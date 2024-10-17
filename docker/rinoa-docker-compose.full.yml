@@ -70,11 +70,11 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=8000
-      - swag_url=addy.trez.wtf
+      - swag_url=addy.${MY_TLD}
       - homepage.group=Privacy/Security
       - homepage.name=Addy
       - homepage.icon=/icons/addy.png
-      - homepage.href=https://addy.trez.wtf
+      - homepage.href=https://addy.${MY_TLD}
       - homepage.description=Anonymous email forwarding
     networks:
       default: null
@@ -102,11 +102,11 @@ services:
     labels:
       - swag=enable
       - swag_proto=http
-      - swag_url=adgh.trez.wtf
+      - swag_url=adgh.${MY_TLD}
       - homepage.group=System Administration
       - homepage.name=AdGuard Home
       - homepage.icon=adguard-home.png
-      - homepage.href=https://adgh.trez.wtf
+      - homepage.href=https://adgh.${MY_TLD}
       - homepage.description=Ad-blocking/DNS
       - homepage.widget.type=adguard
       - homepage.widget.url=http://adguard:80
@@ -235,7 +235,7 @@ services:
     labels:
       - homepage.group=Media Library
       - homepage.name=Audiobookshelf
-      - homepage.href=https://abs.trez.wtf
+      - homepage.href=https://abs.${MY_TLD}
       - homepage.icon=audiobookshelf.png
       - homepage.description=Podcasts, eBooks, & Audiobooks
       - homepage.widget.type=audiobookshelf
@@ -244,9 +244,9 @@ services:
       - swag=enable
       - swag_address=audiobookshelf
       - swag_proto=http
-      - swag_url=abs.trez.wtf
+      - swag_url=abs.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://abs.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://abs.${MY_TLD}
     networks:
       default: null
     ports:
@@ -298,15 +298,15 @@ services:
     labels:
       - homepage.group=Privacy/Security
       - homepage.name=Authelia
-      - homepage.href=https://auth.trez.wtf
+      - homepage.href=https://auth.${MY_TLD}
       - homepage.icon=authelia.svg
       - homepage.description=Authentication/authorization server with MFA & SSO
       - swag=enable
       - swag_proto=http
       - swag_port=9091
-      - swag_url=auth.trez.wtf
+      - swag_url=auth.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://auth.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://auth.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -344,7 +344,7 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Bazarr
-      - homepage.href=https://bazarr.trez.wtf
+      - homepage.href=https://bazarr.${MY_TLD}
       - homepage.icon=bazarr.png
       - homepage.description=Subtitle automation for TV shows/movies
       - homepage.widget.type=bazarr
@@ -404,7 +404,7 @@ services:
     labels:
       - homepage.group=Downloaders
       - homepage.name=Bitmagnet
-      - homepage.href=https://btmag.trez.wtf
+      - homepage.href=https://btmag.${MY_TLD}
       - homepage.icon=/icons/bitmagnet.svg
       - homepage.description=Torrent indexer, DHT crawler, search engine, & content classifier
       - homepage.widget.type=gluetun
@@ -415,9 +415,9 @@ services:
       - swag_auth=authelia
       - swag_auth_bypass=/v1
       - swag_port=3333
-      - swag_url=btmag.trez.wtf
+      - swag_url=btmag.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://btmag.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://btmag.${MY_TLD}
     network_mode: service:gluetun
     restart: always
     volumes:
@@ -457,7 +457,7 @@ services:
       ADMIN_TOKEN: ROR3nZyP4vC7WhxHcZ17dcI2wETtliut26sK8MGFHUVONjvFaPadW4kRzr+1Pf5y
       DATABASE_URL: data/db.sqlite3
       DISABLE_ADMIN_TOKEN: "false"
-      DOMAIN: https://bitwarden.trez.wtf
+      DOMAIN: https://bitwarden.${MY_TLD}
       ENABLE_DB_WAL: "true"
       INVITATIONS_ALLOWED: "false"
       SHOW_PASSWORD_HINT: "false"
@@ -471,10 +471,10 @@ services:
       - homepage.group=Privacy/Security
       - homepage.name=Bitwarden
       - homepage.icon=bitwarden.png
-      - homepage.href=https://bitwarden.trez.wtf
+      - homepage.href=https://bitwarden.${MY_TLD}
       - homepage.description=Credential/Information Vault
       - swag=enable
-      - swag_url=bitwarden.trez.wtf
+      - swag_url=bitwarden.${MY_TLD}
       - swag_proto=http
       - swag_port=80
       - swag.uptime-kuma.enabled=true
@@ -527,7 +527,7 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=3000
-      - swag_url=browse.trez.wtf
+      - swag_url=browse.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -629,7 +629,7 @@ services:
       - com.centurylinklabs.watchtower.enable=false
       - homepage.group=Privacy/Security
       - homepage.name=CrowdSec Dashboard
-      - homepage.href=https://csec.trez.wtf
+      - homepage.href=https://csec.${MY_TLD}
       - homepage.icon=crowdsec.svg
       - homepage.description=Real-time & crowdsourced protection against aggressive IPs
       - homepage.widget.type=crowdsec
@@ -639,9 +639,9 @@ services:
       - swag=enable
       - swag_port=3000
       - swag_proto=http
-      - swag_url=csec.trez.wtf
+      - swag_url=csec.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://csec.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://csec.${MY_TLD}
     networks:
       default: null
     ports:
@@ -668,15 +668,15 @@ services:
     labels:
       - homepage.group=System Administration
       - homepage.name=Czkawka
-      - homepage.href=https://czkawka.trez.wtf
+      - homepage.href=https://czkawka.${MY_TLD}
       - homepage.icon=/icons/czkawka.png
       - homepage.description=Smart file management
       - swag=enable
       - swag_port=5800
       - swag_proto=http
-      - swag_url=czkawka.trez.wtf
+      - swag_url=czkawka.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://czkawka.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://czkawka.${MY_TLD}
     networks:
       default: null
     ports:
@@ -719,15 +719,15 @@ services:
     labels:
       - homepage.group=System Administration
       - homepage.name=Dagu
-      - homepage.href=https://cron.trez.wtf
+      - homepage.href=https://cron.${MY_TLD}
       - homepage.icon=/icons/dagu.png
       - homepage.description=Cron alternative using DAGs (Directed Acyclic Graphs)
       - swag=enable
       - swag_port=8080
       - swag_proto=http
-      - swag_url=cron.trez.wtf
+      - swag_url=cron.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://cron.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://cron.${MY_TLD}
     networks:
       default: null
     ports:
@@ -770,7 +770,7 @@ services:
     labels:
       - homepage.group=Downloaders
       - homepage.name=DelugeVPN
-      - homepage.href=https://deluge.trez.wtf
+      - homepage.href=https://deluge.${MY_TLD}
       - homepage.icon=deluge.png
       - homepage.description=Torrent over VPN
       - homepage.widget.type=deluge
@@ -779,9 +779,9 @@ services:
       - swag=enable
       - swag_port=8112
       - swag_proto=http
-      - swag_url=deluge.trez.wtf
+      - swag_url=deluge.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://deluge.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://deluge.${MY_TLD}
     networks:
       default: null
     ports:
@@ -871,15 +871,15 @@ services:
     labels:
       - homepage.group=Personal Services
       - homepage.name=Docuseal
-      - homepage.href=https://docs.trez.wtf
+      - homepage.href=https://docs.${MY_TLD}
       - homepage.description=OSS Document Signing & Verification
       - homepage.icon=docuseal.png
       - swag=enable
       - swag_proto=http
       - swag_port=3000
-      - swag_url=sign.trez.wtf
+      - swag_url=sign.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://sign.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://sign.${MY_TLD}
     networks:
       default: null
     ports:
@@ -905,10 +905,10 @@ services:
       - swag=enable
       - swag_port=8200
       - swag_proto=http
-      - swag_url=dup.trez.wtf
+      - swag_url=dup.${MY_TLD}
       - homepage.group=Automation
       - homepage.name=Duplicati
-      - homepage.href=https://dup.trez.wtf
+      - homepage.href=https://dup.${MY_TLD}
       - homepage.icon=duplicati.png
       - homepage.description=Data backup
     networks:
@@ -960,7 +960,7 @@ services:
       - homepage.group=Media Library
       - homepage.name=Emby
       - homepage.icon=emby.png
-      - homepage.href=http://emby.trez.wtf
+      - homepage.href=http://emby.${MY_TLD}
       - homepage.description=Movie/TV Streaming
       - homepage.widget.type=emby
       - homepage.widget.url=http://emby:8096
@@ -1010,14 +1010,14 @@ services:
       - homepage.group=Lifestyle
       - homepage.name=Fasten
       - homepage.icon=/icons/fastenhealth.png
-      - homepage.href=http://health.trez.wtf
+      - homepage.href=http://health.${MY_TLD}
       - homepage.description=Open-source, self-hosted, personal/family electronic medical record aggregator
       - swag=enable
       - swag_proto=http
       - swag_port=8080
-      - swag_url=health.trez.wtf
+      - swag_url=health.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://health.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://health.${MY_TLD}
     networks:
       default: null
     ports:
@@ -1090,20 +1090,20 @@ services:
       - mail__options__auth__user=${POSTAL_SMTP_AUTH_USER}
       - mail__options__auth__pass=${POSTAL_SMTP_AUTH_PASSWORD}
       - mail__from="noreply@trez.wtf"
-      - url=https://blog.trez.wtf
+      - url=https://blog.${MY_TLD}
     image: ghost:latest
     labels:
       - homepage.group=Lifestyle
       - homepage.name=Ghost
-      - homepage.href=https://blog.trez.wtf
+      - homepage.href=https://blog.${MY_TLD}
       - homepage.icon=ghost.png
       - homepage.description=Personal blog
       - swag=enable
       - swag_port=2368
       - swag_proto=http
-      - swag_url=blog.trez.wtf
+      - swag_url=blog.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://blog.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://blog.${MY_TLD}
     links:
       - mariadb
     networks:
@@ -1131,7 +1131,7 @@ services:
     labels:
       - homepage.group=Code
       - homepage.name=Gitea
-      - homepage.href=https://git.trez.wtf
+      - homepage.href=https://git.${MY_TLD}
       - homepage.icon=gitea.svg
       - homepage.description=Private Code Repo
       - homepage.widget.type=gitea
@@ -1140,9 +1140,9 @@ services:
       - swag=enable
       - swag_port=3000
       - swag_proto=http
-      - swag_url=git.trez.wtf
+      - swag_url=git.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://git.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://git.${MY_TLD}
     networks:
       default: null
     ports:
@@ -1262,7 +1262,7 @@ services:
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=Gotify
-      - homepage.href=https://gotify.trez.wtf
+      - homepage.href=https://gotify.${MY_TLD}
       - homepage.icon=gotify.png
       - homepage.description=Notification System
       - homepage.widget.type=gotify
@@ -1298,7 +1298,7 @@ services:
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=Grafana (LGTM)
-      - homepage.href=https://mon.trez.wtf
+      - homepage.href=https://mon.${MY_TLD}
       - homepage.description=Monitoring Dashboard for metrics, logs, traces, & profiles
       - homepage.icon=grafana.png
       - homepage.widget.type=grafana
@@ -1307,9 +1307,9 @@ services:
       - homepage.widget.password=${GRAFANA_ADMIN_PASSWORD}
       - swag=enable
       - swag_proto=http
-      - swag_url=mon.trez.wtf
+      - swag_url=mon.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://mon.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://mon.${MY_TLD}
     networks:
       default: null
     ports:
@@ -1585,12 +1585,12 @@ services:
     labels:
       - swag=enable
       - swag_proto=http
-      - swag_url=plants.trez.wtf
+      - swag_url=plants.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://plants.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://plants.${MY_TLD}
       - homepage.group=Lifestyle
       - homepage.name=HortusFox
-      - homepage.href=https://plants.trez.wtf
+      - homepage.href=https://plants.${MY_TLD}
       - homepage.icon=hortusfox.png
       - homepage.description=Plant management system
     networks:
@@ -1638,7 +1638,7 @@ services:
     labels:
       - homepage.group=Automation
       - homepage.name=Huginn
-      - homepage.href=https://huginn.trez.wtf
+      - homepage.href=https://huginn.${MY_TLD}
       - homepage.icon=huginn
       - homepage.description=Agent/Web Automation
       - swag=enable
@@ -1673,12 +1673,12 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=1313
-      - swag_url=it-services.trez.wtf
+      - swag_url=it-services.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://it-services.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://it-services.${MY_TLD}
       - homepage.group=Professional Services
       - homepage.name=Hugo
-      - homepage.href=https://it-services.trez.wtf
+      - homepage.href=https://it-services.${MY_TLD}
       - homepage.icon=hugo.svg
       - homepage.description=Static site
     networks:
@@ -1728,12 +1728,12 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=3000
-      - swag_url=invid.trez.wtf
+      - swag_url=invid.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://invid.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://invid.${MY_TLD}
       - homepage.group=Social
       - homepage.name=Invidious
-      - homepage.href=https://invid.trez.wtf
+      - homepage.href=https://invid.${MY_TLD}
       - homepage.icon=invidious.svg
       - homepage.description=Alternative YouTube frontend (privacy-focused, ad-blocking)
     networks:
@@ -1867,12 +1867,12 @@ services:
     labels:
       - swag=enable
       - swag_proto=http
-      - swag_url=biz.trez.wtf
+      - swag_url=biz.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://biz.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://biz.${MY_TLD}
       - homepage.group=Professional Services
       - homepage.name=Invoice Ninja
-      - homepage.href=https://biz.trez.wtf
+      - homepage.href=https://biz.${MY_TLD}
       - homepage.icon=invoiceninja.svg
       - homepage.description=Simple invoicing, multiple payment options, expense and vendor management, and more!
     networks:
@@ -1900,12 +1900,12 @@ services:
     labels:
       - swag=enable
       - swag_proto=http
-      - swag_url=itt.trez.wtf
+      - swag_url=itt.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://itt.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://itt.${MY_TLD}
       - homepage.group=Code
       - homepage.name=IT-Tools
-      - homepage.href=https://itt.trez.wtf
+      - homepage.href=https://itt.${MY_TLD}
       - homepage.icon=it-tools.svg
       - homepage.description=Useful tools for developers and people working in IT
     networks:
@@ -1923,15 +1923,15 @@ services:
       HTTP_METHOD: http
       MAILER_DSN: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
       MERCURE_JWT_SECRET: ${JITSI__ADMIN_JWT_SECRET}
-      MERCURE_PUBLIC_URL: https://meet-admin.trez.wtf
+      MERCURE_PUBLIC_URL: https://meet-admin.${MY_TLD}
       MERCURE_URL: http://jitsi-admin-websocket
       OAUTH_KEYCLOAK_CLIENT_ID: null
       OAUTH_KEYCLOAK_CLIENT_REALM: null
       OAUTH_KEYCLOAK_CLIENT_SECRET: null
       OAUTH_KEYCLOAK_CLIENT_SERVER: null
-      PUBLIC_URL: https://meet-admin.trez.wtf
-      VICH_BASE: https://meet-admin.trez.wtf
-      laF_baseUrl: https://meet-admin.trez.wtf
+      PUBLIC_URL: https://meet-admin.${MY_TLD}
+      VICH_BASE: https://meet-admin.${MY_TLD}
+      laF_baseUrl: https://meet-admin.${MY_TLD}
       registerEmailAdress: noreply@trez.wtf
     image: h2invent/jitsi-admin-main
     networks:
@@ -1981,15 +1981,15 @@ services:
     labels:
       - homepage.group=Privacy/Security
       - homepage.name=Keycloak
-      - homepage.href=https://cloak.trez.wtf
+      - homepage.href=https://cloak.${MY_TLD}
       - homepage.icon=keycloak.svg
       - homepage.description=Open-source IAM
       - swag=enable
       - swag_proto=http
       - swag_port=8080
-      - swag_url=cloak.trez.wtf
+      - swag_url=cloak.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://cloak.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://cloak.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -2008,12 +2008,12 @@ services:
     labels:
       - swag=enable
       - swag_proto=http
-      - swag_url=meet-admin.trez.wtf
+      - swag_url=meet-admin.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://meet-admin.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://meet-admin.${MY_TLD}
       - homepage.group=System Administration
       - homepage.name=Jitsi Admin
-      - homepage.href=https://meet-admin.trez.wtf
+      - homepage.href=https://meet-admin.${MY_TLD}
       - homepage.icon=/icons/jitsi-admin.png
       - homepage.description=Web Conferencing
     networks:
@@ -2550,12 +2550,12 @@ services:
     labels:
       - swag=enable
       - swag_proto=https
-      - swag_url=meet.trez.wtf
+      - swag_url=meet.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://meet.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://meet.${MY_TLD}
       - homepage.group=Social
       - homepage.name=Jitsi
-      - homepage.href=https://meet.trez.wtf
+      - homepage.href=https://meet.${MY_TLD}
       - homepage.icon=jitsi.png
       - homepage.description=Web Conferencing
     networks:
@@ -2626,16 +2626,16 @@ services:
     labels:
       - homepage.group=Personal Services
       - homepage.name=Joplin
-      - homepage.href=https://notes.trez.wtf
+      - homepage.href=https://notes.${MY_TLD}
       - homepage.icon=joplin.svg
       - homepage.description=Open-source note taking & to-do
       - swag=enable
       - swag_proto=http
       - swag_port=22300
-      - swag_url=notes.trez.wtf
+      - swag_url=notes.${MY_TLD}
       - swag_server_custom_directive="proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;"
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://notes.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://notes.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2662,14 +2662,14 @@ services:
     labels:
       - homepage.group=System Administration
       - homepage.name=LibreSpeed
-      - homepage.href=https://speed.trez.wtf
+      - homepage.href=https://speed.${MY_TLD}
       - homepage.icon=librespeed.png
       - homepage.description=Speed test
       - swag=enable
       - swag_proto=http
-      - swag_url=speed.trez.wtf
+      - swag_url=speed.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://speed.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://speed.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2707,7 +2707,7 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Lidarr
-      - homepage.href=https://lidarr.trez.wtf
+      - homepage.href=https://lidarr.${MY_TLD}
       - homepage.icon=lidarr.png
       - homepage.description=Music Automation
       - homepage.widget.type=lidarr
@@ -2745,7 +2745,7 @@ services:
     environment:
       app_name: lidify
       app_rev: 0.09
-      app_url: lidify.trez.wtf
+      app_url: lidify.${MY_TLD}
       dry_run_adding_to_lidarr: true
       fallback_to_top_result: false
       last_fm_api_key: ${LASTFM_API_KEY}
@@ -2766,16 +2766,16 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Lidify
-      - homepage.href=https://lidify.trez.wtf
+      - homepage.href=https://lidify.${MY_TLD}
       - homepage.icon=/icons/lidify.png
       - homepage.description=Music Discovery a la Last.fm, Spotify, Pandora, etc.
       - swag=enable
       - swag_auth=authelia
       - swag_proto=http
       - swag_port=5000
-      - swag_url=lidify.trez.wtf
+      - swag_url=lidify.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://lidify.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://lidify.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -2807,15 +2807,15 @@ services:
     labels:
       - homepage.group=System Administration
       - homepage.name=LLDAP
-      - homepage.href=https://ldap.trez.wtf
+      - homepage.href=https://ldap.${MY_TLD}
       - homepage.icon=/icons/lldap.png
       - homepage.description=LDAP made easy
       - swag=enable
       - swag_proto=http
       - swag_port=17170
-      - swag_url=ldap.trez.wtf
+      - swag_url=ldap.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://ldap.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://ldap.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2846,13 +2846,13 @@ services:
     labels:
       - homepage.group=Personal Services
       - homepage.name=LocalAI
-      - homepage.href=https://ai.trez.wtf
+      - homepage.href=https://ai.${MY_TLD}
       - homepage.icon=/icons/localai.png
       - homepage.description=Open source OpenAI alternative
       - swag=enable
       - swag_proto=http
       - swag_port=8080
-      - swag_url=ai.trez.wtf
+      - swag_url=ai.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2887,13 +2887,13 @@ services:
     labels:
       - homepage.group=Media Library
       - homepage.name=Maloja
-      - homepage.href=https://scrobble.trez.wtf
+      - homepage.href=https://scrobble.${MY_TLD}
       - homepage.icon=maloja.png
       - homepage.description=Simple self-hosted music scrobble database to create personal listening statistics
       - swag=enable
       - swag_proto=http
       - swag_port=42010
-      - swag_url=scrobble.trez.wtf
+      - swag_url=scrobble.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2980,7 +2980,7 @@ services:
       MM_PLUGINSETTINGS_ENABLEUPLOADS: true
       MM_SERVICESETTINGS_FORWARD80TO443: false
       MM_SERVICESETTINGS_LISTENADDRESS: :8065
-      MM_SERVICESETTINGS_SITEURL: https://mm.trez.wtf
+      MM_SERVICESETTINGS_SITEURL: https://mm.${MY_TLD}
       MM_SQLSETTINGS_DATASOURCE: ${MATTERMOST_POSTGRES_CONNECTION_URI}
       MM_SQLSETTINGS_DRIVERNAME: postgres
       TZ: ${TZ}
@@ -2990,16 +2990,16 @@ services:
     labels:
       - homepage.group=Social
       - homepage.name=Mattermost
-      - homepage.href=https://mm.trez.wtf
+      - homepage.href=https://mm.${MY_TLD}
       - homepage.icon=mattermost.svg
       - homepage.description=Team collaboration and technical workflows (Slack alternative)
       - swag=enable
       - swag_custom_directive=client_max_body_size 0;
       - swag_proto=http
       - swag_port=8065
-      - swag_url=mm.trez.wtf
+      - swag_url=mm.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://mm.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://mm.${MY_TLD}
     networks:
       default: null
     pids_limit: 200
@@ -3081,15 +3081,15 @@ services:
     labels:
       - homepage.group=Lifestyle
       - homepage.name=Maybe
-      - homepage.href=https://finance.trez.wtf
+      - homepage.href=https://finance.${MY_TLD}
       - homepage.icon=/icons/maybe.png
       - homepage.description=Personal finance app
       - swag=enable
       - swag_proto=http
       - swag_port=3000
-      - swag_url=finance.trez.wtf
+      - swag_url=finance.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://finance.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://finance.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3139,12 +3139,12 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=9090
-      - swag_url=s3.trez.wtf
+      - swag_url=s3.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://s3.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://s3.${MY_TLD}
       - homepage.group=System Administration
       - homepage.name=MinIO
-      - homepage.href=https://s3.trez.wtf
+      - homepage.href=https://s3.${MY_TLD}
       - homepage.icon=minio.png
       - homepage.description=S3-compatible storage backend
     networks:
@@ -3305,7 +3305,7 @@ services:
     labels:
       - homepage.group=Media Library
       - homepage.name=Navidrome
-      - homepage.href=https://navi.trez.wtf
+      - homepage.href=https://navi.${MY_TLD}
       - homepage.icon=navidrome.png
       - homepage.description=Music Streaming
       - homepage.widget.type=navidrome
@@ -3316,9 +3316,9 @@ services:
       - swag=enable
       - swag_port=4533
       - swag_proto=http
-      - swag_url=navi.trez.wtf
+      - swag_url=navi.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://navi.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://navi.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3349,14 +3349,14 @@ services:
     labels:
       - homepage.group=Personal Services
       - homepage.name=NextCloud
-      - homepage.href=https://cloud.trez.wtf
+      - homepage.href=https://cloud.${MY_TLD}
       - homepage.icon=nextcloud.png
       - homepage.description=Private Cloud
       - swag=enable
       - swag_proto=https
-      - swag_url=cloud.trez.wtf
+      - swag_url=cloud.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://cloud.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://cloud.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3416,7 +3416,7 @@ services:
     labels:
       - homepage.group=Media Library
       - homepage.name=Ombi
-      - homepage.href=https://ombi.trez.wtf
+      - homepage.href=https://ombi.${MY_TLD}
       - homepage.icon=ombi.png
       - homepage.description=Media Requests
       - homepage.widget.type=ombi
@@ -3462,7 +3462,7 @@ services:
       PAPERLESS_REDIS: redis://redis:6379
       PAPERLESS_SECRET_KEY: ${PAPERLESS_SECRET_KEY}
       PAPERLESS_TIME_ZONE: ${TZ}
-      PAPERLESS_URL: https://docs.trez.wtf
+      PAPERLESS_URL: https://docs.${MY_TLD}
       USERMAP_GID: ${PGID}
       USERMAP_UID: ${PUID}
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -3470,12 +3470,12 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=8000
-      - swag_url=docs.trez.wtf
+      - swag_url=docs.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://docs.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://docs.${MY_TLD}
       - homepage.group=Personal Services
       - homepage.name=Paperless-ngx
-      - homepage.href=https://docs.trez.wtf
+      - homepage.href=https://docs.${MY_TLD}
       - homepage.icon=paperless-ngx.svg
       - homepage.description=Document indexer & archiver with OCR
     networks:
@@ -3514,7 +3514,7 @@ services:
         condition: service_started
         required: true
     environment:
-      BASE_URL: https://analytics.trez.wtf
+      BASE_URL: https://analytics.${MY_TLD}
       CLICKHOUSE_DATABASE_URL: http://plausible-events-db:8123/plausible_events_db
       DATABASE_URL: postgres://plausible:${PLAUSIBLE_PG_PASSWORD}@plausible-db:5432/plausible_db
       DISABLE_REGISTRATION: invite_only
@@ -3534,10 +3534,10 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=8000
-      - swag_url=analytics.trez.wtf
+      - swag_url=analytics.${MY_TLD}
       - homepage.group=Professional Services
       - homepage.name=Plausible
-      - homepage.href=https://analytics.trez.wtf
+      - homepage.href=https://analytics.${MY_TLD}
       - homepage.icon=plausible.svg
       - homepage.description=Open-source web analytics
     networks:
@@ -3609,7 +3609,7 @@ services:
     labels:
       - homepage.group=System Administration
       - homepage.name=Portainer
-      - homepage.href=https://portainer.trez.wtf
+      - homepage.href=https://portainer.${MY_TLD}
       - homepage.icon=portainer.png
       - homepage.description=Docker container management
       - homepage.widget.type=portainer
@@ -3676,12 +3676,12 @@ services:
       - swag_proto=http
       - swag_port=5000
       - swag_address=postal-web
-      - swag_url=post.trez.wtf
+      - swag_url=post.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://post.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://post.${MY_TLD}
       - homepage.group=System Administration
       - homepage.name=Postal
-      - homepage.href=https://post.trez.wtf
+      - homepage.href=https://post.${MY_TLD}
       - homepage.icon=/icons/postal.png
       - homepage.description=OSS Mail delivery platform
     networks:
@@ -3726,7 +3726,7 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Prowlarr
-      - homepage.href=https://prowlarr.trez.wtf
+      - homepage.href=https://prowlarr.${MY_TLD}
       - homepage.icon=prowlarr.png
       - homepage.description=Index aggregator
       - homepage.widget.type=prowlarr
@@ -3783,16 +3783,16 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=RadaRec
-      - homepage.href=https://radarec.trez.wtf
+      - homepage.href=https://radarec.${MY_TLD}
       - homepage.icon=/icons/radarec.png
       - homepage.description=Movie discovery based on library/tastes
       - swag=enable
       - swag_proto=http
       - swag_port=5000
       - swag_auth=authelia
-      - swag_url=radarec.trez.wtf
+      - swag_url=radarec.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://radarec.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://radarec.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -3822,7 +3822,7 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Radarr
-      - homepage.href=https://radarr.trez.wtf
+      - homepage.href=https://radarr.${MY_TLD}
       - homepage.icon=radarr.png
       - homepage.description=Movie Automation
       - homepage.widget.type=radarr
@@ -3871,12 +3871,12 @@ services:
       ACCESS_TOKEN_SECRET: ${REACTIVE_RESUME_ACCESS_TOKEN_SECRET}
       CHROME_PORT: 443
       CHROME_TOKEN: ${CHROMIUM_TOKEN}
-      CHROME_URL: wss://browse.trez.wtf
+      CHROME_URL: wss://browse.${MY_TLD}
       DATABASE_URL: postgresql://reactiveresume:${REACTIVE_RESUME_PGSQL_PASSWORD}@reactive-resume-pg:5432/reactiveresume
       MAIL_FROM: noreply@trez.wtf
       NODE_ENV: production
       PORT: 3000
-      PUBLIC_URL: https://resume.trez.wtf
+      PUBLIC_URL: https://resume.${MY_TLD}
       REFRESH_TOKEN_SECRET: ${REACTIVE_RESUME_REFRESH_TOKEN_SECRET}
       SMTP_URL: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
       STORAGE_ACCESS_KEY: ${REACTIVE_RESUME_S3_ACCESS_KEY}
@@ -3892,15 +3892,15 @@ services:
     labels:
       - homepage.group=Professional Services
       - homepage.name=Reactive Resume
-      - homepage.href=https://resume.trez.wtf
+      - homepage.href=https://resume.${MY_TLD}
       - homepage.icon=reactive-resume.svg
       - homepage.description=Open-source resume builder
       - swag=enable
       - swag_proto=http
       - swag_port=3000
-      - swag_url=resume.trez.wtf
+      - swag_url=resume.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://resume.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://resume.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3939,7 +3939,7 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Readarr
-      - homepage.href=https://readarr.trez.wtf
+      - homepage.href=https://readarr.${MY_TLD}
       - homepage.icon=readarr.png
       - homepage.description=eBook/Audiobook Automation
       - homepage.widget.type=readarr
@@ -4018,15 +4018,15 @@ services:
     labels:
       - homepage.group=Social
       - homepage.name=Redlib
-      - homepage.href=https://rlib.trez.wtf
+      - homepage.href=https://rlib.${MY_TLD}
       - homepage.icon=libreddit.svg
       - homepage.description=Redlib is a private front-end like Invidious but for Reddit
       - swag=enable
       - swag_proto=http
       - swag_port=8080
-      - swag_url=rlib.trez.wtf
+      - swag_url=rlib.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://rlib.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://rlib.${MY_TLD}
     networks:
       default: null
     ports:
@@ -4046,7 +4046,7 @@ services:
       CF_API_TOKEN: ${CLOUDFLARE_DNS_API_TOKEN}
       CF_TUNNEL_CONFIG: |
         ingress:
-          - hostname: rem.trez.wtf
+          - hostname: rem.${MY_TLD}
             service: http://192.168.1.254:3008
           - service: http_status:404
       CF_TUNNEL_NAME: remmina
@@ -4065,11 +4065,11 @@ services:
     image: lscr.io/linuxserver/remmina:latest
     labels:
       - swag=enable
-      - swag_url=rem.trez.wtf
+      - swag_url=rem.${MY_TLD}
       - swag_port=3008
       - homepage.group=System Administration
       - homepage.name=Remmina
-      - homepage.href=https://rem.trez.wtf
+      - homepage.href=https://rem.${MY_TLD}
       - homepage.icon=/icons/remmina.svg
       - homepage.description=GTK Remote desktop client (EXEC, SPICE, SSH, RDP, & VNC)
       - homepage.widget.type=cloudflared
@@ -4120,7 +4120,7 @@ services:
     labels:
       - homepage.group=Downloaders
       - homepage.name=SABnzbd
-      - homepage.href=https://sabnzbd.trez.wtf
+      - homepage.href=https://sabnzbd.${MY_TLD}
       - homepage.icon=sabnzbd.png
       - homepage.description=NZB Downloader over VPN
       - homepage.widget.type=sabnzbd
@@ -4129,9 +4129,9 @@ services:
       - homepage.widget.key=${SABNZBDVPN_API_KEY}
       - swag=enable
       - swag_proto=http
-      - swag_url=sabnzbd.trez.wtf
+      - swag_url=sabnzbd.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://sabnzbd.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://sabnzbd.${MY_TLD}
     networks:
       default: null
     ports:
@@ -4180,15 +4180,15 @@ services:
     labels:
       - homepage.group=Personal Services
       - homepage.name=Scraperr
-      - homepage.href=https://scrape.trez.wtf
+      - homepage.href=https://scrape.${MY_TLD}
       - homepage.icon=/icons/scraperr.png
       - homepage.description=Web scraper
       - swag=enable
       - swag_proto=http
       - swag_port=3000
-      - swag_url=scrape.trez.wtf
+      - swag_url=scrape.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://scrape.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://scrape.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -4289,15 +4289,15 @@ services:
     labels:
       - homepage.group=Personal Services
       - homepage.name=SearxNG
-      - homepage.href=https://search.trez.wtf
+      - homepage.href=https://search.${MY_TLD}
       - homepage.icon=searxng.png
       - homepage.description=Anonymized Meta-Search Engine
       - swag=enable
       - swag_address=searxng
       - swag_proto=http
-      - swag_url=search.trez.wtf
+      - swag_url=search.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://search.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://search.${MY_TLD}
     logging:
       driver: json-file
       options:
@@ -4329,7 +4329,7 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Sonarr
-      - homepage.href=https://sonarr.trez.wtf
+      - homepage.href=https://sonarr.${MY_TLD}
       - homepage.icon=sonarr.png
       - homepage.description=TV Show Automation
       - homepage.widget.type=sonarr
@@ -4386,16 +4386,16 @@ services:
     labels:
       - homepage.group=Servarr Stack
       - homepage.name=Sonashow
-      - homepage.href=https://sonashow.trez.wtf
+      - homepage.href=https://sonashow.${MY_TLD}
       - homepage.icon=/icons/sonashow.png
       - homepage.description=TV show discovery based on library/tastes
       - swag=enable
       - swag_auth=authelia
       - swag_proto=http
       - swag_port=5000
-      - swag_url=sonashow.trez.wtf
+      - swag_url=sonashow.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://sonashow.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://sonashow.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -4431,15 +4431,15 @@ services:
       - homepage.name=Soulseek
       - homepage.group=Downloaders
       - homepage.description=Modern client-server application for the Soulseek file-sharing network.
-      - homepage.href=https://slsk.trez.wtf
+      - homepage.href=https://slsk.${MY_TLD}
       - homepage.icon=/icons/slskd.png
       - swag=enable
       - swag_proto=http
-      - swag_url=slsk.trez.wtf
+      - swag_url=slsk.${MY_TLD}
       - swag_address=gluetun
       - swag_port=5030
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://slsk.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://slsk.${MY_TLD}
     network_mode: service:gluetun
     restart: always
     volumes:
@@ -4479,13 +4479,13 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=81
-      - swag_url=swag.trez.wtf
+      - swag_url=swag.${MY_TLD}
       - swag_auth=authelia
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=SWAG Dashboard
-      - homepage.href=https://swag.trez.wtf
+      - homepage.href=https://swag.${MY_TLD}
       - homepage.icon=linuxserver-io.png
       - homepage.description=SWAG Dashboard for proxies
       - homepage.widget.type=swagdashboard
@@ -4549,7 +4549,7 @@ services:
     labels:
       - homepage.group=Lifestyle
       - homepage.name=Tandoor Recipes
-      - homepage.href=https://recipes.trez.wtf
+      - homepage.href=https://recipes.${MY_TLD}
       - homepage.icon=tandoor.svg
       - homepage.description=Recipes, cookbooks, meal-planning, & grocery lists
       - homepage.widget.type=tandoor
@@ -4558,9 +4558,9 @@ services:
       - swag=enable
       - swag_server_custom_directive="proxy_set_header X-Forwarded-Host $$http_host; proxy_set_header Host $$http_host;"
       - swag_proto=http
-      - swag_url=recipes.trez.wtf
+      - swag_url=recipes.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
     networks:
       default: null
     ports:
@@ -4601,15 +4601,15 @@ services:
     labels:
       - homepage.group=Personal Services
       - homepage.name=Traccar
-      - homepage.href=https://trac.trez.wtf
+      - homepage.href=https://trac.${MY_TLD}
       - homepage.icon=traccar.svg
       - homepage.description=Open-source GPS tracking system
       - swag=enable
       - swag_proto=http
       - swag_port=8082
-      - swag_url=trac.trez.wtf
+      - swag_url=trac.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
     networks:
       default: null
     ports:
@@ -5864,14 +5864,14 @@ services:
     labels:
       - homepage.group=Media Library
       - homepage.name=Unmanic
-      - homepage.href=https://unmanic.trez.wtf
+      - homepage.href=https://unmanic.${MY_TLD}
       - homepage.icon=unmanic.png
       - homepage.description=Library Optimizer
       - homepage.widget.type=unmanic
       - homepage.widget.url=http://unmanic:8888
       - swag=enable
       - swag_port=8888
-      - swag_url=unmanic.trez.wtf
+      - swag_url=unmanic.${MY_TLD}
       - swag_proto=http
       - swag.uptime-kuma.enabled=true
     networks:
@@ -5910,12 +5910,12 @@ services:
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=Uptime Kuma
-      - homepage.href=https://uptime.trez.wtf
+      - homepage.href=https://uptime.${MY_TLD}
       - homepage.icon=uptime-kuma.png
       - homepage.description=HTTP Endpoint Monitoring
       - swag=enable
       - swag_proto=http
-      - swag_url=uptime.trez.wtf
+      - swag_url=uptime.${MY_TLD}
     networks:
       default: null
     ports:
@@ -5955,15 +5955,15 @@ services:
       - homepage.group=Code
       - homepage.name=Vault
       - homepage.icon=vault.png
-      - homepage.href=https://vault.trez.wtf
+      - homepage.href=https://vault.${MY_TLD}
       - homepage.description=Hashicorp Vault for secrets, key/value stores, etc.
       - swag=enable
       - swag_proto=http
       - swag_port=8200
       - swag_address=hc-vault
-      - swag_url=vault.trez.wtf
+      - swag_url=vault.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://vault.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://vault.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6005,7 +6005,7 @@ services:
       - SYMFONY__ENV__DATABASE_TABLE_PREFIX="wallabag_"
       - SYMFONY__ENV__MAILER_DSN=smtp://postal-smtp
       - SYMFONY__ENV__FROM_EMAIL=noreply@trez.wtf
-      - SYMFONY__ENV__DOMAIN_NAME=https://wallabag.trez.wtf
+      - SYMFONY__ENV__DOMAIN_NAME=https://wallabag.${MY_TLD}
       - SYMFONY__ENV__SERVER_NAME="Wallabag @ Rinoa"
       - SYMFONY__ENV__REDIS_HOST=redis
       - SYMFONY__ENV__REDIS_PORT=6379
@@ -6027,7 +6027,7 @@ services:
       - swag.uptime-kuma.enabled=true
       - homepage.group=Lifestyle
       - homepage.name=Wallabag
-      - homepage.href=https://wallabag.trez.wtf
+      - homepage.href=https://wallabag.${MY_TLD}
       - homepage.icon=wallabag.png
       - homepage.description=Knowledge Store
     networks:
@@ -6050,14 +6050,14 @@ services:
     labels:
       - homepage.group=Lifestyle
       - homepage.name=wallos
-      - homepage.href=https://subs.trez.wtf
+      - homepage.href=https://subs.${MY_TLD}
       - homepage.icon=wallos.png
       - homepage.description=Subscription Tracking
       - swag=enable
       - swag_proto=http
-      - swag_url=subs.trez.wtf
+      - swag_url=subs.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6143,7 +6143,7 @@ services:
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=WatchYourLAN
-      - homepage.href=https://wyl.trez.wtf
+      - homepage.href=https://wyl.${MY_TLD}
       - homepage.icon=watchyourlan.png
       - homepage.description=Lightweight network IP scanner
       - swag=enable
@@ -6203,12 +6203,12 @@ services:
       - swag=enable
       - swag_proto=https
       - swag_port=5601
-      - swag_url=wsec.trez.wtf
+      - swag_url=wsec.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://wsec.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://wsec.${MY_TLD}
       - homepage.group=Privacy/Security
       - homepage.name=Wazuh
-      - homepage.href=https://wsec.trez.wtf
+      - homepage.href=https://wsec.${MY_TLD}
       - homepage.icon=wazuh-opaque.png
       - homepage.description=OSS Security Platform for XDR/SIEM
     links:
@@ -6414,14 +6414,14 @@ services:
       - homepage.group=Privacy/Security
       - homepage.name=Web-Check
       - homepage.icon=web-check.png
-      - homepage.href=https://scan.trez.wtf
+      - homepage.href=https://scan.${MY_TLD}
       - homepage.description=Site scanner for attack vectors, architecture, security configs, and more
       - swag=enable
       - swag_proto=http
-      - swag_url=scan.trez.wtf
+      - swag_url=scan.${MY_TLD}
       - swag_port=3000
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://scan.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://scan.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6439,15 +6439,15 @@ services:
     labels:
       - homepage.group=System Administration
       - homepage.name=WhoDB
-      - homepage.href=https://dbs.trez.wtf
+      - homepage.href=https://dbs.${MY_TLD}
       - homepage.icon=/icons/whodb.png
       - homepage.description=Web-based DB management
       - swag=enable
       - swag_proto=http
       - swag_port=8080
-      - swag_url=dbs.trez.wtf
+      - swag_url=dbs.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://dbs.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://dbs.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6462,7 +6462,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=${TZ}
-      - APP_URL=https://myspotify.trez.wtf
+      - APP_URL=https://myspotify.${MY_TLD}
       - SPOTIFY_PUBLIC=${YOUR_SPOTIFY_ID}
       - SPOTIFY_SECRET=${YOUR_SPOTIFY_SECRET}
       - CORS=all
@@ -6477,13 +6477,13 @@ services:
       - homepage.group=Media Library
       - homepage.name=Your Spotify
       - homepage.icon=your-spotify.svg
-      - homepage.href=https://myspotify.trez.wtf
+      - homepage.href=https://myspotify.${MY_TLD}
       - homepage.description=Personal Spotify Tracking
       - swag=enable
       - swag_proto=https
-      - swag_url=myspotify.trez.wtf
+      - swag_url=myspotify.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://myspotify.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://myspotify.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6504,14 +6504,14 @@ services:
       - homepage.group=Downloaders
       - homepage.name=YoutubeDL
       - homepage.icon=youtubedl.png
-      - homepage.href=https://ytdl.trez.wtf
+      - homepage.href=https://ytdl.${MY_TLD}
       - homepage.description=YouTube Downloader
       - swag=enable
       - swag_proto=http
-      - swag_url=ytdl.trez.wtf
+      - swag_url=ytdl.${MY_TLD}
       - swag_port=8080
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://ytdl.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://ytdl.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6706,12 +6706,12 @@ services:
       - swag=enable
       - swag_proto=http
       - swag_port=8080
-      - swag_url=support.trez.wtf
+      - swag_url=support.${MY_TLD}
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://support.trez.wtf
+      - swag.uptime-kuma.monitor.url=https://support.${MY_TLD}
       - homepage.group=Professional Services
       - homepage.name=Zammad
-      - homepage.href=https://support.trez.wtf
+      - homepage.href=https://support.${MY_TLD}
       - homepage.icon=zammad.svg
       - homepage.description=Open-source helpdesk/customer support system
     networks:
