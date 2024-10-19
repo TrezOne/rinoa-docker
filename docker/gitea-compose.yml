@@ -1,0 +1,68 @@
+name: gitea
+networks:
+services:
+  gitea:
+    container_name: gitea
+    env_file: ./.env-gitea
+    image: gitea/gitea:1.22.2
+    labels:
+      - homepage.group=Code
+      - homepage.name=Gitea
+      - homepage.href=https://git.${MY_TLD}
+      - homepage.icon=gitea.svg
+      - homepage.description=Private Code Repo
+      - homepage.widget.type=gitea
+      - homepage.widget.url=http://gitea:3000
+      - homepage.widget.key=${GITEA_HOMEPAGE_API_KEY}
+      - swag=enable
+      - swag_port=3000
+      - swag_proto=http
+      - swag_url=git.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://git.${MY_TLD}
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        protocol: tcp
+        published: "3013"
+        target: 3000
+      - mode: ingress
+        protocol: tcp
+        published: "222"
+        target: 22
+    restart: always
+    volumes:
+      - source: ${DOCKER_VOLUME_CONFIG}/gitea
+        target: /data
+        type: volume
+        volume: {}
+      - bind:
+          create_host_path: true
+        read_only: true
+        source: /etc/timezone
+        target: /etc/timezone
+        type: bind
+      - bind:
+          create_host_path: true
+        read_only: true
+        source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+  gitea-db:
+    container_name: gitea-db
+    env_file: ./.env-
+    expose:
+      - 5432
+    image: postgres:14
+    networks:
+      default: null
+    restart: always
+    volumes:
+      - source: gitea-pg-db
+        target: /var/lib/postgresql/data
+        type: volume
+        volume: {}
+volumes:
+  gitea-pg-db:
+    name: gitea-pg-db
