@@ -1,0 +1,69 @@
+  invoice_ninja:
+    container_name: invoice_ninja
+    env_file: ./.env-invoice_ninja
+    expose:
+      - 9000
+    image: invoiceninja/invoiceninja:5
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        protocol: tcp
+        published: "8003"
+        target: 8003
+    restart: always
+    volumes:
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/public
+        target: /var/www/app/public
+        type: volume
+        volume: {}
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/storage
+        target: /var/www/app/storage
+        type: volume
+        volume: {}
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/php/php.ini
+        target: /usr/local/etc/php/php.ini
+        type: volume
+        volume: {}
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/php/php-cli.ini
+        target: /usr/local/etc/php/php-cli.ini
+        type: volume
+        volume: {}
+  invoice_ninja_proxy:
+    container_name: invoice_ninja_proxy
+    depends_on:
+      invoice_ninja:
+        condition: service_started
+        required: true
+    env_file: ./.env-invoice_ninja
+    image: nginx
+    labels:
+      - swag=enable
+      - swag_proto=http
+      - swag_url=biz.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://biz.${MY_TLD}
+      - homepage.group=Professional Services
+      - homepage.name=Invoice Ninja
+      - homepage.href=https://biz.${MY_TLD}
+      - homepage.icon=invoiceninja.svg
+      - homepage.description=Simple invoicing, multiple payment options, expense and vendor management, and more!
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        protocol: tcp
+        published: "8005"
+        target: 80
+    restart: always
+    volumes:
+      - read_only: true
+        source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/proxy/invoice_ninja.conf
+        target: /etc/nginx/conf.d/in-vhost.conf
+        type: volume
+        volume: {}
+      - read_only: true
+        source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/public
+        target: /var/www/app/public
+        type: volume
+        volume: {}
