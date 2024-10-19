@@ -1,0 +1,235 @@
+name: jitsi
+networks:
+  jitsi_internal:
+    driver: bridge
+    ipam:
+      config:
+        - gateway: 192.168.55.1
+          subnet: 192.168.55.0/28
+      driver: default
+    name: jitsi
+  web_proxy:
+    external: true
+  mariadb_internal:
+    external: true
+services:
+  jitsi-admin:
+    container_name: jitsi-admin
+    env_file: ./.env-jitsi
+    image: h2invent/jitsi-admin-main
+    networks:
+      - jitsi_internal
+    restart: unless-stopped
+  jitsi-admin-keycloak:
+    command:
+      - start-dev
+      - --import-realm
+    container_name: jitsi-admin-keycloak
+    env_file: ./.env-jitsi
+    expose:
+      - 8080
+      - 8443
+    image: keycloak/keycloak
+    labels:
+      - homepage.group=Privacy/Security
+      - homepage.name=Keycloak
+      - homepage.href=https://cloak.${MY_TLD}
+      - homepage.icon=keycloak.svg
+      - homepage.description=Open-source IAM
+      - swag=enable
+      - swag_proto=http
+      - swag_port=8080
+      - swag_url=cloak.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://cloak.${MY_TLD}
+    networks:
+      - jitsi_internal
+    restart: unless-stopped
+    volumes:
+      - source: ${DOCKER_VOLUME_CONFIG}/keycloak
+        target: /opt/keycloak
+        type: volume
+        volume: {}
+  jitsi-admin-websocket:
+    container_name: jitsi-admin-websocket
+    env_file: ./.env-jitsi
+    expose:
+      - 3000
+    image: h2invent/jitsi-admin-websocket
+    labels:
+      - swag=enable
+      - swag_proto=http
+      - swag_url=meet-admin.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://meet-admin.${MY_TLD}
+      - homepage.group=System Administration
+      - homepage.name=Jitsi Admin
+      - homepage.href=https://meet-admin.${MY_TLD}
+      - homepage.icon=/icons/jitsi-admin.png
+      - homepage.description=Web Conferencing
+    networks:
+      - jitsi_internal
+    restart: unless-stopped
+  jitsi-etherpad:
+    container_name: jitsi-etherpad
+    env_file: ./.env-jitsi
+    image: etherpad/etherpad:1.8.6
+    networks:
+      - jitsi_internal
+    restart: unless-stopped
+  jitsi-jibri:
+    cap_add:
+      - SYS_ADMIN
+    container_name: jitsi-jibri
+    depends_on:
+      jitsi-jicofo:
+        condition: service_started
+        required: true
+    env_file: ./.env-jitsi
+    image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable}
+    networks:
+      - jitsi_internal
+    restart: unless-stopped
+    shm_size: 2gb
+    volumes:
+      - source: ${DOCKER_VOLUME_CONFIG}/jitsi/jibri
+        target: /config
+        type: volume
+        volume: {}
+  jitsi-jicofo:
+    container_name: focus.meet.jitsi
+    depends_on:
+      jitsi-prosody:
+        condition: service_started
+        required: true
+    env_file: ./.env-jitsi
+    image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable}
+    networks:
+      - jitsi_internal
+    ports:
+      - 127.0.0.1:${JICOFO_REST_PORT:-8889}:8888
+    restart: unless-stopped
+    volumes:
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/jicofo
+        target: /config
+        type: volume
+        volume: {}
+  jitsi-jigasi:
+    container_name: jitsi-jigasi
+    depends_on:
+      jitsi-prosody:
+        condition: service_started
+        required: true
+    env_file: ./.env-jitsi
+    image: jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable}
+    networks:
+      - jitsi_internal
+    ports:
+      - ${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}:${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}/udp
+    restart: unless-stopped
+    volumes:
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/jigasi
+        target: /config
+        type: volume
+        volume: {}
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/transcripts
+        target: /tmp/transcripts
+        type: volume
+        volume: {}
+  jitsi-jvb:
+    container_name: video.meet.jitsi
+    depends_on:
+      jitsi-prosody:
+        condition: service_started
+        required: true
+    env_file: ./.env-jitsi
+    image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable}
+    networks:
+      - jitsi_internal
+    ports:
+      - ${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp
+      - 127.0.0.1:${JVB_COLIBRI_PORT:-8091}:8080
+    restart: unless-stopped
+    volumes:
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/jvb
+        target: /config
+        type: volume
+        volume: {}
+  jitsi-prosody:
+    container_name: xmpp.meet.jitsi
+    env_file: ./.env-jitsi
+    expose:
+      - ${XMPP_PORT:-5222}
+      - "5347"
+      - "5280"
+    image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable}
+    networks:
+      - jitsi_internal
+    restart: unless-stopped
+    volumes:
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/prosody/config
+        target: /config
+        type: volume
+        volume: {}
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/prosody/prosody-plugins-custom
+        target: /prosody-plugins-custom
+        type: volume
+        volume: {}
+  jitsi-web:
+    container_name: meet.jitsi
+    env_file: ./.env-jitsi
+    image: jitsi/web:${JITSI_IMAGE_VERSION:-stable}
+    labels:
+      - swag=enable
+      - swag_proto=https
+      - swag_url=meet.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://meet.${MY_TLD}
+      - homepage.group=Social
+      - homepage.name=Jitsi
+      - homepage.href=https://meet.${MY_TLD}
+      - homepage.icon=jitsi.png
+      - homepage.description=Web Conferencing
+    networks:
+      - jitsi_internal
+      - web_proxy
+    ports:
+      - ${JITSI__HTTP_PORT}:80
+      - ${JITSI__HTTPS_PORT}:443
+    restart: unless-stopped
+    volumes:
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/web
+        target: /config
+        type: volume
+        volume: {}
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/web/crontabs
+        target: /var/spool/cron/crontabs
+        type: volume
+        volume: {}
+      - bind:
+          selinux: Z
+        source: ${DOCKER_VOLUME_CONFIG}/jitsi/transcripts
+        target: /usr/share/jitsi-meet/transcripts
+        type: volume
+        volume: {}
+volumes:
+  jitsi-web-admin-theme:
+    name: jitsi-web-admin-theme
+  jitsi-web-admin-upload:
+    name: jitsi-web-admin-upload
