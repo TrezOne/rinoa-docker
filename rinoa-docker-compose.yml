@@ -1122,35 +1122,6 @@ services:
     networks:
       default: null
     restart: always
-  git-opengist:
-    container_name: gitea-gist
-    environment:
-      OG_LOG_LEVEL: warn
-      OG_EXTERNAL_URL: https://gist.trez.wtf
-      OG_GIT_DEFAULT_BRANCH: "main"
-      OG_GITEA_CLIENT_KEY: ${OPENGIST_GITEA_CLIENT_KEY}
-      OG_GITEA_SECRET: ${OPENGIST_GITEA_SECRET}
-      OG_GITEA_URL: http://gitea:3000
-      OG_GITEA_NAME: "Gitea @ Rinoa"
-    image: ghcr.io/thomiceli/opengist:latest
-    labels:
-      homepage.description: Private Code Gists
-      homepage.group: Code
-      homepage.href: https://gist.trez.wtf
-      homepage.icon: /icons/opengist.svg
-      homepage.name: Opengist
-      swag: enable
-      swag.uptime-kuma.enabled: "true"
-      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
-      swag_port: "6157"
-      swag_proto: http
-      swag_url: gist.trez.wtf
-    ports:
-      - "6157:6157" # HTTP port
-      - "2222:2222" # SSH port, can be removed if you don't use SSH
-    restart: always
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/gitea/opengist:/opengist
   gitea:
     container_name: gitea
     environment:
@@ -1232,6 +1203,50 @@ services:
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
+  gitea-opengist:
+    container_name: gitea-opengist
+    environment:
+      OG_LOG_LEVEL: warn
+      OG_EXTERNAL_URL: https://gist.trez.wtf
+      OG_GIT_DEFAULT_BRANCH: "main"
+      OG_GITEA_CLIENT_KEY: ${OPENGIST_GITEA_CLIENT_KEY}
+      OG_GITEA_SECRET: ${OPENGIST_GITEA_SECRET}
+      OG_GITEA_URL: https://git.trez.wtf
+      OG_GITEA_NAME: "Gitea @ Rinoa"
+    image: ghcr.io/thomiceli/opengist:latest
+    labels:
+      homepage.description: Private Code Gists
+      homepage.group: Code
+      homepage.href: https://gist.trez.wtf
+      homepage.icon: /icons/opengist.svg
+      homepage.name: Opengist
+      swag: enable
+      swag.uptime-kuma.enabled: "true"
+      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
+      swag_port: "6157"
+      swag_proto: http
+      swag_url: gist.trez.wtf
+    ports:
+      - "6157:6157" # HTTP port
+      - "2222:2222" # SSH port, can be removed if you don't use SSH
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/gitea/opengist:/opengist
+  gitea-runner:
+    container_name: gitea-runner
+    environment:
+      CONFIG_FILE: /config.yaml
+      DOCKER_HOST: tcp://dockerproxy:2375
+      GITEA_INSTANCE_URL: http://gitea:3000
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN}"
+    image: gitea/act_runner:latest
+    networks:
+      default: null
+    ports:
+      - 63604:63604
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/gitea/act-runner/config.yaml:/config.yaml
   gluetun:
     cap_add:
       - NET_ADMIN
