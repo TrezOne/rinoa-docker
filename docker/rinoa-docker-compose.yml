@@ -454,7 +454,7 @@ services:
   bitwarden:
     container_name: bitwarden
     environment:
-      ADMIN_TOKEN: ROR3nZyP4vC7WhxHcZ17dcI2wETtliut26sK8MGFHUVONjvFaPadW4kRzr+1Pf5y
+      ADMIN_TOKEN: ${BITWARDEN_ENVIRONMENT_ADMIN_TOKEN}
       DATABASE_URL: data/db.sqlite3
       DISABLE_ADMIN_TOKEN: "false"
       DOMAIN: https://bitwarden.${MY_TLD}
@@ -535,8 +535,8 @@ services:
     container_name: cloudflareddns
     environment:
       ARGS: --dns-cloudflare-propagation-seconds 60
-      CF_APIKEY: KovoseS_l5lEP3HT4VdcGvImLghasKXcAa-QZ-bC
-      CF_APITOKEN: KovoseS_l5lEP3HT4VdcGvImLghasKXcAa-QZ-bC
+      CF_APIKEY: ${CLOUDFLAREDDNS_ENVIRONMENT_APIKEY}
+      CF_APITOKEN: ${CLOUDFLAREDDNS_ENVIRONMENT_APITOKEN}
       CF_HOSTS: trez.wtf
       CF_RECORDTYPES: A
       CF_USER: charish.patel@trez.wtf
@@ -1109,6 +1109,35 @@ services:
     networks:
       default: null
     restart: always
+  git-opengist:
+    container_name: gitea-gist
+    environment:
+      OG_LOG_LEVEL: warn
+      OG_EXTERNAL_URL: https://gist.trez.wtf
+      OG_GIT_DEFAULT_BRANCH: "main"
+      OG_GITEA_CLIENT_KEY: ${OPENGIST_GITEA_CLIENT_KEY}
+      OG_GITEA_SECRET: ${OPENGIST_GITEA_SECRET}
+      OG_GITEA_URL: http://gitea:3000
+      OG_GITEA_NAME: "Gitea @ Rinoa"
+    image: ghcr.io/thomiceli/opengist:latest
+    labels:
+      homepage.description: Private Code Gists
+      homepage.group: Code
+      homepage.href: https://gist.trez.wtf
+      homepage.icon: /icons/opengist.svg
+      homepage.name: Opengist
+      swag: enable
+      swag.uptime-kuma.enabled: "true"
+      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
+      swag_port: "6157"
+      swag_proto: http
+      swag_url: gist.trez.wtf
+    ports:
+      - "6157:6157" # HTTP port
+      - "2222:2222" # SSH port, can be removed if you don't use SSH
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/gitea/opengist:/opengist
   gitea:
     container_name: gitea
     environment:
