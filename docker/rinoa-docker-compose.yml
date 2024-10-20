@@ -91,8 +91,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/anonaddy
         target: /data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   adguard:
     container_name: adguard
     environment:
@@ -181,8 +182,9 @@ services:
         type: bind
       - source: ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/archive/trez.wtf
         target: /etc/ssl/certs
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   apprise:
     container_name: apprise
     environment:
@@ -313,8 +315,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/authelia/
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   authelia-pg:
     container_name: authelia-pg
     environment:
@@ -331,7 +334,8 @@ services:
       - source: authelia-pg-db
         target: /var/lib/postgresql/data
         type: volume
-        volume: {}
+        bind:
+          create_host_path: true
   bazarr:
     container_name: bazarr
     environment:
@@ -423,8 +427,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/bitmagnet
         target: /root/.local/share/bitmagnet
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   bitmagnet-pgsql:
     container_name: bitmagnet-pgsql
     environment:
@@ -590,17 +595,20 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/crowdsec/config.yaml.local
         target: /etc/crowdsec/config.yaml.local
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/crowdsec/local_api_credentials.yaml.local
         target: /etc/crowdsec/local_api_credentials.yaml.local
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - read_only: true
         source: ${DOCKER_VOLUME_CONFIG}/swag/log/nginx
         target: /var/log/swag
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: crowdsec-config
         target: /etc/crowdsec
         type: volume
@@ -689,12 +697,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/czkawka
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_STORAGE}
         target: /storage
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   dagu-scheduler:
     command: dagu scheduler
     container_name: dagu-scheduler
@@ -740,11 +750,13 @@ services:
       - source: dagu_config
         target: /home/dagu/.config/dagu
         type: volume
-        volume: {}
+        bind:
+          create_host_path: true
       - source: dagu_data
         target: /home/dagu/.local/share
         type: volume
-        volume: {}
+        bind:
+          create_host_path: true
   delugevpn:
     cap_add:
       - NET_ADMIN
@@ -891,8 +903,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/docuseal
         target: /data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   duplicati:
     container_name: duplicati
     environment:
@@ -1187,8 +1200,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gitea
         target: /data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - bind:
           create_host_path: true
         read_only: true
@@ -1311,8 +1325,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gotify
         target: /app/data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   grafana:
     container_name: grafana
     depends_on:
@@ -1357,8 +1372,9 @@ services:
         type: bind
       - source: ${DOCKER_VOLUME_CONFIG}/grafana/data
         target: /var/lib/grafana
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - bind:
           create_host_path: true
         source: /rinoa-storage
@@ -1393,12 +1409,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/grafana/alloy/config.alloy
         target: /etc/alloy/config.alloy
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/grafana/alloy/endpoints.json
         target: /etc/alloy/endpoints.json
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - bind:
           create_host_path: true
         read_only: true
@@ -1436,8 +1454,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/grafana/loki/loki-config.yaml
         target: /etc/loki/loki-config.yaml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   grafana-mimir:
     command:
       - -ingester.native-histograms-ingestion-enabled=true
@@ -1469,8 +1488,9 @@ services:
         volume: {}
       - source: ${DOCKER_VOLUME_CONFIG}/grafana/mimir/mimir.yaml
         target: /etc/mimir.yaml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   grafana-mimir-memcached:
     container_name: grafana-mimir-memcached
     depends_on:
@@ -1518,8 +1538,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/grafana/pyroscope/config.yaml
         target: /etc/pyroscope.yml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   grafana-tempo:
     command:
       - -config.file=/etc/tempo.yaml
@@ -1564,8 +1585,9 @@ services:
         volume: {}
       - source: ${DOCKER_VOLUME_CONFIG}/grafana/tempo/tempo.yaml
         target: /etc/tempo.yaml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   homepage:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:latest
@@ -1580,21 +1602,25 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/homepage
         target: /app/config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/homepage/images
         target: /app/public/images
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/homepage/icons
         target: /app/public/icons
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - read_only: true
         source: ${DOCKER_VOLUME_STORAGE}
         target: /rinoa-storage
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   hortusfox:
     container_name: hortusfox
     depends_on:
@@ -1721,12 +1747,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/hugo/
         target: /src
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/hugo/cache
         target: /tmp/hugo_cache
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   invidious:
     container_name: invidious
     depends_on:
@@ -1794,12 +1822,14 @@ services:
         volume: {}
       - source: ${DOCKER_VOLUME_CONFIG}/invidious/sql
         target: /config/sql
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/invidious/entrypoint/init-invidious-db.sh
         target: /docker-entrypoint-initdb.d/init-invidious-db.sh
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   invoice_ninja:
     container_name: invoice_ninja
     environment:
@@ -1844,20 +1874,24 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/public
         target: /var/www/app/public
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/storage
         target: /var/www/app/storage
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/php/php.ini
         target: /usr/local/etc/php/php.ini
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/php/php-cli.ini
         target: /usr/local/etc/php/php-cli.ini
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   invoice_ninja_proxy:
     container_name: invoice_ninja_proxy
     depends_on:
@@ -1916,13 +1950,15 @@ services:
       - read_only: true
         source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/proxy/invoice_ninja.conf
         target: /etc/nginx/conf.d/in-vhost.conf
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - read_only: true
         source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/public
         target: /var/www/app/public
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   it-tools:
     container_name: it-tools
     image: ghcr.io/corentinth/it-tools:latest
@@ -2025,8 +2061,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/keycloak
         target: /opt/keycloak
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   jitsi-admin-websocket:
     container_name: jitsi-admin-websocket
     environment:
@@ -2121,8 +2158,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/jitsi/jibri
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   jitsi-jicofo:
     container_name: focus.meet.jitsi
     depends_on:
@@ -2193,11 +2231,11 @@ services:
     restart: unless-stopped
     volumes:
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/jicofo
         target: /config
-        type: volume
-        volume: {}
+        type: bind
   jitsi-jigasi:
     container_name: jitsi-jigasi
     depends_on:
@@ -2254,17 +2292,17 @@ services:
     restart: unless-stopped
     volumes:
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/jigasi
         target: /config
-        type: volume
-        volume: {}
+        type: bind
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/transcripts
         target: /tmp/transcripts
-        type: volume
-        volume: {}
+        type: bind
   jitsi-jvb:
     container_name: video.meet.jitsi
     depends_on:
@@ -2314,11 +2352,11 @@ services:
     restart: unless-stopped
     volumes:
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/jvb
         target: /config
-        type: volume
-        volume: {}
+        type: bind
   jitsi-prosody:
     container_name: xmpp.meet.jitsi
     environment:
@@ -2418,17 +2456,17 @@ services:
     restart: unless-stopped
     volumes:
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/prosody/config
         target: /config
-        type: volume
-        volume: {}
+        type: bind
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/prosody/prosody-plugins-custom
         target: /prosody-plugins-custom
-        type: volume
-        volume: {}
+        type: bind
   jitsi-web:
     container_name: meet.jitsi
     environment:
@@ -2595,23 +2633,23 @@ services:
     restart: unless-stopped
     volumes:
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/web
         target: /config
-        type: volume
-        volume: {}
+        type: bind
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/web/crontabs
         target: /var/spool/cron/crontabs
-        type: volume
-        volume: {}
+        type: bind
       - bind:
+          create_host_path: true
           selinux: Z
         source: ${DOCKER_VOLUME_CONFIG}/jitsi/transcripts
         target: /usr/share/jitsi-meet/transcripts
-        type: volume
-        volume: {}
+        type: bind
   joplin-db:
     container_name: joplin-db
     environment:
@@ -2639,7 +2677,7 @@ services:
       - INSTANCE_NAME='Joplin @ Rinoa'
       - IS_ADMIN_INSTANCE=true
       - MAILER_ENABLED=1
-      - MAILER_HOST=postal-smtp
+      - MAILER_HOST=postal-SMTP
       - MAILER_PORT=25
       - MAILER_SECURITY=none
       - MAILER_AUTH_USER=${POSTAL_SMTP_AUTH_USER}
@@ -2811,12 +2849,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/lidify
         target: /lidify/config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_STORAGE}/Audio/Music
         target: /data/media/music
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - bind:
           create_host_path: true
         read_only: true
@@ -2856,8 +2896,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/lldap
         target: /data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   localai:
     container_name: localai
     environment:
@@ -2893,8 +2934,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/localai/models
         target: /build/models
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   maloja:
     container_name: maloja
     environment:
@@ -2934,16 +2976,19 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/maloja/config
         target: /etc/maloja
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/maloja/data
         target: /var/lib/maloja
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/maloja/logs
         target: /var/log/maloja
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   mariadb:
     container_name: mariadb
     environment:
@@ -2976,12 +3021,14 @@ services:
         type: bind
       - source: ${DOCKER_VOLUME_STORAGE}
         target: /storage
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/mariadb
         target: /var/lib/mysql
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   mattermost:
     container_name: mattermost
     depends_on:
@@ -3045,28 +3092,34 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/mattermost/config
         target: /mattermost/config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/mattermost/data
         target: /mattermost/data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/mattermost/logs
         target: /mattermost/logs
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/mattermost/plugins
         target: /mattermost/plugins
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/mattermost/client/plugins
         target: /mattermost/client/plugins
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/mattermost/bleve-indexes
         target: /mattermost/bleve-indexes
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   mattermost-db:
     container_name: mattermost-db
     environment:
@@ -3191,12 +3244,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/minio/data
         target: /mnt/data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/minio/minio
         target: /etc/config.env
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   mongodb1:
     command:
       - --replSet
@@ -3226,12 +3281,14 @@ services:
     volumes:
       - source: mongo1_data
         target: /data/db
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: mongo1_config
         target: /data/configdb
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   mongodb2:
     command:
       - --replSet
@@ -3254,12 +3311,14 @@ services:
     volumes:
       - source: mongo2_data
         target: /data/db
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: mongo2_config
         target: /data/configdb
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   mongodb3:
     command:
       - --replSet
@@ -3312,8 +3371,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/multi-scrobbler
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   navidrome:
     container_name: navidrome
     environment:
@@ -3360,12 +3420,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/navidrome
         target: /data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_STORAGE}/Audio/Music
         target: /music
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   nextcloud:
     container_name: nextcloud
     environment:
@@ -3526,12 +3588,14 @@ services:
         volume: {}
       - source: ${DOCKER_VOLUME_CONFIG}/paperless-ngx/export
         target: /usr/src/paperless/export
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/paperless-ngx/consume
         target: /usr/src/paperless/consume
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   plausible:
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     container_name: plausible
@@ -3592,8 +3656,9 @@ services:
     volumes:
       - source: plausible-db-data
         target: /var/lib/postgresql/data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   plausible_events_db:
     container_name: plausible-events-db
     expose:
@@ -3609,22 +3674,26 @@ services:
     volumes:
       - source: plausible-event-data
         target: /var/lib/clickhouse
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: plausible-event-logs
         target: /var/log/clickhouse-server
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - read_only: true
         source: ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml
         target: /etc/clickhouse-server/config.d/logging.xml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - read_only: true
         source: ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml
         target: /etc/clickhouse-server/users.d/logging.xml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   portainer:
     command:
       - -H
@@ -3694,8 +3763,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/postal
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   postal-web:
     command: postal web-server
     container_name: postal-web
@@ -3724,8 +3794,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/postal
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   postal-worker:
     command: postal worker
     container_name: postal-worker
@@ -3738,8 +3809,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/postal
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   prowlarr:
     container_name: prowlarr
     environment:
@@ -3828,12 +3900,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_STORAGE}/Movies
         target: /data/media/movies
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/radarec
         target: /radarec/config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - bind:
           create_host_path: true
         read_only: true
@@ -3954,8 +4028,9 @@ services:
     volumes:
       - source: reactive-resume-pg
         target: /var/lib/postgresql/data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   readarr:
     container_name: readarr
     environment:
@@ -4121,8 +4196,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/remmina
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -4298,12 +4374,14 @@ services:
         type: bind
       - source: ${DOCKER_VOLUME_CONFIG}/scrutiny/config
         target: /opt/scrutiny/config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/scrutiny/influxdb
         target: /opt/scrutiny/influxdb
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   searxng:
     cap_add:
       - CHOWN
@@ -4344,8 +4422,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/searxng
         target: /etc/searxng
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   sonarr:
     container_name: sonarr
     environment:
@@ -4431,12 +4510,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_STORAGE}/TV_Shows
         target: /data/media/shows
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/sonashow
         target: /sonashow/config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - bind:
           create_host_path: true
         read_only: true
@@ -4474,12 +4555,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/soulseek
         target: /app
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_STORAGE}/Audio/Music
         target: /music
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   swag:
     cap_add:
       - NET_ADMIN
@@ -4601,12 +4684,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/tandoor/static
         target: /opt/recipes/staticfiles
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/tandoor/media
         target: /opt/recipes/mediafiles
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   tandoor-pg:
     container_name: tandoor-pg
     environment:
@@ -5859,12 +5944,14 @@ services:
       - read_only: true
         source: ${DOCKER_VOLUME_CONFIG}/traccar/traccar.xml
         target: /opt/traccar/conf/traccar.xml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/traccar/logs
         target: /opt/traccar/logs
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   traccar-pg:
     container_name: traccar-pg
     environment:
@@ -5880,8 +5967,9 @@ services:
     volumes:
       - source: traccar-pg
         target: /var/lib/postgresql/data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   unmanic:
     container_name: unmanic
     environment:
@@ -5914,12 +6002,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/unmanic
         target: /config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_STORAGE}
         target: /library
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: unmanic-cache
         target: /tmp/unmanic
         type: volume
@@ -6008,12 +6098,14 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/config/
         target: /vault/config
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/logs/
         target: /vault/logs
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   wallabag:
     container_name: wallabag
     depends_on:
@@ -6069,8 +6161,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/wallabag/images
         target: /var/www/wallabag/web/assets/images
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   wallos:
     container_name: wallos
     environment:
@@ -6098,12 +6191,14 @@ services:
     volumes:
       - source: wallos-db
         target: /var/www/html/db
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: wallos-logos
         target: /var/www/html/images/uploads/logos
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   watchtower:
     container_name: watchtower
     environment:
@@ -6189,8 +6284,9 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/watchyourlan
         target: /data
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   wazuh.agent:
     container_name: wazuh.agent
     environment:
@@ -6254,24 +6350,29 @@ services:
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/certs/wazuh.dashboard.pem
         target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/certs/wazuh.dashboard-key.pem
         target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/certs/root-ca.pem
         target: /usr/share/wazuh-dashboard/certs/root-ca.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/config/opensearch_dashboards.yml
         target: /usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/config/wazuh.yml
         target: /usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: wazuh-dashboard-config
         target: /usr/share/wazuh-dashboard/data/wazuh/config
         type: volume
@@ -6308,32 +6409,39 @@ services:
         volume: {}
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/certs/root-ca.pem
         target: /usr/share/wazuh-indexer/certs/root-ca.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/certs/wazuh.indexer-key.pem
         target: /usr/share/wazuh-indexer/certs/wazuh.indexer.key
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/certs/wazuh.indexer.pem
         target: /usr/share/wazuh-indexer/certs/wazuh.indexer.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/certs/admin.pem
         target: /usr/share/wazuh-indexer/certs/admin.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/certs/admin-key.pem
         target: /usr/share/wazuh-indexer/certs/admin-key.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/config/wazuh.indexer.yml
         target: /usr/share/wazuh-indexer/opensearch.yml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/config/internal_users.yml
         target: /usr/share/wazuh-indexer/opensearch-security/internal_users.yml
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   wazuh.manager:
     container_name: wazuh.manager
     environment:
@@ -6422,20 +6530,24 @@ services:
         volume: {}
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/certs/root-ca.pem
         target: /etc/ssl/root-ca.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/certs/wazuh.manager.pem
         target: /etc/ssl/filebeat.pem
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/certs/wazuh.manager-key.pem
         target: /etc/ssl/filebeat.key
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
       - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/config/wazuh_manager.conf
         target: /wazuh-config-mount/etc/ossec.conf
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   web-check:
     container_name: web-check
     image: lissy93/web-check
@@ -6625,7 +6737,7 @@ services:
       - read_only: true
         source: ${DOCKER_VOLUME_CONFIG}/zammad/scripts/backup.sh
         target: /usr/local/bin/backup.sh
-        type: volume
+        type: bind
         volume: {}
   zammad-elasticsearch:
     container_name: zammad-elasticsearch
@@ -6685,7 +6797,8 @@ services:
       - source: zammad-storage
         target: /opt/zammad/storage
         type: volume
-        volume: {}
+        bind:
+          create_host_path: true
   zammad-memcached:
     command: memcached -m 256M
     container_name: zammad-memcached
@@ -6749,8 +6862,9 @@ services:
     volumes:
       - source: zammad-storage
         target: /opt/zammad/storage
-        type: volume
-        volume: {}
+        type: bind
+        bind:
+          create_host_path: true
   zammad-postgresql:
     container_name: zammad-postgresql
     environment:
