@@ -1,0 +1,158 @@
+name: gitea
+  gitea:
+    container_name: gitea
+    depends_on:
+      gitea-db:
+        condition: service_healthy
+        required: true
+    environment:
+      - USER_UID=${PUID}
+      - USER_GID=${PGID}
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=gitea-db:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=${GITEA_PG_DB_PASSWORD}
+      - GITEA__mailer__ENABLED=true
+      - GITEA__mailer__FROM='"Gitea" <noreply@${MY_TLD}>'
+      - GITEA__mailer__PROTOCOL=smtp
+      - GITEA__mailer__SMTP_ADDR=postal-smtp
+      - GITEA__mailer__SMTP_PORT=25
+      - GITEA__mailer__IS_TLS_ENABLED=faLse
+      - GITEA__mailer__USER=${POSTAL_SMTP_AUTH_USER}
+      - GITEA__mailer__PASSWD=${POSTAL_SMTP_AUTH_PASSWORD}
+    image: gitea/gitea:1.22.2
+    labels:
+      - homepage.group=Code
+      - homepage.name=Gitea
+      - homepage.href=https://git.${MY_TLD}
+      - homepage.icon=gitea.svg
+      - homepage.description=Private Code Repo
+      - homepage.widget.type=gitea
+      - homepage.widget.url=http://gitea:3000
+      - homepage.widget.key=${GITEA_HOMEPAGE_API_KEY}
+      - swag=enable
+      - swag_port=3000
+      - swag_proto=http
+      - swag_url=git.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://git.${MY_TLD}
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        protocol: tcp
+        published: "3013"
+        target: 3000
+      - mode: ingress
+        protocol: tcp
+        published: "222"
+        target: 22
+    restart: always
+    volumes:
+      - source: ${DOCKER_VOLUME_CONFIG}/gitea
+        target: /data
+        type: bind
+        bind:
+          create_host_path: true
+      - bind:
+          create_host_path: true
+        read_only: true
+        source: /etc/timezone
+        target: /etc/timezone
+        type: bind
+      - bind:
+          create_host_path: true
+        read_only: true
+        source: /etc/localtime
+        target: /etc/localtime
+        type: bind
+  gitea-db:
+    container_name: gitea-db
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=${GITEA_PG_DB_PASSWORD}
+      - POSTGRES_DB=gitea
+    expose:
+      - 5432
+    healthcheck:
+      interval: 10s
+      start_period: 20s
+      test:
+        - CMD-SHELL
+        - pg_isready
+    image: postgres:14
+    networks:
+      default: null
+    restart: always
+    volumes:
+      - source: gitea-pg-db
+        target: /var/lib/postgresql/data
+        type: volume
+        volume: {}
+  gitea-opengist:
+    container_name: gitea-opengist
+    environment:
+      OG_LOG_LEVEL: warn
+      OG_EXTERNAL_URL: https://gist.${MY_TLD}
+      OG_GIT_DEFAULT_BRANCH: "main"
+      OG_GITEA_CLIENT_KEY: ${OPENGIST_GITEA_CLIENT_KEY}
+      OG_GITEA_SECRET: ${OPENGIST_GITEA_SECRET}
+      OG_GITEA_URL: https://git.${MY_TLD}
+      OG_GITEA_NAME: "Gitea @ Rinoa"
+    image: ghcr.io/thomiceli/opengist:latest
+    labels:
+      homepage.description: Private Code Gists
+      homepage.group: Code
+      homepage.href: https://gist.${MY_TLD}
+      homepage.icon: /icons/opengist.svg
+      homepage.name: Opengist
+      swag: enable
+      swag.uptime-kuma.enabled: "true"
+      swag.uptime-kuma.monitor.url: https://gist.${MY_TLD}
+      swag_port: "6157"
+      swag_proto: http
+      swag_url: gist.${MY_TLD}
+    ports:
+      - "6157:6157" # HTTP port
+      - "2222:2222" # SSH port, can be removed if you don't use SSH
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/gitea/opengist:/opengist
+  gitea-runner:
+    container_name: gitea-runner
+    depends_on:
+      gitea:
+        condition: service_started
+    environment:
+      CONFIG_FILE: /config.yaml
+      DOCKER_HOST: tcp://dockerproxy:2375
+      GITEA_INSTANCE_URL: http://gitea:3000
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN}"
+      GITEA_RUNNER_NAME: "gitea-runner-1"
+    image: gitea/act_runner:latest
+    networks:
+      default: null
+    ports:
+      - 63604:63604
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/gitea/act-runner/config.yaml:/config.yaml
+  gitea-sonarqube-bot:
+    container_name: gitea-sonarqube-bot
+    depends_on:
+      gitea:
+        condition: service_started
+      sonarqube:
+        condition: service_started
+    image: justusbunsi/gitea-sonarqube-bot:v0.3.5
+    environment:
+      GITEA_SQ_BOT_PORT: 58525
+      GITEA_SQ_BOT_CONFIG_PATH: /home/bot/config/config.yaml
+    ports:
+      - 58525:58525
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/gitea/sonarqube-bot/:/home/bot/config/
+volumes:
+  gitea-pg-db:
+    name: gitea-pg-db
