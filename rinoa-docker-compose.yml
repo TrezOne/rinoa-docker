@@ -46,10 +46,10 @@ services:
       MAIL_FROM_ADDRESS: null
       MAIL_FROM_NAME: addy@Rinoa
       PGID: ${PGID}
-      POSTFIX_DEBUG: false
+      POSTFIX_DEBUG: true
       POSTFIX_MESSAGE_SIZE_LIMIT: 26214400
       POSTFIX_RELAYHOST: postal-smtp
-      POSTFIX_RELAYHOST_AUTH_ENABLE: true
+      POSTFIX_RELAYHOST_AUTH_ENABLE: false
       POSTFIX_RELAYHOST_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       POSTFIX_RELAYHOST_USERNAME: ${POSTAL_SMTP_AUTH_USER}
       POSTFIX_SMTP_TLS: false
@@ -1124,6 +1124,10 @@ services:
     restart: always
   gitea:
     container_name: gitea
+    depends_on:
+      gitea-db:
+        condition: service_healthy
+        required: true
     environment:
       - USER_UID=${PUID}
       - USER_GID=${PGID}
@@ -1194,6 +1198,12 @@ services:
       - POSTGRES_DB=gitea
     expose:
       - 5432
+    healthcheck:
+      interval: 10s
+      start_period: 20s
+      test:
+        - CMD-SHELL
+        - pg_isready
     image: postgres:14
     networks:
       default: null
@@ -1234,11 +1244,15 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/gitea/opengist:/opengist
   gitea-runner:
     container_name: gitea-runner
+    depends_on:
+      gitea:
+        condition: service_started
     environment:
       CONFIG_FILE: /config.yaml
       DOCKER_HOST: tcp://dockerproxy:2375
       GITEA_INSTANCE_URL: http://gitea:3000
       GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN}"
+      GITEA_RUNNER_NAME: "gitea-runner-1"
     image: gitea/act_runner:latest
     networks:
       default: null
@@ -1247,6 +1261,21 @@ services:
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/act-runner/config.yaml:/config.yaml
+  gitea-sonarqube-bot:
+    container_name: gitea-sonarqube-bot
+    depends_on:
+      gitea:
+        condition: service_started
+      sonarqube:
+        condition: service_started
+    image: justusbunsi/gitea-sonarqube-bot:v0.3.5
+    environment:
+      GITEA_SQ_BOT_PORT: 58525
+      GITEA_SQ_BOT_CONFIG_PATH: /home/bot/config/config.yaml
+    ports:
+      - 58525:58525
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/gitea/sonarqube-bot/:/home/bot/config/
   gluetun:
     cap_add:
       - NET_ADMIN
@@ -4191,10 +4220,6 @@ services:
       - homepage.href=https://rem.${MY_TLD}
       - homepage.icon=/icons/remmina.svg
       - homepage.description=GTK Remote desktop client (EXEC, SPICE, SSH, RDP, & VNC)
-      - homepage.widget.type=cloudflared
-      - homepage.widget.accountid=${CLOUDFLARE_ACCOUNT_ID}
-      - homepage.widget.tunnelid=${REMMINA_CF_TUNNEL_ID}
-      - homepage.widget.key=${CLOUDFLARE_DNS_API_TOKEN}
     networks:
       default: null
     ports:
@@ -4440,6 +4465,62 @@ services:
         type: bind
         bind:
           create_host_path: true
+  sonarqube:
+    container_name: sonarqube
+    depends_on:
+      sonarqube-pg-db:
+        condition: service_healthy
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://sonarqube-pg-db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: ${SONARQUBE_POSTGRES_PASSWORD}
+      SONAR_SECURITY_REALM: LDAP
+      LDAP_URL: ldap://lldap:3890
+      LDAP_BINDDN: cn=sonarqube,ou=people,dc=trez,dc=wtf
+      LDAP_BINDPASSWORD: ${SONARQUBE_LDAP_BIND_PASSWORD}
+      LDAP_AUTHENTICATION: simple
+      LDAP_USER_BASEDN: ou=people,dc=trez,dc=wtf
+      LDAP_USER_REQUEST: (&(objectClass=inetOrgPerson)(uid={login})(memberof=cn=sonarqube_users,ou=groups,dc=example,dc=com))
+      LDAP_USER_REALNAMEATTRIBUTE: cn
+      LDAP_USER_EMAILATTRIBUTE: mail
+    hostname: sonarqube
+    image: mc1arke/sonarqube-with-community-branch-plugin:lts
+    labels:
+      - homepage.group=Code
+      - homepage.name=Sonarqube
+      - homepage.href=https://sqube.trez.wtf
+      - homepage.icon=sonarqube.svg
+      - homepage.description=Code quality/security
+      - swag=enable
+      - swag_proto=http
+      - swag_port=9000
+      - swag_url=sqube.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://sqube.${MY_TLD}
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-extensions:/opt/sonarqube/extensions
+      - sonarqube-logs:/opt/sonarqube/logs
+      - sonarqube-temp:/opt/sonarqube/temp
+    ports:
+      - 9003:9000
+    read_only: true
+    restart: unless-stopped
+  sonarqube-pg-db:
+    container_name: sonarqube-pg-db    
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: ${SONARQUBE_POSTGRES_PASSWORD}
+      POSTGRES_DB: sonar
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    image: postgres:17-alpine
+    volumes:
+      - sonarqube-db:/var/lib/postgresql
+      - sonarqube-db-data:/var/lib/postgresql/data
   sonarr:
     container_name: sonarr
     environment:
@@ -7154,6 +7235,18 @@ volumes:
     name: compose_reactive-resume-pg
   rustdesk-data:
     name: compose_rustdesk-data
+  sonarqube-data:
+    name: sonarqube-data
+  sonarqube-db:
+    name: sonarqube-db
+  sonarqube-db-data:
+    name: sonarqube-db-data
+  sonarqube-extensions:
+    name: sonarqube-extensions
+  sonarqube-logs:
+    name: sonarqube-logs
+  sonarqube-temp:
+    name: sonarqube-temp
   tandoor-pg:
     name: compose_tandoor-pg
   traccar-pg:
