@@ -1,0 +1,98 @@
+  plausible:
+    command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
+    container_name: plausible
+    depends_on:
+      plausible_db:
+        condition: service_started
+        required: true
+      plausible_events_db:
+        condition: service_started
+        required: true
+    environment:
+      BASE_URL: https://analytics.${MY_TLD}
+      CLICKHOUSE_DATABASE_URL: http://plausible-events-db:8123/plausible_events_db
+      DATABASE_URL: postgres://plausible:${PLAUSIBLE_PG_PASSWORD}@plausible-db:5432/plausible_db
+      DISABLE_REGISTRATION: invite_only
+      ENABLE_EMAIL_VERIFICATION: true
+      MAILER_ADAPTER: Bamboo.Mua
+      MAILER_EMAIL: noreply@trez.wtf
+      MAILER_NAME: Plausible
+      MAXMINDDB_LICENSE_KEY: ${SWAG_MAXMINDDB_LICENSE_KEY}
+      SECRET_KEY_BASE: ${PLAUSIBLE_SECRET_KEY_BASE}
+      SMTP_HOST_ADDR: postal-smtp
+      SMTP_HOST_PORT: 25
+      SMTP_USER_NAME: ${POSTAL_SMTP_AUTH_USER}
+      SMTP_USER_PWD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      TOTP_VAULT_KEY: ${PLAUSIBLE_TOTP_VAULT_KEY}
+    image: ghcr.io/plausible/community-edition:v2.1.0
+    labels:
+      - swag=enable
+      - swag_proto=http
+      - swag_port=8000
+      - swag_url=analytics.${MY_TLD}
+      - homepage.group=Professional Services
+      - homepage.name=Plausible
+      - homepage.href=https://analytics.${MY_TLD}
+      - homepage.icon=plausible.svg
+      - homepage.description=Open-source web analytics
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        protocol: tcp
+        published: "8107"
+        target: 8000
+    restart: always
+  plausible_db:
+    container_name: plausible-db
+    environment:
+      POSTGRES_DB: plausible_db
+      POSTGRES_PASSWORD: ${PLAUSIBLE_PG_PASSWORD}
+      POSTGRES_USER: plausible
+    expose:
+      - 5432
+    image: postgres:16-alpine
+    networks:
+      default: null
+    restart: always
+    volumes:
+      - source: plausible-db-data
+        target: /var/lib/postgresql/data
+        type: bind
+        bind:
+          create_host_path: true
+  plausible_events_db:
+    container_name: plausible-events-db
+    expose:
+      - 8123
+    image: clickhouse/clickhouse-server:24.3.3.102-alpine
+    networks:
+      default: null
+    restart: always
+    ulimits:
+      nofile:
+        hard: 262144
+        soft: 262144
+    volumes:
+      - source: plausible-event-data
+        target: /var/lib/clickhouse
+        type: bind
+        bind:
+          create_host_path: true
+      - source: plausible-event-logs
+        target: /var/log/clickhouse-server
+        type: bind
+        bind:
+          create_host_path: true
+      - read_only: true
+        source: ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml
+        target: /etc/clickhouse-server/config.d/logging.xml
+        type: bind
+        bind:
+          create_host_path: true
+      - read_only: true
+        source: ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml
+        target: /etc/clickhouse-server/users.d/logging.xml
+        type: bind
+        bind:
+          create_host_path: true
