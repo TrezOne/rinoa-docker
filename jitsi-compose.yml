@@ -47,7 +47,7 @@ services:
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/keycloak
-        target: /opt/keycloak
+        target: /opt/keycloak/data/import
         type: volume
         volume: {}
   jitsi-admin-websocket:
