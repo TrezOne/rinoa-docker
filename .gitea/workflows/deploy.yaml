@@ -1,0 +1,67 @@
+name: Docker Compose PR Check and Deploy
+
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+    branches:
+      - main
+
+jobs:
+  status-check:
+    name: Validate SonarQube Bot Status
+    runs-on: self-hosted
+    steps:
+      - name: Fetch PR Status
+        run: |
+          curl -s \
+            -H "Authorization: token $GITEA_TOKEN" \
+            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/{{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status" \
+            | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
+
+  dry-run:
+    name: Dry Run Docker Compose
+    runs-on: self-hosted
+    needs: status-check
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Validate Docker Compose
+        run: |
+          docker compose config -f docker-compose.yml
+        working-directory: ./
+
+  manual-approval:
+    name: Manual Approval
+    runs-on: self-hosted
+    needs: dry-run
+    steps:
+      - name: Approval Required
+        run: |
+          echo "Awaiting manual approval..."
+          exit 1
+
+  merge-and-deploy:
+    name: Merge and Deploy
+    runs-on: self-hosted
+    needs: manual-approval
+    steps:
+      - name: Merge Pull Request
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+        run: |
+          curl -X POST \
+            -H "Authorization: token $GITEA_TOKEN" \
+            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/{{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/merge"
+
+      - name: Deploy Docker Compose Changes
+        run: |
+          ssh $DOCKER_USER@$DOCKER_HOST "
+            cd /path/to/docker/compose/files &&
+            docker compose pull &&
+            docker compose up -d --remove-orphans
+          "
+        env:
+          DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          SSH_KEY: ${{ secrets.DOCKER_SSH_KEY }}
