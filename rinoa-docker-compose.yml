@@ -392,7 +392,7 @@ services:
       - --keys=dht_crawler
     container_name: bitmagnet
     depends_on:
-      bitmagnet-pgsql:
+      bitmagnet-pg-db:
         condition: service_healthy
         required: true
       gluetun:
@@ -401,7 +401,7 @@ services:
         restart: true
     environment:
       LOG_FILE_ROTATION_ENABLED: true
-      POSTGRES_HOST: bitmagnet-pgsql
+      POSTGRES_HOST: bitmagnet-pg-db
       POSTGRES_PASSWORD: ${BITMAGNET_POSTGRESQL_PASSWORD}
       POSTGRES_USER: bitmagnet
     image: ghcr.io/bitmagnet-io/bitmagnet:latest
@@ -430,8 +430,8 @@ services:
         type: bind
         bind:
           create_host_path: true
-  bitmagnet-pgsql:
-    container_name: bitmagnet-pgsql
+  bitmagnet-pg-db:
+    container_name: bitmagnet-pg-db
     environment:
       POSTGRES_DB: bitmagnet
       POSTGRES_PASSWORD: ${BITMAGNET_POSTGRESQL_PASSWORD}
@@ -444,7 +444,7 @@ services:
       test:
         - CMD-SHELL
         - pg_isready
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     networks:
       bitmagnet:
         ipv4_address: 192.168.55.8
@@ -452,7 +452,7 @@ services:
     restart: unless-stopped
     shm_size: 1g
     volumes:
-      - source: bitmagnet-pgsql
+      - source: bitmagnet-pg-db
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
@@ -512,6 +512,40 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  bluesky-pds:
+    container_name: bluesky-pds
+    environment:
+      PDS_ADMIN_EMAIL: charish.patel@trez.wtf
+      PDS_HOSTNAME: bsky.trez.wtf
+      PDS_JWT_SECRET: ${BLUESKY_PDS_JWT_SECRET}
+      PDS_ADMIN_PASSWORD: ${BLUESKY_PDS_ADMIN_PASSWORD}
+      PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX: ${BLUESKY_PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX}
+      PDS_DATA_DIRECTORY: /pds
+      PDS_EMAIL_SMTP_URL: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
+      PDS_EMAIL_FROM_ADDRESS: noreply@trez.wtf
+      PDS_BLOBSTORE_DISK_LOCATION: /pds/blocks
+      PDS_BLOB_UPLOAD_LIMIT: 52428800
+      PDS_DID_PLC_URL: ${PDS_DID_PLC_URL}
+      PDS_BSKY_APP_VIEW_URL: ${PDS_BSKY_APP_VIEW_URL}
+      PDS_BSKY_APP_VIEW_DID: ${PDS_BSKY_APP_VIEW_DID}
+      PDS_REPORT_SERVICE_URL: ${PDS_REPORT_SERVICE_URL}
+      PDS_REPORT_SERVICE_DID: ${PDS_REPORT_SERVICE_DID}
+      PDS_CRAWLERS: ${PDS_CRAWLERS}
+      LOG_ENABLED: true
+    expose: 
+      - 3000
+    image: ghcr.io/bluesky-social/pds:latest
+    labels:
+      - swag=enable
+      - swag_port=3000
+      - swag_url=bsky.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://bsky.${MY_TLD}
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: ${DOCKER_VOLUME_CONFIG}/bluesky-pds
+        target: /pds
   browserless:
     container_name: browserless
     environment:
@@ -536,6 +570,55 @@ services:
     networks:
       default: null
     restart: unless-stopped
+  castopod:
+    container_name: castopod
+    depends_on:
+      - mariadb
+    environment:
+      MYSQL_DATABASE: castopod
+      MYSQL_USER: castopod
+      MYSQL_PASSWORD: ${CASTOPOD_MYSQL_PASSWORD}
+      CP_DATABASE_HOSTNAME: mariadb
+      CP_DATABASE_NAME: castopod
+      CP_DATABASE_USERNAME: castopod
+      CP_DATABASE_PASSWORD: ${CASTOPOD_MYSQL_PASSWORD}
+      CP_BASEURL: pod.trez.wtf
+      CP_ANALYTICS_SALT: ${CASTOPOD_ANALYTICS_SALT}
+      CP_CACHE_HANDLER: redis
+      CP_DISABLE_HTTPS: 1
+      CP_REDIS_HOST: redis
+      CP_EMAIL_SMTP_HOST: postal-smtp
+      CP_EMAIL_FROM: noreply@trez.wtf
+      CP_EMAIL_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      CP_EMAIL_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+    expose:
+      - 8000
+    image: castopod/castopod:latest
+    labels:
+      - homepage.group=Social
+      - homepage.name=Castopod
+      - homepage.href=https://pod.${MY_TLD}
+      - homepage.icon=castopod.png
+      - homepage.description=Podcast self-hosting
+      - swag=enable
+      - swag_port=8000
+      - swag_url=pod.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://pod.${MY_TLD}
+    restart: unless-stopped
+    volumes:
+      - castopod-media:/var/www/castopod/public/media
+  cloudflared:
+    command: ['tunnel', '--no-autoupdate', 'run', '--token', '${CLOUDFLARED_TUNNEL_TOKEN}']
+    container_name: cloudflared
+    environment:
+      CLOUDFLARED_TUNNEL_KEY: ${CLOUDFLARED_TUNNEL_TOKEN}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    image: 'cloudflare/cloudflared:latest'
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/cloudflared:/etc/cloudflared
   cloudflareddns:
     container_name: cloudflareddns
     environment:
@@ -1141,12 +1224,11 @@ services:
       - GITEA__mailer__PROTOCOL=smtp
       - GITEA__mailer__SMTP_ADDR=postal-smtp
       - GITEA__mailer__SMTP_PORT=25
-      - GITEA__mailer__IS_TLS_ENABLED=faLse
       - GITEA__mailer__USER=${POSTAL_SMTP_AUTH_USER}
       - GITEA__mailer__PASSWD=${POSTAL_SMTP_AUTH_PASSWORD}
     image: gitea/gitea:1.22.2
     labels:
-      - homepage.group=Code
+      - homepage.group=Code/DevOps
       - homepage.name=Gitea
       - homepage.href=https://git.${MY_TLD}
       - homepage.icon=gitea.svg
@@ -1155,8 +1237,6 @@ services:
       - homepage.widget.url=http://gitea:3000
       - homepage.widget.key=${GITEA_HOMEPAGE_API_KEY}
       - swag=enable
-      - swag_port=3000
-      - swag_proto=http
       - swag_url=git.${MY_TLD}
       - swag.uptime-kuma.enabled=true
       - swag.uptime-kuma.monitor.url=https://git.${MY_TLD}
@@ -1223,10 +1303,11 @@ services:
       OG_GITEA_SECRET: ${OPENGIST_GITEA_SECRET}
       OG_GITEA_URL: https://git.trez.wtf
       OG_GITEA_NAME: "Gitea @ Rinoa"
+      OG_SSH_EXTERNAL_DOMAIN: gist-ssh.trez.wtf
     image: ghcr.io/thomiceli/opengist:latest
     labels:
       homepage.description: Private Code Gists
-      homepage.group: Code
+      homepage.group: Code/DevOps
       homepage.href: https://gist.trez.wtf
       homepage.icon: /icons/opengist.svg
       homepage.name: Opengist
@@ -1250,12 +1331,10 @@ services:
     environment:
       CONFIG_FILE: /config.yaml
       DOCKER_HOST: tcp://dockerproxy:2375
-      GITEA_INSTANCE_URL: http://gitea:3000
+      GITEA_INSTANCE_URL: https://git.trez.wtf
       GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN}"
       GITEA_RUNNER_NAME: "gitea-runner-1"
     image: gitea/act_runner:latest
-    networks:
-      default: null
     ports:
       - 63604:63604
     restart: always
@@ -1274,6 +1353,7 @@ services:
       GITEA_SQ_BOT_CONFIG_PATH: /home/bot/config/config.yaml
     ports:
       - 58525:58525
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/sonarqube-bot/:/home/bot/config/
   gluetun:
@@ -1289,7 +1369,7 @@ services:
     expose:
       - 8000
     extra_hosts:
-      - bitmagnet-pgsql:192.168.55.8
+      - bitmagnet-pg-db:192.168.55.8
     image: qmcgaw/gluetun:latest
     networks:
       bitmagnet:
@@ -2012,7 +2092,7 @@ services:
       - swag_url=itt.${MY_TLD}
       - swag.uptime-kuma.enabled=true
       - swag.uptime-kuma.monitor.url=https://itt.${MY_TLD}
-      - homepage.group=Code
+      - homepage.group=Code/DevOps
       - homepage.name=IT-Tools
       - homepage.href=https://itt.${MY_TLD}
       - homepage.icon=it-tools.svg
@@ -2033,7 +2113,7 @@ services:
       MAILER_DSN: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
       MERCURE_JWT_SECRET: ${JITSI__ADMIN_JWT_SECRET}
       MERCURE_PUBLIC_URL: https://meet-admin.${MY_TLD}
-      MERCURE_URL: http://jitsi-admin-websocket
+      MERCURE_URL: http://jitsi-admin-websocket:3000
       OAUTH_KEYCLOAK_CLIENT_ID: null
       OAUTH_KEYCLOAK_CLIENT_REALM: null
       OAUTH_KEYCLOAK_CLIENT_SECRET: null
@@ -2043,6 +2123,18 @@ services:
       laF_baseUrl: https://meet-admin.${MY_TLD}
       registerEmailAdress: noreply@trez.wtf
     image: h2invent/jitsi-admin-main
+    labels:
+      - swag=enable
+      - swag_proto=http
+      - swag_port=3000
+      - swag_url=meet-admin.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://meet-admin.${MY_TLD}
+      - homepage.group=System Administration
+      - homepage.name=Jitsi Admin
+      - homepage.href=https://meet-admin.${MY_TLD}
+      - homepage.icon=/icons/jitsi-admin.png
+      - homepage.description=Web Conferencing
     networks:
       default: null
     restart: unless-stopped
@@ -2104,7 +2196,7 @@ services:
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/keycloak
-        target: /opt/keycloak
+        target: /opt/keycloak/data/import
         type: bind
         bind:
           create_host_path: true
@@ -2118,7 +2210,9 @@ services:
     labels:
       - swag=enable
       - swag_proto=http
+      - swag_port=3000
       - swag_url=meet-admin.${MY_TLD}
+      - swag_server_custom_directive="location /ws { proxy_pass http://localhost:3000; proxy_set_header X-Forwarded-Proto http; proxy_set_header Host $$host; }"
       - swag.uptime-kuma.enabled=true
       - swag.uptime-kuma.monitor.url=https://meet-admin.${MY_TLD}
       - homepage.group=System Administration
@@ -2711,8 +2805,8 @@ services:
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
-  joplin-server:
-    container_name: joplin-server
+  joplin:
+    container_name: joplin
     environment:
       - ACCOUNT_TYPES_ENABLED=true
       - APP_PORT=${JOPLIN_APP_PORT}
@@ -2735,18 +2829,15 @@ services:
       - POSTGRES_HOST=joplin-db
     image: joplin/server:latest
     labels:
-      - homepage.group=Personal Services
-      - homepage.name=Joplin
-      - homepage.href=https://notes.${MY_TLD}
-      - homepage.icon=joplin.svg
-      - homepage.description=Open-source note taking & to-do
-      - swag=enable
-      - swag_proto=http
-      - swag_port=22300
-      - swag_url=notes.${MY_TLD}
-      - swag_server_custom_directive="proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;"
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://notes.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: Joplin
+      homepage.href: https://notes.${MY_TLD}
+      homepage.icon: joplin.svg
+      homepage.description: Open-source note taking & to-do
+      swag: enable
+      swag_url: notes.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://notes.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2911,7 +3002,7 @@ services:
     container_name: lldap
     environment:
       - UID=${PUID}
-      - GID=${GUID}
+      - GID=${PGID}
       - TZ=${TZ}
       - LLDAP_JWT_SECRET=${LLDAP_JWT_SECRET}
       - LLDAP_KEY_SEED=${LLDAP_KEY_SEED}
@@ -3114,7 +3205,7 @@ services:
       - homepage.icon=mattermost.svg
       - homepage.description=Team collaboration and technical workflows (Slack alternative)
       - swag=enable
-      - swag_custom_directive=client_max_body_size 0;
+      - swag_server_custom_directive=client_max_body_size 0;
       - swag_proto=http
       - swag_port=8065
       - swag_url=mm.${MY_TLD}
@@ -3472,6 +3563,69 @@ services:
         type: bind
         bind:
           create_host_path: true
+  netbox:
+    container_name: netbox
+    depends_on:
+      netbox-db:
+        condition: service_healthy
+        required: true
+      redis:
+        condition: service_started
+        required: true
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      SUPERUSER_EMAIL: charish.patel@pm.me
+      SUPERUSER_PASSWORD: ${NETBOX_SUPERUSER_PASSWORD}
+      ALLOWED_HOST: net.trez.wtf
+      DB_NAME: netbox
+      DB_USER: netbox
+      DB_PASSWORD: ${NETBOX_PG_DB_PASSWORD}
+      DB_HOST: netbox-db
+      DB_PORT: 5432
+      DEBUG: false
+      DOCKER_MODS: linuxserver/mods:netbox-slurpit
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REMOTE_AUTH_ENABLED:
+    image: lscr.io/linuxserver/netbox:latest
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Netbox
+      homepage.href: https://net.${MY_TLD}
+      homepage.icon: netbox.svg
+      homepage.description: Network modeling/documentation
+      swag: enable
+      swag_url: net.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://net.${MY_TLD}
+    ports:
+      - 8007:8000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/netbox/:/config
+  netbox-db:
+    container_name: netbox-db
+    environment:
+      POSTGRES_USER: netbox
+      POSTGRES_PASSWORD: ${NETBOX_PG_DB_PASSWORD}
+      POSTGRES_DB: netbox
+    expose:
+      - 5432
+    healthcheck:
+      test: pg_isready -q -t 2 -d $$POSTGRES_DB -U $$POSTGRES_USER
+      start_period: 20s
+      timeout: 30s
+      interval: 10s
+      retries: 5
+    image: postgres:17-alpine
+    restart: always
+    volumes:
+      - source: netbox-pg-db
+        target: /var/lib/postgresql/data
+        type: volume
+        volume: {}
   nextcloud:
     container_name: nextcloud
     environment:
@@ -4170,6 +4324,7 @@ services:
       - homepage.icon=libreddit.svg
       - homepage.description=Redlib is a private front-end like Invidious but for Reddit
       - swag=enable
+      - swag_auth=authelia
       - swag_proto=http
       - swag_port=8080
       - swag_url=rlib.${MY_TLD}
@@ -4465,6 +4620,120 @@ services:
         type: bind
         bind:
           create_host_path: true
+  semaphore:
+    container_name: semaphore
+    environment:
+      ANSIBLE_HOST_KEY_CHECKING: false
+      SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
+      SEMAPHORE_ADMIN_NAME: admin
+      SEMAPHORE_ADMIN_EMAIL: charish.patel@pm.me
+      SEMAPHORE_ADMIN: admin
+      SEMAPHORE_DB_DIALECT: bolt
+      SEMAPHORE_EMAIL_ALERT: true
+      SEMAPHORE_EMAIL_SENDER: noreply@trez.wtf
+      SEMAPHORE_EMAIL_HOST: postal-smtp
+      SEMAPHORE_EMAIL_PORT: 25
+      SEMAPHORE_EMAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}  
+      SEMAPHORE_EMAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SEMAPHORE_EMAIL_SECURE: false
+      SEMAPHORE_USE_REMOTE_RUNNER: true
+    image: semaphoreui/semaphore:v2.10.32
+    labels:
+      - homepage.group=Code/DevOps
+      - homepage.name=Semaphore
+      - homepage.href=https://devops.${MY_TLD}
+      - homepage.icon=semaphore.svg
+      - homepage.description=Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools
+      - swag=enable
+      - swag_port=3000
+      - swag_proto=http
+      - swag_url=devops.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://search.${MY_TLD}
+    ports:
+      - 3015:3000
+    restart: unless-stopped
+    volumes:
+      - semaphore_config:/etc/semaphore
+      - semaphore_data:/var/lib/semaphore
+      - semaphore_tmp:/tmp/semaphore
+  slurpit-portal:
+    container_name: slurpit-portal
+    environment:
+      TZ: ${TZ}
+      PORTAL_BASE_URL: https://slurpit.trez.wtf
+      PORTAL_WAREHOUSE_URL: http://slurpit-warehouse
+    image: slurpit/portal:latest
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Slurp'it
+      homepage.href: https://slurpit.${MY_TLD}
+      homepage.icon: /icons/slurpit.png
+      homepage.description: Network discovery
+      swag: enable
+      swag_port: 80
+      swag_url: slurpit.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://slurpit.${MY_TLD}
+    ports:
+      - 8110:80
+      - 5443:443
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/logs/nginx:/var/log/nginx/
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/logs/mysql:/var/log/mysql/
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/logs/php:/var/log/php/
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/certs:/etc/nginx/certs/
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/db/portal:/var/lib/mysql
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/backup/portal:/backup/files
+  slurpit-scanner:
+    container_name: slurpit-scanner
+    depends_on:
+      slurpit-warehouse:
+        condition: service_healthy
+    environment:
+      TZ: ${TZ}
+      SCANNER_POOLSIZE: 4
+      SCANNER_TIMEOUT: 10
+      SCANNER_WAREHOUSE_URL: http://slurpit-warehouse
+    image: slurpit/scanner:latest
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/logs/scanner:/logs
+  slurpit-scraper:
+    container_name: slurpit-scraper
+    depends_on:
+      slurpit-warehouse:
+        condition: service_healthy
+    image: slurpit/scraper:latest
+    environment:
+      TZ: ${TZ}
+      SCRAPER_TIMEOUT: 20
+      SCRAPER_POOLSIZE: 4
+      SCRAPER_WAREHOUSE_URL: http://slurpit-warehouse
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/logs/scraper:/logs
+  slurpit-warehouse:
+    container_name: slurpit-warehouse
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/services"]
+      interval: 10s
+      timeout: 10s
+      retries: 360
+    image: slurpit/warehouse:latest
+    environment:
+      TZ: ${TZ}
+      WAREHOUSE_CALLBACK_SCANNER_URL: http://slurpit-portal/callback/scanner
+      WAREHOUSE_CALLBACK_SCANNER_TOKEN:
+      WAREHOUSE_CALLBACK_SCRAPER_URL: http://slurpit-portal/callback/scraper
+      WAREHOUSE_CALLBACK_SCRAPER_TOKEN:
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/backup/warehouse:/backup/files
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/db/warehouse:/var/lib/mongodb
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/logs/warehouse/mongodb:/var/log/mongodb
+      - ${DOCKER_VOLUME_CONFIG}/slurpit/logs/warehouse:/logs
   sonarqube:
     container_name: sonarqube
     depends_on:
@@ -4486,11 +4755,11 @@ services:
     hostname: sonarqube
     image: mc1arke/sonarqube-with-community-branch-plugin:lts
     labels:
-      - homepage.group=Code
+      - homepage.group=Code/DevOps
       - homepage.name=Sonarqube
       - homepage.href=https://sqube.trez.wtf
       - homepage.icon=sonarqube.svg
-      - homepage.description=Code quality/security
+      - homepage.description=Code/DevOps quality/security
       - swag=enable
       - swag_proto=http
       - swag_port=9000
@@ -4518,6 +4787,7 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:17-alpine
+    restart: unless-stopped
     volumes:
       - sonarqube-db:/var/lib/postgresql
       - sonarqube-db-data:/var/lib/postgresql/data
@@ -4676,7 +4946,7 @@ services:
       - VALIDATION=dns
       - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
       - CROWDSEC_LAPI_URL=http://crowdsec:8080
-      - DOCKER_MODS=linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec
+      - DOCKER_MODS=linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec|linuxserver/mods:swag-auto-uptime-kuma
       - PROPAGATION=30
       - UPTIME_KUMA_PASSWORD=${UPTIME_KUMA_PASSWORD}
       - UPTIME_KUMA_URL=http://uptimekuma:3001
@@ -4690,7 +4960,7 @@ services:
       - swag_url=swag.${MY_TLD}
       - swag_auth=authelia
       - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
+      - swag.uptime-kuma.monitor.url=https://swag.${MY_TLD}
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=SWAG Dashboard
       - homepage.href=https://swag.${MY_TLD}
@@ -4764,7 +5034,6 @@ services:
       - homepage.widget.url=http://tandoor-recipes:8080
       - homepage.widget.key=${TANDOOR_API_TOKEN}
       - swag=enable
-      - swag_server_custom_directive="proxy_set_header X-Forwarded-Host $$http_host; proxy_set_header Host $$http_host;"
       - swag_proto=http
       - swag_url=recipes.${MY_TLD}
       - swag.uptime-kuma.enabled=true
@@ -6156,52 +6425,6 @@ services:
         source: /etc/localtime
         target: /etc/localtime
         type: bind
-  vault:
-    cap_add:
-      - IPC_LOCK
-    command:
-      - server
-    container_name: hc-vault
-    environment:
-      - AWS_ACCESS_KEY_ID=${VAULT_HASHICORP_AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${VAULT_HASHICORP_AWS_SECRET_ACCESS_KEY}
-    image: hashicorp/vault:latest
-    labels:
-      - homepage.group=Code
-      - homepage.name=Vault
-      - homepage.icon=vault.png
-      - homepage.href=https://vault.${MY_TLD}
-      - homepage.description=Hashicorp Vault for secrets, key/value stores, etc.
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8200
-      - swag_address=hc-vault
-      - swag_url=vault.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://vault.${MY_TLD}
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8200"
-        target: 8200
-      - mode: ingress
-        protocol: tcp
-        published: "8250"
-        target: 8250
-    restart: unless-stopped
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/config/
-        target: /vault/config
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/logs/
-        target: /vault/logs
-        type: bind
-        bind:
-          create_host_path: true
   wallabag:
     container_name: wallabag
     depends_on:
@@ -7141,8 +7364,10 @@ services:
 volumes:
   authelia-pg-db:
     name: compose_authelia-pg-db
-  bitmagnet-pgsql:
-    name: compose_bitmagnet-pgsql
+  bitmagnet-pg-db:
+    name: bitmagnet-pg-db
+  castopod-media:
+    name: castopod-media
   crowdsec-config:
     name: compose_crowdsec-config
   crowdsec-db:
@@ -7156,9 +7381,9 @@ volumes:
   fastenhealth-db:
     name: compose_fastenhealth-db
   filebeat_etc:
-    name: compose_filebeat_etc
+    name: filebeat_etc
   filebeat_var:
-    name: compose_filebeat_var
+    name: filebeat_var
   gitea-pg-db:
     name: compose_gitea-pg-db
   grafana-mimir-data:
@@ -7217,6 +7442,8 @@ volumes:
     name: compose_mongo3_config
   mongo3_data:
     name: compose_mongo3_data
+  netbox-pg-db:
+    name: netbox-pg-db
   ollama:
     name: compose_ollama
   paperless-ngx-data:
@@ -7233,8 +7460,12 @@ volumes:
     name: compose_plausible-event-logs
   reactive-resume-pg:
     name: compose_reactive-resume-pg
-  rustdesk-data:
-    name: compose_rustdesk-data
+  semaphore_config:
+    name: semaphore_config
+  semaphore_data:
+    name: semaphore_data
+  semaphore_tmp:
+    name: semaphore_tmp
   sonarqube-data:
     name: sonarqube-data
   sonarqube-db:
@@ -7258,29 +7489,29 @@ volumes:
   wallos-logos:
     name: compose_wallos-logos
   wazuh-dashboard-config:
-    name: compose_wazuh-dashboard-config
+    name: wazuh-dashboard-config
   wazuh-dashboard-custom:
-    name: compose_wazuh-dashboard-custom
+    name: wazuh-dashboard-custom
   wazuh-indexer-data:
-    name: compose_wazuh-indexer-data
+    name: wazuh-indexer-data
   wazuh_active_response:
-    name: compose_wazuh_active_response
+    name: wazuh_active_response
   wazuh_agentless:
-    name: compose_wazuh_agentless
+    name: wazuh_agentless
   wazuh_api_configuration:
-    name: compose_wazuh_api_configuration
+    name: wazuh_api_configuration
   wazuh_etc:
-    name: compose_wazuh_etc
+    name: wazuh_etc
   wazuh_integrations:
-    name: compose_wazuh_integrations
+    name: wazuh_integrations
   wazuh_logs:
-    name: compose_wazuh_logs
+    name: wazuh_logs
   wazuh_queue:
-    name: compose_wazuh_queue
+    name: wazuh_queue
   wazuh_var_multigroups:
-    name: compose_wazuh_var_multigroups
+    name: wazuh_var_multigroups
   wazuh_wodles:
-    name: compose_wazuh_wodles
+    name: wazuh_wodles
   zammad-backup:
     driver: local
     name: compose_zammad-backup
