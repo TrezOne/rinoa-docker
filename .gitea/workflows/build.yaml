@@ -22,18 +22,12 @@ jobs:
       env:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-      with:
-        args: >
-          -Dsonar.projectKey=${{ gitea.repository.name }}
 
     - name: SonarQube Quality Gate Check
       uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
       env:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-      with:
-        args: >
-          -Dsonar.projectKey=${{ gitea.repository.name }}
 
     - name: Fetch SonarQube Project Status
       id: fetch-status
