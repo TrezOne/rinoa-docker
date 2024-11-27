@@ -36,9 +36,9 @@ jobs:
       uses: cytopia/gocurl@v3
       with:
         method: POST
-        url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
+        url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
         headers: |
-          Authorization: token ${{ secrets.GITEA_TOKEN }}
+          Authorization: token ${{ secrets.RINOA_GITEA_TOKEN }}
           Content-Type: application/json
         body: |
           {
