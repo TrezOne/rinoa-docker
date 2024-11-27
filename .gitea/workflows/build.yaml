@@ -36,11 +36,25 @@ jobs:
       uses: cytopia/gocurl@v3
       with:
         method: POST
-        url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
+        url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
         headers: |
-          Authorization: token ${{ secrets.GITEA_TOKEN }}
+          Authorization: token ${{ secrets.RINOA_GITEA_TOKEN }}
           Content-Type: application/json
         body: |
           {
             "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
           }
+
+  dry-run:
+    name: Dry Run Docker Compose
+    runs-on: self-hosted
+    needs: status-check
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Validate Docker Compose
+        run: |
+          echo "Validating Docker Compose configuration..."
+          docker compose config -f rinoa-docker-compose.yml
+          echo "Docker Compose validation successful."
