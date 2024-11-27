@@ -24,6 +24,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
     - name: SonarQube Quality Gate Check
+      id: quality-gate
       uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
       env:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
@@ -39,29 +40,30 @@ jobs:
     #     params: '{{ "projectKey", "${{ gitea.repository.name }}" }}'
     #     log-response: true
 
-    # - name: Comment on PR with SonarQube Status
-    #   uses: prasiman/gocurl@v1
-    #   with:
-    #     method: POST
-    #     url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
-    #     headers: |
-    #       Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-    #       Content-Type: application/json
-    #     body: |
-    #       {
-    #         "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
-    #       }
-    - name: SonarQube Pull Request Comment
-      if: always()
-      uses: campos-pay/sonarqube-pr-comment@v0.1.5
+    - name: Comment on PR with SonarQube Status
+      uses: prasiman/gocurl@v1
       with:
-        sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
-        sonar_host_url: ${{ secrets.SONARQUBE_HOST }}
-        sonar_projectkey: ${{ gitea.event.repository.name }}
-        github-token: ${{ secrets.BOT_GITEA_TOKEN }}
-        repo_name: ${{ gitea.repository }}
-        pr_number: ${{ gitea.event.pull_request.number }}
-        github_api_base_url: "https://git.trez.wtf/api/v1"
+        method: POST
+        url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
+        headers: |
+          Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+          Content-Type: application/json
+        body: |
+          {
+            "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.quality-gate-status }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
+          }
+
+    # - name: SonarQube Pull Request Comment
+    #   if: always()
+    #   uses: campos-pay/sonarqube-pr-comment@v0.1.5
+    #   with:
+    #     sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
+    #     sonar_host_url: ${{ secrets.SONARQUBE_HOST }}
+    #     sonar_projectkey: ${{ gitea.event.repository.name }}
+    #     github-token: ${{ secrets.BOT_GITEA_TOKEN }}
+    #     repo_name: ${{ gitea.repository }}
+    #     pr_number: ${{ gitea.event.pull_request.number }}
+    #     github_api_base_url: "https://git.trez.wtf/api/v1"
 
   # status-check:
   #   name: Validate SonarQube Bot Status
