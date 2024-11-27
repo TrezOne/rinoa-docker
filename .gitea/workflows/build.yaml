@@ -29,8 +29,7 @@ jobs:
       with:
         method: GET
         url: ${{ secrets.SONARQUBE_URL }}/api/qualitygates/project_status
-        headers: |
-          Authorization: Basic ${{ secrets.SONARQUBE_TOKEN }}
+        basic-auth-token: ${{ secrets.SONARQUBE_TOKEN }} 
         query: projectKey=${{ gitea.repository.name }}
 
     - name: Comment on PR with SonarQube Status
