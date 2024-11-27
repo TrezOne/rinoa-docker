@@ -44,7 +44,8 @@ jobs:
       uses: prasiman/gocurl@v1
       with:
         method: POST
-        url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
+        url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/reviews
+        /repos/{owner}/{repo}/pulls/{index}/reviews
         headers: |
           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
           Content-Type: application/json
