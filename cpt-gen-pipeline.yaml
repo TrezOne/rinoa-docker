@@ -1,0 +1,139 @@
+name: Docker Compose PR Check and Deploy
+
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+    branches:
+      - main
+
+jobs:
+  setup-sonarqube:
+    name: Setup SonarQube Project and Analyze
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log Current Directory
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          echo "Working in directory: $(pwd)"
+
+      - name: Create SonarQube Project (if not exists)
+        uses: cytopia/gocurl@v3
+        with:
+          method: POST
+          url: ${{ secrets.SONARQUBE_URL }}/api/projects/create
+          headers: |
+            Authorization: Basic ${{ secrets.SONARQUBE_TOKEN }}
+            Content-Type: application/json
+          query: |
+            project=${{ gitea.repository.name }}
+            name=${{ gitea.repository.name }}
+        continue-on-error: true # Ignore error if project already exists
+
+      - name: Run SonarQube Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_URL: ${{ secrets.SONARQUBE_URL }}
+        run: |
+          echo "Starting SonarQube analysis..."
+          sonar-scanner \
+            -Dsonar.projectKey=${{ gitea.repository.name }} \
+            -Dsonar.sources=. \
+            -Dsonar.language=docker \
+            -Dsonar.host.url=$SONAR_URL \
+            -Dsonar.login=$SONAR_TOKEN \
+            -X
+          echo "SonarQube analysis completed."
+
+      - name: Fetch SonarQube Project Status
+        id: fetch-status
+        uses: cytopia/gocurl@v3
+        with:
+          method: GET
+          url: ${{ secrets.SONARQUBE_URL }}/api/qualitygates/project_status
+          headers: Authorization: Basic ${{ secrets.SONARQUBE_TOKEN }}
+          query: projectKey=${{ gitea.repository.name }}
+
+      - name: Comment on PR with SonarQube Status
+        uses: cytopia/gocurl@v3
+        with:
+          method: POST
+          url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
+          headers: |
+            Authorization: token ${{ secrets.GITEA_TOKEN }}
+            Content-Type: application/json
+          body: |
+            {
+              "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
+            }
+
+  status-check:
+    name: Validate SonarQube Bot Status
+    needs: setup-sonarqube
+    runs-on: self-hosted
+    steps:
+      - name: Fetch PR Status
+        uses: cytopia/gocurl@v3
+        with:
+          method: GET
+          url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
+          headers: Authorization: token ${{ secrets.GITEA_TOKEN }}
+        run: |
+          echo "Validating SonarQube bot status..."
+          echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
+          echo "SonarQube bot status validation successful."
+
+  dry-run:
+    name: Dry Run Docker Compose
+    runs-on: self-hosted
+    needs: status-check
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Validate Docker Compose
+        run: |
+          echo "Validating Docker Compose configuration..."
+          docker compose config -f docker-compose.yml
+          echo "Docker Compose validation successful."
+
+  manual-approval:
+    name: Manual Approval
+    runs-on: self-hosted
+    needs: dry-run
+    steps:
+      - name: Approval Required
+        run: |
+          echo "Manual approval step reached. Please approve to proceed."
+          exit 1
+
+  merge-and-deploy:
+    name: Merge and Deploy
+    runs-on: self-hosted
+    needs: manual-approval
+    steps:
+      - name: Merge Pull Request
+        uses: cytopia/gocurl@v3
+        with:
+          method: POST
+          url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/merge
+          headers: Authorization: token ${{ secrets.GITEA_TOKEN }}
+
+      - name: Deploy Docker Compose Changes
+        run: |
+          echo "Deploying Docker Compose changes to host..."
+          ssh $DOCKER_USER@$DOCKER_HOST "
+            echo 'Pulling new images...'
+            cd /path/to/docker/compose/files &&
+            docker compose pull
+            echo 'Applying changes...'
+            docker compose up -d --remove-orphans
+          "
+        env:
+          DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          SSH_KEY: ${{ secrets.DOCKER_SSH_KEY }}
+          SSH_AUTH_SOCK: /run/ssh-agent.sock
