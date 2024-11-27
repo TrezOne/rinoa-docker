@@ -16,7 +16,6 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
-        token: ${{ secrets.PERSONAL_GH_TOKEN }}
 
     - name: SonarQube Scan
       uses: kitabisa/sonarqube-action@v1.2.0
@@ -26,7 +25,7 @@ jobs:
 
     - name: Fetch SonarQube Project Status
       id: fetch-status
-      uses: cytopia/gocurl@v3
+      uses: prasiman/gocurl@v1
       with:
         method: GET
         url: ${{ secrets.SONARQUBE_URL }}/api/qualitygates/project_status
@@ -35,7 +34,7 @@ jobs:
         query: projectKey=${{ gitea.repository.name }}
 
     - name: Comment on PR with SonarQube Status
-      uses: cytopia/gocurl@v3
+      uses: prasiman/gocurl@v1
       with:
         method: POST
         url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
@@ -53,7 +52,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Fetch PR Status
-        uses: cytopia/gocurl@v3
+        uses: prasiman/gocurl@v1
         with:
           method: GET
           url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
@@ -71,8 +70,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PERSONAL_GH_TOKEN }}
       - name: Validate Docker Compose
         run: |
           echo "Validating Docker Compose configuration..."
