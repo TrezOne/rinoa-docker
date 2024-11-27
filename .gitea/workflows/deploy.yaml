@@ -7,15 +7,58 @@ on:
       - main
 
 jobs:
+  setup-sonarqube:
+    name: Setup SonarQube Project and Analyze
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Create SonarQube Project (if not exists)
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_URL: ${{ secrets.SONARQUBE_URL }}
+        run: |
+          curl -s -X POST -u "$SONAR_TOKEN:" \
+            -H "Content-Type: application/json" \
+            "$SONAR_URL/api/projects/create?project=${{ gitea.repository.name }}&name=${{ gitea.repository.name }}" || true
+
+      - name: Run SonarQube Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_URL: ${{ secrets.SONARQUBE_URL }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=${{ gitea.repository.name }} \
+            -Dsonar.sources=. \
+            -Dsonar.language=docker \
+            -Dsonar.host.url=$SONAR_URL \
+            -Dsonar.login=$SONAR_TOKEN
+
+      - name: Comment on PR with SonarQube Status
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          SONAR_URL: ${{ secrets.SONARQUBE_URL }}
+          GITEA_SERVER: ${{ secrets.GITEA_SERVER }}
+        run: |
+          STATUS=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/qualitygates/project_status?projectKey=${{ gitea.repository.name }}" | jq -r '.projectStatus.status')
+          COMMENT="SonarQube Analysis: $STATUS\n[View in SonarQube]($SONAR_URL/dashboard?id=${{ gitea.repository.name }})"
+          curl -X POST -H "Authorization: token $GITEA_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\": \"$COMMENT\"}" \
+            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments"
+
   status-check:
     name: Validate SonarQube Bot Status
+    needs: setup-sonarqube
     runs-on: self-hosted
     steps:
       - name: Fetch PR Status
         run: |
           curl -s \
             -H "Authorization: token $GITEA_TOKEN" \
-            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/{{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status" \
+            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status" \
             | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
 
   dry-run:
@@ -52,7 +95,7 @@ jobs:
         run: |
           curl -X POST \
             -H "Authorization: token $GITEA_TOKEN" \
-            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/{{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/merge"
+            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/merge"
 
       - name: Deploy Docker Compose Changes
         run: |
