@@ -30,7 +30,8 @@ jobs:
         method: GET
         url: ${{ secrets.SONARQUBE_URL }}/api/qualitygates/project_status
         basic-auth-token: ${{ secrets.SONARQUBE_TOKEN }} 
-        query: projectKey=${{ gitea.repository.name }}
+        params: '{{ "projectKey", "${{ gitea.repository.name }}" }}'
+        log-response: true
 
     - name: Comment on PR with SonarQube Status
       uses: prasiman/gocurl@v1
