@@ -8,7 +8,7 @@ on:
 name: SonarQube Scan
 jobs:
   sonarqube:
-    name: SonarQube Trigger
+    name: SonarQube Scanning & Status
     runs-on: ubuntu-latest
     steps:
     - name: Checking out
@@ -18,7 +18,7 @@ jobs:
         fetch-depth: 0
 
     - name: SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@master
+      uses: SonarSource/sonarqube-scan-action@v4.0.0
       env:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
     #       }
     - name: SonarQube Pull Request Comment
       if: always()
-      uses: campos-pay/sonarqube-pr-comment@main
+      uses: campos-pay/sonarqube-pr-comment@v0.1.5
       with:
         sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
         sonar_host_url: ${{ secrets.SONARQUBE_HOST }}
@@ -92,7 +92,7 @@ jobs:
     needs: status-check
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Validate Docker Compose
         run: |
           echo "Validating Docker Compose configuration..."
