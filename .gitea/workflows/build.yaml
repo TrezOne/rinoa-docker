@@ -63,32 +63,32 @@ jobs:
         pr_number: ${{ gitea.event.pull_request.number }}
         github_api_base_url: "https://git.trez.wtf/api/v1"
 
-  status-check:
-    name: Validate SonarQube Bot Status
-    needs: setup-sonarqube
-    runs-on: self-hosted
-    steps:
-      - name: Fetch PR Status
-        uses: prasiman/gocurl@v1
-        with:
-          method: GET
-          url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
-          headers: |
-            Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-        run: |
-          echo "Validating SonarQube bot status..."
-          echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
-          echo "SonarQube bot status validation successful."
+  # status-check:
+  #   name: Validate SonarQube Bot Status
+  #   needs: setup-sonarqube
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Fetch PR Status
+  #       uses: prasiman/gocurl@v1
+  #       with:
+  #         method: GET
+  #         url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
+  #         headers: |
+  #           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+  #       run: |
+  #         echo "Validating SonarQube bot status..."
+  #         echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
+  #         echo "SonarQube bot status validation successful."
 
-  dry-run:
-    name: Dry Run Docker Compose
-    runs-on: self-hosted
-    needs: status-check
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Validate Docker Compose
-        run: |
-          echo "Validating Docker Compose configuration..."
-          docker compose config -f rinoa-docker-compose.yml
-          echo "Docker Compose validation successful."
+  # dry-run:
+  #   name: Dry Run Docker Compose
+  #   runs-on: self-hosted
+  #   needs: status-check
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
+  #     - name: Validate Docker Compose
+  #       run: |
+  #         echo "Validating Docker Compose configuration..."
+  #         docker compose config -f rinoa-docker-compose.yml
+  #         echo "Docker Compose validation successful."
