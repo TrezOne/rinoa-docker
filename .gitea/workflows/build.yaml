@@ -1,0 +1,46 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+      types: [opened, synchronize, reopened]
+
+name: SonarQube Scan
+jobs:
+  sonarqube:
+    name: SonarQube Trigger
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checking out
+      uses: actions/checkout@v4
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+
+    - name: SonarQube Scan
+      uses: kitabisa/sonarqube-action@v1.2.0
+      with:
+        host: ${{ secrets.SONARQUBE_HOST }}
+        login: ${{ secrets.SONARQUBE_TOKEN }}
+
+    - name: Fetch SonarQube Project Status
+      id: fetch-status
+      uses: cytopia/gocurl@v3
+      with:
+        method: GET
+        url: ${{ secrets.SONARQUBE_URL }}/api/qualitygates/project_status
+        headers: Authorization: Basic ${{ secrets.SONARQUBE_TOKEN }}
+        query: projectKey=${{ gitea.repository.name }}
+
+    - name: Comment on PR with SonarQube Status
+      uses: cytopia/gocurl@v3
+      with:
+        method: POST
+        url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
+        headers: |
+          Authorization: token ${{ secrets.GITEA_TOKEN }}
+          Content-Type: application/json
+        body: |
+          {
+            "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
+          }
