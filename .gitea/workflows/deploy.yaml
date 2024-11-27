@@ -14,26 +14,37 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Log Current Directory
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          echo "Working in directory: $(pwd)"
+
       - name: Create SonarQube Project (if not exists)
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_URL: ${{ secrets.SONARQUBE_URL }}
         run: |
-          curl -s -X POST -u "$SONAR_TOKEN:" \
+          echo "Attempting to create SonarQube project if it doesn't exist..."
+          RESPONSE=$(curl -s -X POST -u "$SONAR_TOKEN:" \
             -H "Content-Type: application/json" \
-            "$SONAR_URL/api/projects/create?project=${{ gitea.repository.name }}&name=${{ gitea.repository.name }}" || true
+            "$SONAR_URL/api/projects/create?project=${{ gitea.repository.name }}&name=${{ gitea.repository.name }}" || echo "Request failed")
+          echo "Response: $RESPONSE"
 
       - name: Run SonarQube Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_URL: ${{ secrets.SONARQUBE_URL }}
         run: |
+          echo "Starting SonarQube analysis..."
           sonar-scanner \
             -Dsonar.projectKey=${{ gitea.repository.name }} \
             -Dsonar.sources=. \
             -Dsonar.language=docker \
             -Dsonar.host.url=$SONAR_URL \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.login=$SONAR_TOKEN \
+            -X
+          echo "SonarQube analysis completed."
 
       - name: Comment on PR with SonarQube Status
         env:
@@ -42,8 +53,11 @@ jobs:
           SONAR_URL: ${{ secrets.SONARQUBE_URL }}
           GITEA_SERVER: ${{ secrets.GITEA_SERVER }}
         run: |
+          echo "Fetching SonarQube project status..."
           STATUS=$(curl -s -u "$SONAR_TOKEN:" "$SONAR_URL/api/qualitygates/project_status?projectKey=${{ gitea.repository.name }}" | jq -r '.projectStatus.status')
+          echo "SonarQube quality gate status: $STATUS"
           COMMENT="SonarQube Analysis: $STATUS\n[View in SonarQube]($SONAR_URL/dashboard?id=${{ gitea.repository.name }})"
+          echo "Adding comment to PR: $COMMENT"
           curl -X POST -H "Authorization: token $GITEA_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"body\": \"$COMMENT\"}" \
@@ -56,10 +70,12 @@ jobs:
     steps:
       - name: Fetch PR Status
         run: |
+          echo "Validating SonarQube bot status..."
           curl -s \
             -H "Authorization: token $GITEA_TOKEN" \
             "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status" \
             | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
+          echo "SonarQube bot status validation successful."
 
   dry-run:
     name: Dry Run Docker Compose
@@ -71,8 +87,9 @@ jobs:
 
       - name: Validate Docker Compose
         run: |
+          echo "Validating Docker Compose configuration..."
           docker compose config -f docker-compose.yml
-        working-directory: ./
+          echo "Docker Compose validation successful."
 
   manual-approval:
     name: Manual Approval
@@ -81,7 +98,7 @@ jobs:
     steps:
       - name: Approval Required
         run: |
-          echo "Awaiting manual approval..."
+          echo "Manual approval step reached. Please approve to proceed."
           exit 1
 
   merge-and-deploy:
@@ -93,18 +110,24 @@ jobs:
         env:
           GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
         run: |
-          curl -X POST \
+          echo "Merging pull request into main..."
+          RESPONSE=$(curl -X POST \
             -H "Authorization: token $GITEA_TOKEN" \
-            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/merge"
+            "$GITEA_SERVER/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/merge")
+          echo "Merge response: $RESPONSE"
 
       - name: Deploy Docker Compose Changes
         run: |
+          echo "Deploying Docker Compose changes to host..."
           ssh $DOCKER_USER@$DOCKER_HOST "
+            echo 'Pulling new images...'
             cd /path/to/docker/compose/files &&
-            docker compose pull &&
+            docker compose pull
+            echo 'Applying changes...'
             docker compose up -d --remove-orphans
           "
         env:
           DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           SSH_KEY: ${{ secrets.DOCKER_SSH_KEY }}
+          SSH_AUTH_SOCK: /run/ssh-agent.sock
