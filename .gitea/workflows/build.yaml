@@ -45,6 +45,22 @@ jobs:
             "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
           }
 
+  status-check:
+    name: Validate SonarQube Bot Status
+    needs: setup-sonarqube
+    runs-on: self-hosted
+    steps:
+      - name: Fetch PR Status
+        uses: cytopia/gocurl@v3
+        with:
+          method: GET
+          url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
+          headers: Authorization: token ${{ secrets.GITEA_TOKEN }}
+        run: |
+          echo "Validating SonarQube bot status..."
+          echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
+          echo "SonarQube bot status validation successful."
+
   dry-run:
     name: Dry Run Docker Compose
     runs-on: self-hosted
