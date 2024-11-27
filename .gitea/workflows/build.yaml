@@ -55,7 +55,7 @@ jobs:
         with:
           method: GET
           url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
-          headers: Authorization: token ${{ secrets.GITEA_TOKEN }}
+          headers: "Authorization: token ${{ secrets.GITEA_TOKEN }}""
         run: |
           echo "Validating SonarQube bot status..."
           echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
