@@ -20,31 +20,26 @@ jobs:
           ls -la
           echo "Working in directory: $(pwd)"
 
-      - name: Create SonarQube Project (if not exists)
-        env:
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-          SONAR_URL: ${{ secrets.SONARQUBE_URL }}
-        run: |
-          echo "Attempting to create SonarQube project if it doesn't exist..."
-          RESPONSE=$(curl -s -X POST -u "$SONAR_TOKEN:" \
-            -H "Content-Type: application/json" \
-            "$SONAR_URL/api/projects/create?project=${{ gitea.repository.name }}&name=${{ gitea.repository.name }}" || echo "Request failed")
-          echo "Response: $RESPONSE"
+      - name: SonarQube Scan
+        uses: kitabisa/sonarqube-action@v1.2.0
+        with:
+          host: ${{ secrets.SONARQUBE_HOST }}
+          login: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Run SonarQube Analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-          SONAR_URL: ${{ secrets.SONARQUBE_URL }}
-        run: |
-          echo "Starting SonarQube analysis..."
-          sonar-scanner \
-            -Dsonar.projectKey=${{ gitea.repository.name }} \
-            -Dsonar.sources=. \
-            -Dsonar.language=docker \
-            -Dsonar.host.url=$SONAR_URL \
-            -Dsonar.login=$SONAR_TOKEN \
-            -X
-          echo "SonarQube analysis completed."
+      # - name: Run SonarQube Analysis
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      #     SONAR_URL: ${{ secrets.SONARQUBE_URL }}
+      #   run: |
+      #     echo "Starting SonarQube analysis..."
+      #     sonar-scanner \
+      #       -Dsonar.projectKey=${{ gitea.repository.name }} \
+      #       -Dsonar.sources=. \
+      #       -Dsonar.language=docker \
+      #       -Dsonar.host.url=$SONAR_URL \
+      #       -Dsonar.login=$SONAR_TOKEN \
+      #       -X
+      #     echo "SonarQube analysis completed."
 
       - name: Comment on PR with SonarQube Status
         env:
