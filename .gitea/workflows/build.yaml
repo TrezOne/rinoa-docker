@@ -16,6 +16,7 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
+        token: ${{ secrets.PERSONAL_GH_TOKEN }}
 
     - name: SonarQube Scan
       uses: kitabisa/sonarqube-action@v1.2.0
@@ -70,7 +71,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
+        with:
+          token: ${{ secrets.PERSONAL_GH_TOKEN }}
       - name: Validate Docker Compose
         run: |
           echo "Validating Docker Compose configuration..."
