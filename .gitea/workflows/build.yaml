@@ -44,3 +44,17 @@ jobs:
           {
             "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
           }
+
+  dry-run:
+    name: Dry Run Docker Compose
+    runs-on: self-hosted
+    needs: status-check
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Validate Docker Compose
+        run: |
+          echo "Validating Docker Compose configuration..."
+          docker compose config -f rinoa-docker-compose.yml
+          echo "Docker Compose validation successful."
