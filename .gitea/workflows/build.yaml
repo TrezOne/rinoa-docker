@@ -18,10 +18,22 @@ jobs:
         fetch-depth: 0
 
     - name: SonarQube Scan
-      uses: kitabisa/sonarqube-action@v1.2.0
+      uses: SonarSource/sonarqube-scan-action@master
+      env:
+        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
       with:
-        host: ${{ secrets.SONARQUBE_HOST }}
-        login: ${{ secrets.SONARQUBE_TOKEN }}
+        args: >
+          -Dsonar.projectKey=${{ gitea.repository.name }}
+
+    - name: SonarQube Quality Gate Check
+      uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+      env:
+        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=${{ gitea.repository.name }}
 
     - name: Fetch SonarQube Project Status
       id: fetch-status
@@ -33,18 +45,29 @@ jobs:
         params: '{{ "projectKey", "${{ gitea.repository.name }}" }}'
         log-response: true
 
-    - name: Comment on PR with SonarQube Status
-      uses: prasiman/gocurl@v1
+    # - name: Comment on PR with SonarQube Status
+    #   uses: prasiman/gocurl@v1
+    #   with:
+    #     method: POST
+    #     url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
+    #     headers: |
+    #       Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+    #       Content-Type: application/json
+    #     body: |
+    #       {
+    #         "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
+    #       }
+    - name: SonarQube Pull Request Comment
+      if: always()
+      uses: campos-pay/sonarqube-pr-comment@main
       with:
-        method: POST
-        url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/issues/${{ gitea.pull_request.id }}/comments
-        headers: |
-          Authorization: token ${{ secrets.RINOA_GITEA_TOKEN }}
-          Content-Type: application/json
-        body: |
-          {
-            "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.body | fromJson | get('projectStatus.status') }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
-          }
+        sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
+        sonar_host_url: ${{ secrets.SONARQUBE_HOST }}
+        sonar_projectkey: ${{ gitea.event.repository.name }}
+        github-token: ${{ secrets.BOT_GITEA_TOKEN }}
+        repo_name: ${{ gitea.repository }}
+        pr_number: ${{ gitea.event.pull_request.number }}
+        github_api_base_url: "https://git.trez.wtf/api/v1"
 
   status-check:
     name: Validate SonarQube Bot Status
@@ -57,7 +80,7 @@ jobs:
           method: GET
           url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
           headers: |
-            Authorization: token ${{ secrets.GITEA_TOKEN }}
+            Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
           echo "Validating SonarQube bot status..."
           echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
