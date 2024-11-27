@@ -50,7 +50,17 @@ jobs:
           Content-Type: application/json
         body: |
           {
-            "body": "SonarQube Analysis: ${{ steps.fetch-status.outputs.quality-gate-status }}\n[View in SonarQube](${{ secrets.SONARQUBE_URL }}/dashboard?id=${{ gitea.repository.name }})"
+            "body": "string",
+            "comments": [
+              {
+                "body": "${{ steps.quality-gate.outputs.quality-gate-status }}",
+                "new_position": 0,
+                "old_position": 0,
+                "path": "string"
+              }
+            ],
+            "commit_id": "${{ gitea.pull_request.head.sha }}",
+            "event": "string"
           }
 
     # - name: SonarQube Pull Request Comment
