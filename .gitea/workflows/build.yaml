@@ -43,7 +43,7 @@ jobs:
     - name: Comment on PR with SonarQube Status
       uses: prasiman/gocurl@v1
       with:
-        method: POST
+        method: "POST"
         url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/reviews
         headers: |
           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
@@ -60,7 +60,7 @@ jobs:
               }
             ],
             "commit_id": "${{ gitea.pull_request.head.sha }}",
-            "event": "string"
+            "event": "COMMENT"
           }
 
     # - name: SonarQube Pull Request Comment
