@@ -71,7 +71,7 @@ jobs:
         sonar_auth_token: ${{ secrets.SONARQUBE_TOKEN }}
         gitea_server_url: ${{ secrets.RINOA_GITEA_SERVER }}
         gitea_token: ${{ secrets.BOT_GITEA_TOKEN }}
-        project_key: $ {{ gitea.repository.name }}
+        project_key: rinoa-docker
         pull_request_id: ${{ github.event.pull_request.number }}
         
     # - name: SonarQube Pull Request Comment
