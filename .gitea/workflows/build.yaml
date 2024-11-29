@@ -65,7 +65,7 @@ jobs:
     #       }
 
     - name: Run SonarQube and Gitea Action
-      uses: https://git.trez.wtf/Trez.One/sonar-gitea-pr-bot@v1.0.1
+      uses: https://git.trez.wtf/Trez.One/sonar-gitea-pr-bot@v1.0.2
       with:
         sonar_server_url: ${{ secrets.SONARQUBE_HOST }}
         sonar_auth_token: ${{ secrets.SONARQUBE_TOKEN }}
