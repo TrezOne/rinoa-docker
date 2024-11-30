@@ -17,11 +17,11 @@ jobs:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
 
-    - name: SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@v4.0.0
-      env:
-        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+    # - name: SonarQube Scan
+    #   uses: SonarSource/sonarqube-scan-action@v4.0.0
+    #   env:
+    #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+    #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
     - name: SonarQube Quality Gate Check
       id: quality-gate
@@ -72,7 +72,7 @@ jobs:
         gitea_server_url: ${{ secrets.RINOA_GITEA_SERVER }}
         gitea_token: ${{ secrets.BOT_GITEA_TOKEN }}
         project_key: rinoa-docker
-        pull_request_id: ${{ github.event.pull_request.number }}
+        pull_request_id: ${{ gitea.event.pull_request.number }}
         
     # - name: SonarQube Pull Request Comment
     #   if: always()
