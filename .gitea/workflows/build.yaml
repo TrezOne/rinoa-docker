@@ -23,13 +23,6 @@ jobs:
     #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
     #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-    - name: SonarQube Quality Gate Check
-      id: quality-gate
-      uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
-      env:
-        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-
     # - name: Fetch SonarQube Project Status
     #   id: fetch-status
     #   uses: prasiman/gocurl@v1
@@ -73,7 +66,14 @@ jobs:
         gitea_token: ${{ secrets.BOT_GITEA_TOKEN }}
         project_key: rinoa-docker
         pull_request_id: ${{ gitea.event.pull_request.number }}
-        
+
+    - name: SonarQube Quality Gate Check
+      id: quality-gate
+      uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+      env:
+        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+
     # - name: SonarQube Pull Request Comment
     #   if: always()
     #   uses: campos-pay/sonarqube-pr-comment@v0.1.5
