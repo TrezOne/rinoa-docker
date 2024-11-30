@@ -30,15 +30,15 @@ jobs:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-    - name: Run SonarQube and Gitea Action
-      uses: https://git.trez.wtf/Trez.One/sonar-gitea-pr-bot@v1.0.2
-      with:
-        sonar_server_url: ${{ secrets.SONARQUBE_HOST }}
-        sonar_auth_token: ${{ secrets.SONARQUBE_TOKEN }}
-        gitea_server_url: ${{ secrets.RINOA_GITEA_SERVER }}
-        gitea_token: ${{ secrets.BOT_GITEA_TOKEN }}
-        project_key: ${{ gitea.repository.name }}
-        pull_request_id: ${{ gitea.event.pull_request.number }}
+    # - name: Run SonarQube and Gitea Action
+    #   uses: https://git.trez.wtf/Trez.One/sonar-gitea-pr-bot@v1.0.2
+    #   with:
+    #     sonar_server_url: ${{ secrets.SONARQUBE_HOST }}
+    #     sonar_auth_token: ${{ secrets.SONARQUBE_TOKEN }}
+    #     gitea_server_url: ${{ secrets.RINOA_GITEA_SERVER }}
+    #     gitea_token: ${{ secrets.BOT_GITEA_TOKEN }}
+    #     project_key: ${{ gitea.repository.name }}
+    #     pull_request_id: ${{ gitea.event.pull_request.number }}
 
     # - name: Fetch SonarQube Project Status
     #   id: fetch-status
