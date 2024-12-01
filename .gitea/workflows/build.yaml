@@ -29,81 +29,11 @@ jobs:
       env:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-
-    # - name: Run SonarQube and Gitea Action
-    #   uses: https://git.trez.wtf/Trez.One/sonar-gitea-pr-bot@v1.0.2
-    #   with:
-    #     sonar_server_url: ${{ secrets.SONARQUBE_HOST }}
-    #     sonar_auth_token: ${{ secrets.SONARQUBE_TOKEN }}
-    #     gitea_server_url: ${{ secrets.RINOA_GITEA_SERVER }}
-    #     gitea_token: ${{ secrets.BOT_GITEA_TOKEN }}
-    #     project_key: ${{ gitea.repository.name }}
-    #     pull_request_id: ${{ gitea.event.pull_request.number }}
-
-    # - name: Fetch SonarQube Project Status
-    #   id: fetch-status
-    #   uses: prasiman/gocurl@v1
-    #   with:
-    #     method: GET
-    #     url: ${{ secrets.SONARQUBE_URL }}/api/qualitygates/project_status
-    #     basic-auth-token: ${{ secrets.SONARQUBE_TOKEN }} 
-    #     params: '{{ "projectKey", "${{ gitea.repository.name }}" }}'
-    #     log-response: true
-
-    # - name: Comment on PR with SonarQube Status
-    #   uses: prasiman/gocurl@v1
-    #   with:
-    #     method: POST
-    #     url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/reviews
-    #     headers: |
-    #       Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-    #       Content-Type: application/json
-    #     body: >
-    #       {
-    #         "body": "SonarQube Quality Gate Status",
-    #         "comments": [
-    #           {
-    #             "body": "${{ steps.quality-gate.outputs.quality-gate-status }}",
-    #             "new_position": 0,
-    #             "old_position": 0
-    #           }
-    #         ],
-    #         "commit_id": "${{ gitea.pull_request.head.sha }}",
-    #         "event": "COMMENT"
-    #       }
-
-
-    # - name: SonarQube Pull Request Comment
-    #   if: always()
-    #   uses: campos-pay/sonarqube-pr-comment@v0.1.5
-    #   with:
-    #     sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
-    #     sonar_host_url: ${{ secrets.SONARQUBE_HOST }}
-    #     sonar_projectkey: ${{ gitea.event.repository.name }}
-    #     github-token: ${{ secrets.BOT_GITEA_TOKEN }}
-    #     repo_name: ${{ gitea.repository }}
-    #     pr_number: ${{ gitea.event.pull_request.number }}
-    #     github_api_base_url: "https://git.trez.wtf/api/v1"
-
-  # status-check:
-  #   name: Validate SonarQube Bot Status
-  #   needs: setup-sonarqube
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Fetch PR Status
-  #       uses: prasiman/gocurl@v1
-  #       with:
-  #         method: GET
-  #         url: ${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/status
-  #         headers: |
-  #           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-  #       run: |
-  #         echo "Validating SonarQube bot status..."
-  #         echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
-  #         echo "SonarQube bot status validation successful."
-
+  
   dry-run:
+    runs-on: self-hosted
+    steps:
     - name: Tests
       uses: cloudposse/github-action-docker-compose-test-run@main
       with:
-        file: rinoa-docker-compose.yml
+        file: docker-compose.yml
