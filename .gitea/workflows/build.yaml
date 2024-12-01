@@ -50,27 +50,27 @@ jobs:
     #     params: '{{ "projectKey", "${{ gitea.repository.name }}" }}'
     #     log-response: true
 
-    - name: Comment on PR with SonarQube Status
-      uses: prasiman/gocurl@v1
-      with:
-        method: POST
-        url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/reviews
-        headers: |
-          Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-          Content-Type: application/json
-        body: >
-          {
-            "body": "SonarQube Quality Gate Status",
-            "comments": [
-              {
-                "body": "${{ steps.quality-gate.outputs.quality-gate-status }}",
-                "new_position": 0,
-                "old_position": 0
-              }
-            ],
-            "commit_id": "${{ gitea.pull_request.head.sha }}",
-            "event": "COMMENT"
-          }
+    # - name: Comment on PR with SonarQube Status
+    #   uses: prasiman/gocurl@v1
+    #   with:
+    #     method: POST
+    #     url: ${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ gitea.repository.owner.login }}/${{ gitea.repository.name }}/pulls/${{ gitea.pull_request.id }}/reviews
+    #     headers: |
+    #       Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+    #       Content-Type: application/json
+    #     body: >
+    #       {
+    #         "body": "SonarQube Quality Gate Status",
+    #         "comments": [
+    #           {
+    #             "body": "${{ steps.quality-gate.outputs.quality-gate-status }}",
+    #             "new_position": 0,
+    #             "old_position": 0
+    #           }
+    #         ],
+    #         "commit_id": "${{ gitea.pull_request.head.sha }}",
+    #         "event": "COMMENT"
+    #       }
 
 
     # - name: SonarQube Pull Request Comment
@@ -102,15 +102,8 @@ jobs:
   #         echo ${{ steps.fetch-status.outputs.body }} | jq -e '.statuses[] | select(.creator.login == "gitea-sonarqube-bot" and .status == "success")' || exit 1
   #         echo "SonarQube bot status validation successful."
 
-  # dry-run:
-  #   name: Dry Run Docker Compose
-  #   runs-on: self-hosted
-  #   needs: status-check
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v4
-  #     - name: Validate Docker Compose
-  #       run: |
-  #         echo "Validating Docker Compose configuration..."
-  #         docker compose config -f rinoa-docker-compose.yml
-  #         echo "Docker Compose validation successful."
+  dry-run:
+    - name: Tests
+      uses: cloudposse/github-action-docker-compose-test-run@main
+      with:
+        file: rinoa-docker-compose.yml
