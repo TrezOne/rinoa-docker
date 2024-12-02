@@ -97,14 +97,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Tea CLI
+      - name: Install & Setup Tea CLI
         run: |
           curl -sSL https://dl.gitea.io/tea/0.9.1/tea-0.9.1-linux-amd64 > /usr/local/bin/tea
           chmod +x /usr/local/bin/tea
+          tea login add --name gitea-rinoa --url $ {{ secrets.RINOA_GITEA_SERVER }} --user gitea-sonarqube-bot --token $ {{ secrets.BOT_GITEA_TOKEN }}
       
       - name: Merge PR with Tea CLI
         run: |
-          tea pr m --token "${{ secrets.BOT_GITEA_TOKEN }}" "${{ gitea.event.pull_request.number }}"
+          tea pr m ${{ gitea.event.pull_request.number }}
 
   #     - name: Merge Pull Request
   #       uses: prasiman/gocurl@v1
