@@ -46,8 +46,15 @@ jobs:
   docker-compose-dry-run:
     name: Dry Run Docker Compose
     runs-on: self-hosted
-    if: ${{ steps.quality-gate.outputs.quality-gate-status }} == 'PASSED'
+    needs: quality-gate
+    if: needs.steps.quality-gate.outputs.quality-gate-status == 'PASSED'
     steps:
+    - name: Checking out
+      uses: actions/checkout@v4
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+
     - name: Docker Compose Lint
       uses: sjafferali/docker-compose-lint-action@v0.1.2
       with:
