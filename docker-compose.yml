@@ -4522,23 +4522,23 @@ services:
     container_name: scrutiny
     devices:
       - permissions: rwm
-        source: /dev/sda
-        target: /dev/sda
+        source: "/dev/sda"
+        target: "/dev/sda"
       - permissions: rwm
-        source: /dev/sdb
-        target: /dev/sdb
+        source: "/dev/sdb"
+        target: "/dev/sdb"
       - permissions: rwm
-        source: /dev/sdd
-        target: /dev/sdd
+        source: "/dev/sdd"
+        target: "/dev/sdd"
       - permissions: rwm
-        source: /dev/sde
-        target: /dev/sde
+        source: "/dev/sde"
+        target: "/dev/sde"
       - permissions: rwm
-        source: /dev/sdc
-        target: /dev/sdc
+        source: "/dev/sdc"
+        target: "/dev/sdc"
       - permissions: rwm
-        source: /dev/sdf
-        target: /dev/sdf
+        source: "/dev/sdf"
+        target: "/dev/sdf"
     image: ghcr.io/analogj/scrutiny:master-omnibus
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
