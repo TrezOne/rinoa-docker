@@ -56,7 +56,8 @@ jobs:
         fetch-depth: 0
 
     - name: Generate ephemeral env
-      run: echo "${{ secrets.RINOA_DOCKER_ENV }}" > ./.env
+      run: |
+        echo "${{ secrets.RINOA_DOCKER_ENV }}" > ./.env
 
     - name: Validate Docker Compose Configuration
       id: docker-lint
@@ -94,7 +95,7 @@ jobs:
   #   steps:
   #     - name: Checkout Code
   #       uses: actions/checkout@v4
-  
+
   #     - name: Merge Pull Request
   #       uses: prasiman/gocurl@v1
   #       with:
