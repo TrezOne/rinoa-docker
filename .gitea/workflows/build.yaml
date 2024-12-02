@@ -53,31 +53,31 @@ jobs:
       with:
         compose-file: './docker-compose.yml'
 
-  manual-approval:
-    name: Manual Approval
-    needs: docker-compose-test
-    if: always()
-    runs-on: self-hosted
-    steps:
-      - name: Approval Required
-        run: |
-          echo "Manual approval step reached. Please approve to proceed."
-          exit 1
+  # manual-approval:
+  #   name: Manual Approval
+  #   needs: docker-compose-test
+  #   if: always()
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Approval Required
+  #       run: |
+  #         echo "Manual approval step reached. Please approve to proceed."
+  #         exit 1
 
-  deploy-changes:
-    name: Merge and Deploy Changes
-    needs: manual-approval
-    runs-on: self-hosted
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - name: Merge Pull Request
-        uses: prasiman/gocurl@v1
-        with:
-          method: POST
-          url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
-          headers: >
-            Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+  # deploy-changes:
+  #   name: Merge and Deploy Changes
+  #   needs: manual-approval
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
+  #     - name: Merge Pull Request
+  #       uses: prasiman/gocurl@v1
+  #       with:
+  #         method: POST
+  #         url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
+  #         headers: >
+  #           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
 
       # - name: Deploy Docker Compose Changes
       # - uses: astappiev/docker-compose-remote-action@master
