@@ -1,60 +1,57 @@
-name: Docker Compose PR Check and Deploy
-
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push:
     branches:
       - main
+  pull_request:
+      types: [opened, synchronize, reopened]
 
+name: SonarQube Scan
 jobs:
-  setup-sonarqube:
-    name: Setup SonarQube Project and Analyze
-    runs-on: self-hosted
+  sonarqube:
+    name: SonarQube Scanning & Status
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    - name: Checking out
+      uses: actions/checkout@v4
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
 
-      - name: Run SonarQube Analysis
-        uses: sonarsource/sonarqube-scan-action@v1.0.0
-        with:
-          host: ${{ secrets.SONARQUBE_HOST }}
-          login: ${{ secrets.SONARQUBE_TOKEN }}
-          projectKey: ${{ github.event.repository.name }}
-          projectName: ${{ github.event.repository.name }}
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v4.0.0
+      env:
+        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Check SonarQube Quality Gate
-        id: quality-gate
-        uses: sonarsource/sonarqube-quality-gate-check@v1.1.0
-        with:
-          host: ${{ secrets.SONARQUBE_HOST }}
-          login: ${{ secrets.SONARQUBE_TOKEN }}
+    - name: SonarQube Quality Gate Check
+      id: quality-gate
+      uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+      env:
+        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Comment on Pull Request with Quality Gate Status
-        id: comment-pr
-        uses: prasiman/gocurl@v0.5.0
-        with:
-          method: POST
-          url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
-          headers: >
-            Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-          body: |
-            {
-              "body": "SonarQube Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
-            }
+    - name: Comment on Pull Request with Quality Gate Status
+      id: comment-pr
+      uses: prasiman/gocurl@v0.5.0
+      with:
+        method: POST
+        url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
+        headers: >
+          Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+        body: |
+          {
+            "body": "SonarQube Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
+          }
 
-  docker-compose-test:
+  docker-compose-dry-run:
     name: Dry Run Docker Compose
-    needs: setup-sonarqube
-    if: needs.setup-sonarqube.outputs.quality-gate == 'true'
     runs-on: self-hosted
+    if: needs.sonarqube.outputs.quality-gate == 'true'
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Validate Docker Compose Configuration
-        uses: alexesdev/docker-compose-tests-run@v1
-        with:
-          compose_file: docker-compose.yml
+    - name: Docker Compose Lint
+      uses: sjafferali/docker-compose-lint-action@v0.1.2
+      with:
+        compose-file: './docker-compose.yml'
 
   manual-approval:
     name: Manual Approval
