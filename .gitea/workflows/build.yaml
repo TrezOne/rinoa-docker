@@ -14,10 +14,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Configure Git Credentials
-        run: |
-          git config --global url."https://${{ secrets.GITEA_TOKEN }}@${{ secrets.GITEA_SERVER }}".insteadOf "https://${{ secrets.GITEA_SERVER }}"
-
       - name: Run SonarQube Analysis
         uses: sonarsource/sonarqube-scan-action@v1.0.0
         with:
