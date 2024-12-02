@@ -62,7 +62,7 @@ jobs:
     - name: Validate Docker Compose Configuration
       id: docker-lint
       run: |
-        docker compose config --no-interpolate --dry-run
+        docker compose config --no-interpolate --quiet --dry-run
         EXIT_CODE=$?
         if [ $? -ne 0 ]; then
           echo "Docker Compose configuration validation failed."
