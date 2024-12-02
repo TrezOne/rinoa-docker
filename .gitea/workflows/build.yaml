@@ -104,7 +104,7 @@ jobs:
       
       - name: Merge PR with Tea CLI
         run: |
-          tea pr m --token ${{ secrets.BOT_GITEA_TOKEN }} ${{ gitea.event.pull_request.number }}
+          tea pr m --token "${{ secrets.BOT_GITEA_TOKEN }}" "${{ gitea.event.pull_request.number }}"
 
   #     - name: Merge Pull Request
   #       uses: prasiman/gocurl@v1
