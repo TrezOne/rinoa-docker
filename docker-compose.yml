@@ -4521,24 +4521,12 @@ services:
       - SYS_RAWIO
     container_name: scrutiny
     devices:
-      - permissions: "rwm"
-        source: "/dev/sda"
-        target: "/dev/sda"
-      - permissions: "rwm"
-        source: "/dev/sdb"
-        target: "/dev/sdb"
-      - permissions: "rwm"
-        source: "/dev/sdd"
-        target: "/dev/sdd"
-      - permissions: "rwm"
-        source: "/dev/sde"
-        target: "/dev/sde"
-      - permissions: "rwm"
-        source: "/dev/sdc"
-        target: "/dev/sdc"
-      - permissions: "rwm"
-        source: "/dev/sdf"
-        target: "/dev/sdf"
+      - "/dev/sda:/dev/sda:rwm"
+      - "/dev/sdb:/dev/sdb:rwm"
+      - "/dev/sdc:/dev/sdc:rwm"
+      - "/dev/sdd:/dev/sdd:rwm"
+      - "/dev/sde:/dev/sde:rwm"
+      - "/dev/sdf:/dev/sdf:rwm"
     image: ghcr.io/analogj/scrutiny:master-omnibus
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
