@@ -90,8 +90,7 @@ jobs:
 
   deploy-changes:
     name: Merge and Deploy Changes
-    needs: manual-approval
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
