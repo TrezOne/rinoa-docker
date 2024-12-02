@@ -17,7 +17,7 @@ jobs:
       - name: Run SonarQube Analysis
         uses: sonarsource/sonarqube-scan-action@v1.0.0
         with:
-          host: ${{ secrets.SONARQUBE_URL }}
+          host: ${{ secrets.SONARQUBE_HOST }}
           login: ${{ secrets.SONARQUBE_TOKEN }}
           projectKey: ${{ github.event.repository.name }}
           projectName: ${{ github.event.repository.name }}
@@ -26,7 +26,7 @@ jobs:
         id: quality-gate
         uses: sonarsource/sonarqube-quality-gate-check@v1.1.0
         with:
-          host: ${{ secrets.SONARQUBE_URL }}
+          host: ${{ secrets.SONARQUBE_HOST }}
           login: ${{ secrets.SONARQUBE_TOKEN }}
 
       - name: Comment on Pull Request with Quality Gate Status
@@ -34,9 +34,9 @@ jobs:
         uses: prasiman/gocurl@v0.5.0
         with:
           method: POST
-          url: "https://${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
+          url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
           headers: >
-            Authorization: token ${{ secrets.GITEA_TOKEN }}
+            Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
           body: |
             {
               "body": "SonarQube Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
@@ -79,9 +79,9 @@ jobs:
         uses: prasiman/gocurl@v0.5.0
         with:
           method: POST
-          url: "https://${{ secrets.GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
+          url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
           headers: >
-            Authorization: token ${{ secrets.GITEA_TOKEN }}
+            Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
 
       - name: Deploy Docker Compose Changes
         uses: alexesdev/ssh-docker-compose@v1.0.0
