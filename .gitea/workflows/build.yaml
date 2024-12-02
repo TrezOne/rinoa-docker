@@ -99,7 +99,7 @@ jobs:
 
       - name: Install & Setup Tea CLI
         run: |
-          curl -sSL https://dl.gitea.io/tea/0.9.1/tea-0.9.1-linux-amd64 > /usr/local/bin/tea
+          curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
           chmod +x /usr/local/bin/tea
           tea login add --name gitea-rinoa --url $ {{ secrets.RINOA_GITEA_SERVER }} --user gitea-sonarqube-bot --token $ {{ secrets.BOT_GITEA_TOKEN }}
       
