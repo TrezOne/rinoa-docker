@@ -46,7 +46,7 @@ jobs:
   docker-compose-dry-run:
     name: Dry Run Docker Compose
     runs-on: self-hosted
-    if: needs.sonarqube.outputs.quality-gate == 'true'
+    if: ${{ steps.quality-gate.outputs.quality-gate-status }} == 'PASSED'
     steps:
     - name: Docker Compose Lint
       uses: sjafferali/docker-compose-lint-action@v0.1.2
