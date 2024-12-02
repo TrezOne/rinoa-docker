@@ -30,18 +30,18 @@ jobs:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-    - name: Comment on Pull Request with Quality Gate Status
-      id: comment-pr
-      uses: prasiman/gocurl@v1
-      with:
-        method: POST
-        url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
-        headers: >
-          Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-        body: |
-          {
-            "body": "SonarQube Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
-          }
+    # - name: Comment on Pull Request with Quality Gate Status
+    #   id: comment-pr
+    #   uses: prasiman/gocurl@v1
+    #   with:
+    #     method: POST
+    #     url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
+    #     headers: >
+    #       Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+    #     body: |
+    #       {
+    #         "body": "SonarQube Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
+    #       }
 
   docker-compose-dry-run:
     name: Dry Run Docker Compose
