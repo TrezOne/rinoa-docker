@@ -32,7 +32,7 @@ jobs:
 
     - name: Comment on Pull Request with Quality Gate Status
       id: comment-pr
-      uses: prasiman/gocurl@v0.5.0
+      uses: prasiman/gocurl@v1
       with:
         method: POST
         url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
@@ -70,21 +70,29 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
       - name: Merge Pull Request
-        uses: prasiman/gocurl@v0.5.0
+        uses: prasiman/gocurl@v1
         with:
           method: POST
           url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
           headers: >
             Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
 
-      - name: Deploy Docker Compose Changes
-        uses: alexesdev/ssh-docker-compose@v1.0.0
-        with:
-          ssh_host: ${{ secrets.DOCKER_HOST }}
-          ssh_user: ${{ secrets.DOCKER_USER }}
-          ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
-          compose_file_path: /path/to/docker-compose.yml
-          docker_compose_command: "up -d --remove-orphans"
+      # - name: Deploy Docker Compose Changes
+      # - uses: astappiev/docker-compose-remote-action@master
+      #   name: Docker-Compose Remote Deployment
+      #   with:
+      #     ssh_host: example.com
+      #     ssh_user: ${{ secrets.DEPLOY_USERNAME }}
+      #     ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+      #     ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
+      #     docker_compose_prefix: myapp
+
+      #   uses: alex-ac/github-action-ssh-docker-compose@master
+      #   with:
+      #     ssh_host: ${{ secrets.DOCKER_HOST }}
+      #     ssh_user: ${{ secrets.DOCKER_USER }}
+      #     ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
+      #     compose_file_path: /path/to/docker-compose.yml
+      #     docker_compose_command: "up -d --remove-orphans"
