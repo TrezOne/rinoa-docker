@@ -45,9 +45,9 @@ jobs:
 
   docker-compose-dry-run:
     name: Dry Run Docker Compose
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: quality-gate
-    if: needs.steps.quality-gate.outputs.quality-gate-status == 'PASSED'
+    if: steps.quality-gate.outputs.quality-gate-status == 'PASSED'
     steps:
     - name: Checking out
       uses: actions/checkout@v4
@@ -55,10 +55,20 @@ jobs:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
 
-    - name: Docker Compose Lint
-      uses: sjafferali/docker-compose-lint-action@v0.1.2
-      with:
-        compose-file: './docker-compose.yml'
+    - name: Validate Docker Compose Configuration
+      run: |
+        docker compose config
+        if [ $? -ne 0 ]; then
+          echo "Docker Compose configuration validation failed."
+          exit 1
+        else
+          echo "Docker Compose configuration is valid."
+        fi
+
+    # - name: Docker Compose Lint
+    #   uses: sjafferali/docker-compose-lint-action@v0.1.2
+    #   with:
+    #     compose-file: './docker-compose.yml'
 
   # manual-approval:
   #   name: Manual Approval
