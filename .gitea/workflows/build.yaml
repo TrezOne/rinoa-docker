@@ -88,13 +88,24 @@ jobs:
   #         echo "Manual approval step reached. Please approve to proceed."
   #         exit 1
 
-  # deploy-changes:
-  #   name: Merge and Deploy Changes
-  #   needs: manual-approval
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v4
+  deploy-changes:
+    name: Merge and Deploy Changes
+    needs: manual-approval
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Tea CLI
+        run: |
+          curl -sSL https://dl.gitea.io/tea/0.9.1/tea-0.9.1-linux-amd64 > /usr/local/bin/tea
+          chmod +x /usr/local/bin/tea
+      
+      - name: Merge PR with Tea CLI
+        run: |
+          tea pr merge --login git-sonarqube-bot --token ${{ secrets.BOT_GITEA_TOKEN }} \
+          --repo ${{ gitea.event.repository.owner.login }}/${{ github.event.repository.name }} \
+          --number ${{ gitea.event.pull_request.number }}
 
   #     - name: Merge Pull Request
   #       uses: prasiman/gocurl@v1
@@ -104,15 +115,15 @@ jobs:
   #         headers: >
   #           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
 
-      # - name: Deploy Docker Compose Changes
-      # - uses: astappiev/docker-compose-remote-action@master
-      #   name: Docker-Compose Remote Deployment
-      #   with:
-      #     ssh_host: example.com
-      #     ssh_user: ${{ secrets.DEPLOY_USERNAME }}
-      #     ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-      #     ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_KEY }}
-      #     docker_compose_prefix: myapp
+      - name: Deploy Docker Compose Changes
+        uses: astappiev/docker-compose-remote-action@master
+        with:
+          ssh_host: 192.168.1.254
+          ssh_user: gitea-deploy
+          ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_SSH_KEY }}
+          ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_SSH_KEY }} 
+          docker_env: $ {{ secrets.RINOA_DOCKER_ENV }}
+          docker_args: -d --remove-orphans --build --dry-run
 
       #   uses: alex-ac/github-action-ssh-docker-compose@master
       #   with:
