@@ -74,7 +74,7 @@ jobs:
       
       - name: Merge PR with Tea CLI
         run: |
-          tea pr m "${{ gitea.event.pull_request.number }}"
+          tea pr m "${{ gitea.ref }}"
 
       - name: Deploy Docker Compose Changes
         uses: astappiev/docker-compose-remote-action@master
