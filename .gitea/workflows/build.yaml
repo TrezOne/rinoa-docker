@@ -14,7 +14,6 @@ jobs:
     - name: Checking out
       uses: actions/checkout@v4
       with:
-        # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
 
     - name: SonarQube Scan
@@ -30,19 +29,6 @@ jobs:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-    # - name: Comment on Pull Request with Quality Gate Status
-    #   id: comment-pr
-    #   uses: prasiman/gocurl@v1
-    #   with:
-    #     method: POST
-    #     url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/issues/${{ github.event.pull_request.number }}/reviews"
-    #     headers: >
-    #       Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-    #     body: |
-    #       {
-    #         "body": "SonarQube Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
-    #       }
-
   docker-compose-dry-run:
     name: Dry Run Docker Compose
     runs-on: ubuntu-latest
@@ -52,7 +38,6 @@ jobs:
     - name: Checking out
       uses: actions/checkout@v4
       with:
-        # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
 
     - name: Generate ephemeral env
@@ -71,22 +56,6 @@ jobs:
           echo "Docker Compose configuration is valid."
         fi
         echo "::set-output name=exit_code::$EXIT_CODE"
-
-    # - name: Docker Compose Lint
-    #   uses: sjafferali/docker-compose-lint-action@v0.1.2
-    #   with:
-    #     compose-file: './docker-compose.yml'
-
-  # manual-approval:
-  #   name: Manual Approval
-  #   needs: docker-compose-test
-  #   if: always()
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Approval Required
-  #       run: |
-  #         echo "Manual approval step reached. Please approve to proceed."
-  #         exit 1
 
   deploy-changes:
     name: Merge and Deploy Changes
@@ -107,14 +76,6 @@ jobs:
         run: |
           tea pr m "${{ gitea.event.pull_request.number }}"
 
-  #     - name: Merge Pull Request
-  #       uses: prasiman/gocurl@v1
-  #       with:
-  #         method: POST
-  #         url: "https://${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
-  #         headers: >
-  #           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-
       - name: Deploy Docker Compose Changes
         uses: astappiev/docker-compose-remote-action@master
         with:
@@ -124,11 +85,3 @@ jobs:
           ssh_host_public_key: ${{ secrets.DEPLOY_PUBLIC_SSH_KEY }} 
           docker_env: $ {{ secrets.RINOA_DOCKER_ENV }}
           docker_args: -d --remove-orphans --build --dry-run
-
-      #   uses: alex-ac/github-action-ssh-docker-compose@master
-      #   with:
-      #     ssh_host: ${{ secrets.DOCKER_HOST }}
-      #     ssh_user: ${{ secrets.DOCKER_USER }}
-      #     ssh_key: ${{ secrets.DOCKER_SSH_KEY }}
-      #     compose_file_path: /path/to/docker-compose.yml
-      #     docker_compose_command: "up -d --remove-orphans"
