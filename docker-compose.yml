@@ -1458,7 +1458,10 @@ services:
       grafana-alloy:
         condition: service_started
         required: true
+<<<<<<< HEAD
         restart: true
+=======
+>>>>>>> sonarqube-gitea-docker-compose-deploy
     environment:
       GF_INSTALL_PLUGINS: grafana-piechart-panel
       TZ: America/New_York
@@ -1567,7 +1570,10 @@ services:
       grafana-alloy:
         condition: service_started
         required: true
+<<<<<<< HEAD
         restart: true
+=======
+>>>>>>> sonarqube-gitea-docker-compose-deploy
     image: grafana/loki:latest
     networks:
       default: null
@@ -1592,7 +1598,10 @@ services:
       grafana-alloy:
         condition: service_started
         required: true
+<<<<<<< HEAD
         restart: true
+=======
+>>>>>>> sonarqube-gitea-docker-compose-deploy
     image: grafana/mimir:latest
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
@@ -1647,7 +1656,10 @@ services:
       grafana-alloy:
         condition: service_started
         required: true
+<<<<<<< HEAD
         restart: true
+=======
+>>>>>>> sonarqube-gitea-docker-compose-deploy
     image: grafana/pyroscope:latest
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
@@ -1677,7 +1689,10 @@ services:
       grafana-alloy:
         condition: service_started
         required: true
+<<<<<<< HEAD
         restart: true
+=======
+>>>>>>> sonarqube-gitea-docker-compose-deploy
     image: grafana/tempo:latest
     networks:
       default: null
@@ -4526,6 +4541,7 @@ services:
       - SYS_RAWIO
     container_name: scrutiny
     devices:
+<<<<<<< HEAD
       - permissions: rwm
         source: /dev/sda
         target: /dev/sda
@@ -4544,6 +4560,14 @@ services:
       - permissions: rwm
         source: /dev/sdf
         target: /dev/sdf
+=======
+      - "/dev/sda:/dev/sda:rwm"
+      - "/dev/sdb:/dev/sdb:rwm"
+      - "/dev/sdc:/dev/sdc:rwm"
+      - "/dev/sdd:/dev/sdd:rwm"
+      - "/dev/sde:/dev/sde:rwm"
+      - "/dev/sdf:/dev/sdf:rwm"
+>>>>>>> sonarqube-gitea-docker-compose-deploy
     image: ghcr.io/analogj/scrutiny:master-omnibus
     labels:
       - homepage.group=Infrastructure/App Performance Monitoring
