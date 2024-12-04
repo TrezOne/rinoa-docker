@@ -76,7 +76,7 @@ jobs:
       - name: Merge PR with Tea CLI
         run: |
           echo "${{ gitea.event.pull_request.number }}"
-          tea pr m "${{ gitea.event.pull_request.number }}" --merge --message "Automatically merged by GitHub Actions"
+          tea pr m --message "Automatically merged by GitHub Actions" "${{ gitea.event.pull_request.number }}"
 
       - name: Deploy Docker Compose Changes
         uses: 5eqn/docker-compose-remote-action@v0.0.7
