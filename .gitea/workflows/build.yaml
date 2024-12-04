@@ -75,7 +75,7 @@ jobs:
       
       - name: Merge PR with Tea CLI
         run: |
-          tea pr m "${{ gitea.repository.pulls.index }}"
+          tea pr m "${{ gitea.ref }}"
 
       - name: Deploy Docker Compose Changes
         uses: 5eqn/docker-compose-remote-action@v0.0.7
