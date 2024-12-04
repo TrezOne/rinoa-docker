@@ -11,89 +11,6 @@ networks:
   default:
     name: compose_default
 services:
-  addy:
-    container_name: addy
-    depends_on:
-      mariadb:
-        condition: service_started
-        required: true
-      redis:
-        condition: service_started
-        required: true
-    environment:
-      ANONADDY_ADDITIONAL_USERNAME_LIMIT: ${ADDY_ANONADDY_ADDITIONAL_USERNAME_LIMIT}
-      ANONADDY_ADMIN_USERNAME: ${ADDY_ANONADDY_ADMIN_USERNAME}
-      ANONADDY_ALL_DOMAINS: ${ADDY_ANONADDY_ALL_DOMAINS}
-      ANONADDY_BANDWIDTH_LIMIT: ${ADDY_ANONADDY_BANDWIDTH_LIMIT}
-      ANONADDY_DOMAIN: ${ADDY_ANONADDY_DOMAIN}
-      ANONADDY_ENABLE_REGISTRATION: true
-      ANONADDY_HOSTNAME: ${ADDY_ANONADDY_HOSTNAME}
-      ANONADDY_LIMIT: ${ADDY_ANONADDY_LIMIT}
-      ANONADDY_NEW_ALIAS_LIMIT: ${ADDY_ANONADDY_NEW_ALIAS_LIMIT}
-      ANONADDY_RETURN_PATH: null
-      ANONADDY_SECRET: ${ADDY_ANONADDY_SECRET}
-      APP_DEBUG: false
-      APP_KEY: ${ADDY_APP_KEY}
-      APP_NAME: addy-rinoa
-      APP_URL: ${ADDY_APP_URL}
-      DB_DATABASE: anonaddy
-      DB_HOST: mariadb
-      DB_PASSWORD: ${ADDY_DB_PASSWORD}
-      DB_PORT: 3306
-      DB_TIMEOUT: 120
-      DB_USERNAME: addy
-      MAIL_ENCRYPTION: null
-      MAIL_FROM_ADDRESS: null
-      MAIL_FROM_NAME: addy@Rinoa
-      PGID: ${PGID}
-      POSTFIX_DEBUG: true
-      POSTFIX_MESSAGE_SIZE_LIMIT: 26214400
-      POSTFIX_RELAYHOST: postal-smtp
-      POSTFIX_RELAYHOST_AUTH_ENABLE: false
-      POSTFIX_RELAYHOST_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      POSTFIX_RELAYHOST_USERNAME: ${POSTAL_SMTP_AUTH_USER}
-      POSTFIX_SMTP_TLS: false
-      POSTFIX_SMTPD_TLS: false
-      POSTFIX_SMTPD_TLS_CERT_FILE: null
-      POSTFIX_SMTPD_TLS_KEY_FILE: null
-      POSTFIX_SPAMHAUS_DQS_KEY: null
-      PUID: ${PUID}
-      REDIS_HOST: redis
-      REDIS_PASSWORD: null
-      REDIS_PORT: 6379
-      RSPAMD_ENABLE: true
-      RSPAMD_NO_LOCAL_ADDRS: null
-      RSPAMD_WEB_PASSWORD: null
-      TZ: ${TZ}
-    image: anonaddy/anonaddy:latest
-    labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8000
-      - swag_url=addy.${MY_TLD}
-      - homepage.group=Privacy/Security
-      - homepage.name=Addy
-      - homepage.icon=/icons/addy.png
-      - homepage.href=https://addy.${MY_TLD}
-      - homepage.description=Anonymous email forwarding
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: 8009
-        target: 8000
-      - mode: ingress
-        protocol: tcp
-        published: 11334
-        target: 11334
-    restart: always
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/anonaddy
-        target: /data
-        type: bind
-        bind:
-          create_host_path: true
   adguard:
     container_name: adguard
     environment:
@@ -1347,7 +1264,7 @@ services:
         condition: service_started
       sonarqube:
         condition: service_started
-    image: justusbunsi/gitea-sonarqube-bot:v0.3.5
+    image: justusbunsi/gitea-sonarqube-bot:v0.4.0
     environment:
       GITEA_SQ_BOT_PORT: 58525
       GITEA_SQ_BOT_CONFIG_PATH: /home/bot/config/config.yaml
