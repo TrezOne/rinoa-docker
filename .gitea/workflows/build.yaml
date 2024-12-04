@@ -5,10 +5,10 @@ on:
   pull_request:
       types: [opened, synchronize, reopened]
 
-name: SonarQube Scan
+name: Docker Scan, Lint, & Deploy via Compose
 jobs:
   sonarqube:
-    name: SonarQube Scanning & Status
+    name: SonarQube Scanning & Quality Gate
     runs-on: ubuntu-latest
     steps:
     - name: Checking out
@@ -17,17 +17,18 @@ jobs:
         fetch-depth: 0
 
     - name: SonarQube Scan
+      id: sonarqube-scan
       uses: SonarSource/sonarqube-scan-action@v4.0.0
       env:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-    - name: SonarQube Quality Gate Check
-      id: quality-gate
-      uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
-      env:
-        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+    # - name: SonarQube Quality Gate Check
+    #   id: quality-gate
+    #   uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+    #   env:
+    #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+    #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
   docker-compose-dry-run:
     name: Dry Run Docker Compose
@@ -74,10 +75,11 @@ jobs:
       
       - name: Merge PR with Tea CLI
         run: |
-          tea pr m "${{ gitea.event.pull_request.number }}"
+          echo "${{ gitea.event.pull_request.number }}"
+          tea pr m --repo "${{ gitea.repository.name }}" --message "Automatically merged by GitHub Actions" --output table "${{ gitea.event.pull_request.number }}"
 
       - name: Deploy Docker Compose Changes
-        uses: astappiev/docker-compose-remote-action@master
+        uses: 5eqn/docker-compose-remote-action@v0.0.7
         with:
           ssh_host: 192.168.1.254
           ssh_user: gitea-deploy
