@@ -103,7 +103,7 @@ jobs:
         run: |
           curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
           chmod +x /usr/local/bin/tea
-          tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_SERVER }}" --user gitea-sonarqube-bot --token "${{ secrets.BOT_GITEA_TOKEN }}"
+          tea login add --n gitea-rinoa --u "${{ secrets.RINOA_GITEA_SERVER }}" --user gitea-sonarqube-bot --pwd "${{ secrets.BOT_GITEA_PASSWORD }}" --t "${{ secrets.BOT_GITEA_TOKEN }}"
       
       - name: Merge PR with Tea CLI
         run: |
