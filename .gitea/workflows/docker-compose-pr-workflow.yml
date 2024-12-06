@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Gitea List Pull Requests
         id: gitea-check-pr
-        uses: vicamo/gitea-list-pull-requests@v1.0.1
+        uses: vicamo/gitea-list-pull-requests@v1.0.0
         with:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           server_url: ${{ secrets.RINOA_GITEA_SERVER }}
