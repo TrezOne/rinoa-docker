@@ -32,7 +32,7 @@ jobs:
           url: ${{ secrets.RINOA_GITEA_SERVER }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
       - name: Run SonarQube Analysis
-        uses: sonarsource/sonarqube-scan-action@v2.0.0
+        uses: SonarSource/sonarqube-scan-action@v4.1.0
         with:
           SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
           sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
@@ -43,7 +43,7 @@ jobs:
             -Dsonar.language=yaml,docker
       - name: Check SonarQube Quality Gate
         id: quality-gate
-        uses: sonarsource/sonarqube-quality-gate-check-action@v2.0.0
+        uses: sonarsource/sonarqube-quality-gate-check-action@v1.1.0
         with:
           SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
           sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
@@ -57,7 +57,7 @@ jobs:
 
       - name: Merge Pull Request
         if: steps.docker-lint.outcome == 'success'
-        uses: prasiman/gocurl@v1.2.0
+        uses: prasiman/gocurl@v1
         with:
           url: ${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge
           method: POST
