@@ -6474,42 +6474,6 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
-  watchyourlan:
-    container_name: watchyourlan
-    environment:
-      DBPATH: /data/db.sqlite
-      GUIIP: 0.0.0.0
-      GUIPORT: "8840"
-      IFACE: eno4
-      IGNOREIP: "no"
-      SHOUTRRR_URL: ""
-      THEME: darkly
-      TIMEOUT: "120"
-      TZ: America/New_York
-    image: aceberg/watchyourlan
-    labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=WatchYourLAN
-      - homepage.href=https://wyl.${MY_TLD}
-      - homepage.icon=watchyourlan.png
-      - homepage.description=Lightweight network IP scanner
-      - swag=enable
-      - swag_proto=http
-      - swag_url=wyl.trez
-      - swag_port=8840
-    network_mode: host
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8840"
-        target: 8840
-    restart: unless-stopped
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/watchyourlan
-        target: /data
-        type: bind
-        bind:
-          create_host_path: true
   wazuh.agent:
     container_name: wazuh.agent
     environment:
