@@ -15,14 +15,12 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - name: SonarQube Scan
       id: sonarqube-scan
-      uses: SonarSource/sonarqube-scan-action@v4.0.0
+      uses: SonarSource/sonarqube-scan-action@v4.1.0
       env:
         SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
         SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-
     - name: SonarQube Quality Gate Check
       id: quality-gate
       uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
@@ -40,11 +38,9 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - name: Generate ephemeral env
       run: |
-        echo "${{ secrets.RINOA_DOCKER_ENV }}" > ./.env        
-
+        echo "${{ secrets.RINOA_DOCKER_ENV }}" > ./.env
     - name: Validate Docker Compose Configuration
       id: docker-lint
       run: |
@@ -56,7 +52,22 @@ jobs:
         else
           echo "Docker Compose configuration is valid."
         fi
-        echo "::set-output name=exit_code::$EXIT_CODE"        
+        echo "::set-output name=exit_code::$EXIT_CODE"     
+    - name: Merge PR in Gitea
+      needs: docker-lint
+      if: steps.docker-lint.outputs.exit_code == 0
+      uses: prasiman/gocurl@v1
+      if: ${{ github.event.pull_request.merged == false }} # Only merge if PR is not already merged
+      with:
+        method: "POST"
+        url: "${{ secrets.RINOA_GITEA_SERVER }}/api/v1/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
+        headers: >
+          Authorization: token "${{ secrets.BOT_GITEA_TOKEN }}
+          Content-Type: application/json
+        body: |
+          {
+            "Do": "merge"
+          }
 
   deploy-changes:
     name: Merge and Deploy Changes
@@ -66,25 +77,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      # - name: Install & Setup Tea CLI
-      #   run: |
-      #     curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
-      #     chmod +x /usr/local/bin/tea
-      #     tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_SERVER }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token "${{ secrets.BOT_GITEA_TOKEN }}"          
-      
-      # - name: Merge PR with Tea CLI
-      #   run: |
-      #     echo "${{ gitea.event.pull_request.number }}"
-      #     tea pr m --repo "${{ gitea.repository.name }}" --message "Automatically merged by GitHub Actions" --output table "${{ gitea.event.pull_request.number }}"
-
       - name: Git Merge & Push
         uses: morbalint/git-merge-action@v1.1.0
         with:
           target: 'main'
           source: ${{ gitea.event.pull_request.head.ref }}
           dry-run: true
-
       - name: Deploy Docker Compose Changes
         uses: 5eqn/docker-compose-remote-action@v0.0.7
         with:
