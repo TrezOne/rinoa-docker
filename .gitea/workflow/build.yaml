@@ -16,12 +16,12 @@ jobs:
       with:
         fetch-depth: 0
 
-    # - name: SonarQube Scan
-    #   id: sonarqube-scan
-    #   uses: SonarSource/sonarqube-scan-action@v4.0.0
-    #   env:
-    #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-    #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+    - name: SonarQube Scan
+      id: sonarqube-scan
+      uses: SonarSource/sonarqube-scan-action@v4.0.0
+      env:
+        SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
     # - name: SonarQube Quality Gate Check
     #   id: quality-gate
