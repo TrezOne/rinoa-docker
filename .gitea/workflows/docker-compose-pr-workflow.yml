@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           server_url: ${{ secrets.RINOA_GITEA_SERVER }}
-          state: open
+          state: all
   #     - name: Set PR_EXISTS environment variable
   #       run: echo "PR_EXISTS=${{ steps.gitea-check-pr.outputs.exists }}" >> $GITHUB_ENV
   #     - name: Create Pull Request
