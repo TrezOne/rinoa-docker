@@ -3,9 +3,10 @@ name: Docker Compose PR Workflow
 on:
   push:
     branches:
-      - main
-  pull_request:
-      types: [opened, synchronize, reopened]
+      - '*'
+  create:
+    branches:
+      - '*'
 
 name: SonarQube Scan
 jobs:
