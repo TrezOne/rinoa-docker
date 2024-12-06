@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Check if Pull Request Exists
         id: check-pr
-        uses: prasiman/gocurl@v1.2.0
+        uses: prasiman/gocurl@v1
         with:
           url: ${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/pulls?state=open&head=${{ github.repository_owner }}:${{ github.ref_name }}
           method: GET
