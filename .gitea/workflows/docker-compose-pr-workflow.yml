@@ -43,7 +43,7 @@ jobs:
             -Dsonar.language=yaml,docker
       - name: Check SonarQube Quality Gate
         id: quality-gate
-        uses: sonarsource/sonarqube-quality-gate-check-action@v1.1.0
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         with:
           SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
           sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
