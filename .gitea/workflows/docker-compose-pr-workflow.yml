@@ -15,9 +15,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: URL check
+        run: |
+          echo "${{ secrets.RINOA_GITEA_SERVER }}"
       - name: Gitea List Pull Requests
         id: gitea-check-pr
-        uses: vicamo/gitea-list-pull-requests@v1.0.0
+        uses: vicamo/gitea-list-pull-requests@v1.0.1
         with:
           token: "${{ secrets.BOT_GITEA_TOKEN }}"
           server_url: "${{ secrets.RINOA_GITEA_SERVER }}"
