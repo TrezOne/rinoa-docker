@@ -54,7 +54,6 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_ENV }}" > .env
           docker compose config --no-interpolate --quiet --dry-run
-        continue-on-error: true
 
       - name: Merge Pull Request
         if: steps.docker-lint.outcome == 'success'
