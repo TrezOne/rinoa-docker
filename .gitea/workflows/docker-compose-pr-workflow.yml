@@ -107,7 +107,8 @@ jobs:
       
       - name: Merge PR with Tea CLI
         run: |
-          tea pr m "${{ gitea.event.pull_request.number }}"
+          echo "${{ gitea.event.pull_request.number }}"
+          tea pr m --message "Automatically merged by GitHub Actions" "${{ gitea.event.pull_request.number }}"
 
   #     - name: Merge Pull Request
   #       uses: prasiman/gocurl@v1
