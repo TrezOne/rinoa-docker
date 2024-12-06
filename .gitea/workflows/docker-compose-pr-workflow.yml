@@ -19,7 +19,7 @@ jobs:
         id: check-pr
         uses: prasiman/gocurl@v1
         with:
-          url: ${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/pulls?state=open&head=${{ github.repository_owner }}:${{ github.ref_name }}
+          url: "${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/pulls?state=open&head=${{ github.repository_owner }}:${{ github.ref_name }}"
           method: GET
           headers: |
             Authorization: token ${{ secrets.GITEA_API_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
         if: steps.docker-lint.outcome == 'success'
         uses: prasiman/gocurl@v1
         with:
-          url: ${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge
+          url: "${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge"
           method: POST
           headers: |
             Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
