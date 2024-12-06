@@ -78,12 +78,12 @@ jobs:
       #     echo "${{ gitea.event.pull_request.number }}"
       #     tea pr m --repo "${{ gitea.repository.name }}" --message "Automatically merged by GitHub Actions" --output table "${{ gitea.event.pull_request.number }}"
 
-      - name: Merge PR
-        uses: uses: AlexRogalskiy/github-action-git-operation@V2.0.1
+      - name: Git Merge & Push
+        uses: morbalint/git-merge-action@v1.1.0
         with:
-          mode: 'merge-fast-forward'
-          sourceBranch: $ {{ gitea.event.pull_request.head.ref }}
-          targetBranch: 'main'
+          target: 'main'
+          source: ${{ gitea.event.pull_request.head.ref }}
+          dry-run: true
 
       - name: Deploy Docker Compose Changes
         uses: 5eqn/docker-compose-remote-action@v0.0.7
