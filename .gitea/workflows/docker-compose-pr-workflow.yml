@@ -20,9 +20,11 @@ jobs:
         uses: prasiman/gocurl@v1
         with:
           url: ${{ secrets.RINOA_GITEA_SERVER }}/repos/${{ github.repository_owner }}/pulls?state=open&head=${{ github.repository_owner }}:${{ github.ref_name }}
-          method: GET
-          headers: |
-            Authorization: token ${{ secrets.GITEA_API_TOKEN }}
+          method: "GET"
+          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
+          log-response: true
+      - name: Set PR_EXISTS Environment Variable
+        run: echo "PR_EXISTS=${{ contains(steps.check-pr.outputs.response, 'number') }
         outputs:
           response: ${{ steps.check-pr.outputs.response }}
       - name: Create Pull Request
@@ -31,14 +33,16 @@ jobs:
         with:
           url: ${{ secrets.RINOA_GITEA_SERVER }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
+
       - name: Run SonarQube Analysis
         uses: sonarsource/sonarqube-scan-action@v4.1.0
         with:
           SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
           sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
+
       - name: Check SonarQube Quality Gate
         id: quality-gate
-        uses: sonarsource/sonarqube-quality-gate-check-action@v2.0.0
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         with:
           SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
           sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
@@ -56,6 +60,7 @@ jobs:
         with:
           url: ${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge
           method: "POST"
+          log-response: true
           headers: |
             Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
             Content-Type: application/json
