@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           server_url: https://git.trez.wtf
-          state: 'all'
+          state: 'closed'
       - name: Parse Response
         id: parse-response
         uses: yakubique/json-utils@v1.8
