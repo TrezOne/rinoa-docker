@@ -20,6 +20,7 @@ jobs:
         uses: prasiman/gocurl@v1
         with:
           url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls
+          params: '{ "state": "open" }'
           method: "GET"
           headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
           log-response: true
