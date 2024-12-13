@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: List PRs
-        id: list-prs
+        id: listprs
         uses: prasiman/gocurl@v1
         with:
           url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls
@@ -25,10 +25,9 @@ jobs:
           headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
           log-response: true
       - name: Parse Response
-        id: parse-response
         uses: yakubique/json-utils@v1.8
         with:
-          input: ${{ steps.list-prs.outputs.response }}
+          input: ${{ steps.listprs.outputs.response }}
           action: "get"
           key: "data"
       # - name: Create Pull Request
