@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           server_url: ${{ vars.RINOA_GITEA_URL }}
-          state: 'open'
+          state: 'all'
       - name: Parse Response
         id: parse-response
         uses: yakubique/json-utils@v1.8
