@@ -17,11 +17,13 @@ jobs:
         uses: actions/checkout@v4
       - name: List PRs
         id: list-prs
-        uses: vicamo/gitea-list-pull-requests@v1.0.1
+        uses: prasiman/gocurl@v1
         with:
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
-          server_url: https://git.trez.wtf
-          state: 'closed'
+          url: ${{ vars.RINOA_GITEA_API }}/api/v1/repos/${{ github.repository }}/pulls
+          params: '{ "state": "all" }'
+          method: "GET"
+          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
+          log-response: true
       - name: Parse Response
         id: parse-response
         uses: yakubique/json-utils@v1.8
