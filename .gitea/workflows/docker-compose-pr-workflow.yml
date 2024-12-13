@@ -19,68 +19,72 @@ jobs:
         id: check-pr
         uses: prasiman/gocurl@v1
         with:
-          url: ${{ secrets.RINOA_GITEA_SERVER }}/repos/${{ github.repository_owner }}/pulls?state=open&head=${{ github.repository_owner }}:${{ github.ref_name }}
+          url: ${{ secrets.RINOA_GITEA_SERVER }}/repos/${{ github.repository_owner }}/pulls
+          params: '{ "state": "open" }'
           method: "GET"
           headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
           log-response: true
-      - name: Set PR_EXISTS Environment Variable
-        run: echo "PR_EXISTS=${{ contains(steps.check-pr.outputs.response, 'number') }
-        outputs:
-          response: ${{ steps.check-pr.outputs.response }}
-      - name: Create Pull Request
-        if: env.PR_EXISTS != 'true'
-        uses: arifer612/Gitea-PR-action@v1.2.0
+      - name: Parse Response
+        id: parse-response
+        uses: yakubique/json-utils@v1.8
         with:
-          url: ${{ secrets.RINOA_GITEA_SERVER }}
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          inputs: ${{ steps.check-pr.response }}
+          action: "get"
+          key: "data"
+      # - name: Create Pull Request
+      #   if: 
+      #   uses: arifer612/Gitea-PR-action@v1.2.0
+      #   with:
+      #     url: ${{ secrets.RINOA_GITEA_SERVER }}
+      #     token: ${{ secrets.BOT_GITEA_TOKEN }}
 
-      - name: Run SonarQube Analysis
-        uses: sonarsource/sonarqube-scan-action@v4.1.0
-        with:
-          SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
-          sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
+  #     - name: Run SonarQube Analysis
+  #       uses: sonarsource/sonarqube-scan-action@v4.1.0
+  #       with:
+  #         SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
+  #         sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Check SonarQube Quality Gate
-        id: quality-gate
-        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
-        with:
-          SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
-          sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
+  #     - name: Check SonarQube Quality Gate
+  #       id: quality-gate
+  #       uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+  #       with:
+  #         SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
+  #         sonar_token: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Validate Docker Compose Configuration
-        if: steps.quality-gate.outputs.quality-gate-status == 'PASSED'
-        id: docker-lint
-        run: |
-          echo "${{ secrets.DOCKER_ENV }}" > .env
-          docker compose config --no-interpolate --quiet --dry-run
+  #     - name: Validate Docker Compose Configuration
+  #       if: steps.quality-gate.outputs.quality-gate-status == 'PASSED'
+  #       id: docker-lint
+  #       run: |
+  #         echo "${{ secrets.DOCKER_ENV }}" > .env
+  #         docker compose config --no-interpolate --quiet --dry-run
 
-      - name: Merge Pull Request
-        if: steps.docker-lint.outcome == 'success'
-        uses: prasiman/gocurl@v1
-        with:
-          url: ${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge
-          method: "POST"
-          log-response: true
-          headers: |
-            Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
-            Content-Type: application/json
-          body: |
-            {
-              "Do": "merge"
-            }
+  #     - name: Merge Pull Request
+  #       if: steps.docker-lint.outcome == 'success'
+  #       uses: prasiman/gocurl@v1
+  #       with:
+  #         url: ${{ secrets.GITEA_API_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ github.event.pull_request.number }}/merge
+  #         method: "POST"
+  #         log-response: true
+  #         headers: |
+  #           Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}
+  #           Content-Type: application/json
+  #         body: |
+  #           {
+  #             "Do": "merge"
+  #           }
 
-  deploy-main:
-    name: Deploy to Remote Host
-    needs: create-pr-and-validate
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: SSH to Remote Host and Deploy Docker Compose
-        uses: keatonLiu/docker-compose-remote-action@v1.2
-        with:
-          ssh_user: gitea-deploy
-          ssh_host: 192.168.1.254
-          ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_SSH_KEY }}
-          ssh_host_public_key: $ ${{ secrets.DEPLOY_PUBLIC_SSH_KEY }}
-          compose_file_path: docker-compose.yml
-          args: "-d --remove-orphans --build --dry-run"
+  # deploy-main:
+  #   name: Deploy to Remote Host
+  #   needs: create-pr-and-validate
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: SSH to Remote Host and Deploy Docker Compose
+  #       uses: keatonLiu/docker-compose-remote-action@v1.2
+  #       with:
+  #         ssh_user: gitea-deploy
+  #         ssh_host: 192.168.1.254
+  #         ssh_private_key: ${{ secrets.DEPLOY_PRIVATE_SSH_KEY }}
+  #         ssh_host_public_key: $ ${{ secrets.DEPLOY_PUBLIC_SSH_KEY }}
+  #         compose_file_path: docker-compose.yml
+  #         args: "-d --remove-orphans --build --dry-run"
