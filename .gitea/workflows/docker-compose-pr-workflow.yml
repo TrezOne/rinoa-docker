@@ -20,7 +20,7 @@ jobs:
         uses: prasiman/gocurl@v1
         with:
           url: ${{ vars.RINOA_GITEA_API }}/api/v1/repos/${{ github.repository }}/pulls
-          params: '{ "state": "all" }'
+          params: '{ "state": "closed" }'
           method: "GET"
           headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
           log-response: true
@@ -28,7 +28,7 @@ jobs:
         id: parse-response
         uses: yakubique/json-utils@v1.8
         with:
-          input: "${{ steps.list-prs.outputs.json }}"
+          input: "${{ steps.list-prs.outputs.response }}"
           action: "none"
       # - name: Create Pull Request
       #   if: 
