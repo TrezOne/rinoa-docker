@@ -15,11 +15,14 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Verify URL
+        run: |
+          echo "Verifying URL: ${{ secrets.RINOA_GITEA_SERVER }}/repos/${{ github.repository }}/pulls"
       - name: Check if Pull Request Exists
         id: check-pr
         uses: prasiman/gocurl@v1
         with:
-          url: ${{ secrets.RINOA_GITEA_SERVER }}/repos/${{ github.repository_owner }}/pulls
+          url: ${{ secrets.RINOA_GITEA_SERVER }}/repos/${{ github.repository }}/pulls
           params: '{ "state": "open" }'
           method: "GET"
           headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
