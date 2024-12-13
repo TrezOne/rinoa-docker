@@ -31,7 +31,7 @@ jobs:
         id: parse-response
         uses: yakubique/json-utils@v1.8
         with:
-          inputs: ${{ steps.check-pr.response }}
+          input: ${{ steps.check-pr.response }}
           action: "get"
           key: "data"
       # - name: Create Pull Request
