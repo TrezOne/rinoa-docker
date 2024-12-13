@@ -28,7 +28,7 @@ jobs:
         id: parse-response
         uses: yakubique/json-utils@v1.8
         with:
-          input: "${{ steps.list-prs.outputs.response.data }}"
+          input: ${{ steps.list-prs.outputs.response }}
           action: "none"
       # - name: Create Pull Request
       #   if: 
