@@ -29,7 +29,8 @@ jobs:
         uses: yakubique/json-utils@v1.8
         with:
           input: ${{ steps.list-prs.outputs.response }}
-          action: "none"
+          action: "get"
+          key: "data"
       # - name: Create Pull Request
       #   if: 
       #   uses: arifer612/Gitea-PR-action@v1.2.0
