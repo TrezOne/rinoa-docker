@@ -20,7 +20,7 @@ jobs:
         uses: vicamo/gitea-list-pull-requests@v1
         with:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
-          server_url: $ {{ vars.RINOA_GITEA_URL }}
+          server_url: ${{ vars.RINOA_GITEA_URL }}
           state: 'open'
       - name: Parse Response
         id: parse-response
