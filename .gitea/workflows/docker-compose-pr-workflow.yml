@@ -24,12 +24,15 @@ jobs:
           method: "GET"
           headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
           log-response: true
-      - name: Parse Response
-        uses: yakubique/json-utils@v1.8
-        with:
-          input: ${{ steps.listprs.outputs.response }}
-          action: "get"
-          key: "data"
+      - name: Var test
+        run: |
+          echo ${{ steps.listprs.outputs.response }}
+      # - name: Parse Response
+      #   uses: yakubique/json-utils@v1.8
+      #   with:
+      #     input: ${{ steps.listprs.outputs.response }}
+      #     action: "get"
+      #     key: "data"
       # - name: Create Pull Request
       #   if: 
       #   uses: arifer612/Gitea-PR-action@v1.2.0
