@@ -11,6 +11,22 @@ networks:
   default:
     name: compose_default
 services:
+  actual_server:
+    container_name: actualbudget
+    environment:
+      ACTUAL_LOGIN_METHOD: "pass"
+      ACTUAL_PORT: 5006
+      # - ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB=20
+      # - ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB=50
+      # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=20
+      # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
+      # !! If you are not using any of these options, remove the 'environment:' tag entirely.
+    image: docker.io/actualbudget/actual-server:latest
+    ports:
+      - 5006:5006
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/actual-budget:/data
   adguard:
     container_name: adguard
     environment:
@@ -530,8 +546,6 @@ services:
     container_name: cloudflared
     environment:
       CLOUDFLARED_TUNNEL_KEY: ${CLOUDFLARED_TUNNEL_TOKEN}
-    extra_hosts:
-      - host.docker.internal:host-gateway
     image: 'cloudflare/cloudflared:latest'
     restart: unless-stopped
     volumes:
@@ -2022,124 +2036,6 @@ services:
         published: "8104"
         target: 80
     restart: unless-stopped
-  jitsi-admin:
-    container_name: jitsi-admin
-    environment:
-      DATABASE_URL: mysql://jitsiadmin:${JITSI__ADMIN_DB_PASSWORD}@mariadb:3306/jitsiadmin
-      HTTP_METHOD: http
-      MAILER_DSN: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
-      MERCURE_JWT_SECRET: ${JITSI__ADMIN_JWT_SECRET}
-      MERCURE_PUBLIC_URL: https://meet-admin.${MY_TLD}
-      MERCURE_URL: http://jitsi-admin-websocket:3000
-      OAUTH_KEYCLOAK_CLIENT_ID: null
-      OAUTH_KEYCLOAK_CLIENT_REALM: null
-      OAUTH_KEYCLOAK_CLIENT_SECRET: null
-      OAUTH_KEYCLOAK_CLIENT_SERVER: null
-      PUBLIC_URL: https://meet-admin.${MY_TLD}
-      VICH_BASE: https://meet-admin.${MY_TLD}
-      laF_baseUrl: https://meet-admin.${MY_TLD}
-      registerEmailAdress: noreply@trez.wtf
-    image: h2invent/jitsi-admin-main
-    labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_url=meet-admin.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://meet-admin.${MY_TLD}
-      - homepage.group=System Administration
-      - homepage.name=Jitsi Admin
-      - homepage.href=https://meet-admin.${MY_TLD}
-      - homepage.icon=/icons/jitsi-admin.png
-      - homepage.description=Web Conferencing
-    networks:
-      default: null
-    restart: unless-stopped
-  jitsi-admin-keycloak:
-    command:
-      - start-dev
-      - --import-realm
-    container_name: jitsi-admin-keycloak
-    environment:
-      KC_RUN_IN_CONTAINER: true
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KEYCLOAK_BIND_ADDRESS: 0.0.0.0
-      KEYCLOAK_CACHE_TYPE: ispn
-      KEYCLOAK_DAEMON_GROUP: keycloak
-      KEYCLOAK_DAEMON_USER: keycloak
-      KEYCLOAK_DATABASE_HOST: postgresql
-      KEYCLOAK_DATABASE_NAME: bitnami_keycloak
-      KEYCLOAK_DATABASE_PASSWORD: nil
-      KEYCLOAK_DATABASE_PORT: 5432
-      KEYCLOAK_DATABASE_SCHEMA: public
-      KEYCLOAK_DATABASE_USER: bn_keycloak
-      KEYCLOAK_DATABASE_VENDOR: postgresql
-      KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: false
-      KEYCLOAK_ENABLE_HTTPS: false
-      KEYCLOAK_ENABLE_STATISTICS: false
-      KEYCLOAK_HOSTNAME: null
-      KEYCLOAK_HTTP_PORT: 8080
-      KEYCLOAK_HTTP_RELATIVE_PATH: /
-      KEYCLOAK_HTTPS_PORT: 8443
-      KEYCLOAK_HTTPS_USE_PEM: false
-      KEYCLOAK_INIT_MAX_RETRIES: 10
-      KEYCLOAK_JDBC_DRIVER: postgresql
-      KEYCLOAK_JDBC_PARAMS: nil
-      KEYCLOAK_LOG_LEVEL: info
-      KEYCLOAK_LOG_OUTPUT: default
-      KEYCLOAK_MOUNTED_CONF_DIR: /opt/keycloak/conf
-      KEYCLOAK_PRODUCTION: false
-      KEYCLOAK_PROXY: passthrough
-      KEYCLOAK_ROOT_LOG_LEVEL: INFO
-    expose:
-      - 8080
-      - 8443
-    image: keycloak/keycloak
-    labels:
-      - homepage.group=Privacy/Security
-      - homepage.name=Keycloak
-      - homepage.href=https://cloak.${MY_TLD}
-      - homepage.icon=keycloak.svg
-      - homepage.description=Open-source IAM
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8080
-      - swag_url=cloak.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://cloak.${MY_TLD}
-    networks:
-      default: null
-    restart: unless-stopped
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/keycloak
-        target: /opt/keycloak/data/import
-        type: bind
-        bind:
-          create_host_path: true
-  jitsi-admin-websocket:
-    container_name: jitsi-admin-websocket
-    environment:
-      WEBSOCKET_SECRET: ${JITSI__ADMIN_JWT_SECRET}
-    expose:
-      - 3000
-    image: h2invent/jitsi-admin-websocket
-    labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_url=meet-admin.${MY_TLD}
-      - swag_server_custom_directive="location /ws { proxy_pass http://localhost:3000; proxy_set_header X-Forwarded-Proto http; proxy_set_header Host $$host; }"
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://meet-admin.${MY_TLD}
-      - homepage.group=System Administration
-      - homepage.name=Jitsi Admin
-      - homepage.href=https://meet-admin.${MY_TLD}
-      - homepage.icon=/icons/jitsi-admin.png
-      - homepage.description=Web Conferencing
-    networks:
-      default: null
-    restart: unless-stopped
   jitsi-etherpad:
     container_name: jitsi-etherpad
     environment:
@@ -2763,6 +2659,98 @@ services:
         published: "22300"
         target: 22300
     restart: unless-stopped
+  komodo-core:
+    container_name: komodo-core
+    depends_on:
+      - komodo-ferretdb
+      - komodo-periphery
+    environment:
+      KOMODO_HOST: https://komodo.trez.wtf
+      KOMODO_TITLE: Komodo @ Rinoa
+      KOMODO_FIRST_SERVER: http://komodo-periphery:8120
+      KOMODO_DISABLE_CONFIRM_DIALOG: false
+      KOMODO_MONITORING_INTERVAL: "15-sec"
+      KOMODO_RESOURCE_POLL_INTERVAL: "5-min"
+      KOMODO_PASSKEY: ${KOMODO_PASSKEY}
+      KOMODO_WEBHOOK_SECRET: ${KOMODO_WEBHOOK_SECRET}
+      KOMODO_JWT_SECRET: ${KOMODO_JWT_SECRET}
+      KOMODO_LOCAL_AUTH: true
+      KOMODO_DISABLE_USER_REGISTRATION: false
+      KOMODO_ENABLE_NEW_USERS: false
+      KOMODO_DISABLE_NON_ADMIN_CREATE: false
+      KOMODO_TRANSPARENT_MODE: false
+      KOMODO_JWT_TTL: "1-day"
+      KOMODO_OIDC_ENABLED: false
+      # KOMODO_OIDC_PROVIDER: https://oidc.provider.internal/application/o/komodo
+      # KOMODO_OIDC_REDIRECT_HOST: https://oidc.provider.external
+      # KOMODO_OIDC_CLIENT_ID:  # Alt: KOMODO_OIDC_CLIENT_ID_FILE
+      # KOMODO_OIDC_CLIENT_SECRET:  # Alt: KOMODO_OIDC_CLIENT_SECRET_FILE
+      # KOMODO_OIDC_USE_FULL_EMAIL: true
+      # KOMODO_OIDC_ADDITIONAL_AUDIENCES: abc,123 # Alt: KOMODO_OIDC_ADDITIONAL_AUDIENCES_FILE
+      KOMODO_GITHUB_OAUTH_ENABLED: false
+      # KOMODO_GITHUB_OAUTH_ID:  # Alt: KOMODO_GITHUB_OAUTH_ID_FILE
+      # KOMODO_GITHUB_OAUTH_SECRET:  # Alt: KOMODO_GITHUB_OAUTH_SECRET_FILE
+      KOMODO_GOOGLE_OAUTH_ENABLED: false
+      # KOMODO_GOOGLE_OAUTH_ID:  # Alt: KOMODO_GOOGLE_OAUTH_ID_FILE
+      # KOMODO_GOOGLE_OAUTH_SECRET:  # Alt: KOMODO_GOOGLE_OAUTH_SECRET_FILE
+      # KOMODO_AWS_ACCESS_KEY_ID:  # Alt: KOMODO_AWS_ACCESS_KEY_ID_FILE
+      # KOMODO_AWS_SECRET_ACCESS_KEY:  # Alt: KOMODO_AWS_SECRET_ACCESS_KEY_FILE
+      # KOMODO_HETZNER_TOKEN:  # Alt: KOMODO_HETZNER_TOKEN_FILE
+      KOMODO_DATABASE_URI: mongodb://komodo:${KOMODO_PG_DB_PASSWORD}@komodo-ferretdb:27017/komodo?authMechanism=PLAIN
+    image: ghcr.io/mbecker20/komodo:latest
+    labels:
+      homepage.group: System Administration
+      homepage.name: Komodo
+      homepage.href: https://komodo.${MY_TLD}
+      homepage.icon: /icons/komodo.png
+      homepage.description: Open-source note taking & to-do
+      swag: enable
+      swag_url: komodo.${MY_TLD}
+      swag_port: 9120
+      swag_proto: http
+    ports:
+      - 9120:9120
+    restart: always
+  komodo-ferretdb:
+    container_name: komodo-ferretdb
+    depends_on:
+      - komodo-pg-db
+    image: ghcr.io/ferretdb/ferretdb
+    labels:
+      komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+    restart: unless-stopped
+    expose:
+      - 27017
+    environment:
+      - FERRETDB_POSTGRESQL_URL=postgres://komodo-pg-db:5432/komodo
+  komodo-periphery:
+    container_name: komodo-periphery
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+      PERIPHERY_PASSKEYS: ${KOMODO_PASSKEY}
+      PERIPHERY_SSL_ENABLED: false
+      PERIPHERY_INCLUDE_DISK_MOUNTS: /etc/hostname
+      # PERIPHERY_EXCLUDE_DISK_MOUNTS: /snap,/etc/repos
+    expose:
+      - 8120
+    image: ghcr.io/mbecker20/periphery:latest
+    labels:
+      komodo.skip: 
+    restart: always
+    volumes:
+      - /proc:/proc
+  komodo-pg-db:
+    container_name: komodo-pg-db
+    environment:
+      POSTGRES_USER: komodo
+      POSTGRES_PASSWORD: ${KOMODO_PG_DB_PASSWORD}
+      POSTGRES_DB: komodo
+    expose:
+      - 5432
+    image: postgres:17-alpine
+    restart: unless-stopped
+    volumes:
+      - komodo-pg-data:/var/lib/postgresql/data
   librespeed:
     container_name: librespeed
     environment:
@@ -3303,101 +3291,15 @@ services:
         type: bind
         bind:
           create_host_path: true
-  mongodb1:
-    command:
-      - --replSet
-      - rinoa-rs0
-      - --bind_ip_all
-      - --port
-      - "27017"
-    container_name: mongodb1
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    healthcheck:
-      interval: 5s
-      retries: 30
-      start_interval: 1s
-      start_period: 0s
-      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rinoa-rs0',members:[{_id:0,host:'host.docker.internal:27017',priority:1},{_id:1,host:'host.docker.internal:27018',priority:0.5},{_id:2,host:'host.docker.internal:27019',priority:0.5}]}) }" | mongosh --port 27017 --quiet
-      timeout: 30s
+  mongodb:
+    container_name: mongodb
     image: mongo:7.0
-    networks:
-      default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "27017"
-        target: 27017
+      - 27017:27017
     restart: unless-stopped
     volumes:
-      - source: mongo1_data
-        target: /data/db
-        type: bind
-        bind:
-          create_host_path: true
-      - source: mongo1_config
-        target: /data/configdb
-        type: bind
-        bind:
-          create_host_path: true
-  mongodb2:
-    command:
-      - --replSet
-      - rinoa-rs0
-      - --bind_ip_all
-      - --port
-      - "27018"
-    container_name: mongodb2
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    image: mongo:7.0
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "27018"
-        target: 27018
-    restart: unless-stopped
-    volumes:
-      - source: mongo2_data
-        target: /data/db
-        type: bind
-        bind:
-          create_host_path: true
-      - source: mongo2_config
-        target: /data/configdb
-        type: bind
-        bind:
-          create_host_path: true
-  mongodb3:
-    command:
-      - --replSet
-      - rinoa-rs0
-      - --bind_ip_all
-      - --port
-      - "27019"
-    container_name: mongodb3
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    image: mongo:7.0
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "27019"
-        target: 27019
-    restart: unless-stopped
-    volumes:
-      - source: mongo3_data
-        target: /data/db
-        type: volume
-        volume: {}
-      - source: mongo3_config
-        target: /data/configdb
-        type: volume
-        volume: {}
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
@@ -7280,6 +7182,8 @@ volumes:
     name: compose_jitsi-web-admin-upload
   joplin_data:
     name: compose_joplin_data
+  komodo-pg-data:
+    name: komodo-pg-data
   lldap_data:
     name: compose_lldap_data
   localai_data:
@@ -7298,18 +7202,10 @@ volumes:
     name: compose_medusajs_redis_data
   medusajs_storefront_node_modules:
     name: compose_medusajs_storefront_node_modules
-  mongo1_config:
+  mongodb_config:
     name: compose_mongo1_config
-  mongo1_data:
+  mongodb_data:
     name: compose_mongo1_data
-  mongo2_config:
-    name: compose_mongo2_config
-  mongo2_data:
-    name: compose_mongo2_data
-  mongo3_config:
-    name: compose_mongo3_config
-  mongo3_data:
-    name: compose_mongo3_data
   netbox-pg-db:
     name: netbox-pg-db
   ollama:
