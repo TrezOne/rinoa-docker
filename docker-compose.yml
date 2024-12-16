@@ -7057,8 +7057,9 @@ services:
   zitadel-pg-db:
     container_name: zitadel-pg-db
     environment:
-      PGUSER: postgres
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${ZITADEL_ADMIN_DB_PASSWORD}
+      POSTGRES_DB: zitadel
     expose:
       - 5432
     healthcheck:
