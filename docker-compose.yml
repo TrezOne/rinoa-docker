@@ -7025,9 +7025,9 @@ services:
     container_name: zitadel
     image: ghcr.io/zitadel/zitadel:latest
     command: 'start-from-init --masterkeyFromEnv --tlsMode external'
-    depends_on:
-      zitadel-pg-db:
-        condition: 'service_healthy'
+    # depends_on:
+    #   zitadel-pg-db:
+    #     condition: 'service_healthy'
     environment:
       ZITADEL_DATABASE_POSTGRES_HOST: zitadel-pg-db
       ZITADEL_DATABASE_POSTGRES_PORT: 5432
