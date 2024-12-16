@@ -3606,11 +3606,7 @@ services:
       default: null
     restart: always
     volumes:
-      - source: plausible-db-data
-        target: /var/lib/postgresql/data
-        type: bind
-        bind:
-          create_host_path: true
+      - plausible-db-data:/var/lib/postgresql/data
   plausible_events_db:
     container_name: plausible-events-db
     expose:
@@ -3624,28 +3620,10 @@ services:
         hard: 262144
         soft: 262144
     volumes:
-      - source: plausible-event-data
-        target: /var/lib/clickhouse
-        type: bind
-        bind:
-          create_host_path: true
-      - source: plausible-event-logs
-        target: /var/log/clickhouse-server
-        type: bind
-        bind:
-          create_host_path: true
-      - read_only: true
-        source: ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml
-        target: /etc/clickhouse-server/config.d/logging.xml
-        type: bind
-        bind:
-          create_host_path: true
-      - read_only: true
-        source: ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml
-        target: /etc/clickhouse-server/users.d/logging.xml
-        type: bind
-        bind:
-          create_host_path: true
+      - plausible-event-data:/var/lib/clickhouse
+      - plausible-event-logs:/var/log/clickhouse-server
+      - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
+      - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
   portainer:
     command:
       - -H
