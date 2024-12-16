@@ -121,8 +121,8 @@ services:
   apprise:
     container_name: apprise
     environment:
-      PGID: "1000"
-      PUID: "1000"
+      PGID: 1000
+      PUID: 1000
       TZ: America/New_York
     hostname: Rinoa
     image: lscr.io/linuxserver/apprise-api:latest
