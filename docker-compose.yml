@@ -3956,11 +3956,7 @@ services:
       default: null
     restart: unless-stopped
     volumes:
-      - source: reactive-resume-pg
-        target: /var/lib/postgresql/data
-        type: bind
-        bind:
-          create_host_path: true
+      - reactive-resume-pg:/var/lib/postgresql/data
   readarr:
     container_name: readarr
     environment:
@@ -6050,11 +6046,7 @@ services:
       default: null
     restart: unless-stopped
     volumes:
-      - source: traccar-pg
-        target: /var/lib/postgresql/data
-        type: bind
-        bind:
-          create_host_path: true
+      - traccar-pg:/var/lib/postgresql/data
   unmanic:
     container_name: unmanic
     environment:
@@ -6228,16 +6220,8 @@ services:
         target: 80
     restart: unless-stopped
     volumes:
-      - source: wallos-db
-        target: /var/www/html/db
-        type: bind
-        bind:
-          create_host_path: true
-      - source: wallos-logos
-        target: /var/www/html/images/uploads/logos
-        type: bind
-        bind:
-          create_host_path: true
+      - wallos-db:/var/www/html/db
+      - wallos-logos:/var/www/html/images/uploads/logos
   watchtower:
     container_name: watchtower
     environment:
@@ -6797,11 +6781,7 @@ services:
     restart: on-failure
     user: "0:0"
     volumes:
-      - source: zammad-storage
-        target: /opt/zammad/storage
-        type: volume
-        bind:
-          create_host_path: true
+      - zammad-storage:/opt/zammad/storage
   zammad-memcached:
     command: memcached -m 256M
     container_name: zammad-memcached
@@ -6863,11 +6843,7 @@ services:
       default: null
     restart: ${ZAMMAD_RESTART}
     volumes:
-      - source: zammad-storage
-        target: /opt/zammad/storage
-        type: bind
-        bind:
-          create_host_path: true
+      - zammad-storage:/opt/zammad/storage
   zammad-postgresql:
     container_name: zammad-postgresql
     environment:
