@@ -7126,18 +7126,6 @@ volumes:
     name: compose_localai_data
   mattermost-postgres:
     name: compose_mattermost-postgres
-  maybe-app:
-    name: compose_maybe-app
-  maybe-pg-db:
-    name: compose_maybe-pg-db
-  medusajs_backend_node_modules:
-    name: compose_medusajs_backend_node_modules
-  medusajs_postgres_data:
-    name: compose_medusajs_postgres_data
-  medusajs_redis_data:
-    name: compose_medusajs_redis_data
-  medusajs_storefront_node_modules:
-    name: compose_medusajs_storefront_node_modules
   mongodb_config:
     name: compose_mongo1_config
   mongodb_data:
