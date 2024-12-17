@@ -38,8 +38,8 @@ jobs:
         id: extract-json
         run: |
           RESPONSE='${{ toJSON(steps.check-pr.outputs.response) }}'
-          echo "$RESPONSE" | jq '.' > valid_response.json
-          cat valid_response.json
+          echo "$RESPONSE" > valid_response.json
+          cat valid_response.json | jq
           echo "response_json=$(cat valid_response.json)" >> $GITHUB_OUTPUT
 
       - name: Parse PR Response
