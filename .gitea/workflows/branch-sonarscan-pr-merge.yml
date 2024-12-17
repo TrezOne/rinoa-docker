@@ -66,28 +66,40 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-      # Step 2: SonarQube Quality Gate Check
-      - name: SonarQube Quality Gate
-        id: quality-gate
-        uses: sonarsource/sonarqube-quality-gate-action@v1
+      - name: Custom Quality Gate Check
+        uses: dieuhd/sonar-quality-gate@v1
         env:
-          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          GITHUB_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }} 
+          GIT_URL: ${{ vars.RINOA_GITEA_URL }}/api/v1
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }} 
+          SONAR_URL: ${{ secrets.SONARQUBE_HOST }}
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-        
-      - name: Pause for quality gate results
-        run: sleep 10
-
-      - name: Check Quality Gate Status
-        uses: DesarrolloORT/sonarqube-quality-gate-action@v1
-        id: quality-gate-check
         with:
-          sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
-          sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
-          github-token: ${{ secrets.BOT_GITEA_TOKEN }}
+          login:  ${{ secrets.SONAR_TOKEN }}
+          url: ${{ secrets.SONAR_URL }}
+          projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
+      # Step 2: SonarQube Quality Gate Check
+      # - name: SonarQube Quality Gate
+      #   id: quality-gate
+      #   uses: sonarsource/sonarqube-quality-gate-action@v1
+      #   env:
+      #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+      #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+        
+      # - name: Pause for quality gate results
+      #   run: sleep 10
 
-      - name: Log Quality Gate Result
-        run: |
-          echo "Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
+      # - name: Check Quality Gate Status
+      #   uses: DesarrolloORT/sonarqube-quality-gate-action@v1
+      #   id: quality-gate-check
+      #   with:
+      #     sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
+      #     sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
+      #     github-token: ${{ secrets.BOT_GITEA_TOKEN }}
+
+      # - name: Log Quality Gate Result
+      #   run: |
+      #     echo "Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
 
   # # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
