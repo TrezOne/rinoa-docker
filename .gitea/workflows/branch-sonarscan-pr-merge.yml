@@ -28,22 +28,35 @@ jobs:
         id: check-pr
         uses: prasiman/gocurl@v1
         with:
-          url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.base_ref }}/${{ github.ref_name }}
+          url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }}
           method: "GET"
           headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
+          accept: 200,201,204,404
           log-response: true
 
-      - name: Evaluate Existing PR Status
-        id: eval-pr
+      - name: Convert gocurl Response to JSON
+        id: preprocess-response
         run: |
-          echo "Checking if PR already exists..."
-          if [ "${{ steps.check-pr.outputs.response }}" = "[]" ]; then
-            echo "pr_exists=false" >> $GITHUB_ENV
-            echo "No existing PR found for branch."
-          else
-            echo "pr_exists=true" >> $GITHUB_ENV
-            echo "PR already exists. Continuing..."
-          fi
+          RESPONSE='${{ steps.check-pr.outputs.response }}'
+
+          # Extract the 'data' and 'status_code' fields into JSON format
+          DATA=$(echo "$RESPONSE" | grep -oP 'data:\K[^\s]+' || echo "null")
+          STATUS_CODE=$(echo "$RESPONSE" | grep -oP 'status_code:\K[^\s]+' || echo "0")
+
+          # Create valid JSON output
+          echo "{ \"data\": $DATA, \"status_code\": $STATUS_CODE }" > response.json
+          cat response.json
+
+          # Export as output
+          echo "response_json=$(cat response.json)" >> $GITHUB_OUTPUT
+
+      - name: Parse PR Response
+        id: parse-pr
+        uses: yakubique/json-utils@v1.8
+        with:
+          input: ${{ steps.preprocess-response.outputs.response_json }}
+          action: "get"
+          key: ""
 
       # Step 2: Create PR if none exists
       - name: Create PR in Gitea
