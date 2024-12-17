@@ -34,17 +34,20 @@ jobs:
         run: |
           echo '${{ toJSON(steps.check-pr.outputs.response) }}'
 
+      - name: Extract gocurl Response to Valid JSON
+        id: extract-json
+        run: |
+          RESPONSE='${{ toJSON(steps.check-pr.outputs.response) }}'
+          echo "$RESPONSE" | jq '.' > valid_response.json
+          echo "response_json=$(cat valid_response.json)" >> $GITHUB_OUTPUT
+
       - name: Parse PR Response
         id: parse-pr
         uses: yakubique/json-utils@v1.8
         with:
-          input: '${{ toJSON(steps.check-pr.outputs.response) }}'
+          input: '${{ steps.extract-json.outputs.response_json }}'
           action: "get"
           key: "status"
-
-      - name: View output from json-utils
-        run: |
-          echo '${{ steps.parse-pr.outputs.status }}'
 
       # Step 2: Create PR if none exists
       # - name: Create PR in Gitea
