@@ -11,6 +11,7 @@ on:
 jobs:
   # Job 1: Check if PR exists and create one if the branch is new
   check-and-create-pr:
+    name: Check and Create PR
     runs-on: ubuntu-latest
     outputs:
       pr_created: ${{ steps.check-pr.outputs.pr_created }}
@@ -25,25 +26,16 @@ jobs:
         run: |
           pr_http_status=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'accept: application/json' -H 'Authorization: ${{ secrets.BOT_GITEA_TOKEN }}' -w "%{http_code}" -s -o /dev/null)
           echo "pr_http_status=$pr_http_status" >> $GITHUB_OUTPUT
-        # uses: prasiman/gocurl@v1
-        # with:
-        #   url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }}
-        #   method: "GET"
-        #   headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" , "Accept": "application/json" }'
-        #   accept: 200,201,204,404
-        #   log-response: true
-      - name: Var test
-        run: |
-          echo "pr_http_status: ${{ steps.check-pr.outputs.pr_http_status }}"
 
       # Step 2: Create PR if none exists
       - name: Create PR in Gitea
-        if: ${{ steps.check_pr.outputs.pr_http_status == '404' }}
+        if: steps.check_pr.outputs.pr_http_status == '404'
         id: create-pr
         uses: arifer612/Gitea-PR-action@v1.2.0
         with:
           url: ${{ vars.RINOA_GITEA_URL }}
-          token: ${{ secrets.GITEA_API_TOKEN }}
+          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          assignee: ${{ github.actor }}
 
   # # Job 2: Run SonarQube Analysis
   # sonarqube-analysis:
