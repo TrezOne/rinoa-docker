@@ -38,7 +38,6 @@ jobs:
         with:
           url: ${{ vars.RINOA_GITEA_URL }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
-          assignee: ${{ github.actor }}
 
   # # Job 2: Run SonarQube Analysis
   # sonarqube-analysis:
