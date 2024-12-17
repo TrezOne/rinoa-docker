@@ -29,30 +29,16 @@ jobs:
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -s | jq '{index: .number, state: .state}' > pr_status.json
-          
-          cat pr_status.json
           echo "pr_status=$(jq -c . pr_status.json)" >> "$GITHUB_OUTPUT"
 
-      - name: Status check
+      - name: Create PR in Gitea
         if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
-        run: echo "PR is closed, creating a new one..."
-
-      - name: Get PR status
-        id: get-pr-status
-        uses: yakubique/json-utils@v1.8
+        id: create-pr
+        uses: arifer612/Gitea-PR-action@v1.2.0
         with:
-          input: '${{ toJSON(steps.check-pr.outputs.pr_status) }}'
-          action: "get"
-          key: "state"
-      # Step 2: Create PR if none exists
-      # - name: Create PR in Gitea
-      #   if: steps.check-pr.outputs.pr_http_status.state == 'closed'
-      #   id: create-pr
-      #   uses: arifer612/Gitea-PR-action@v1.2.0
-      #   with:
-      #     url: ${{ vars.RINOA_GITEA_URL }}
-      #     token: ${{ secrets.BOT_GITEA_TOKEN }}
-      #     assignee: ${{ github.actor }}
+          url: ${{ vars.RINOA_GITEA_URL }}
+          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          assignee: ${{ github.actor }}
 
   # # Job 2: Run SonarQube Analysis
   # sonarqube-analysis:
