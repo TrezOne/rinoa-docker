@@ -30,23 +30,11 @@ jobs:
           accept: 200,201,204,404
           log-response: true
 
-      - name: Format of gocurl response.
-        run: |
-          echo '${{ toJSON(steps.check-pr.outputs.response) }}'
-
-      - name: Extract gocurl Response to Valid JSON
-        id: extract-json
-        run: |
-          RESPONSE='${{ toJSON(steps.check-pr.outputs.response) }}'
-          echo "$RESPONSE" > valid_response.json
-          cat valid_response.json | jq
-          echo "response_json=$(cat valid_response.json)" >> $GITHUB_OUTPUT
-
       - name: Parse PR Response
         id: parse-pr
         uses: yakubique/json-utils@v1.8
         with:
-          input: '${{ steps.extract-json.outputs.response_json }}'
+          input: '${{ fromJSON(steps.check-pr.outputs.response) }}'
           action: "get"
           key: "status"
 
