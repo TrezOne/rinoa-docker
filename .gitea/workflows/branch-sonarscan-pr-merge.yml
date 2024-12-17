@@ -1,0 +1,103 @@
+name: Gitea Branch PR, SonarQube Analyze, and Merge Workflow
+
+on:
+  push:
+    branches-ignore:
+      - main
+  create:
+    branches: 
+      - '**'
+
+jobs:
+  # Job 1: Check if PR exists and create one if the branch is new
+  check-and-create-pr:
+    runs-on: ubuntu-latest
+    outputs:
+      pr_created: ${{ steps.check-pr.outputs.pr_created }}
+      pr_index: ${{ steps.create-pr.outputs.pr_index }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 1: Check for an existing PR
+      - name: Check if PR Exists
+        id: check-pr
+        uses: prasiman/gocurl@v1
+        with:
+          url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.base_ref }}/${{ github.ref_name }}
+          method: "GET"
+          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
+          log-response: true
+
+      - name: Evaluate Existing PR Status
+        id: eval-pr
+        run: |
+          echo "Checking if PR already exists..."
+          if [ "${{ steps.check-pr.outputs.response }}" = "[]" ]; then
+            echo "pr_exists=false" >> $GITHUB_ENV
+            echo "No existing PR found for branch."
+          else
+            echo "pr_exists=true" >> $GITHUB_ENV
+            echo "PR already exists. Continuing..."
+          fi
+
+      # Step 2: Create PR if none exists
+      - name: Create PR in Gitea
+        if: env.pr_exists == 'false'
+        id: create-pr
+        uses: arifer612/Gitea-PR-action@v1.2.0
+        with:
+          url: ${{ vars.RINOA_GITEA_URL }}
+          token: ${{ secrets.GITEA_API_TOKEN }}"
+
+  # Job 2: Run SonarQube Analysis
+  sonarqube-analysis:
+    runs-on: ubuntu-latest
+    needs: check-and-create-pr
+    outputs:
+      quality_gate_status: ${{ steps.quality-gate.outputs.quality-gate-status }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 1: Run SonarQube Scan
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v4.1.0
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+
+      # Step 2: SonarQube Quality Gate Check
+      - name: SonarQube Quality Gate
+        id: quality-gate
+        uses: sonarsource/sonarqube-quality-gate-action@v1
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+
+      - name: Log Quality Gate Result
+        run: |
+          echo "Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
+
+  # Job 3: Merge PR if Quality Gate passes
+  merge-pr:
+    runs-on: ubuntu-latest
+    needs: [check-and-create-pr, sonarqube-analysis]
+    if: needs.sonarqube-analysis.outputs.quality_gate_status == 'PASSED'
+    steps:
+      - name: Merge PR in Gitea
+        uses: prasiman/gocurl@v1
+        with:
+          url: "${{ secrets.GITEA_INSTANCE_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ needs.check-and-create-pr.outputs.pr_index }}"
+          method: "POST"
+          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}", "Content-Type": "application/json" }'
+          params: >-
+            {
+              "Do": "merge",
+              "delete_branch_after_merge": true,
+              "force_merge": true,
+              "merge_when_checks_succeed": true
+            }
+
+      - name: Confirm Merge
+        run: echo "PR has been successfully merged into main."
