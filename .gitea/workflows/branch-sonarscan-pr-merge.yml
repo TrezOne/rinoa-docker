@@ -26,7 +26,7 @@ jobs:
         with:
           url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }}
           method: "GET"
-          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" }'
+          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" , "Accept": "application/json" }'
           accept: 200,201,204,404
           log-response: true
 
