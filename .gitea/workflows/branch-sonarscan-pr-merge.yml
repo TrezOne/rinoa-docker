@@ -34,9 +34,8 @@ jobs:
         id: parse-pr
         uses: yakubique/json-utils@v1.8
         with:
-          input: ${{ steps.check-pr.outputs.response }}
-          action: "get"
-          key: "status"
+          input: ${{ steps.check-pr.outputs.response.status }}
+          action: "none"
 
       # Step 2: Create PR if none exists
       # - name: Create PR in Gitea
