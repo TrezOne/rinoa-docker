@@ -30,6 +30,10 @@ jobs:
           accept: 200,201,204,404
           log-response: true
 
+      - name: Format of gocurl response.
+	run: |
+	  echo "${{ steps.check-pr.outputs.response }}"
+
       - name: Parse PR Response
         id: parse-pr
         uses: yakubique/json-utils@v1.8
