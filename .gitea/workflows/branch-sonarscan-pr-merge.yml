@@ -46,7 +46,8 @@ jobs:
 
       - name: json-utils output
         run: |
-          echo "${{ steps.parse-pr.outputs.result }}"
+          echo "${{ steps.extract-json.outputs.response_json }}"
+          echo "${{ steps.extract-json.outputs.response_json }}" | jq '.'
 
       - name: Parse PR Response
         id: parse-pr
