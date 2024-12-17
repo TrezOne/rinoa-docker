@@ -34,7 +34,7 @@ jobs:
           echo "pr_status=$(jq -c . pr_status.json)" >> "$GITHUB_OUTPUT"
 
       - name: Status check
-        if: ${{ steps.check-pr.outputs.pr_status.state == 'closed' }}
+        if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
         run: echo "PR is closed, creating a new one..."
 
       - name: Get PR status
