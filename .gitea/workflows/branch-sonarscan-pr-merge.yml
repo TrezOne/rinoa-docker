@@ -25,17 +25,14 @@ jobs:
         id: check-pr
         run: |
           echo "Checking for existing PR..."
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'Accept: application/json' -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' -s | jq '{index: .number, state: .state}'
-
-      # - name: var test
-      #   run: |
-      #    echo "pr_status: ${{ steps.check-pr.outputs.pr_status }}"
+          pr_status=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'Accept: application/json' -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' -s | jq '{index: .number, state: .state}')
+          echo "pr_status=$pr_status" >> $GITHUB_OUTPUT
 
       - name: Get PR status
         id: get-pr-status
         uses: yakubique/json-utils@v1.8
         with:
-          input: '${{ steps.check-pr.outputs.pr_status }}'
+          input: ${{ steps.check-pr.outputs.pr_status }}
           action: "get"
           key: "state"
       # Step 2: Create PR if none exists
