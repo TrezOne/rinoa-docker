@@ -25,8 +25,12 @@ jobs:
         id: check-pr
         run: |
           echo "Checking for existing PR..."
-          pr_http_status=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'Accept: application/json' -H 'Authorization: ${{ secrets.BOT_GITEA_TOKEN }}' -s | jq '{index: .number, state: .state}')
+          pr_status=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'Accept: application/json' -H 'Authorization: ${{ secrets.BOT_GITEA_TOKEN }}' -s | jq '{index: .number, state: .state}')
           echo "pr_http_status=$pr_http_status" >> $GITHUB_OUTPUT
+
+      - name: var test
+        run: |
+         echo "pr_http_status: ${{ steps.check-pr.outputs.pr_http_status }}"
 
       - name: Get PR status
         id: get-pr-status
