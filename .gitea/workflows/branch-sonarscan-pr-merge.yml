@@ -41,7 +41,7 @@ jobs:
         id: parse-pr
         uses: yakubique/json-utils@v1.8
         with:
-          input: '${{ fromJSON(steps.format-response.outputs.response_json) }}'
+          input: '${{ steps.format-response.outputs.response_json }}'
           action: "get"
           key: "status"
 
