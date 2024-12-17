@@ -2664,39 +2664,6 @@ services:
     depends_on:
       - komodo-ferretdb
       - komodo-periphery
-    environment:
-      KOMODO_HOST: https://komodo.trez.wtf
-      KOMODO_TITLE: Komodo @ Rinoa
-      KOMODO_FIRST_SERVER: http://komodo-periphery:8120
-      KOMODO_DISABLE_CONFIRM_DIALOG: false
-      KOMODO_MONITORING_INTERVAL: "15-sec"
-      KOMODO_RESOURCE_POLL_INTERVAL: "5-min"
-      KOMODO_PASSKEY: ${KOMODO_PASSKEY}
-      KOMODO_WEBHOOK_SECRET: ${KOMODO_WEBHOOK_SECRET}
-      KOMODO_JWT_SECRET: ${KOMODO_JWT_SECRET}
-      KOMODO_LOCAL_AUTH: true
-      KOMODO_DISABLE_USER_REGISTRATION: false
-      KOMODO_ENABLE_NEW_USERS: false
-      KOMODO_DISABLE_NON_ADMIN_CREATE: false
-      KOMODO_TRANSPARENT_MODE: false
-      KOMODO_JWT_TTL: "1-day"
-      KOMODO_OIDC_ENABLED: false
-      # KOMODO_OIDC_PROVIDER: https://oidc.provider.internal/application/o/komodo
-      # KOMODO_OIDC_REDIRECT_HOST: https://oidc.provider.external
-      # KOMODO_OIDC_CLIENT_ID:  # Alt: KOMODO_OIDC_CLIENT_ID_FILE
-      # KOMODO_OIDC_CLIENT_SECRET:  # Alt: KOMODO_OIDC_CLIENT_SECRET_FILE
-      # KOMODO_OIDC_USE_FULL_EMAIL: true
-      # KOMODO_OIDC_ADDITIONAL_AUDIENCES: abc,123 # Alt: KOMODO_OIDC_ADDITIONAL_AUDIENCES_FILE
-      KOMODO_GITHUB_OAUTH_ENABLED: false
-      # KOMODO_GITHUB_OAUTH_ID:  # Alt: KOMODO_GITHUB_OAUTH_ID_FILE
-      # KOMODO_GITHUB_OAUTH_SECRET:  # Alt: KOMODO_GITHUB_OAUTH_SECRET_FILE
-      KOMODO_GOOGLE_OAUTH_ENABLED: false
-      # KOMODO_GOOGLE_OAUTH_ID:  # Alt: KOMODO_GOOGLE_OAUTH_ID_FILE
-      # KOMODO_GOOGLE_OAUTH_SECRET:  # Alt: KOMODO_GOOGLE_OAUTH_SECRET_FILE
-      # KOMODO_AWS_ACCESS_KEY_ID:  # Alt: KOMODO_AWS_ACCESS_KEY_ID_FILE
-      # KOMODO_AWS_SECRET_ACCESS_KEY:  # Alt: KOMODO_AWS_SECRET_ACCESS_KEY_FILE
-      # KOMODO_HETZNER_TOKEN:  # Alt: KOMODO_HETZNER_TOKEN_FILE
-      KOMODO_DATABASE_URI: mongodb://komodo:${KOMODO_PG_DB_PASSWORD}@komodo-ferretdb:27017/komodo?authMechanism=PLAIN
     image: ghcr.io/mbecker20/komodo:latest
     labels:
       homepage.group: System Administration
@@ -2711,6 +2678,8 @@ services:
     ports:
       - 9120:9120
     restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/komodo/core.config.toml:/config/config.toml
   komodo-ferretdb:
     container_name: komodo-ferretdb
     depends_on:
