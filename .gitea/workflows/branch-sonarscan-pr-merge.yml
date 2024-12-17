@@ -22,37 +22,25 @@ jobs:
       # Step 1: Check for an existing PR
       - name: Check if PR Exists
         id: check-pr
-        uses: prasiman/gocurl@v1
-        with:
-          url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }}
-          method: "GET"
-          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" , "Accept": "application/json" }'
-          accept: 200,201,204,404
-          log-response: true
-
-      - name: Format of gocurl response.
-        id: format-response
         run: |
-          RESPONSE='${{ toJSON(steps.check-pr.outputs.response) }}'
-          echo "$RESPONSE" | jq > valid_response.json
-          echo "response_json=$(cat valid_response.json)" >> $GITHUB_OUTPUT
+          pr_http_status=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'accept: application/json' -H 'Authorization: ${{ secrets.BOT_GITEA_TOKEN }}' -w "%{http_code}" -s -o /dev/null)
+          echo "pr_http_status=$pr_http_status" >> $GITHUB_OUTPUT
+        # uses: prasiman/gocurl@v1
+        # with:
+        #   url: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }}
+        #   method: "GET"
+        #   headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" , "Accept": "application/json" }'
+        #   accept: 200,201,204,404
+        #   log-response: true
 
-      - name: Parse PR Response
-        id: parse-pr
-        uses: yakubique/json-utils@v1.8
+      Step 2: Create PR if none exists
+      - name: Create PR in Gitea
+        if: ${{ steps.check_pr.outputs.pr_http_status == '404' }}
+        id: create-pr
+        uses: arifer612/Gitea-PR-action@v1.2.0
         with:
-          input: '${{ steps.format-response.outputs.response_json }}'
-          action: "get"
-          key: "status"
-
-      # Step 2: Create PR if none exists
-      # - name: Create PR in Gitea
-      #   if: ${{ steps.parse-pr.outputs.status == '404' }}
-      #   id: create-pr
-      #   uses: arifer612/Gitea-PR-action@v1.2.0
-      #   with:
-      #     url: ${{ vars.RINOA_GITEA_URL }}
-      #     token: ${{ secrets.GITEA_API_TOKEN }}"
+          url: ${{ vars.RINOA_GITEA_URL }}
+          token: ${{ secrets.GITEA_API_TOKEN }}
 
   # # Job 2: Run SonarQube Analysis
   # sonarqube-analysis:
