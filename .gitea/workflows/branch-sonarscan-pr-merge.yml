@@ -39,7 +39,12 @@ jobs:
         uses: yakubique/json-utils@v1.8
         with:
           input: '${{ toJSON(steps.check-pr.outputs.response) }}'
-          action: "none"
+          action: "get"
+          key: "status"
+
+      - name: View output from json-utils
+        run: |
+          echo '${{ steps.parse-pr.outputs.status }}'
 
       # Step 2: Create PR if none exists
       # - name: Create PR in Gitea
