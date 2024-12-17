@@ -25,7 +25,7 @@ jobs:
         id: check-pr
         run: |
           echo "Checking for existing PR..."
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'Accept: application/json' -H 'Authorization: ${{ secrets.BOT_GITEA_TOKEN }}' -s | jq '{index: .number, state: .state}')
+          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'Accept: application/json' -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' -s | jq '{index: .number, state: .state}'
 
       # - name: var test
       #   run: |
