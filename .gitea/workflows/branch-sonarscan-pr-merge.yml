@@ -32,6 +32,9 @@ jobs:
         #   headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}" , "Accept": "application/json" }'
         #   accept: 200,201,204,404
         #   log-response: true
+      - name: Var test
+        run: |
+          echo "pr_http_status: ${{ steps.check-pr.outputs.pr_http_status }}"
 
       # Step 2: Create PR if none exists
       - name: Create PR in Gitea
