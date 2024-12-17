@@ -34,10 +34,20 @@ jobs:
       - name: Create PR in Gitea
         if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
         id: create-pr
-        uses: arifer612/Gitea-PR-action@v1.2.0
-        with:
-          url: ${{ vars.RINOA_GITEA_URL }}
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
+        run: |
+          echo "Creating PR..."
+          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls \
+            -X 'POST' \
+            -H 'Accept: application/json' \
+            -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "title": "PR: ${{ github.ref_name }} -> main",
+              "body": "This is an automated PR created by Gitea Actions.",
+              "base": "main",
+              "head": "${{ github.ref_name }}"
+            }' | jq '{index: .number}' > pr_created.json
+          echo "pr_created=$(jq -c . pr_created.json)" >> "$GITHUB_OUTPUT"
 
   # # Job 2: Run SonarQube Analysis
   # sonarqube-analysis:
