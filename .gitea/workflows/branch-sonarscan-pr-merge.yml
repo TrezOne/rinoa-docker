@@ -33,7 +33,7 @@ jobs:
         #   accept: 200,201,204,404
         #   log-response: true
 
-      Step 2: Create PR if none exists
+      # Step 2: Create PR if none exists
       - name: Create PR in Gitea
         if: ${{ steps.check_pr.outputs.pr_http_status == '404' }}
         id: create-pr
