@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: URL check
-       run: |
+        run: |
           echo "URL: ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.base_ref }}/${{ github.ref_name }}"
           
       # Step 1: Check for an existing PR
