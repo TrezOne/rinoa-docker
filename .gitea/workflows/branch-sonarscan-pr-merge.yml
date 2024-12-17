@@ -30,41 +30,22 @@ jobs:
           accept: 200,201,204,404
           log-response: true
 
-      - name: Extract gocurl Response to Valid JSON
-        id: extract-json
-        run: |
-          RESPONSE='${{ steps.check-pr.outputs.response }}'
-
-          # Extract only the JSON content starting with '{' and ending with '}'
-          JSON_RESPONSE=$(echo "$RESPONSE" | grep -oP '\{.*\}' || echo '{}')
-
-          # Validate the JSON using jq
-          echo "$JSON_RESPONSE" | jq '.' > valid_response.json || echo '{}' > valid_response.json
-
-          # Output the validated JSON
-          echo "response_json=$(cat valid_response.json)" >> $GITHUB_OUTPUT
-
-      - name: json-utils output
-        run: |
-          echo "${{ steps.extract-json.outputs.response_json }}"
-          echo "${{ steps.extract-json.outputs.response_json }}" | jq '.'
-
       - name: Parse PR Response
         id: parse-pr
         uses: yakubique/json-utils@v1.8
         with:
-          input: ${{ steps.extract-json.outputs.response_json }}
+          input: ${{ steps.check-pr.outputs.response }}
           action: "get"
           key: "status"
 
       # Step 2: Create PR if none exists
-      - name: Create PR in Gitea
-        if: ${{ steps.parse-pr.outputs.status == '404' }}
-        id: create-pr
-        uses: arifer612/Gitea-PR-action@v1.2.0
-        with:
-          url: ${{ vars.RINOA_GITEA_URL }}
-          token: ${{ secrets.GITEA_API_TOKEN }}"
+      # - name: Create PR in Gitea
+      #   if: ${{ steps.parse-pr.outputs.status == '404' }}
+      #   id: create-pr
+      #   uses: arifer612/Gitea-PR-action@v1.2.0
+      #   with:
+      #     url: ${{ vars.RINOA_GITEA_URL }}
+      #     token: ${{ secrets.GITEA_API_TOKEN }}"
 
   # # Job 2: Run SonarQube Analysis
   # sonarqube-analysis:
