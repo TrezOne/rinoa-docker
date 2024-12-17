@@ -24,12 +24,13 @@ jobs:
       - name: Check if PR Exists
         id: check-pr
         run: |
-          pr_http_status=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'accept: application/json' -H 'Authorization: ${{ secrets.BOT_GITEA_TOKEN }}' -w "%{http_code}" -s -o /dev/null)
+          echo "Checking for existing PR..."
+          pr_http_status=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} -X 'GET' -H 'Accept: application/json' -H 'Authorization: ${{ secrets.BOT_GITEA_TOKEN }}' | jq '{index: .number, state: .state}')
           echo "pr_http_status=$pr_http_status" >> $GITHUB_OUTPUT
 
       # Step 2: Create PR if none exists
       - name: Create PR in Gitea
-        if: steps.check_pr.outputs.pr_http_status == '404'
+        if: steps.check-pr.outputs.pr_http_status.state == 'closed'
         id: create-pr
         uses: arifer612/Gitea-PR-action@v1.2.0
         with:
