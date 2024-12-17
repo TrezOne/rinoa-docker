@@ -38,7 +38,7 @@ jobs:
         id: parse-pr
         uses: yakubique/json-utils@v1.8
         with:
-          input: ${{ steps.check-pr.outputs.response.status }}
+          input: '${{ toJSON(steps.check-pr.outputs.response) }}'
           action: "none"
 
       # Step 2: Create PR if none exists
