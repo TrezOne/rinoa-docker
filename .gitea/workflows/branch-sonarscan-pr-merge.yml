@@ -34,21 +34,19 @@ jobs:
           accept: 200,201,204,404
           log-response: true
 
-      - name: Convert gocurl Response to JSON
-        id: preprocess-response
+      - name: Extract gocurl Response to Valid JSON
+        id: extract-json
         run: |
           RESPONSE='${{ steps.check-pr.outputs.response }}'
 
-          # Extract the 'data' and 'status_code' fields into JSON format
-          DATA=$(echo "$RESPONSE" | grep -oP 'data:\K[^\s]+' || echo "null")
-          STATUS_CODE=$(echo "$RESPONSE" | grep -oP 'status_code:\K[^\s]+' || echo "0")
+          # Extract only the JSON content starting with '{' and ending with '}'
+          JSON_RESPONSE=$(echo "$RESPONSE" | grep -oP '\{.*\}' || echo '{}')
 
-          # Create valid JSON output
-          echo "{ \"data\": $DATA, \"status_code\": $STATUS_CODE }" > response.json
-          cat response.json
+          # Validate the JSON using jq
+          echo "$JSON_RESPONSE" | jq '.' > valid_response.json || echo '{}' > valid_response.json
 
-          # Export as output
-          echo "response_json=$(cat response.json)" >> $GITHUB_OUTPUT
+          # Output the validated JSON
+          echo "response_json=$(cat valid_response.json)" >> $GITHUB_OUTPUT
 
       - name: Parse PR Response
         id: parse-pr
