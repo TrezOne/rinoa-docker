@@ -44,6 +44,10 @@ jobs:
           # Output the validated JSON
           echo "response_json=$(cat valid_response.json)" >> $GITHUB_OUTPUT
 
+      - name: json-utils output
+        run: |
+          echo "${{ steps.parse-pr.outputs.result }}"
+
       - name: Parse PR Response
         id: parse-pr
         uses: yakubique/json-utils@v1.8
@@ -52,9 +56,6 @@ jobs:
           action: "get"
           key: "status"
 
-      - name: json-utils output
-        run: |
-          echo "${{ steps.parse-pr.outputs.result }}"
       # Step 2: Create PR if none exists
       - name: Create PR in Gitea
         if: ${{ steps.parse-pr.outputs.status == '404' }}
