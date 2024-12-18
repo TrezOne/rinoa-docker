@@ -84,18 +84,11 @@ jobs:
       - name: Create Input File
         run: |
           echo "Creating invalid input..."
-          cat <<EOF > input.txt
-          ${{ steps.quality-gate-check.outputs.quality-gate-result }}
-          EOF
-
-      - name: Fix JSON Formatting
-        id: fix-json
-        run: |
-          echo "Fixing invalid JSON..."
-          sed -E 's/([^,{:]*):/\1":/g; s/: ([^,}\]]*)/: "\1"/g' input.txt | \
-          sed 's/,\s*}/}/g; s/,\s*\]/]/g' > fixed.json
+          echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > input.txt
+          sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' input.txt > fixed.json
+          echo "Fixed JSON:"
           cat fixed.json
-
+          
       - name: Validate Fixed JSON
         run: |
           echo "Validating JSON with jq..."
