@@ -66,36 +66,21 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
+      - name: SonarQube Quality Gate
+        id: quality-gate
+        uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+
       - name: Custom Quality Gate Check
-        uses: phwt/sonarqube-quality-gate-action@v1
+        uses: DesarrolloORT/sonarqube-quality-gate-action@v1.0.1
         id: quality-gate-check
         with:
           sonar-project-key: rinoa-docker
           sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
           github-token: ${{ secrets.BOT_GITEA_TOKEN }}
-      # Step 2: SonarQube Quality Gate Check
-      # - name: SonarQube Quality Gate
-      #   id: quality-gate
-      #   uses: sonarsource/sonarqube-quality-gate-action@v1
-      #   env:
-      #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-      #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-        
-      # - name: Pause for quality gate results
-      #   run: sleep 10
-
-      # - name: Check Quality Gate Status
-      #   uses: DesarrolloORT/sonarqube-quality-gate-action@v1
-      #   id: quality-gate-check
-      #   with:
-      #     sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
-      #     sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
-      #     github-token: ${{ secrets.BOT_GITEA_TOKEN }}
-
-      # - name: Log Quality Gate Result
-      #   run: |
-      #     echo "Quality Gate Status: ${{ steps.quality-gate.outputs.quality-gate-status }}"
 
   # # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
