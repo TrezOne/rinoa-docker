@@ -82,12 +82,16 @@ jobs:
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
       
       - name: Check Quality Gate Status
+        id: check-quality-gate-status
         run: |
           echo "Quality Gate Status: ${{ steps.quality-gate-check.outputs.project-status }}"
           echo "Quality Gate Result: "
-          echo "${{ steps.quality-gate-check.outputs.quality-gate-result }}" > quality-gate-result.json
-          cat quality-gate-result.json | jq
-
+          echo "${{ steps.quality-gate-check.outputs.quality-gate-result }}" > quality-gate-result.txt
+          sed -E 's/([^,{:]*):/\1":/g; s/: ([^,}\]]*)/: "\1"/g' input.txt | sed 's/,\s*}/}/g; s/,\s*\]/]/g' > fixed.json
+          jq '.' fixed.json
+          cat fixed.json
+          echo "quality-gate-report=$(cat fixed.json)" >> "$GITHUB_OUTPUT"
+  
       - name: Convert JSON report to markdown
         id: convert-json-to-md
         uses: parkerbxyz/json-to-markdown-table@v1.1.2
