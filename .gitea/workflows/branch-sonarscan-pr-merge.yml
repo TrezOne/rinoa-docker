@@ -80,7 +80,24 @@ jobs:
           sonar-project-key: rinoa-docker
           sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
-          github-token: ${{ secrets.BOT_GITEA_TOKEN }}
+      
+      - name: Convert JSON report to markdown
+        id: convert-json-to-md
+        uses: parkerbxyz/json-to-markdown-table@v1.1.2
+        with:
+          json: ${{ steps.quality-gate-check.outputs.quality-gate-result }}
+
+      # Step 2: Post SonarQube results as comment (using curl commands and Gitea API)
+      # - name: Post SonarQube Results as Comment
+      #   run: |
+      #     curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.pull_request.number }}/reviews \
+      #       -X POST \
+      #       -H 'Accept: application/json' \
+      #       -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+      #       -H 'Content-Type: application/json' \
+      #       -d '{
+      #          "body": "SonarQube analysis results:\n\n- Bugs: ${{ env.SONAR_BUGS }}\n- Vulnerabilities: ${{ env.SONAR_VULNERABILITIES }}\n- Code Smells: ${{ env.SONAR_CODE_SMELLS }}\n- Coverage: ${{ env.SONAR_COVERAGE }}%\n- Duplications: ${{ env.SONAR_DUPLICATIONS }}%\n- Quality Gate Status: ${{ env.SONAR_QUALITY_GATE_STATUS }}"
+      #       }'
 
   # # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
