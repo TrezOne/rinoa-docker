@@ -47,7 +47,7 @@ jobs:
               "body": "This is an automated PR created by Gitea Actions.",
               "base": "main",
               "head": "${{ github.ref_name }}"
-            }' | jq '{index: .number}' > pr_created.json
+            }' -s | jq '{index: .number}' > pr_created.json
           echo "pr_created=$(jq -c . pr_created.json)" >> "$GITHUB_OUTPUT"
 
   # Job 2: Run SonarQube Analysis
@@ -86,7 +86,7 @@ jobs:
         run: |
           echo "Quality Gate Status: ${{ steps.quality-gate-check.outputs.project-status }}"
           echo "Quality Gate Result: "
-          echo "${{ steps.quality-gate-check.outputs.quality-gate-result }}" > quality-gate-result.txt
+          echo "${{ steps.quality-gate-check.outputs.quality-gate-result }}" > input.txt
           sed -E 's/([^,{:]*):/\1":/g; s/: ([^,}\]]*)/: "\1"/g' input.txt | sed 's/,\s*}/}/g; s/,\s*\]/]/g' > fixed.json
           jq '.' fixed.json
           cat fixed.json
