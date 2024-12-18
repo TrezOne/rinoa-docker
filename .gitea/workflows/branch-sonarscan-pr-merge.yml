@@ -81,28 +81,23 @@ jobs:
           sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Create Input File
+      - name: JSON clean-up for proccessing...
+        id: json-cleanup
         run: |
-          echo "Creating invalid input..."
+          echo "Cleaning up quality gate response..."
           echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > input.txt
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' input.txt > fixed.json
-          echo "Fixed JSON:"
-          cat fixed.json
-          
-      - name: Validate Fixed JSON
+          echo "fixed-json=$(cat fixed.json)" >> $GITHUB_OUTPUT
+
+      - name: Convert JSON report to markdown
+        id: convert-json-to-md
+        uses: parkerbxyz/json-to-markdown-table@v1.1.2
+        with:
+          json: toJSON(${{ steps.json-cleanup.outputs }})
+
+      - name: Verify markdown output
         run: |
-          echo "Validating JSON with jq..."
-          jq '.' fixed.json
-
-      # - name: Convert JSON report to markdown
-      #   id: convert-json-to-md
-      #   uses: parkerbxyz/json-to-markdown-table@v1.1.2
-      #   with:
-      #     json: toJSON(${{ steps.quality-gate-check.outputs.quality-gate-result }})
-
-      # - name: Verify markdown output
-      #   run: |
-      #     echo "${{ steps.convert-json-to-md.outputs.table }}"
+          echo "${{ steps.convert-json-to-md.outputs.table }}"
 
       # Step 2: Post SonarQube results as comment (using curl commands and Gitea API)
       # - name: Post SonarQube Results as Comment
