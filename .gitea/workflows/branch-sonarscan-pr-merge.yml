@@ -84,7 +84,7 @@ jobs:
       - name: Check Quality Gate Status
         run: |
           echo "Quality Gate Status: ${{ steps.quality-gate-check.outputs.quality-gate-status }}"
-          echo "Quality Gate Result: ${{ steps.quality-gate-check.outputs.quality-gate-result }}"
+          echo "Quality Gate Result: ${{ toJSON(steps.quality-gate-check.outputs.quality-gate-result) }}"
 
       - name: Convert JSON report to markdown
         id: convert-json-to-md
