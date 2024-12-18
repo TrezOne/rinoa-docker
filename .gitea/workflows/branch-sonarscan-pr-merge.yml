@@ -86,15 +86,15 @@ jobs:
           echo "Quality Gate Status: ${{ steps.quality-gate-check.outputs.quality-gate-status }}"
           echo "Quality Gate Result: ${{ steps.quality-gate-check.outputs.quality-gate-result }}"
 
-      # - name: Convert JSON report to markdown
-      #   id: convert-json-to-md
-      #   uses: parkerbxyz/json-to-markdown-table@v1.1.2
-      #   with:
-      #     json: ${{ steps.quality-gate-check.outputs.quality-gate-result }}
+      - name: Convert JSON report to markdown
+        id: convert-json-to-md
+        uses: parkerbxyz/json-to-markdown-table@v1.1.2
+        with:
+          json: ${{ toJSON(steps.quality-gate-check.outputs.quality-gate-result) }}
 
-      # - name: Verify markdown output
-      #   run: |
-      #     echo "${{ steps.convert-json-to-md.outputs.table }}"
+      - name: Verify markdown output
+        run: |
+          echo "${{ steps.convert-json-to-md.outputs.table }}"
 
       # Step 2: Post SonarQube results as comment (using curl commands and Gitea API)
       # - name: Post SonarQube Results as Comment
