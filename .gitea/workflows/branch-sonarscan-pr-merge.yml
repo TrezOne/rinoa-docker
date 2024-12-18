@@ -87,14 +87,29 @@ jobs:
           echo "Cleaning up quality gate response..."
           echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
-          qg_fixed_json=$(jq -c '.' qg_raw.json)
-          echo "fixed-json=$(echo $qg_fixed_json)" >> $GITHUB_OUTPUT
+          jq -c '.' qg_raw.json > qg_fixed_json
+          cat qg_fixed_json
+          echo "qg_fixed_json=$(cat qg_fixed_json)" >> $GITHUB_OUTPUT
 
       - name: Convert JSON report to markdown
         id: convert-json-to-md
         uses: parkerbxyz/json-to-markdown-table@v1.1.2
         with:
-          json: ${{ steps.json-cleanup.outputs.fixed-json }}
+          json: ${{ steps.json-cleanup.outputs.qg_fixed_json }}
+          table_title: SonarQube Quality Gate Results
+          table_columns: metric,value
+          table_column_alignment: left,right
+          table_cell_padding: 1
+          table_cell_padding_left: 2
+          table_cell_padding_right: 2
+          table_cell_padding_top: 1
+          table_cell_padding_bottom: 1
+          table_cell_border: true
+          table_cell_border_color: '#000000'
+          table_cell_border_width: 1
+          table_cell_border_style: solid
+          table_cell_border_radius: 0
+          table_cell_border_radius_top_left: 0
 
       - name: Verify markdown output
         run: |
