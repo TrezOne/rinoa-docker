@@ -855,6 +855,7 @@ services:
   docker-socket-proxy:
     container_name: dockerproxy
     environment:
+      - AUTH=1
       - BUILD=1
       - COMMIT=1
       - CONFIGS=1
