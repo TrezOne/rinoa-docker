@@ -45,6 +45,7 @@ jobs:
               "base": "main",
               "head": "${{ github.ref_name }}"
             }' > pr_created.json
+          cat pr_created.json
           echo "pr_created=$(cat pr_created.json | jq -c .number)" >> "$GITHUB_OUTPUT"
 
       - name: Retrieve existing PR number
