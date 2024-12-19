@@ -53,8 +53,8 @@ jobs:
         if: ${{ steps.check-pr.outputs.pr_status.state }} == 'open'
         id: retrieve-pr
         run: |
-          echo "PR already exists. Number: ${{ steps.check-pr.outputs.pr_status.index }}"
-          echo "pr_number=${{ steps.check-pr.outputs.pr_status.index }}" >> "$GITHUB_OUTPUT"
+          echo "PR already exists. Number: ${{ fromJSON(steps.check-pr.outputs.pr_status).index }}"
+          echo "pr_number=${{ fromJSON(steps.check-pr.outputs.pr_status).index }}" >> "$GITHUB_OUTPUT"
 
   # sonarqube-analysis:
   #   name: SonarQube Analysis
