@@ -101,7 +101,7 @@ jobs:
 
       - name: Convert JSON to Markdown Table
         id: convert-json-to-md
-        uses: parkerbxyz/json-to-markdown-table@v1.1.2
+        uses: uses: buildingcash/json-to-markdown-table-action@v1.1.0
         with:
           json: ${{ steps.json-cleanup.outputs.conditions }}
 
