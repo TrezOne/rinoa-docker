@@ -45,28 +45,19 @@ jobs:
               "base": "main",
               "head": "${{ github.ref_name }}"
             }' | jq '{index: .number}' > pr_created.json
-          echo "pr_created=$(jq -c . pr_created.json)" >> "$GITHUB_OUTPUT"
+          echo "pr_created=$(cat pr_created.json | jq -c .index)" >> "$GITHUB_OUTPUT"
 
-  sonarqube-analysis:
-    name: SonarQube Analysis
-    runs-on: ubuntu-latest
-    needs: check-and-create-pr
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Verify PR number
+        run: |
+          echo "PR number: ${{ steps.create-pr.outputs.pr_created }}"
 
-      # - name: Start Gitea-Sonarqube Bot
-      #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
-      #   with:
-      #     # Required inputs for the bot
-      #     args: >
-      #       --sonarqube-url ${{ secrets.SONARQUBE_URL }}
-      #       --sonarqube-token ${{ secrets.SONARQUBE_TOKEN }}
-      #       --git-provider github
-      #       --git-api-url https://api.github.com
-      #       --git-token ${{ secrets.GITHUB_TOKEN }}
-      #       --repository my-org/my-repo
-      #       --pull-request-id ${{ github.event.pull_request.number }}
+  # sonarqube-analysis:
+  #   name: SonarQube Analysis
+  #   runs-on: ubuntu-latest
+  #   needs: check-and-create-pr
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v4
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v4.1.0
@@ -116,6 +107,19 @@ jobs:
       - name: Verify PR number
         run: |
           echo "PR number: ${{ steps.create-pr.outputs.pr_created }}"
+
+      # - name: Start Gitea-Sonarqube Bot
+      #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
+      #   with:
+      #     # Required inputs for the bot
+      #     args: >
+      #       --sonarqube-url ${{ secrets.SONARQUBE_URL }}
+      #       --sonarqube-token ${{ secrets.SONARQUBE_TOKEN }}
+      #       --git-provider github
+      #       --git-api-url https://api.github.com
+      #       --git-token ${{ secrets.GITHUB_TOKEN }}
+      #       --repository my-org/my-repo
+      #       --pull-request-id ${{ github.event.pull_request.number }}
 
       # - name: Post SonarQube Results as Comment
       #   run: |
