@@ -4,9 +4,6 @@ on:
   push:
     branches-ignore:
       - main
-  create:
-    branches: 
-      - '**'
 
 jobs:
   # Job 1: Check if PR exists and create one if the branch is new
@@ -129,7 +126,7 @@ jobs:
       #       }'
       - name: Verify PR number
         run: |
-          echo "PR number: ${{ gitea.event.pull_request.number }}"
+          echo "PR number: ${{ github.event.pull_request.number }}"
 
       # - name: Post SonarQube Results as Comment
       #   run: |
