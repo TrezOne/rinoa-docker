@@ -108,6 +108,10 @@ jobs:
         with:
           json: "${{ steps.json-cleanup.outputs.conditions }}"
 
+      - name: verify md table
+        run: |
+          echo "${{ steps.convert-json-to-md.outputs.table }}"
+
       # - name: Start Gitea-Sonarqube Bot
       #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
       #   with:
