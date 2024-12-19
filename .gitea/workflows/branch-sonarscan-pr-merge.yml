@@ -109,7 +109,7 @@ jobs:
 
       - name: Post SonarQube Results as Comment
         run: |
-          payload=$(jq -n --arg body "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ jobs.check-and-create-pr.outputs.pr_index }}" \
+          payload=$(jq -n --arg body "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}" \
                   --arg path "path" \
                   --argjson position 0 \
                   '{
@@ -131,7 +131,7 @@ jobs:
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -H 'Content-Type: application/json' \
-            -d '${payload}' -s -i
+            -d '${payload}' -s -w "%http_code%" -i
   
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
