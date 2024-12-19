@@ -102,7 +102,7 @@ jobs:
         id: convert-json-to-md
         uses: parkerbxyz/json-to-markdown-table@v1.1.2
         with:
-          json: ${{ steps.json-cleansing.outputs.projstatus }}
+          json: ${{ steps.json-cleanup.outputs.projstatus }}
 
       - name: Verify markdown output
         run: |
