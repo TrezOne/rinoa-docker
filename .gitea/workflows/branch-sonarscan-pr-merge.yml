@@ -125,7 +125,8 @@ jobs:
                     ],
                     event: "COMMENT"
                   }')
-          echo "${payload}" | jq
+          echo "${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.cc-pr.outputs.pr_index }}/reviews"
+          echo "${payload}"
           curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.cc-pr.outputs.pr_index }}/reviews \
             -X POST \
             -H 'Accept: application/json' \
