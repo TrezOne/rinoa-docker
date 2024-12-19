@@ -26,8 +26,8 @@ jobs:
             -X 'GET' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -s | jq '{index: .number, state: .state}' > pr_status.json
-          echo "pr_status=$(jq -r .index pr_status.json)" >> "$GITHUB_OUTPUT"
+            -s | jq -c '{index: .number, state: .state}' > pr_status.json
+          echo "pr_status=$(cat pr_status.json)" >> "$GITHUB_OUTPUT"
 
       - name: Create PR in Gitea
         if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
@@ -45,7 +45,7 @@ jobs:
               "base": "main",
               "head": "${{ github.ref_name }}"
             }' > pr_created.json
-          cat pr_created.json
+          cat pr_created.json | jq
           echo "pr_created=$(cat pr_created.json | jq -c .number)" >> "$GITHUB_OUTPUT"
 
       - name: Retrieve existing PR number
