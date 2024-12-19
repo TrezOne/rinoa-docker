@@ -94,9 +94,7 @@ jobs:
         id: convert-json-to-md
         uses: parkerbxyz/json-to-markdown-table@v1.1.2
         with:
-          json: ${{ env.QUALITY_GATE_RESULT }}
-        env:
-          QUALITY_GATE_RESULT: ${{ env.qg_fixed_json }}
+          json: ${{ env.qg_fixed_json }}
 
       - name: Verify markdown output
         run: |
