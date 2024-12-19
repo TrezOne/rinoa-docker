@@ -31,7 +31,7 @@ jobs:
           echo "pr_status=$(cat pr_status.json)" >> "$GITHUB_OUTPUT"
 
       - name: Create PR in Gitea
-        if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
+        if: ${{ steps.check-pr.outputs.pr_status.state }} == '"closed"'
         id: create-pr
         run: |
           echo "Creating PR..."
