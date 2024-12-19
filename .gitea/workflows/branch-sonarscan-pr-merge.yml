@@ -116,17 +116,20 @@ jobs:
       #       -d '{
       #          "body": "SonarQube analysis results:\n\n- Bugs: ${{ env.SONAR_BUGS }}\n- Vulnerabilities: ${{ env.SONAR_VULNERABILITIES }}\n- Code Smells: ${{ env.SONAR_CODE_SMELLS }}\n- Coverage: ${{ env.SONAR_COVERAGE }}%\n- Duplications: ${{ env.SONAR_DUPLICATIONS }}%\n- Quality Gate Status: ${{ env.SONAR_QUALITY_GATE_STATUS }}"
       #       }'
-
-      - name: Post SonarQube Results as Comment
+      - name: Verify PR number
         run: |
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.pull_request.number }}/reviews \
-            -X POST \
-            -H 'Accept: application/json' \
-            -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -H 'Content-Type: application/json' \
-            -d '{
-               "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
-            }'
+          echo "PR number: ${{ github.event.pull_request.number }}"
+
+      # - name: Post SonarQube Results as Comment
+      #   run: |
+      #     curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.pull_request.number }}/reviews \
+      #       -X POST \
+      #       -H 'Accept: application/json' \
+      #       -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+      #       -H 'Content-Type: application/json' \
+      #       -d '{
+      #          "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
+      #       }'
   # # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
   #   runs-on: ubuntu-latest
