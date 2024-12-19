@@ -89,9 +89,9 @@ jobs:
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
           jq -c '.' qg_raw.json > qg_fixed_json.json
           cat qg_fixed_json.json
-          projstatus=$(jq -r '.projectStatus.status' fixed.json)
-          caycStatus=$(jq -r '.projectStatus.caycStatus' fixed.json)
-          conditions=$(jq -c '.projectStatus.conditions' fixed.json)
+          projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
+          caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
+          conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
 
           echo "status=${status}" >> $GITHUB_OUTPUT
           echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
