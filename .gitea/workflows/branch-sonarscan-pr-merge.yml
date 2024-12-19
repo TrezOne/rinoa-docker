@@ -108,42 +108,29 @@ jobs:
         with:
           json: "${{ steps.json-cleanup.outputs.conditions }}"
 
-      - name: verify md table
-        run: |
-          echo "${{ steps.convert-json-to-md.outputs.table }}"
-
-      # - name: Start Gitea-Sonarqube Bot
-      #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
-      #   with:
-      #     # Required inputs for the bot
-      #     args: >
-      #       --sonarqube-url ${{ secrets.SONARQUBE_URL }}
-      #       --sonarqube-token ${{ secrets.SONARQUBE_TOKEN }}
-      #       --git-provider github
-      #       --git-api-url https://api.github.com
-      #       --git-token ${{ secrets.GITHUB_TOKEN }}
-      #       --repository my-org/my-repo
-      #       --pull-request-id ${{ github.event.pull_request.number }}
-
       - name: Post SonarQube Results as Comment
         run: |
+          payload=$(jq -n --arg body "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}" \
+                  --arg path "path" \
+                  --argjson position 0 \
+                  '{
+                    body: "string",
+                    comments: [
+                      {
+                        body: $body,
+                        path: $path,
+                        old_position: $position,
+                        new_position: $position
+                      }
+                    ],
+                    event: "COMMENT"
+                  }')
           curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.cc-pr.outputs.pr_index }}/reviews \
             -X POST \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -H 'Content-Type: application/json' \
-            -d '{
-               "body": "string",
-               "comments": [
-                 {
-                   "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}",
-                   "path": "path",
-                   "position": 0
-                 }
-               ],
-               "event": "COMMENT"
-             }'
-            }'
+            -d '${payload}'
   
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
