@@ -11,9 +11,8 @@ jobs:
     name: Check and Create PR
     runs-on: ubuntu-latest
     outputs:
-      pr_created: ${{ steps.check-pr.outputs.pr_created }}
-      pr_index: ${{ steps.create-pr.outputs.pr_index }}
-
+      pr_created: ${{ steps.cc-pr.outputs.pr_created }}
+      pr_index: ${{ steps.cc-pr.outputs.pr_index }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -110,7 +109,7 @@ jobs:
 
       - name: Post SonarQube Results as Comment
         run: |
-          payload=$(jq -n --arg body "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}" \
+          payload=$(jq -n --arg body "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ jobs.check-and-create-pr.outputs.pr_index }}" \
                   --arg path "path" \
                   --argjson position 0 \
                   '{
@@ -125,9 +124,9 @@ jobs:
                     ],
                     event: "COMMENT"
                   }')
-          echo "${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.cc-pr.outputs.pr_index }}/reviews"
+          echo "${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ jobs.check-and-create-pr.outputs.pr_index }}/reviews"
           echo "${payload}"
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.cc-pr.outputs.pr_index }}/reviews \
+          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ jobs.check-and-create-pr.outputs.pr_index }}/reviews \
             -X POST \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
