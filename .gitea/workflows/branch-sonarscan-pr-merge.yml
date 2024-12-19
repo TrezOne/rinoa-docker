@@ -27,16 +27,14 @@ jobs:
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -s | jq '{index: .number, state: .state}' > pr_status.json
-          cat pr_status.json
-          if [ $(jq -r .index pr_status.json) != "null" ]; then
-            echo "pr_status=$(jq -r .index pr_status.json)" >> "$GITHUB_OUTPUT"
+          echo "pr_status=$(jq -r .index pr_status.json)" >> "$GITHUB_OUTPUT"
 
       - name: Create PR in Gitea
         if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
         id: create-pr
         run: |
           echo "Creating PR..."
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls \
+          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls -s \
             -X 'POST' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
@@ -46,8 +44,8 @@ jobs:
               "body": "This is an automated PR created by Gitea Actions.",
               "base": "main",
               "head": "${{ github.ref_name }}"
-            }' | jq '{index: .number}' > pr_created.json
-          echo "pr_created=$(cat pr_created.json | jq -c .)" >> "$GITHUB_OUTPUT"
+            }' > pr_created.json
+          echo "pr_created=$(cat pr_created.json | jq -c .number)" >> "$GITHUB_OUTPUT"
 
       - name: Retrieve existing PR number
         if: ${{ steps.check-pr.outputs.pr_status.state }} == 'open'
