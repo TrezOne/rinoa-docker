@@ -125,16 +125,16 @@ jobs:
       #       --repository my-org/my-repo
       #       --pull-request-id ${{ github.event.pull_request.number }}
 
-      # - name: Post SonarQube Results as Comment
-      #   run: |
-      #     curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.cc-pr.outputs.pr_index }}/reviews \
-      #       -X POST \
-      #       -H 'Accept: application/json' \
-      #       -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-      #       -H 'Content-Type: application/json' \
-      #       -d '{
-      #          "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
-      #       }'
+      - name: Post SonarQube Results as Comment
+        run: |
+          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.cc-pr.outputs.pr_index }}/reviews \
+            -X POST \
+            -H 'Accept: application/json' \
+            -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d '{
+               "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
+            }'
   
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
