@@ -88,11 +88,12 @@ jobs:
           echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
           jq -c '.' qg_raw.json > qg_fixed_json.json
-          cat qg_fixed_json.json
           projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
+          echo "${projstatus}"
           caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
+          echo "${caycStatus}"
           conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
-
+          echo "${conditions}"
           echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
           echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
           echo "conditions=${conditions}" >> $GITHUB_OUTPUT
