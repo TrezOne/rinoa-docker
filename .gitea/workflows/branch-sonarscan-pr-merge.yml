@@ -83,7 +83,7 @@ jobs:
           sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
 
-- name: JSON clean-up for proccessing...
+      - name: JSON clean-up for proccessing...
         id: json-cleanup
         run: |
           echo "Cleaning up quality gate response..."
