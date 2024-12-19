@@ -27,10 +27,9 @@ jobs:
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -s | jq '{index: .number, state: .state}' > pr_status.json
+          cat pr_status.json
           if [ $(jq -r .index pr_status.json) != "null" ]; then
             echo "pr_status=$(jq -r .index pr_status.json)" >> "$GITHUB_OUTPUT"
-          else
-            exit 1
 
       - name: Create PR in Gitea
         if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
