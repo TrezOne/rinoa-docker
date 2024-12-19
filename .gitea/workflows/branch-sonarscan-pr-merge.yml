@@ -56,57 +56,53 @@ jobs:
   #   runs-on: ubuntu-latest
   #   needs: check-and-create-pr
   #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v4
+      # - name: Checkout Code
+      #   uses: actions/checkout@v4
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v4.1.0
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      # - name: SonarQube Scan
+      #   uses: sonarsource/sonarqube-scan-action@v4.1.0
+      #   env:
+      #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+      #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: SonarQube Quality Gate
-        id: quality-gate
-        uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+      # - name: SonarQube Quality Gate
+      #   id: quality-gate
+      #   uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
+      #   env:
+      #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+      #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Custom Quality Gate Check
-        uses: DesarrolloORT/sonarqube-quality-gate-action@v1.0.1
-        id: quality-gate-check
-        with:
-          sonar-project-key: rinoa-docker
-          sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
-          sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
+      # - name: Custom Quality Gate Check
+      #   uses: DesarrolloORT/sonarqube-quality-gate-action@v1.0.1
+      #   id: quality-gate-check
+      #   with:
+      #     sonar-project-key: rinoa-docker
+      #     sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
+      #     sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: JSON clean-up for proccessing...
-        id: json-cleanup
-        run: |
-          echo "Cleaning up quality gate response..."
-          echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
-          sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
-          jq -c '.' qg_raw.json > qg_fixed_json.json
-          projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
-          echo "${projstatus}"
-          caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
-          echo "${caycStatus}"
-          conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
-          echo "${conditions}"
-          echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
-          echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
-          echo "conditions=${conditions}" >> $GITHUB_OUTPUT
-          echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
+      # - name: JSON clean-up for proccessing...
+      #   id: json-cleanup
+      #   run: |
+      #     echo "Cleaning up quality gate response..."
+      #     echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
+      #     sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
+      #     jq -c '.' qg_raw.json > qg_fixed_json.json
+      #     projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
+      #     echo "${projstatus}"
+      #     caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
+      #     echo "${caycStatus}"
+      #     conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
+      #     echo "${conditions}"
+      #     echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
+      #     echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
+      #     echo "conditions=${conditions}" >> $GITHUB_OUTPUT
+      #     echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
 
-      - name: Convert JSON to Markdown Table
-        id: convert-json-to-md
-        uses: buildingcash/json-to-markdown-table-action@v1.1.0
-        with:
-          json: ${{ steps.json-cleanup.outputs.conditions }}
-
-      - name: Verify PR number
-        run: |
-          echo "PR number: ${{ steps.create-pr.outputs.pr_created }}"
+      # - name: Convert JSON to Markdown Table
+      #   id: convert-json-to-md
+      #   uses: buildingcash/json-to-markdown-table-action@v1.1.0
+      #   with:
+      #     json: ${{ steps.json-cleanup.outputs.conditions }}
 
       # - name: Start Gitea-Sonarqube Bot
       #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
