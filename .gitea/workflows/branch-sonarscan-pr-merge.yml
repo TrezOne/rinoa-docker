@@ -126,7 +126,7 @@ jobs:
       #       -H 'Content-Type: application/json' \
       #       -d '{
       #          "body": "SonarQube analysis results:\n\n- Bugs: ${{ env.SONAR_BUGS }}\n- Vulnerabilities: ${{ env.SONAR_VULNERABILITIES }}\n- Code Smells: ${{ env.SONAR_CODE_SMELLS }}\n- Coverage: ${{ env.SONAR_COVERAGE }}%\n- Duplications: ${{ env.SONAR_DUPLICATIONS }}%\n- Quality Gate Status: ${{ env.SONAR_QUALITY_GATE_STATUS }}"
-            }'
+      #       }'
       - name: Verify PR number
         run: |
           echo "PR number: ${{ gitea.event.pull_request.number }}"
