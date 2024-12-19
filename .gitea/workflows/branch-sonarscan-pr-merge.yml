@@ -93,10 +93,16 @@ jobs:
           caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
           conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
 
-          echo "status=${status}" >> $GITHUB_OUTPUT
+          echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
           echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
-          echo "conditions=${conditionCount}" >> $GITHUB_OUTPUT
+          echo "conditions=${conditions}" >> $GITHUB_OUTPUT
           echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
+
+      - name: Convert JSON to Markdown Table
+        id: convert-json-to-md
+        uses: parkerbxyz/json-to-markdown-table@v1.1.2
+        with:
+          json: ${{ steps.json-cleansing.outputs.projstatus }}
 
       - name: Verify markdown output
         run: |
