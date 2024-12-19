@@ -45,7 +45,7 @@ jobs:
               "base": "main",
               "head": "${{ github.ref_name }}"
             }' | jq '{index: .number}' > pr_created.json
-          echo "pr_created=$(cat pr_created.json | jq -c .index)" >> "$GITHUB_OUTPUT"
+          echo "pr_created=$(cat pr_created.json | jq -c .)" >> "$GITHUB_OUTPUT"
 
       - name: Verify PR number
         run: |
