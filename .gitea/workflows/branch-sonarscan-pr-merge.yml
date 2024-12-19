@@ -133,7 +133,16 @@ jobs:
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -H 'Content-Type: application/json' \
             -d '{
-               "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
+               "body": "string",
+               "comments": [
+                 {
+                   "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}",
+                   "path": "path",
+                   "position": 0
+                 }
+               ],
+               "event": "COMMENT"
+             }'
             }'
   
   # Job 3: Merge PR if Quality Gate passes
