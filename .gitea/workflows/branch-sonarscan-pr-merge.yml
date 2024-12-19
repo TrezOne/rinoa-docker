@@ -106,8 +106,7 @@ jobs:
           json: ${{ steps.json-cleanup.outputs.conditions }}
 
       - name: Verify markdown output
-        run: |
-          echo ${{ steps.convert-json-to-md.outputs.table }}
+        run: echo ${{ steps.convert-json-to-md.outputs.table }}
 
       # Step 2: Post SonarQube results as comment (using curl commands and Gitea API)
       # - name: Post SonarQube Results as Comment
