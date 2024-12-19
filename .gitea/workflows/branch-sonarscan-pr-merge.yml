@@ -89,13 +89,14 @@ jobs:
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
           jq -c '.' qg_raw.json > qg_fixed_json.json
           cat qg_fixed_json.json
-          echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
+          projstatus=$(jq -r '.projectStatus.status' fixed.json)
+          caycStatus=$(jq -r '.projectStatus.caycStatus' fixed.json)
+          conditions=$(jq -c '.projectStatus.conditions' fixed.json)
 
-      - name: Convert JSON report to markdown
-        id: convert-json-to-md
-        uses: parkerbxyz/json-to-markdown-table@v1.1.2
-        with:
-          json: ${{ env.qg_fixed_json }}
+          echo "status=${status}" >> $GITHUB_OUTPUT
+          echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
+          echo "conditions=${conditionCount}" >> $GITHUB_OUTPUT
+          echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
 
       - name: Verify markdown output
         run: |
