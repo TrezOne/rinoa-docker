@@ -125,13 +125,13 @@ jobs:
                     event: "COMMENT"
                   }')
           echo "${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ jobs.check-and-create-pr.outputs.pr_index }}/reviews"
-          # echo "${payload}"
+          echo "${payload}"
           curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ jobs.check-and-create-pr.outputs.pr_index }}/reviews \
             -X POST \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -H 'Content-Type: application/json' \
-            -d '${payload}' -s -w "%http_code%" -i
+            -d '${payload}' -s -i
   
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
