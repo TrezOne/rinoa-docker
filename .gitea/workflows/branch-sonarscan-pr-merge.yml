@@ -27,6 +27,7 @@ jobs:
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -s | jq -c '{index: .number, state: .state}' > pr_status.json
+          cat pr_status.json
           echo "pr_status=$(cat pr_status.json)" >> "$GITHUB_OUTPUT"
 
       - name: Create PR in Gitea
