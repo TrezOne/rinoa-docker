@@ -129,7 +129,7 @@ jobs:
             }'
       - name: Verify PR number
         run: |
-          echo "PR number: ${{ gitea.pull_request.id }}"
+          echo "PR number: ${{ gitea.event.number }}"
 
       # - name: Post SonarQube Results as Comment
       #   run: |
