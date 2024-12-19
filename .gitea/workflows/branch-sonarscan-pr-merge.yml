@@ -47,9 +47,12 @@ jobs:
             }' | jq '{index: .number}' > pr_created.json
           echo "pr_created=$(cat pr_created.json | jq -c .)" >> "$GITHUB_OUTPUT"
 
-      - name: Verify PR number
+      - name: Retrieve existing PR number
+        if: ${{ steps.check-pr.outputs.pr_status.state }} == 'open'
+        id: retrieve-pr
         run: |
-          echo "PR number: ${{ steps.create-pr.outputs.pr_created }}"
+          echo "PR already exists. Number: ${{ steps.check-pr.outputs.pr_status.index }}"
+          echo "pr_number=${{ steps.check-pr.outputs.pr_status.index }}" >> "$GITHUB_OUTPUT"
 
   # sonarqube-analysis:
   #   name: SonarQube Analysis
