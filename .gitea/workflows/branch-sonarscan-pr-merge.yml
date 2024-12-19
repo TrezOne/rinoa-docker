@@ -27,27 +27,53 @@ jobs:
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -s | jq '{index: .number, state: .state}')
-          if [ $(echo ${pr_check} | jq -r '.state') == '"open"' ]; then
-            echo "PR already exists. PR number: $(echo ${pr_check} | jq -r '.state')"
-            echo "pr_index=$(echo ${pr_check} | jq -r '.index')" >> "$GITHUB_ENV"
-          elif [ $(echo ${pr_check} | jq -r ''.state') == '"closed"' ]; then
+          pr_status=$(echo ${pr_check} | jq -r '.state')
+          if [ "${pr_status}" == "open" ]; then
+            echo "PR already exists. PR number: $(echo ${pr_check} | jq -r '.index')"
+            echo "pr_created=false" >> "$GITHUB_OUTPUT"
+            echo "pr_index=$(echo ${pr_check} | jq -r '.index')" >> "$GITHUB_OUTPUT"
+          elif [ "${pr_status}" == "closed" ]; then
             echo "PR does not exist. Creating PR..."
-            echo "Creating PR..."
             pr_response=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls -s \
-            -X 'POST' \
-            -H 'Accept: application/json' \
-            -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -H 'Content-Type: application/json' \
-            -d '{
-              "title": "PR: ${{ github.ref_name }} -> main",
-              "body": "This is an automated PR created by Gitea Actions.",
-              "base": "main",
-              "head": "${{ github.ref_name }}"
-            }')
-            pr_index=$(echo "$pr_response" | jq -r '.number')
-            echo "PR created. PR number: $pr_index"
-            echo "pr_index=$pr_index" >> "$GITHUB_ENV"
+              -X 'POST' \
+              -H 'Accept: application/json' \
+              -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+              -H 'Content-Type: application/json' \
+              -d '{
+                "base": "main",
+                "head": "'"${{ github.ref_name }}"'",
+                "title": "Automated PR for branch '"${{ github.ref_name }}"'",
+                "body": "This is an automated PR created for branch '"${{ github.ref_name }}"'."
+              }')
+            pr_index=$(echo ${pr_response} | jq -r '.number')
+            echo "PR created. PR number: ${pr_index}"
+            echo "pr_created=true" >> "$GITHUB_OUTPUT"
+            echo "pr_index=${pr_index}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Error checking for existing PR. Exiting..."
+            exit 1
           fi
+        # if [ $(echo ${pr_check} | jq -r '.state') == '"open"' ]; then
+        #   echo "PR already exists. PR number: $(echo ${pr_check} | jq -r '.state')"
+        #   echo "pr_index=$(echo ${pr_check} | jq -r '.index')" >> "$GITHUB_ENV"
+        # elif [ $(echo ${pr_check} | jq -r ''.state') == '"closed"' ]; then
+        #   echo "PR does not exist. Creating PR..."
+        #   echo "Creating PR..."
+        #   pr_response=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls -s \
+        #   -X 'POST' \
+        #   -H 'Accept: application/json' \
+        #   -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+        #   -H 'Content-Type: application/json' \
+        #   -d '{
+        #     "title": "PR: ${{ github.ref_name }} -> main",
+        #     "body": "This is an automated PR created by Gitea Actions.",
+        #     "base": "main",
+        #     "head": "${{ github.ref_name }}"
+        #   }')
+        #   pr_index=$(echo "$pr_response" | jq -r '.number')
+        #   echo "PR created. PR number: $pr_index"
+        #   echo "pr_index=$pr_index" >> "$GITHUB_ENV"
+        # fi
 
   sonarqube-analysis:
     name: SonarQube Analysis
