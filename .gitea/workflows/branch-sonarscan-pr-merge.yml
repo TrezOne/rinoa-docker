@@ -106,7 +106,7 @@ jobs:
         id: convert-json-to-md
         uses: buildingcash/json-to-markdown-table-action@v1.1.0
         with:
-          json: ${{ toJSON(steps.json-cleanup.outputs.conditions) }}
+          json: "${{ steps.json-cleanup.outputs.conditions }}"
 
       # - name: Start Gitea-Sonarqube Bot
       #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
