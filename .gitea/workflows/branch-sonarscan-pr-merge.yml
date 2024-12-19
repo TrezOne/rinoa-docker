@@ -18,24 +18,22 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Check if PR Exists
-        id: check-pr
+      - name: PR Check/Create
+        id: cc-pr
         run: |
           echo "Checking for existing PR..."
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} \
+          pr_check=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} \
             -X 'GET' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -s | jq -c '{index: .number, state: .state}' > pr_status.json
-          cat pr_status.json
-          echo "pr_status=$(cat pr_status.json)" >> "$GITHUB_OUTPUT"
-
-      - name: Create PR in Gitea
-        if: steps.check-pr.outputs.pr_status.state == '"closed"'
-        id: create-pr
-        run: |
-          echo "Creating PR..."
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls -s \
+            -s | jq '{index: .number, state: .state}')
+          if [ $(echo ${pr_check} | jq -r '.state') == '"open"' ]; then
+            echo "PR already exists. PR number: $(echo ${pr_check} | jq -r '.state')"
+            echo "pr_index=$(echo ${pr_check} | jq -r '.index')" >> "$GITHUB_ENV"
+          elif [ $(echo ${pr_check} | jq -r ''.state') == '"closed"' ]; then
+            echo "PR does not exist. Creating PR..."
+            echo "Creating PR..."
+            pr_response=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls -s \
             -X 'POST' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
@@ -45,69 +43,61 @@ jobs:
               "body": "This is an automated PR created by Gitea Actions.",
               "base": "main",
               "head": "${{ github.ref_name }}"
-            }' > pr_created.json
-          cat pr_created.json | jq
-          echo "pr_created=$(cat pr_created.json | jq -c .number)" >> "$GITHUB_OUTPUT"
+            }')
+            pr_index=$(echo "$pr_response" | jq -r '.number')
+            echo "PR created. PR number: $pr_index"
+            echo "pr_index=$pr_index" >> "$GITHUB_ENV"
+          fi
 
-      - name: Retrieve existing PR number
-        if: ${{ steps.check-pr.outputs.pr_status.state }} == 'open'
-        id: retrieve-pr
+  sonarqube-analysis:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    needs: check-and-create-pr
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v4.1.0
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+
+      - name: SonarQube Quality Gate
+        id: quality-gate
+        uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+
+      - name: Custom Quality Gate Check
+        uses: DesarrolloORT/sonarqube-quality-gate-action@v1.0.1
+        id: quality-gate-check
+        with:
+          sonar-project-key: rinoa-docker
+          sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
+          sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
+
+      - name: JSON clean-up for proccessing...
+        id: json-cleanup
         run: |
-          echo "PR already exists. Number: ${{ fromJSON(steps.check-pr.outputs.pr_status).index }}"
-          echo "pr_number=${{ fromJSON(steps.check-pr.outputs.pr_status).index }}" >> "$GITHUB_OUTPUT"
+          echo "Cleaning up quality gate response..."
+          echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
+          sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
+          jq -c '.' qg_raw.json > qg_fixed_json.json
+          projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
+          caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
+          conditions=$(jq -r '.projectStatus.conditions' qg_fixed_json.json)
+          echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
+          echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
+          echo "conditions=${conditions}" >> $GITHUB_OUTPUT
+          echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
 
-  # sonarqube-analysis:
-  #   name: SonarQube Analysis
-  #   runs-on: ubuntu-latest
-  #   needs: check-and-create-pr
-  #   steps:
-      # - name: Checkout Code
-      #   uses: actions/checkout@v4
-
-      # - name: SonarQube Scan
-      #   uses: sonarsource/sonarqube-scan-action@v4.1.0
-      #   env:
-      #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-      #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-
-      # - name: SonarQube Quality Gate
-      #   id: quality-gate
-      #   uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
-      #   env:
-      #     SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
-      #     SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-
-      # - name: Custom Quality Gate Check
-      #   uses: DesarrolloORT/sonarqube-quality-gate-action@v1.0.1
-      #   id: quality-gate-check
-      #   with:
-      #     sonar-project-key: rinoa-docker
-      #     sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
-      #     sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
-
-      # - name: JSON clean-up for proccessing...
-      #   id: json-cleanup
-      #   run: |
-      #     echo "Cleaning up quality gate response..."
-      #     echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
-      #     sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
-      #     jq -c '.' qg_raw.json > qg_fixed_json.json
-      #     projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
-      #     echo "${projstatus}"
-      #     caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
-      #     echo "${caycStatus}"
-      #     conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
-      #     echo "${conditions}"
-      #     echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
-      #     echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
-      #     echo "conditions=${conditions}" >> $GITHUB_OUTPUT
-      #     echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
-
-      # - name: Convert JSON to Markdown Table
-      #   id: convert-json-to-md
-      #   uses: buildingcash/json-to-markdown-table-action@v1.1.0
-      #   with:
-      #     json: ${{ steps.json-cleanup.outputs.conditions }}
+      - name: Convert JSON to Markdown Table
+        id: convert-json-to-md
+        uses: buildingcash/json-to-markdown-table-action@v1.1.0
+        with:
+          json: ${{ steps.json-cleanup.outputs.conditions }}
 
       # - name: Start Gitea-Sonarqube Bot
       #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
@@ -122,17 +112,18 @@ jobs:
       #       --repository my-org/my-repo
       #       --pull-request-id ${{ github.event.pull_request.number }}
 
-      # - name: Post SonarQube Results as Comment
-      #   run: |
-      #     curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ steps.create-pr.outputs.pr_created. }}/reviews \
-      #       -X POST \
-      #       -H 'Accept: application/json' \
-      #       -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-      #       -H 'Content-Type: application/json' \
-      #       -d '{
-      #          "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
-      #       }'
-  # # Job 3: Merge PR if Quality Gate passes
+      - name: Post SonarQube Results as Comment
+        run: |
+          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ env.pr_index }}/reviews \
+            -X POST \
+            -H 'Accept: application/json' \
+            -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+            -H 'Content-Type: application/json' \
+            -d '{
+               "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
+            }'
+  
+  # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
   #   runs-on: ubuntu-latest
   #   needs: [check-and-create-pr, sonarqube-analysis]
