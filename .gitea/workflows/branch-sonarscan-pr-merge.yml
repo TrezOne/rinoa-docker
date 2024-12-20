@@ -114,10 +114,10 @@ jobs:
           BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
           payload=$(jq -n \
-            --arg body "SonarQube analysis results:\n\n${SQ_RESULTS} \n\n${QG_STATUS}" \
+            --arg body "SonarQube analysis results: \
+                ${SQ_RESULTS} \n\n${QG_STATUS}" \
             '{ body: $body }')
       
-
           echo "Constructed Payload:"
           echo "$payload"
       
@@ -137,7 +137,6 @@ jobs:
             echo "Error: Failed to post comment. HTTP Status Code: $response"
             exit 1
           fi
-        
   
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
