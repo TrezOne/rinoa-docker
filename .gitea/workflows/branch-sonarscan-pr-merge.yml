@@ -128,24 +128,33 @@ jobs:
             "${RINOA_GITEA_URL}/api/v1/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
 
   # Job 3: Merge PR if Quality Gate passes
-  # merge-pr:
-  #   runs-on: ubuntu-latest
-  #   needs: [check-and-create-pr, sonarqube-analysis]
-  #   if: needs.sonarqube-analysis.outputs.quality_gate_status == 'PASSED'
-  #   steps:
-  #     - name: Merge PR in Gitea
-  #       uses: prasiman/gocurl@v1
-  #       with:
-  #         url: "${{ secrets.GITEA_INSTANCE_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ needs.check-and-create-pr.outputs.pr_index }}"
-  #         method: "POST"
-  #         headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}", "Content-Type": "application/json" }'
-  #         params: >-
-  #           {
-  #             "Do": "merge",
-  #             "delete_branch_after_merge": true,
-  #             "force_merge": true,
-  #             "merge_when_checks_succeed": true
-  #           }
+  dry-run-merge-pr:
+    runs-on: ubuntu-latest
+    needs: [check-and-create-pr, sonarqube-analysis]
+    if: needs.sonarqube-analysis.outputs.quality_gate_status == 'PASSED'
+    steps:
+      - name: Docker Compose Dry Run
+        uses: s3i7h/spin-up-docker-compose-action@v1.2
+        with:
+          file: docker-compose.yml
+          pull: true
+          pull-opts: --dry-run
+          up: true
+          up-opts: -d --dry-run
 
-  #     - name: Confirm Merge
-  #       run: echo "PR has been successfully merged into main."
+      # - name: Merge PR in Gitea
+      #   uses: prasiman/gocurl@v1
+      #   with:
+      #     url: "${{ secrets.GITEA_INSTANCE_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ needs.check-and-create-pr.outputs.pr_index }}"
+      #     method: "POST"
+      #     headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}", "Content-Type": "application/json" }'
+      #     params: >-
+      #       {
+      #         "Do": "merge",
+      #         "delete_branch_after_merge": true,
+      #         "force_merge": true,
+      #         "merge_when_checks_succeed": true
+      #       }
+
+      # - name: Confirm Merge
+      #   run: echo "PR has been successfully merged into main."
