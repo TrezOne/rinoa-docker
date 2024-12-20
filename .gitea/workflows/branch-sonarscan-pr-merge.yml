@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-and-create-pr
     outputs:
-      qg_status_status: ${{ steps.quality-gate.outputs.quality-gate-status }}
+      qg_status: ${{ steps.quality-gate.outputs.quality-gate-status }}
       qg_results: ${{ steps.quality-gate-check.outputs.quality-gate-result }}
 
     steps:
@@ -103,9 +103,10 @@ jobs:
 
   # Job 3: Merge PR if Quality Gate passes
   scan-json-merge-pr:
+    name: Merge PR if checks pass
     runs-on: ubuntu-latest
-    needs: [check-and-create-pr, sonarqube-analysis]
-    if: needs.sonarqube-analysis.outputs.quality_gate_status == 'PASSED'
+    needs: [check-and-create-pr, sonarqube-analysis-dry-run]
+    if: needs.sonarqube-analysis-dry-run.outputs.quality_gate_status == 'PASSED'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
