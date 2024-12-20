@@ -133,6 +133,9 @@ jobs:
     needs: [check-and-create-pr, sonarqube-analysis]
     if: needs.sonarqube-analysis.outputs.quality_gate_status == 'PASSED'
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
       - name: Docker Compose Dry Run
         uses: s3i7h/spin-up-docker-compose-action@v1.2
         with:
@@ -142,19 +145,19 @@ jobs:
           up: true
           up-opts: -d --dry-run
 
-      # - name: Merge PR in Gitea
-      #   uses: prasiman/gocurl@v1
-      #   with:
-      #     url: "${{ secrets.GITEA_INSTANCE_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ needs.check-and-create-pr.outputs.pr_index }}"
-      #     method: "POST"
-      #     headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}", "Content-Type": "application/json" }'
-      #     params: >-
-      #       {
-      #         "Do": "merge",
-      #         "delete_branch_after_merge": true,
-      #         "force_merge": true,
-      #         "merge_when_checks_succeed": true
-      #       }
+      - name: Merge PR in Gitea
+        uses: prasiman/gocurl@v1
+        with:
+          url: "${{ secrets.GITEA_INSTANCE_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ needs.check-and-create-pr.outputs.pr_index }}"
+          method: "POST"
+          headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}", "Content-Type": "application/json" }'
+          params: >-
+            {
+              "Do": "merge",
+              "delete_branch_after_merge": true,
+              "force_merge": true,
+              "merge_when_checks_succeed": true
+            }
 
-      # - name: Confirm Merge
-      #   run: echo "PR has been successfully merged into main."
+      - name: Confirm Merge
+        run: echo "PR has been successfully merged into main."
