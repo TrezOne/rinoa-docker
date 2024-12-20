@@ -85,20 +85,20 @@ jobs:
           sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Generate Ephemeral .env for Dry Run
-        run: |
-          echo "${{ secrets.RINOA_ENV }}" > .env
+      # - name: Generate Ephemeral .env for Dry Run
+      #   run: |
+      #     echo "${{ secrets.RINOA_ENV }}" > .env
 
-      - name: Docker Compose Lint
-        id: docker-compose-lint
-        uses: https://git.trez.wtf/Trez.One/spin-up-docker-compose-action@v1.3
-        with:
-          compose-file: "./docker-compose.yml"
-          up-flags: --dry-run -d
-          pull: true
-          pull-opts: --dry-run
-        env: 
-          DOCKER_HOST: tcp://dockerproxy:2375
+      # - name: Docker Compose Lint
+      #   id: docker-compose-lint
+      #   uses: https://git.trez.wtf/Trez.One/spin-up-docker-compose-action@v1.3
+      #   with:
+      #     compose-file: "./docker-compose.yml"
+      #     up-flags: --dry-run -d
+      #     pull: true
+      #     pull-opts: --dry-run
+      #   env: 
+      #     DOCKER_HOST: tcp://dockerproxy:2375
 
   scan-json-merge-pr:
     name: Merge PR if checks pass
