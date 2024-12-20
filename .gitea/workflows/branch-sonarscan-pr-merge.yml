@@ -115,10 +115,10 @@ jobs:
           formatted_results=$(echo "${SQ_RESULTS}" | sed 's/\\n/\
           /g')
           payload=$(jq -n \
-            --arg body "${QG_STATUS} \
-            SonarQube analysis results: \
-            \
-            ${formatted_results} " \
+            --arg body "SonarQube analysis results:
+                <br>
+                <br>
+                ${{ env.SQ_RESULTS }}" \
             '{ body: $body }')
       
           echo "Constructed Payload:"
