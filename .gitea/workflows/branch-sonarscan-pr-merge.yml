@@ -113,8 +113,9 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
+          result_cleanup=$(echo "${SQ_RESULTS}" | sed 's|\\n||g')
           payload=$(jq -n \
-            --arg body "SonarQube analysis results:\n\n${SQ_RESULTS} \n\n${QG_STATUS}" \
+            --arg body "SonarQube analysis results:\n\n${result_cleanup} \n\n${QG_STATUS}" \
             '{ body: $body }')
       
 
