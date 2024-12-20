@@ -106,7 +106,7 @@ jobs:
         with:
           error: 'level='
           gh-token: ${{ secrets.BOT_GITEA_TOKEN }}
-          run-id: ${{ gitea.run_id }}
+          run-id: ${{ github.run_id }}
           job-name: sonarqube-analysis-dry-run
 
   # Job 3: Merge PR if Quality Gate passes
