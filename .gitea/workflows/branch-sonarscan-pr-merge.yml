@@ -126,7 +126,7 @@ jobs:
                   }')
           echo "${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews"
           echo "${payload}"
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews \
+          curl http://gitea:3000/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews \
             -X POST \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
