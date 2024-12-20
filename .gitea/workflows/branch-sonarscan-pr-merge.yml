@@ -113,7 +113,7 @@ jobs:
                   '{
                     body: $body
                   }')
-          echo "payload=${payload}" >> $GITHUB_ENV
+          echo "${payload}"
           curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews \
             -X 'POST' \
             -H 'Accept: application/json' \
