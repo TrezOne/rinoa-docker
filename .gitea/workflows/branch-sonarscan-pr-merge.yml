@@ -91,15 +91,11 @@ jobs:
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
           jq -c '.' qg_raw.json > qg_fixed_json.json
           projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
-          echo "${projstatus}"
           caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
-          echo "${caycStatus}"
           conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
-          echo "${conditions}"
           echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
           echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
           echo "conditions=${conditions}" >> $GITHUB_OUTPUT
-          echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV          
 
       - name: Convert JSON to Markdown Table
         id: convert-json-to-md
@@ -117,14 +113,13 @@ jobs:
                   '{
                     body: $body
                   }')
-          echo "${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews"
-          echo "${payload}"
+          echo ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews
           curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews \
             -X 'POST' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -H 'Content-Type: application/json' \
-            -d '${payload}' -s -w "%http_code%" -i
+            -d '${payload}' -s -w "%http_code%" 
   
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
