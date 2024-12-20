@@ -102,7 +102,6 @@ jobs:
         uses: buildingcash/json-to-markdown-table-action@v1.1.0
         with:
           json: "${{ steps.json-cleanup.outputs.conditions }}"
-          align-pipes: 'true'
 
       - name: Post SonarQube Results as Comment
         env:
@@ -113,6 +112,8 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
+          formatted_results=$(echo "${SQ_RESULTS}" | sed 's/\\n/\
+          /g')
           payload=$(jq -n \
             --arg body "${QG_STATUS}<br><br>SonarQube analysis results:<br>${SQ_RESULTS} " \
             '{ body: $body }')
