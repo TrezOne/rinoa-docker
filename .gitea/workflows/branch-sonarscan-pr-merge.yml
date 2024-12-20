@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  # Job 1: Check if PR exists and create one if the branch is new
+
   check-and-create-pr:
     name: Check and Create PR
     runs-on: ubuntu-latest
@@ -97,7 +97,6 @@ jobs:
         env: 
           DOCKER_HOST: tcp://dockerproxy:2375
 
-  # Job 3: Merge PR if Quality Gate passes
   scan-json-merge-pr:
     name: Merge PR if checks pass
     runs-on: ubuntu-latest
@@ -106,60 +105,53 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Parse Docker Compose Dry Run Output
-        uses: niklas-weber/scan-log@v1.0.2
+      - name: JSON clean-up for Custom Quality Gate Check...
+        id: json-cleanup
+        run: |
+          echo "Cleaning up quality gate response..."
+          echo '${{ needs.sonarqube-analysis-dry-run.outputs.qg_results }}' > qg_input.txt
+          sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
+          jq -c '.' qg_raw.json > qg_fixed_json.json
+          echo "qgfixedjson=$(cat qg_fixed_json.json)" >> $GITHUB_OUTPUT
+          echo "JSON cleanup complete."
+          projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
+          caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
+          conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
+          echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
+          echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
+          echo "conditions=${conditions}" >> $GITHUB_OUTPUT
+
+      - name: Convert JSON to Markdown Table
+        id: convert-json-to-md
+        uses: buildingcash/json-to-markdown-table-action@v1.1.0
         with:
-          error: 'level='
-          gh-token: ${{ secrets.BOT_GITEA_TOKEN }}
-          run-id: ${{ gitea.run_id }}
-          job-name: sonarqube-analysis-dry-run
+          json: "${{ steps.json-cleanup.outputs.conditions }}"
 
-  #     - name: JSON clean-up for Custom Quality Gate Check...
-  #       id: json-cleanup
-  #       run: |
-  #         echo "Cleaning up quality gate response..."
-  #         echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
-  #         sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
-  #         jq -c '.' qg_raw.json > qg_fixed_json.json
-  #         echo "qgfixedjson=$(cat qg_fixed_json.json)" >> $GITHUB_OUTPUT
-  #         echo "JSON cleanup complete.
-  #         projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
-  #         caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
-  #         conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
-  #         echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
-  #         echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
-  #         echo "conditions=${conditions}" >> $GITHUB_OUTPUT
-  #     - name: Post SonarQube Results as Comment
-  #       env:
-  #         PR_NUMBER: ${{ needs.check-and-create-pr.outputs.pr_number }}
-  #         SQ_RESULTS: ${{ steps.convert-json-to-md.outputs.table }}
-  #         QG_STATUS: ${{ steps.quality-gate.outputs.quality-gate-status }}
-  #         RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
-  #         GITHUB_REPOSITORY: ${{ github.repository }}
-  #         BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
-  #       run: |
-  #         formatted_results=$(echo "${SQ_RESULTS}" | sed 's/\\n/\
-  #         /g')
-  #         payload=$(jq -n \
-  #           --arg body "SonarQube analysis results:
-  #               <br>
-  #               ${{ env.SQ_RESULTS }}" \
-  #           '{ body: $body }')
+      - name: Post SonarQube Results as Comment
+        env:
+          PR_NUMBER: ${{ needs.check-and-create-pr.outputs.pr_number }}
+          SQ_RESULTS: ${{ steps.convert-json-to-md.outputs.table }}
+          QG_STATUS: ${{ needs.quality-gate.outputs.qg_status }}
+          QG_RESULTS: ${{ needs.sonarqube-analysis-dry-run.outputs.qg_results }}
+          RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
+        run: |
+          formatted_results=$(echo "${SQ_RESULTS}" | sed 's/\\n/\
+          /g')
+          payload=$(jq -n \
+            --arg body "SonarQube analysis results:
+                <br>
+                ${{ env.SQ_RESULTS }}" \
+            '{ body: $body }')
             
-  #         response=$(curl -s -o response.json -w "%{http_code}" \
-  #           -X POST \
-  #           -H "Accept: application/json" \
-  #           -H "Authorization: token ${BOT_GITEA_TOKEN}" \
-  #           -H "Content-Type: application/json" \
-  #           -d "$payload" \
-  #           "${RINOA_GITEA_URL}/api/v1/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
-
-  #     - name: Convert JSON to Markdown Table
-  #       id: convert-json-to-md
-  #       uses: buildingcash/json-to-markdown-table-action@v1.1.0
-  #       with:
-  #         json: "${{ steps.json-cleanup.outputs.conditions }}"
-
+          response=$(curl -s -o response.json -w "%{http_code}" \
+            -X POST \
+            -H "Accept: application/json" \
+            -H "Authorization: token ${BOT_GITEA_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "${RINOA_GITEA_URL}/api/v1/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
 
   #     - name: Merge PR in Gitea
   #       uses: prasiman/gocurl@v1
