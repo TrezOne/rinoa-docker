@@ -89,15 +89,11 @@ jobs:
         run: |
           echo "${{ secrets.RINOA_ENV }}" > .env
 
-      - name: Docker Compose Dry Run
-        id: docker-compose-dry-run
-        uses: s3i7h/spin-up-docker-compose-action@v1.2
+      - name: Docker Compose Lint
+        id: docker-compose-lint
+        uses: sjafferali/docker-compose-lint-action@v0.1.2
         with:
-          file: docker-compose.yml
-          pull: true
-          pull-opts: --dry-run
-          up: true
-          up-opts: -d --dry-run
+          compose-file: './docker-compose.yml'
         env: 
           DOCKER_HOST: tcp://dockerproxy:2375
 
