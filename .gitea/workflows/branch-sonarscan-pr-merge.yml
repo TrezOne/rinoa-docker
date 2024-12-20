@@ -53,7 +53,7 @@ jobs:
           fi
 
   sonarqube-analysis-dry-run:
-    name: SonarQube Analysis
+    name: SonarQube Analysis & Compose Dry-Run
     runs-on: ubuntu-latest
     needs: check-and-create-pr
     outputs:
@@ -95,7 +95,7 @@ jobs:
           compose-file: "./docker-compose.yml"
           up-flags: --dry-run
         env: 
-          DOCKER_HOST: tcp://localhost:2375
+          DOCKER_HOST: tcp://dockerproxy:2375
   # Job 3: Merge PR if Quality Gate passes
   # dry-run-merge-pr:
   #   runs-on: ubuntu-latest
