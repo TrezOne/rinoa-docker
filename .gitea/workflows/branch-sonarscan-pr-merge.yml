@@ -104,6 +104,9 @@ jobs:
           json: "${{ steps.json-cleanup.outputs.conditions }}"
           align-pipes: 'true'
 
+      - name: Print Table
+        run: echo "${{ steps.convert-json-to-md.outputs.table }}"
+
       - name: Post SonarQube Results as Comment
         env:
           PR_NUMBER: ${{ needs.check-and-create-pr.outputs.pr_number }}
@@ -113,9 +116,8 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
-          result_cleanup=$(echo "$SQ_RESULTS" | sed 's/|/\\|/g')
           payload=$(jq -n \
-            --arg body "SonarQube analysis results:\n\n${result_cleanup} \n\n${QG_STATUS}" \
+            --arg body "SonarQube analysis results:\n\n${{ env.SQ_RESULTS }} \n\n${QG_STATUS}" \
             '{ body: $body }')
       
 
