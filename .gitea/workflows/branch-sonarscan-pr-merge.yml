@@ -113,13 +113,13 @@ jobs:
                   '{
                     body: $body
                   }')
-          echo ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews
+          echo "payload=${payload}" >> $GITHUB_ENV
           curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews \
             -X 'POST' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
             -H 'Content-Type: application/json' \
-            -d '${payload}' -s -w "%http_code%" 
+            -d '${{ env.payload }}' -s -w "%http_code%" -i
   
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
