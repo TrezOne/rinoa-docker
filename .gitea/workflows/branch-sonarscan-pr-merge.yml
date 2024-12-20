@@ -101,7 +101,7 @@ jobs:
         id: convert-json-to-md
         uses: parkerbxyz/json-to-markdown-table@v1.1.2
         with:
-          json: "${{ steps.json-cleanup.outputs.conditions }}"
+          json: ${{ steps.json-cleanup.outputs.conditions }}
           align-pipes: 'true'
 
       - name: Print Table
