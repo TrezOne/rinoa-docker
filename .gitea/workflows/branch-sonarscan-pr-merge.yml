@@ -140,7 +140,8 @@ jobs:
         
       - name: Generate Ephemeral .env for Docker Compose Dry Run
         run: |
-          echo ${{ secrets.RINOA_ENV }}
+          echo ${{ secrets.RINOA_ENV }} > .env
+          
       - name: Docker Compose Dry Run
         uses: s3i7h/spin-up-docker-compose-action@v1.2
         with:
