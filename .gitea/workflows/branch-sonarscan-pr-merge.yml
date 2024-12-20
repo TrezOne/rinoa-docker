@@ -107,7 +107,7 @@ jobs:
           error: 'level='
           gh-token: ${{ secrets.BOT_GITEA_TOKEN }}
           run-id: ${{ gitea.run_id }}
-          job-name: docker-compose-dry-run
+          job-name: sonarqube-analysis-dry-run
 
   # Job 3: Merge PR if Quality Gate passes
   # dry-run-merge-pr:
