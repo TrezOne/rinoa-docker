@@ -118,7 +118,7 @@ jobs:
             --arg body "${QG_STATUS} \
             SonarQube analysis results: \
             \
-            ${SQ_RESULTS} " \
+            ${formatted_results} " \
             '{ body: $body }')
       
           echo "Constructed Payload:"
