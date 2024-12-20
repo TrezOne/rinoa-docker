@@ -99,13 +99,10 @@ jobs:
 
       - name: Convert JSON to Markdown Table
         id: convert-json-to-md
-        uses: parkerbxyz/json-to-markdown-table@v1.1.2
+        uses: buildingcash/json-to-markdown-table-action@v1.1.0
         with:
-          json: ${{ steps.json-cleanup.outputs.conditions }}
+          json: "${{ steps.json-cleanup.outputs.conditions }}"
           align-pipes: 'true'
-
-      - name: Print Table
-        run: echo "${{ steps.convert-json-to-md.outputs.table }}"
 
       - name: Post SonarQube Results as Comment
         env:
@@ -117,7 +114,7 @@ jobs:
           BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
           payload=$(jq -n \
-            --arg body "SonarQube analysis results:\n\n${{ env.SQ_RESULTS }} \n\n${QG_STATUS}" \
+            --arg body "SonarQube analysis results:\n\n${SQ_RESULTS} \n\n${QG_STATUS}" \
             '{ body: $body }')
       
 
