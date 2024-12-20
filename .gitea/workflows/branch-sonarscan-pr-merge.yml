@@ -105,7 +105,7 @@ jobs:
   scan-json-merge-pr:
     name: Merge PR if checks pass
     runs-on: ubuntu-latest
-    needs: [check-and-create-pr, sonarqube-analysis-dry-run]
+    needs: sonarqube-analysis-dry-run
     if: needs.sonarqube-analysis-dry-run.outputs.quality_gate_status == 'PASSED'
     steps:
       - name: Checkout Code
