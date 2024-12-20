@@ -102,7 +102,7 @@ jobs:
           DOCKER_HOST: tcp://dockerproxy:2375
 
       - name: Parse Docker Compose Dry Run Output
-        uses: niklas-weber/scan-log
+        uses: niklas-weber/scan-log@v1.0.2
         with:
           error: 'level='
           gh-token: ${{ secrets.BOT_GITEA_TOKEN }}
