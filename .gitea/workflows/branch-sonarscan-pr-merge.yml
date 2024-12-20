@@ -90,10 +90,13 @@ jobs:
           echo "${{ secrets.RINOA_ENV }}" > .env
 
       - name: Docker Compose Dry Run
-        uses: hoverkraft-tech/compose-action@v2.0.2
+        uses: s3i7h/spin-up-docker-compose-action@v1.2
         with:
-          compose-file: "./docker-compose.yml"
-          up-flags: --dry-run
+          file: docker-compose.yml
+          pull: true
+          pull-opts: --dry-run
+          up: true
+          up-opts: -d --dry-run
         env: 
           DOCKER_HOST: tcp://dockerproxy:2375
   # Job 3: Merge PR if Quality Gate passes
