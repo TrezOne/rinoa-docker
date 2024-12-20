@@ -86,7 +86,6 @@ jobs:
         id: json-cleanup
         run: |
           echo "Cleaning up quality gate response..."
-          echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}'
           echo '${{ steps.quality-gate-check.outputs.quality-gate-result }}' > qg_input.txt
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
           jq -c '.' qg_raw.json > qg_fixed_json.json
@@ -117,13 +116,9 @@ jobs:
           payload=$(jq -n \
             --arg body "SonarQube analysis results:
                 <br>
-                <br>
                 ${{ env.SQ_RESULTS }}" \
             '{ body: $body }')
-      
-          echo "Constructed Payload:"
-          echo "$payload"
-      
+            
           response=$(curl -s -o response.json -w "%{http_code}" \
             -X POST \
             -H "Accept: application/json" \
@@ -132,15 +127,6 @@ jobs:
             -d "$payload" \
             "${RINOA_GITEA_URL}/api/v1/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
 
-          echo "HTTP Status Code: $response"
-          echo "Response Body:"
-          cat response.json
-
-          if [ "$response" -ne 200 ]; then
-            echo "Error: Failed to post comment. HTTP Status Code: $response"
-            exit 1
-          fi
-  
   # Job 3: Merge PR if Quality Gate passes
   # merge-pr:
   #   runs-on: ubuntu-latest
