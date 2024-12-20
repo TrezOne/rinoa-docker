@@ -109,6 +109,7 @@ jobs:
 
       - name: Post SonarQube Results as Comment
         env:
+          RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
           PR_NUMBER: ${{ needs.check-and-create-pr.outputs.pr_number }}
         run: |
           payload=$(jq -n --arg body "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}" \
@@ -124,9 +125,9 @@ jobs:
                     ],
                     event: "COMMENT"
                   }')
-          echo "${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews"
+          echo "${RINOA_GITEA_URL}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews"
           echo "${payload}"
-          curl http://gitea:3000/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews \
+          curl "${RINOA_GITEA_URL}/api/v1/repos/${{ github.repository }}/pulls/${PR_NUMBER}/reviews" \
             -X POST \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
