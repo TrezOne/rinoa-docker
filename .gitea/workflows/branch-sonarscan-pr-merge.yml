@@ -85,6 +85,10 @@ jobs:
           sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
 
+      - name: Generate Epemeral .env for Dry Run
+        run: |
+          echo "${{ secrets.RINOA_ENV }}" > .env
+
       - name: Docker Compose Dry Run
         uses: s3i7h/spin-up-docker-compose-action@v1.2
         with:
