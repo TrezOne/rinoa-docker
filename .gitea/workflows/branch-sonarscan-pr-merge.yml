@@ -90,6 +90,7 @@ jobs:
           echo "${{ secrets.RINOA_ENV }}" > .env
 
       - name: Docker Compose Dry Run
+        id: docker-compose-dry-run
         uses: s3i7h/spin-up-docker-compose-action@v1.2
         with:
           file: docker-compose.yml
@@ -99,6 +100,15 @@ jobs:
           up-opts: -d --dry-run
         env: 
           DOCKER_HOST: tcp://dockerproxy:2375
+
+      - name: Parse Docker Compose Dry Run Output
+        uses: niklas-weber/scan-log
+        with:
+          error: 'level='
+          gh-token: ${{ secrets.BOT_GITEA_TOKEN }}
+          run-id: ${{ gitea.run_id }}
+          job-name: docker-compose-dry-run
+
   # Job 3: Merge PR if Quality Gate passes
   # dry-run-merge-pr:
   #   runs-on: ubuntu-latest
