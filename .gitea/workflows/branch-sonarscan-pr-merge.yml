@@ -85,14 +85,14 @@ jobs:
           sonar-host-url: ${{ secrets.SONARQUBE_HOST }}
           sonar-token: ${{ secrets.SONARQUBE_TOKEN }}
 
-      - name: Generate Epemeral .env for Dry Run
+      - name: Generate Ephemeral .env for Dry Run
         run: |
           echo "${{ secrets.RINOA_ENV }}" > .env
 
       - name: Docker Compose Dry Run
         uses: hoverkraft-tech/compose-action@v2.0.2
         with:
-          compose-file: ""
+          compose-file: "./docker-compose.yml"
           up-flags: --dry-run
   # Job 3: Merge PR if Quality Gate passes
   # dry-run-merge-pr:
