@@ -91,9 +91,12 @@ jobs:
 
       - name: Docker Compose Lint
         id: docker-compose-lint
-        uses: sjafferali/docker-compose-lint-action@v0.1.2
+        uses: https://git.trez.wtf/Trez.One/spin-up-docker-compose-action@v1.3
         with:
-          compose-file: './docker-compose.yml'
+          compose-file: "./docker-compose.yml"
+          up-flags: --dry-run -d
+          pull: true
+          pull-opts: --dry-run
         env: 
           DOCKER_HOST: tcp://dockerproxy:2375
 
