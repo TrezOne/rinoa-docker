@@ -114,8 +114,7 @@ jobs:
           BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
           payload=$(jq -n \
-            --arg body "SonarQube analysis results: \
-                ${SQ_RESULTS} \n\n${QG_STATUS}" \
+            --arg body "${QG_STATUS}<br><br>SonarQube analysis results:<br>${SQ_RESULTS} " \
             '{ body: $body }')
       
           echo "Constructed Payload:"
