@@ -164,3 +164,4 @@ jobs:
         with:
           image: gitea/tea:latest
           run: tea pr ls
+          shell: tea
