@@ -153,7 +153,7 @@ jobs:
           up: true
           up-opts: -d --dry-run
 
-      - name: ITea CLI Setup & PR Merge
+      - name: Tea CLI Setup & PR Merge
         env:
           PR_INDEX: ${{ needs.check-pr-status.outputs.pr_number }}
           RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
