@@ -155,24 +155,14 @@ jobs:
       - name: Merge PR
         env:
           PR_INDEX: ${{ needs.check-and-create-pr.outputs.pr_number }}
-        run: |
-          merge_response=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${PR_INDEX}/merge -s \
-              -X 'POST' \
-              -H 'Accept: application/json' \
-              -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-              -H 'Content-Type: application/json' \
-              -d '{
-                "Do": "merge",
-                "delete_branch_after_merge": true,
-                "force_merge": true,
-                "merge_when_checks_succeed": true
-              }' -w "%{http_code}")
-          if [ "${merge_response}" -eq "200" ]; then
-            echo "PR has been successfully merged into main."
-          else
-            echo "Failed to merge PR. Response code: {$merge_response}"
-            exit 1
-          fi
-
-      - name: Confirm Merge
-        run: echo "PR has been successfully merged into main."
+        uses: Frozen-Tapestry/docker-run-action@v6
+        with:
+          image: tgerczei/tea
+          run: |
+            tea login add --token ${{ secrets.GITHUB_TOKEN }} --name github
+          env: |
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITEA_USER="gitea-sonarqube-bot"
+            GITEA_SERVER_URL=${{ vars.RINOA_GITEA_URL }}
+            GITEA_SERVER_TOKEN=${{ secrets.BOT_GITEA_TOKEN }}
+            DOCKER_HOST: tcp://dockerproxy:2375
