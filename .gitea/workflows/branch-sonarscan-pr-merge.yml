@@ -155,14 +155,13 @@ jobs:
       - name: Merge PR
         env:
           PR_INDEX: ${{ needs.check-and-create-pr.outputs.pr_number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITEA_USER: "gitea-sonarqube-bot"
+          GITEA_SERVER_URL: ${{ vars.RINOA_GITEA_URL }}
+          GITEA_SERVER_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
+          DOCKER_HOST: tcp://dockerproxy:2375
         uses: Frozen-Tapestry/docker-run-action@v6
         with:
           image: tgerczei/tea
-          run: |
-            tea login add --token ${{ secrets.GITHUB_TOKEN }} --name github
-          env: |
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            GITEA_USER="gitea-sonarqube-bot"
-            GITEA_SERVER_URL=${{ vars.RINOA_GITEA_URL }}
-            GITEA_SERVER_TOKEN=${{ secrets.BOT_GITEA_TOKEN }}
-            DOCKER_HOST: tcp://dockerproxy:2375
+          run: tea pr ls
+          socket: ${DOCKER_HOST}
