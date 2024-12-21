@@ -144,6 +144,8 @@ jobs:
 
       - name: Docker Compose Dry Run
         uses: s3i7h/spin-up-docker-compose-action@v1.2
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
         with:
           file: docker-compose.yml
           pull: true
