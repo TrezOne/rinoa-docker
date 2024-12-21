@@ -6962,56 +6962,6 @@ services:
         target: /opt/zammad/storage
         type: volume
         volume: {}
-  zitadel:
-    container_name: zitadel
-    image: ghcr.io/zitadel/zitadel:latest
-    command: 'start-from-init --masterkeyFromEnv --tlsMode external'
-    # depends_on:
-    #   zitadel-pg-db:
-    #     condition: 'service_healthy'
-    environment:
-      ZITADEL_DATABASE_POSTGRES_HOST: zitadel-pg-db
-      ZITADEL_DATABASE_POSTGRES_PORT: 5432
-      ZITADEL_DATABASE_POSTGRES_DATABASE: zitadel
-      ZITADEL_DATABASE_POSTGRES_USER_USERNAME: zitadel
-      ZITADEL_DATABASE_POSTGRES_USER_PASSWORD: ${ZITADEL_DB_PASSWORD}
-      ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE: disable
-      ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME: postgres
-      ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD: ${ZITADEL_DB_ADMIN_PASSWORD}
-      ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: disable
-      ZITADEL_EXTERNALSECURE: true
-      ZITADEL_EXTERNALPORT: 443
-      ZITADEL_EXTERNALDOMAIN: zitadel.trez.wtf
-      ZITADEL_MASTERKEY: ${ZITADEL_MASTER_KEY}
-    expose:
-      - 8080
-    labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8080
-      - swag_url=zitadel.${MY_TLD}
-      - homepage.group=System Administration
-      - homepage.name=Zitadel
-      - homepage.href=https://zitadel.${MY_TLD}
-      - homepage.icon=zitadel.svg
-      - homepage.description=Centralized authentication management
-  zitadel-pg-db:
-    container_name: zitadel-pg-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${ZITADEL_DB_ADMIN_PASSWORD}
-    expose:
-      - 5432
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "zitadel", "-U", "postgres"]
-      interval: '10s'
-      timeout: '30s'
-      retries: 5
-      start_period: '20s'
-    image: postgres:16-alpine
-    restart: always
-    volumes: 
-      - zitadel-pg-db:/var/lib/postgresql/data
 volumes:
   authelia-pg-db:
     name: compose_authelia-pg-db

@@ -4,9 +4,6 @@ on:
   push:
     branches-ignore:
       - main
-  create:
-    branches: 
-      - '**'
 
 jobs:
   # Job 1: Check if PR exists and create one if the branch is new
@@ -14,63 +11,57 @@ jobs:
     name: Check and Create PR
     runs-on: ubuntu-latest
     outputs:
-      pr_created: ${{ steps.check-pr.outputs.pr_created }}
-      pr_index: ${{ steps.create-pr.outputs.pr_index }}
-
+      pr_created: ${{ steps.cc-pr.outputs.pr_created }}
+      pr_number: ${{ steps.cc-pr.outputs.pr_index }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Check if PR Exists
-        id: check-pr
+      - name: PR Check/Create
+        id: cc-pr
         run: |
           echo "Checking for existing PR..."
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} \
+          pr_check=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} \
             -X 'GET' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -s | jq '{index: .number, state: .state}' > pr_status.json
-          echo "pr_status=$(jq -c . pr_status.json)" >> "$GITHUB_OUTPUT"
+            -s | jq '{index: .number, state: .state}')
+          pr_status=$(echo ${pr_check} | jq -r '.state')
+          if [ "${pr_status}" == "open" ]; then
+            echo "PR already exists. PR number: $(echo ${pr_check} | jq -r '.index')"
+            echo "pr_created=false" >> "$GITHUB_OUTPUT"
+            echo "pr_index=$(echo ${pr_check} | jq -r '.index')" >> "$GITHUB_OUTPUT"
+          elif [ "${pr_status}" == "closed" ]; then
+            echo "PR does not exist. Creating PR..."
+            pr_response=$(curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls -s \
+              -X 'POST' \
+              -H 'Accept: application/json' \
+              -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
+              -H 'Content-Type: application/json' \
+              -d '{
+                "base": "main",
+                "head": "'"${{ github.ref_name }}"'",
+                "title": "Automated PR for branch '"${{ github.ref_name }}"'",
+                "body": "This is an automated PR created for branch '"${{ github.ref_name }}"'."
+              }')
+            pr_index=$(echo ${pr_response} | jq -r '.number')
+            echo "PR created. PR number: ${pr_index}"
+            echo "pr_created=true" >> "$GITHUB_OUTPUT"
+            echo "pr_index=${pr_index}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Error checking for existing PR. Exiting..."
+            exit 1
+          fi
 
-      - name: Create PR in Gitea
-        if: ${{ steps.check-pr.outputs.pr_status.state }} == 'closed'
-        id: create-pr
-        run: |
-          echo "Creating PR..."
-          curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls \
-            -X 'POST' \
-            -H 'Accept: application/json' \
-            -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -H 'Content-Type: application/json' \
-            -d '{
-              "title": "PR: ${{ github.ref_name }} -> main",
-              "body": "This is an automated PR created by Gitea Actions.",
-              "base": "main",
-              "head": "${{ github.ref_name }}"
-            }' -s | jq '{index: .number}' > pr_created.json
-          echo "pr_created=$(jq -c . pr_created.json)" >> "$GITHUB_OUTPUT"
-
-  # Job 2: Run SonarQube Analysis
   sonarqube-analysis:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
     needs: check-and-create-pr
+    outputs:
+      qg_status: ${{ steps.quality-gate.outputs.quality-gate-status }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      # - name: Start Gitea-Sonarqube Bot
-      #   uses: docker://justusbunsi/gitea-sonarqube-bot:v0.3.3
-      #   with:
-      #     # Required inputs for the bot
-      #     args: >
-      #       --sonarqube-url ${{ secrets.SONARQUBE_URL }}
-      #       --sonarqube-token ${{ secrets.SONARQUBE_TOKEN }}
-      #       --git-provider github
-      #       --git-api-url https://api.github.com
-      #       --git-token ${{ secrets.GITHUB_TOKEN }}
-      #       --repository my-org/my-repo
-      #       --pull-request-id ${{ github.event.pull_request.number }}
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v4.1.0
@@ -101,65 +92,72 @@ jobs:
           sed -E 's/([a-zA-Z0-9_]+):/\\"\1\\":/g; s/:([^",{}\[\]]+)/:"\1"/g' qg_input.txt > qg_raw.json
           jq -c '.' qg_raw.json > qg_fixed_json.json
           projstatus=$(jq -r '.projectStatus.status' qg_fixed_json.json)
-          echo "${projstatus}"
           caycStatus=$(jq -r '.projectStatus.caycStatus' qg_fixed_json.json)
-          echo "${caycStatus}"
           conditions=$(jq -c '.projectStatus.conditions' qg_fixed_json.json)
-          echo "${conditions}"
           echo "projstatus=${projstatus}" >> $GITHUB_OUTPUT
           echo "caycStatus=${caycStatus}" >> $GITHUB_OUTPUT
           echo "conditions=${conditions}" >> $GITHUB_OUTPUT
-          echo "qg_fixed_json=$(cat qg_fixed_json.json)" >> $GITHUB_ENV
 
       - name: Convert JSON to Markdown Table
         id: convert-json-to-md
         uses: buildingcash/json-to-markdown-table-action@v1.1.0
         with:
-          json: ${{ steps.json-cleanup.outputs.conditions }}
+          json: "${{ steps.json-cleanup.outputs.conditions }}"
 
-      # - name: Post SonarQube Results as Comment
-      #   run: |
-      #     curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.pull_request.number }}/reviews \
-      #       -X POST \
-      #       -H 'Accept: application/json' \
-      #       -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-      #       -H 'Content-Type: application/json' \
-      #       -d '{
-      #          "body": "SonarQube analysis results:\n\n- Bugs: ${{ env.SONAR_BUGS }}\n- Vulnerabilities: ${{ env.SONAR_VULNERABILITIES }}\n- Code Smells: ${{ env.SONAR_CODE_SMELLS }}\n- Coverage: ${{ env.SONAR_COVERAGE }}%\n- Duplications: ${{ env.SONAR_DUPLICATIONS }}%\n- Quality Gate Status: ${{ env.SONAR_QUALITY_GATE_STATUS }}"
-      #       }'
-      - name: Verify PR number
+      - name: Post SonarQube Results as Comment
+        env:
+          PR_NUMBER: ${{ needs.check-and-create-pr.outputs.pr_number }}
+          SQ_RESULTS: ${{ steps.convert-json-to-md.outputs.table }}
+          QG_STATUS: ${{ steps.quality-gate.outputs.quality-gate-status }}
+          RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          BOT_GITEA_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
         run: |
-          echo "PR number: ${{ gitea.event.pull_request.number }}"
+          formatted_results=$(echo "${SQ_RESULTS}" | sed 's/\\n/\
+          /g')
+          payload=$(jq -n \
+            --arg body "SonarQube analysis results:
+                <br>
+                ${{ env.SQ_RESULTS }}" \
+            '{ body: $body }')
+            
+          response=$(curl -s -o response.json -w "%{http_code}" \
+            -X POST \
+            -H "Accept: application/json" \
+            -H "Authorization: token ${BOT_GITEA_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "${RINOA_GITEA_URL}/api/v1/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
 
-      # - name: Post SonarQube Results as Comment
-      #   run: |
-      #     curl ${{ vars.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/${{ github.pull_request.number }}/reviews \
-      #       -X POST \
-      #       -H 'Accept: application/json' \
-      #       -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-      #       -H 'Content-Type: application/json' \
-      #       -d '{
-      #          "body": "SonarQube analysis results:\n\n${{ steps.convert-json-to-md.outputs.table }}\n\n${{ steps.quality-gate.outputs.quality-gate-status }}"
-      #       }'
-  # # Job 3: Merge PR if Quality Gate passes
-  # merge-pr:
-  #   runs-on: ubuntu-latest
-  #   needs: [check-and-create-pr, sonarqube-analysis]
-  #   if: needs.sonarqube-analysis.outputs.quality_gate_status == 'PASSED'
-  #   steps:
-  #     - name: Merge PR in Gitea
-  #       uses: prasiman/gocurl@v1
-  #       with:
-  #         url: "${{ secrets.GITEA_INSTANCE_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ needs.check-and-create-pr.outputs.pr_index }}"
-  #         method: "POST"
-  #         headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}", "Content-Type": "application/json" }'
-  #         params: >-
-  #           {
-  #             "Do": "merge",
-  #             "delete_branch_after_merge": true,
-  #             "force_merge": true,
-  #             "merge_when_checks_succeed": true
-  #           }
+  dry-run-merge-pr:
+    runs-on: ubuntu-latest
+    name: Dry Run & PR Merge
+    needs: sonarqube-analysis
+    if: needs.sonarqube-analysis.outputs.qg_status == 'PASSED'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Generate Ephemeral .env for Docker Compose Dry Run
+        run: |
+          echo "${{ secrets.RINOA_ENV }}" > .env
 
-  #     - name: Confirm Merge
-  #       run: echo "PR has been successfully merged into main."
+      - name: Docker Compose Dry Run
+        uses: s3i7h/spin-up-docker-compose-action@v1.2
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
+        with:
+          file: docker-compose.yml
+          pull: true
+          pull-opts: --dry-run
+          up: true
+          up-opts: -d --dry-run
+
+      - name: Tea CLI Setup & PR Merge
+        run: |
+          curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
+          chmod +x /usr/local/bin/tea
+          echo "Merging PR..."
+          tea login add --name gitea-rinoa --url "${{ vars.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token "${{ secrets.BOT_GITEA_TOKEN }}"
+          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep "${{ gitea.ref_name }}" | awk -F, '{print $1}' | sed -e 's|"||g')
+          tea pr m --repo ${{ github.repository }} --title "Auto Merge" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
