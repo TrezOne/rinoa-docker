@@ -158,6 +158,7 @@ jobs:
           PR_INDEX: ${{ needs.check-and-create-pr.outputs.pr_number }}
           RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
         run: |
+          echo ${PR_INDEX}
           curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
           chmod +x /usr/local/bin/tea
           echo "${PR_INDEX}"
