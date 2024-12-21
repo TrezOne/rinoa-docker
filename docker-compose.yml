@@ -6993,7 +6993,7 @@ services:
   zitadel-pg-db:
     container_name: zitadel-pg-db
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USER: root
       POSTGRES_PASSWORD: ${ZITADEL_DB_ADMIN_PASSWORD}
     expose:
       - 5432
