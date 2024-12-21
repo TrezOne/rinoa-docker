@@ -162,5 +162,6 @@ jobs:
           DOCKER_HOST: tcp://dockerproxy:2375
         uses: Frozen-Tapestry/docker-run-action@v6
         with:
-          image: tgerczei/tea
+          image: gitea/tea:latest
+          sheLL: /bin/bash
           run: tea pr ls
