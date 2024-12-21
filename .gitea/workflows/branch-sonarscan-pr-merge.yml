@@ -164,4 +164,3 @@ jobs:
         with:
           image: tgerczei/tea
           run: tea pr ls
-          socket: ${DOCKER_HOST}
