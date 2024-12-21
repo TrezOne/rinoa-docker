@@ -3152,6 +3152,29 @@ services:
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
+  meshcentral:
+    container_name: meshcentral
+    image: ghcr.io/ylianst/meshcentral:master
+    labels:
+      - homepage.group=System Administration
+      - homepage.name=MeshCentral
+      - homepage.href=https://mesh.${MY_TLD}
+      - homepage.icon=meshcentral.png
+      - homepage.description=
+      - swag=enable
+      - swag_proto=http
+      - swag_port=46717
+      - swag_url=mesh.${MY_TLD}
+    ports:
+      - 46717:80 # HTTP
+      - 61741:443 # HTTPS
+      - 42865:4433 # AMT (Optional)
+    restart: unless-stopped
+    volumes:
+      - meshcentral-data:/opt/meshcentral/meshcentral-data
+      - meshcentral-user_files:/opt/meshcentral/meshcentral-files
+      - meshcentral-backup:/opt/meshcentral/meshcentral-backups
+      - meshcentral-web:/opt/meshcentral/meshcentral-web
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
@@ -4040,58 +4063,6 @@ services:
     security_opt:
       - no-new-privileges=true
     user: nobody
-  remmina:
-    container_name: remmina
-    environment:
-      CF_ACCOUNT_ID: ${CLOUDFLARE_ACCOUNT_ID}
-      CF_API_TOKEN: ${CLOUDFLARE_DNS_API_TOKEN}
-      CF_TUNNEL_CONFIG: |
-        ingress:
-          - hostname: rem.${MY_TLD}
-            service: http://192.168.1.254:3008
-          - service: http_status:404
-      CF_TUNNEL_NAME: remmina
-      CF_TUNNEL_PASSWORD: ${REMMINA_CF_TUNNEL_PASSWORD}
-      CF_ZONE_ID: ${CLOUDFLARE_ZONE_ID}
-      CUSTOM_HTTPS_PORT: 3009
-      CUSTOM_PORT: 3008
-      CUSTOM_USER: trez-one
-      DOCKER_HOST: tcp://dockerproxy:2375
-      DOCKER_MODS: linuxserver/mods:universal-cloudflared
-      PASSWORD: ${REMMINA_USER_PASSWORD}
-      PGID: 1000
-      PUID: 1000
-      TITLE: Remmina @ Rinoa
-      TZ: ${TZ}
-    image: lscr.io/linuxserver/remmina:latest
-    labels:
-      - swag=enable
-      - swag_url=rem.${MY_TLD}
-      - swag_port=3008
-      - homepage.group=System Administration
-      - homepage.name=Remmina
-      - homepage.href=https://rem.${MY_TLD}
-      - homepage.icon=/icons/remmina.svg
-      - homepage.description=GTK Remote desktop client (EXEC, SPICE, SSH, RDP, & VNC)
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3008"
-        target: 3008
-      - mode: ingress
-        protocol: tcp
-        published: "3009"
-        target: 3009
-    privileged: true
-    restart: unless-stopped
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/remmina
-        target: /config
-        type: bind
-        bind:
-          create_host_path: true
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -7050,6 +7021,10 @@ volumes:
     name: compose_localai_data
   mattermost-postgres:
     name: compose_mattermost-postgres
+  meshcentral-data:
+  meshcentral-user_files:
+  meshcentral-backup:
+  meshcentral-web:
   mongodb_config:
     name: compose_mongo1_config
   mongodb_data:
