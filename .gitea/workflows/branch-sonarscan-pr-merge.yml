@@ -155,11 +155,10 @@ jobs:
 
       - name: ITea CLI Setup & PR Merge
         env:
-            PR_NUMBER: ${{ github.event.pull_request.number }}
-            RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
+          PR_INDEX: ${{ needs.check-pr-status.outputs.pr_number }}
+          RINOA_GITEA_URL: ${{ vars.RINOA_GITEA_URL }}
         run: |
           curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
           chmod +x /usr/local/bin/tea
-          tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_SERVER }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token "${{ secrets.BOT_GITEA_TOKEN }}"          
+          tea login add --name gitea-rinoa --url "${{ vars.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token "${{ secrets.BOT_GITEA_TOKEN }}"          
           tea pr m --message "Automatically merged by Gitea Actions" --output table ${PR_INDEX}
-          
