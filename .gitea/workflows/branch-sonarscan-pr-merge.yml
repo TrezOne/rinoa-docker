@@ -163,5 +163,5 @@ jobs:
         uses: Frozen-Tapestry/docker-run-action@v6
         with:
           image: gitea/tea:latest
-          sheLL: /bin/bash
+          sheLL: /bin/sh
           run: tea pr ls
