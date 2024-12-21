@@ -166,8 +166,8 @@ jobs:
                 "delete_branch_after_merge": true,
                 "force_merge": true,
                 "merge_when_checks_succeed": true
-              }' -w "{%http_code%}")
-          if [ "$merge_response" -eq 200 ]; then
+              }' -w "%{http_code}")
+          if [ "${merge_response}" -eq "200" ]; then
             echo "PR has been successfully merged into main."
           else
             echo "Failed to merge PR. Response code: {$merge_response}"
