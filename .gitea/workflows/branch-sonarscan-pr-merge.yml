@@ -57,6 +57,8 @@ jobs:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
     needs: check-and-create-pr
+    outputs:
+      qg_status: ${{ steps.quality-gate.outputs.quality-gate-status }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -127,25 +129,35 @@ jobs:
             -d "$payload" \
             "${RINOA_GITEA_URL}/api/v1/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/reviews")
 
-  # Job 3: Merge PR if Quality Gate passes
-  # merge-pr:
-  #   runs-on: ubuntu-latest
-  #   needs: [check-and-create-pr, sonarqube-analysis]
-  #   if: needs.sonarqube-analysis.outputs.quality_gate_status == 'PASSED'
-  #   steps:
-  #     - name: Merge PR in Gitea
-  #       uses: prasiman/gocurl@v1
-  #       with:
-  #         url: "${{ secrets.GITEA_INSTANCE_URL }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/pulls/${{ needs.check-and-create-pr.outputs.pr_index }}"
-  #         method: "POST"
-  #         headers: '{ "Authorization": "token ${{ secrets.GITEA_API_TOKEN }}", "Content-Type": "application/json" }'
-  #         params: >-
-  #           {
-  #             "Do": "merge",
-  #             "delete_branch_after_merge": true,
-  #             "force_merge": true,
-  #             "merge_when_checks_succeed": true
-  #           }
+  dry-run-merge-pr:
+    runs-on: ubuntu-latest
+    name: Dry Run & PR Merge
+    needs: sonarqube-analysis
+    if: needs.sonarqube-analysis.outputs.qg_status == 'PASSED'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Generate Ephemeral .env for Docker Compose Dry Run
+        run: |
+          echo "${{ secrets.RINOA_ENV }}" > .env
 
-  #     - name: Confirm Merge
-  #       run: echo "PR has been successfully merged into main."
+      - name: Docker Compose Dry Run
+        uses: s3i7h/spin-up-docker-compose-action@v1.2
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
+        with:
+          file: docker-compose.yml
+          pull: true
+          pull-opts: --dry-run
+          up: true
+          up-opts: -d --dry-run
+
+      - name: Tea CLI Setup & PR Merge
+        run: |
+          curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
+          chmod +x /usr/local/bin/tea
+          echo "Merging PR..."
+          tea login add --name gitea-rinoa --url "${{ vars.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token "${{ secrets.BOT_GITEA_TOKEN }}"
+          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep "${{ gitea.ref_name }}" | awk -F, '{print $1}' | sed -e 's|"||g')
+          tea pr m --repo ${{ gitea.ref_name }} --output table --title "Auto Merge" --message "Merged by ${{ gitea.actor }}" ${pr_index}
