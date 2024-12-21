@@ -131,6 +131,7 @@ jobs:
 
   dry-run-merge-pr:
     runs-on: ubuntu-latest
+    name: Dry Run & PR Merge
     needs: sonarqube-analysis
     if: needs.sonarqube-analysis.outputs.qg_status == 'PASSED'
     steps:
@@ -152,16 +153,15 @@ jobs:
           up: true
           up-opts: -d --dry-run
 
-      - name: Merge PR
+      - name: Install & Setup Tea CLI
+        run: |
+          curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
+          chmod +x /usr/local/bin/tea
+          tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_SERVER }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token "${{ secrets.BOT_GITEA_TOKEN }}"          
+
+      - name: Merge PR with Tea CLI
         env:
           PR_INDEX: ${{ needs.check-and-create-pr.outputs.pr_number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITEA_USER: "gitea-sonarqube-bot"
-          GITEA_SERVER_URL: ${{ vars.RINOA_GITEA_URL }}
-          GITEA_SERVER_TOKEN: ${{ secrets.BOT_GITEA_TOKEN }}
-          DOCKER_HOST: tcp://dockerproxy:2375
-        uses: Frozen-Tapestry/docker-run-action@v6
-        with:
-          image: gitea/tea:latest
-          run: pr ls
-          shell: /tea
+        run: |
+          echo "${{ gitea.event.pull_request.number }}"
+          tea pr m --message "Automatically merged by Gitea Actions" --output table "${PR_INDEX}"
