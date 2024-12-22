@@ -3168,7 +3168,7 @@ services:
       - homepage.description=
       - swag=enable
       - swag_proto=http
-      - swag_port=46717
+      - swag_port=80
       - swag_url=mesh.${MY_TLD}
     ports:
       - 46717:80 # HTTP
