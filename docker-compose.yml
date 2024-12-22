@@ -878,7 +878,7 @@ services:
       - LOG_LEVEL=debug
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     labels:
-      komodo.skip:
+      komodo.skip: s
     networks:
       default: null
     ports:
@@ -2674,7 +2674,7 @@ services:
       homepage.href: https://komodo.${MY_TLD}
       homepage.icon: /icons/komodo.png
       homepage.description: Open-source note taking & to-do
-      komodo.skip:
+      komodo.skip: a
       swag: enable
       swag_url: komodo.${MY_TLD}
       swag_port: 9120
@@ -2690,7 +2690,7 @@ services:
       - komodo-pg-db
     image: ghcr.io/ferretdb/ferretdb
     labels:
-      komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+      komodo.skip: a
     restart: unless-stopped
     expose:
       - 27017
@@ -2708,7 +2708,7 @@ services:
       - 8120
     image: ghcr.io/mbecker20/periphery:latest
     labels:
-      komodo.skip: 
+      komodo.skip: a
     restart: always
     volumes:
       - /proc:/proc
@@ -2721,7 +2721,7 @@ services:
     expose:
       - 5432
     labels:
-      komodo.skip:
+      komodo.skip: a
     image: postgres:17-alpine
     restart: unless-stopped
     volumes:
@@ -4629,7 +4629,7 @@ services:
       - swag_port=81
       - swag_url=swag.${MY_TLD}
       - swag_auth=authelia
-      - komodo.skip=
+      - komodo.skip=a
       - swag.uptime-kuma.enabled=true
       - swag.uptime-kuma.monitor.url=https://swag.${MY_TLD}
       - homepage.group=Infrastructure/App Performance Monitoring
