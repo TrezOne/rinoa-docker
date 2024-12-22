@@ -4625,7 +4625,6 @@ services:
       - swag_auth=authelia
       - swag.uptime-kuma.enabled=true
       - swag.uptime-kuma.monitor.url=https://swag.${MY_TLD}
-      - komodo.skip:
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=SWAG Dashboard
       - homepage.href=https://swag.${MY_TLD}
