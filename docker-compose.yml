@@ -2672,6 +2672,7 @@ services:
       homepage.href: https://komodo.${MY_TLD}
       homepage.icon: /icons/komodo.png
       homepage.description: Open-source note taking & to-do
+      komodo.skip:
       swag: enable
       swag_url: komodo.${MY_TLD}
       swag_port: 9120
@@ -4624,6 +4625,7 @@ services:
       - swag_auth=authelia
       - swag.uptime-kuma.enabled=true
       - swag.uptime-kuma.monitor.url=https://swag.${MY_TLD}
+      - komodo.skip:
       - homepage.group=Infrastructure/App Performance Monitoring
       - homepage.name=SWAG Dashboard
       - homepage.href=https://swag.${MY_TLD}
