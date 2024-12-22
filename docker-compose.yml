@@ -6992,6 +6992,7 @@ services:
       - swag_proto=http
       - swag_port=8080
       - swag_url=zitadel.${MY_TLD}
+      - swag_server_custom_directive="http2 on;"
       - homepage.group=System Administration
       - homepage.name=Zitadel
       - homepage.href=https://id.${MY_TLD}
