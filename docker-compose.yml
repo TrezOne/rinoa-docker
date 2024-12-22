@@ -2718,6 +2718,8 @@ services:
       POSTGRES_DB: komodo
     expose:
       - 5432
+    labels:
+      komodo.skip:
     image: postgres:17-alpine
     labels: 
       komodo.skip:
