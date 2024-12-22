@@ -6965,7 +6965,7 @@ services:
   zitadel:
     container_name: zitadel
     image: ghcr.io/zitadel/zitadel:latest
-    command: 'start-from-init --masterkeyFromEnv  --config /config.yaml --config secrets.yaml --config init-steps.yaml --tlsMode external'
+    command: 'start-from-init --masterkeyFromEnv  --config /config.yaml --config /secrets.yaml --config /init-steps.yaml --tlsMode external'
     # depends_on:
     #   zitadel-pg-db:
     #     condition: 'service_healthy'
