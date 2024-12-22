@@ -4627,7 +4627,7 @@ services:
       - swag_port=81
       - swag_url=swag.${MY_TLD}
       - swag_auth=authelia
-      - komodo-skip=
+      - komodo.skip=
       - swag.uptime-kuma.enabled=true
       - swag.uptime-kuma.monitor.url=https://swag.${MY_TLD}
       - homepage.group=Infrastructure/App Performance Monitoring
