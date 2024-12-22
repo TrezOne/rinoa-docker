@@ -877,6 +877,8 @@ services:
       - VOLUMES=1
       - LOG_LEVEL=debug
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
+    labels:
+      komodo.skip:
     networks:
       default: null
     ports:
