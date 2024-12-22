@@ -6965,14 +6965,11 @@ services:
   zitadel:
     container_name: zitadel
     image: ghcr.io/zitadel/zitadel:latest
-    command: 'start-from-init --masterkeyFromEnv  --config /config.yaml --config /secrets.yaml --config /init-steps.yaml --tlsMode external'
+    command: 'start-from-init --masterkeyFromEnv --config /config.yaml --config /secrets.yaml --config /init-steps.yaml --tlsMode external'
     # depends_on:
     #   zitadel-pg-db:
     #     condition: 'service_healthy'
     environment:
-      ZITADEL_DATABASE_POSTGRES_DATABASE: zitadel
-      ZITADEL_DATABASE_POSTGRES_USER_PASSWORD: ${ZITADEL_DB_PASSWORD}
-      ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD: ${ZITADEL_DB_ADMIN_PASSWORD}
       ZITADEL_MASTERKEY: ${ZITADEL_MASTER_KEY}
     expose:
       - 8080
