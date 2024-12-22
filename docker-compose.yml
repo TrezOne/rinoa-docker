@@ -6992,12 +6992,7 @@ services:
       swag_proto: http
       swag_port: 8080
       swag_url: id.${MY_TLD}
-      swag_server_custom_directive: |
-        http2 on;
-        location / {
-          grpc_pass grpc://zitadel:8080;
-          grpc_set_header Host $host;
-        }
+      swag_server_custom_directive: http2 on;
       homepage.group: System Administration
       homepage.name: Zitadel
       homepage.href: https://id.${MY_TLD}
