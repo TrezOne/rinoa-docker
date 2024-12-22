@@ -2723,8 +2723,6 @@ services:
     labels:
       komodo.skip:
     image: postgres:17-alpine
-    labels: 
-      komodo.skip:
     restart: unless-stopped
     volumes:
       - komodo-pg-data:/var/lib/postgresql/data
