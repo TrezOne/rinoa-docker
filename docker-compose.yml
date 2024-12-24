@@ -1735,49 +1735,6 @@ services:
         target: /var/www/html/app/migrations
         type: volume
         volume: {}
-  huginn:
-    container_name: huginn
-    environment:
-      HUGINN_DATABASE_HOST: mariadb
-      HUGINN_DATABASE_NAME: huginn
-      HUGINN_DATABASE_PASSWORD: MLbKPT3j9TYcguYevFRcfEcrXtL4kcxujtrNdrq9eCig4WhUbxkyLoAiCPpm4zob
-      HUGINN_DATABASE_PORT: "3306"
-      HUGINN_DATABASE_USERNAME: huginn
-      PGID: "1000"
-      PUID: "1000"
-      TZ: America/New_York
-    hostname: Rinoa
-    image: ghcr.io/huginn/huginn
-    labels:
-      - homepage.group=Automation
-      - homepage.name=Huginn
-      - homepage.href=https://huginn.${MY_TLD}
-      - homepage.icon=huginn
-      - homepage.description=Agent/Web Automation
-      - swag=enable
-      - swag_port=3000
-      - swag_proto=http
-      - swag.uptime-kuma.enabled=true
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3005"
-        target: 3000
-    restart: unless-stopped
-    volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
   hugo:
     command: hugo server --baseURL "it-services.trez.wtf" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
     container_name: hugo
@@ -3269,6 +3226,33 @@ services:
         type: bind
         bind:
           create_host_path: true
+  n8n:
+    container_name: n8n
+    environment:
+      N8N_HOST: n8n.${MY_TLD}
+      N8N_PORT: 5678
+      N8N_PROTOCOL: https
+      NODE_ENV: production
+      WEBHOOK_URL: https://n8n.${MY_TLD}/
+      GENERIC_TIMEZONE: ${TZ}
+    image: docker.n8n.io/n8nio/n8n
+    labels:
+      swag: enable
+      swag_proto: https
+      swag_port: 5678
+      swag_url: n8n.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://n8n.${MY_TLD}
+      homepage.group: Automation
+      homepage.name: n8n
+      homepage.href: https://n8n.${MY_TLD}
+      homepage.icon: n8n.svg
+      homepage.description: Extendable workflow automation tool to easily automate tasks
+    ports:
+      - 5678:5678
+    restart: unless-stopped
+    volumes:
+      - n8n-data:/home/node/.n8n
   navidrome:
     container_name: navidrome
     environment:
@@ -7086,6 +7070,8 @@ volumes:
     name: compose_mongo1_config
   mongodb_data:
     name: compose_mongo1_data
+  n8n-data:
+    name: n8n-data
   netbox-pg-db:
     name: netbox-pg-db
   ollama:
