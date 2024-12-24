@@ -1,0 +1,24 @@
+name: Gitea Branch PR, SonarQube Analyze, and Merge Workflow
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  # Job 1: Check if PR exists and create one if the branch is new
+  check-and-create-pr:
+    name: Check and Create PR
+    runs-on: ubuntu-latest
+    outputs:
+      pr_created: ${{ steps.cc-pr.outputs.pr_created }}
+      pr_number: ${{ steps.cc-pr.outputs.pr_index }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: PR Check
+        id: cc-pr
+        uses: vicamo/gitea-list-pull-requests@v1.0.1
+        with:
+          state: open
