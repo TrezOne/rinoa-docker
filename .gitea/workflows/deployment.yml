@@ -10,9 +10,6 @@ jobs:
   check-and-create-pr:
     name: Check and Create PR
     runs-on: ubuntu-latest
-    outputs:
-      pr_created: ${{ steps.cc-pr.outputs.pr_created }}
-      pr_number: ${{ steps.cc-pr.outputs.pr_index }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
