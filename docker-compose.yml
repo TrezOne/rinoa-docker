@@ -3227,22 +3227,7 @@ services:
         bind:
           create_host_path: true
   n8n:
-    image: docker.n8n.io/n8nio/n8n
-    restart: always
-    ports:
-      - 5678:5678
-    labels:
-      swag: enable
-      swag_proto: https
-      swag_port: 5678
-      swag_url: n8n.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://n8n.${MY_TLD}
-      homepage.group: System Administration
-      homepage.name: MinIO
-      homepage.href: https://n8n.${MY_TLD}
-      homepage.icon: n8n.svg
-      homepage.description: Extendable workflow automation tool to easily automate tasks
+    container_name: n8n
     environment:
       N8N_HOST: n8n.${MY_TLD}
       N8N_PORT: 5678
@@ -3250,8 +3235,24 @@ services:
       NODE_ENV: production
       WEBHOOK_URL: https://n8n.${MY_TLD}/
       GENERIC_TIMEZONE: ${TZ}
+    image: docker.n8n.io/n8nio/n8n
+    labels:
+      swag: enable
+      swag_proto: https
+      swag_port: 5678
+      swag_url: n8n.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://n8n.${MY_TLD}
+      homepage.group: Automation
+      homepage.name: n8n
+      homepage.href: https://n8n.${MY_TLD}
+      homepage.icon: n8n.svg
+      homepage.description: Extendable workflow automation tool to easily automate tasks
+    ports:
+      - 5678:5678
+    restart: unless-stopped
     volumes:
-      - n8n_data:/home/node/.n8n
+      - n8n-data:/home/node/.n8n
   navidrome:
     container_name: navidrome
     environment:
@@ -7069,6 +7070,8 @@ volumes:
     name: compose_mongo1_config
   mongodb_data:
     name: compose_mongo1_data
+  n8n-data:
+    name: n8n-data
   netbox-pg-db:
     name: netbox-pg-db
   ollama:
