@@ -25,3 +25,7 @@ jobs:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           server_url: ${{ github.server_url }}
           state: open
+      
+      - name: PR list
+        run: |
+           echo "PRs: ${{ steps.cc-pr.outputs.json }}"
