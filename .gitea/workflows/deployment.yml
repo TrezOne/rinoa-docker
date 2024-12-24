@@ -23,11 +23,6 @@ jobs:
           state: open
           hours_old: 0
 
-      - name: List PRs
-        run: |
-          echo "PR count: ${{ steps.list-prs.outputs.count }}"
-          echo "PR List: ${{ steps.list-prs.outputs.pull_requests_json }}"
-
       - name: Create PR
         if: steps.list-prs.outputs.pr-count == 0
         uses: arifer612/Gitea-PR-action@v1.2.0
@@ -35,3 +30,9 @@ jobs:
           url: ${{ gitea.server_url }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           assignee: ${{ gitea.actor }}
+
+      - name: Linting
+        uses: super-linter/super-linter@v7.2.1
+        env:
+          GITHUB_CUSTOM_SERVER_URL: ${{ gitea.server_url }}
+          GITHUB_CUSTOM_API_URL: ${{ gitea.server_url }}/api/v1
