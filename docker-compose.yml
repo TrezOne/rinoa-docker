@@ -3238,7 +3238,7 @@ services:
     image: docker.n8n.io/n8nio/n8n
     labels:
       swag: enable
-      swag_proto: https
+      swag_proto: http
       swag_port: 5678
       swag_url: n8n.${MY_TLD}
       swag.uptime-kuma.enabled: true
