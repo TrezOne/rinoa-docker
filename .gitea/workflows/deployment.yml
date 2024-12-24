@@ -14,14 +14,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: PR Check
-        id: pr-check
-        uses: vicamo/gitea-list-pull-requests@v1.0.1
-        with:
-          repository: ${{ gitea.repository }}
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
-          state: all
-      
       - name: PR list
         uses: magebitcom/list-pr-action@v1.0.0
         id: list-prs
@@ -31,6 +23,11 @@ jobs:
           repo: ${{ gitea.repository }}
           state: open
           hours_old: 0
+
+      - name: List PRs
+        run: |
+          echo "PR count: ${{ steps.list-prs.outputs.count }}"
+          echo "PR List: ${{ steps.list-prs.outputs.pull_requests_json }}"
 
       - name: Create PR
         if: steps.list-prs.outputs.pr-count == 0
