@@ -15,12 +15,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: PR list
-        uses: magebitcom/list-pr-action@v1.0.0
+        uses: vicamo/gitea-list-pull-requests@v1.0.1
         id: list-prs
-        with:
-          base: main
-          github-token: ${{ secrets.BOT_GITEA_TOKEN }}
-          state: open
 
       - name: Create PR
         if: steps.list-prs.outputs.pr-count == 0
