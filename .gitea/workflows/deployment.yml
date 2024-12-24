@@ -19,7 +19,7 @@ jobs:
         uses: vicamo/gitea-list-pull-requests@v1.0.1
         with:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
-          state: 'all'
+          state: all
       
       - name: PR list
         run: |
