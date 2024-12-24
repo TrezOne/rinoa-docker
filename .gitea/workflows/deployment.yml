@@ -25,4 +25,4 @@ jobs:
       - name: PR list
         run: |
            echo "PRs: ${{ steps.pr-check.outputs.json }}"
-           echo "${{ github.repository }}\n${{ github.server_url}}\n\n${{ gitea.repository }}\n${{ gitea.server_url }}"
+           echo -e "${{ github.repository }}\n${{ github.server_url}}\n\n${{ gitea.repository }}\n${{ gitea.server_url }}"
