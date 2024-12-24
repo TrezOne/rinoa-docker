@@ -18,10 +18,9 @@ jobs:
         uses: magebitcom/list-pr-action@v1.0.0
         id: list-prs
         with:
-          base: 'main'
+          base: main
           github-token: ${{ secrets.BOT_GITEA_TOKEN }}
           state: open
-          hours_old: 0
 
       - name: Create PR
         if: steps.list-prs.outputs.pr-count == 0
