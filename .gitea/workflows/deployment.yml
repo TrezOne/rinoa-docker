@@ -25,4 +25,43 @@ jobs:
       - name: PR list
         run: |
            echo "PRs: ${{ steps.pr-check.outputs.json }}"
-           echo -e "${{ github.repository }}\n${{ github.ref }}\n\n${{ gitea.repository }}\n${{ gitea.ref }}"
+           echo "${{ github }} \
+                  ${{ github.action }} \
+                  ${{ github.action_path }} \
+                  ${{ github.action_ref }} \
+                  ${{ github.action_repository }} \
+                  ${{ github.action_status }} \
+                  ${{ github.actor }} \
+                  ${{ github.actor_id }} \
+                  ${{ github.api_url }} \
+                  ${{ github.base_ref }} \
+                  ${{ github.env }} \
+                  ${{ github.event }} \
+                  ${{ github.event_name }} \
+                  ${{ github.event_path }} \
+                  ${{ github.graphql_url }} \
+                  ${{ github.head_ref }} \
+                  ${{ github.job }} \
+                  ${{ github.path }} \
+                  ${{ github.ref }} \
+                  ${{ github.ref_name }} \
+                  ${{ github.ref_protected }} \
+                  ${{ github.ref_type }} \
+                  ${{ github.repository }} \
+                  ${{ github.repository_id }} \
+                  ${{ github.repository_owner }} \
+                  ${{ github.repository_owner_id }} \
+                  ${{ github.repositoryUrl }} \
+                  ${{ github.retention_days }} \
+                  ${{ github.run_id }} \
+                  ${{ github.run_number }} \
+                  ${{ github.run_attempt }} \
+                  ${{ github.secret_source }} \
+                  ${{ github.server_url }} \
+                  ${{ github.sha }} \
+                  ${{ github.token }} \
+                  ${{ github.triggering_actor }} \
+                  ${{ github.workflow }} \
+                  ${{ github.workflow_ref }} \
+                  ${{ github.workflow_sha }} \
+                  ${{ github.workspace }}"
