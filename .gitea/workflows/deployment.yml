@@ -15,14 +15,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: PR Check
-        id: cc-pr
+        id: pr-check
         uses: vicamo/gitea-list-pull-requests@v1.0.1
         with:
-          repository: ${{ github.repository }}
+          repository: ${{ gitea.repository }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
-          server_url: ${{ github.server_url }}
-          state: closed
+          server_url: ${{ gitea.server_url }}
+          state: all
       
       - name: PR list
         run: |
-           echo "PRs: ${{ steps.cc-pr.outputs.json }}"
+           echo "PRs: ${{ steps.pr-check.outputs.json }}"
+           echo "${{ github.repository }}\n${{ github.server_url}}\n\n${{ gitea.repository }}\n${{ gitea.server_url }}"
