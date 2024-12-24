@@ -18,6 +18,10 @@ jobs:
         uses: vicamo/gitea-list-pull-requests@v1.0.1
         id: list-prs
 
+      - name: List PRs
+        run: |
+          echo "PR count: ${{ steps.list-prs.outputs.json }}"
+
       - name: Create PR
         if: steps.list-prs.outputs.pr-count == 0
         uses: arifer612/Gitea-PR-action@v1.2.0
