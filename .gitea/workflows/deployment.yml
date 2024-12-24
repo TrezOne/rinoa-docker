@@ -24,7 +24,7 @@ jobs:
           repository: ${{ github.repository }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           server_url: ${{ github.server_url }}
-          state: open
+          state: all
       
       - name: PR list
         run: |
