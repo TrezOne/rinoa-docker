@@ -18,8 +18,10 @@ jobs:
         id: cc-pr
         uses: vicamo/gitea-list-pull-requests@v1.0.1
         with:
+          repository: ${{ github.repository }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
-          state: all
+          server_url: ${{ github.server_url }}
+          state: closed
       
       - name: PR list
         run: |
