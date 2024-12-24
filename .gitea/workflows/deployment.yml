@@ -15,12 +15,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: PR list
-        uses: vicamo/gitea-list-pull-requests@v1.0.1
+        uses: actions/github-list-pull-requests@v1.0
         id: list-prs
+        with:
+          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          state: open
 
       - name: List PRs
         run: |
-          echo "PR count: ${{ steps.list-prs.outputs.json }}"
+          echo "PR count: ${{ steps.list-prs.outputs.pullRequestNumbers }}"
 
       - name: Create PR
         if: steps.list-prs.outputs.pr-count == 0
