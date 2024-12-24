@@ -20,7 +20,6 @@ jobs:
         with:
           base: 'main'
           github-token: ${{ secrets.BOT_GITEA_TOKEN }}
-          repo: ${{ gitea.repository }}
           state: open
           hours_old: 0
 
