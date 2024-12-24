@@ -23,45 +23,19 @@ jobs:
           state: all
       
       - name: PR list
-        run: |
-           echo "PRs: ${{ steps.pr-check.outputs.json }}"
-           echo -e "${{ gitea }} \n
-                  ${{ gitea.action }} \n
-                  ${{ gitea.action_path }} \n
-                  ${{ gitea.action_ref }} \n
-                  ${{ gitea.action_repository }} \n
-                  ${{ gitea.action_status }} \n
-                  ${{ gitea.actor }} \n
-                  ${{ gitea.actor_id }} \n
-                  ${{ gitea.api_url }} \n
-                  ${{ gitea.base_ref }} \n
-                  ${{ gitea.env }} \n
-                  ${{ gitea.event }} \n
-                  ${{ gitea.event_name }} \n
-                  ${{ gitea.event_path }} \n
-                  ${{ gitea.graphql_url }} \n
-                  ${{ gitea.head_ref }} \n
-                  ${{ gitea.job }} \n
-                  ${{ gitea.path }} \n
-                  ${{ gitea.ref }} \n
-                  ${{ gitea.ref_name }} \n
-                  ${{ gitea.ref_protected }} \n
-                  ${{ gitea.ref_type }} \n
-                  ${{ gitea.repository }} \n
-                  ${{ gitea.repository_id }} \n
-                  ${{ gitea.repository_owner }} \n
-                  ${{ gitea.repository_owner_id }} \n
-                  ${{ gitea.repositoryUrl }} \n
-                  ${{ gitea.retention_days }} \n
-                  ${{ gitea.run_id }} \n
-                  ${{ gitea.run_number }} \n
-                  ${{ gitea.run_attempt }} \n
-                  ${{ gitea.secret_source }} \n
-                  ${{ gitea.server_url }} \n
-                  ${{ gitea.sha }} \n
-                  ${{ gitea.token }} \n
-                  ${{ gitea.triggering_actor }} \n
-                  ${{ gitea.workflow }} \n
-                  ${{ gitea.workflow_ref }} \n
-                  ${{ gitea.workflow_sha }} \n
-                  ${{ gitea.workspace }}"
+        uses: magebitcom/list-pr-action@v1.0.0
+        id: list-prs
+        with:
+          base: 'main'
+          github-token: ${{ secrets.BOT_GITEA_TOKEN }}
+          repo: ${{ gitea.repository }}
+          state: open
+          hours_old: 0
+
+      - name: Create PR
+        if: steps.list-prs.outputs.pr-count == 0
+        uses: arifer612/Gitea-PR-action@v1.2.0
+        with:
+          url: ${{ gitea.server_url }}
+          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          assignee: ${{ gitea.actor }}
