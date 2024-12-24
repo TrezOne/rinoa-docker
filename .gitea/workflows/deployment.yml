@@ -20,7 +20,6 @@ jobs:
         with:
           repository: ${{ gitea.repository }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
-          server_url: ${{ gitea.server_url }}
           state: all
       
       - name: PR list
