@@ -15,10 +15,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: PR list
-        uses: actions/github-list-pull-requests@v1.0
+        uses: magebitcom/list-pr-action@v1.0.0
         id: list-prs
         with:
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          base: main
+          github-token: ${{ secrets.BOT_GITEA_TOKEN }}
           state: open
 
       - name: List PRs
