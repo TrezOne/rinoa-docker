@@ -22,11 +22,12 @@ jobs:
           echo "Listing PRs..."
           tea login add --name gitea-rinoa --url "${{ vars.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token "${{ secrets.BOT_GITEA_TOKEN }}"
           tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep 'open'
+          echo "list_exit=$?" >> "$GITHUB_OUTPUT"
           if [ $? -eq 0 ]; then
             echo "PR already exists. Skipping PR creation."
             pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
           echo "pr_index=$(echo ${pr_index})" >> "$GITHUB_OUTPUT"
-          echo "list_exit=$?" >> "$GITHUB_OUTPUT"
+          
           
       - name: Create PR
         if: steps.list-prs.outputs.list_exit != 0
