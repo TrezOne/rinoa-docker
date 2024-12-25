@@ -24,8 +24,8 @@ jobs:
           tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep 'open'
           if [ $? -eq 0 ]; then
             echo "PR already exists. Skipping PR creation."
-            pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep ${{ gitea.ref_name }}" | awk -F, '{print $1}' | sed -e 's|"||g')
-          echo "pr_index=${pr_index}" >> "$GITHUB_OUTPUT"
+            pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
+          echo "pr_index=$pr_index" >> "$GITHUB_OUTPUT"
           echo "list_exit=$?" >> "$GITHUB_OUTPUT"
           
       - name: Create PR
