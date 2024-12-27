@@ -3001,119 +3001,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  mattermost:
-    container_name: mattermost
-    depends_on:
-      mattermost-db:
-        condition: service_started
-        required: true
-    environment:
-      MM_EMAILSETTINGS_ENABLESMTPAUTH: true
-      MM_EMAILSETTINGS_SMTPPASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      MM_EMAILSETTINGS_SMTPPORT: 25
-      MM_EMAILSETTINGS_SMTPSERVER: postal-smtp
-      MM_EMAILSETTINGS_SMTPUSERNAME: ${POSTAL_SMTP_AUTH_USER}
-      MM_FILESETTINGS_AMAZONS3ACCESSKEYID: ${MATTERMOST_AWS_S3_ACCESSKEY}
-      MM_FILESETTINGS_AMAZONS3BUCKET: mattermost
-      MM_FILESETTINGS_AMAZONS3ENDPOINT: minio:9000
-      MM_FILESETTINGS_AMAZONS3REGION: us-east-fh-pln
-      MM_FILESETTINGS_AMAZONS3SECRETACCESSKEY: ${MATTERMOST_AWS_S3_SECRETKEY}
-      MM_FILESETTINGS_AMAZONS3SSL: false
-      MM_FILESETTINGS_ARCHIVERECURSION: true
-      MM_FILESETTINGS_DRIVERNAME: amazons3
-      MM_FILESETTINGS_MAXFILESIZE: 104857600
-      MM_LOGSETTINGS_CONSOLELEVEL: info
-      MM_LOGSETTINGS_ENABLECOLOR: true
-      MM_METRICSSETTINGS_ENABLE: true
-      MM_PLUGINSETTINGS_ENABLEUPLOADS: true
-      MM_SERVICESETTINGS_FORWARD80TO443: false
-      MM_SERVICESETTINGS_LISTENADDRESS: :8065
-      MM_SERVICESETTINGS_SITEURL: https://mm.${MY_TLD}
-      MM_SQLSETTINGS_DATASOURCE: ${MATTERMOST_POSTGRES_CONNECTION_URI}
-      MM_SQLSETTINGS_DRIVERNAME: postgres
-      TZ: ${TZ}
-    expose:
-      - 8067
-    image: mattermost/mattermost-team-edition:latest
-    labels:
-      - homepage.group=Social
-      - homepage.name=Mattermost
-      - homepage.href=https://mm.${MY_TLD}
-      - homepage.icon=mattermost.svg
-      - homepage.description=Team collaboration and technical workflows (Slack alternative)
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8065
-      - swag_url=mm.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://mm.${MY_TLD}
-    networks:
-      default: null
-    pids_limit: 200
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8065"
-        target: 8065
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    tmpfs:
-      - /tmp
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/mattermost/config
-        target: /mattermost/config
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/mattermost/data
-        target: /mattermost/data
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/mattermost/logs
-        target: /mattermost/logs
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/mattermost/plugins
-        target: /mattermost/plugins
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/mattermost/client/plugins
-        target: /mattermost/client/plugins
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/mattermost/bleve-indexes
-        target: /mattermost/bleve-indexes
-        type: bind
-        bind:
-          create_host_path: true
-  mattermost-db:
-    container_name: mattermost-db
-    environment:
-      - TZ=${TZ}
-      - POSTGRES_DB=mattermost
-      - POSTGRES_USER=mattermost
-      - POSTGRES_PASSWORD=${MATTERMOST_POSTGRES_PASSWORD}
-    expose:
-      - 5432
-    image: postgres:16-alpine
-    networks:
-      default: null
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges=true
-    tmpfs:
-      - /tmp
-      - /var/run/postgresql
-    volumes:
-      - source: mattermost-postgres
-        target: /var/lib/postgresql/data
-        type: volume
-        volume: {}
   meshcentral:
     container_name: meshcentral
     image: ghcr.io/ylianst/meshcentral:master
@@ -4631,6 +4518,38 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
+  synapse:
+    container_name: synapse
+    depends_on:
+      - synapse-db
+    environment:
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+    image: docker.io/matrixdotorg/synapse:latest
+    labels:
+      homepage.group: Social
+      homepage.name: Matrix-Synapse
+      homepage.href: https://matrix.${MY_TLD}
+      homepage.icon: matrix-synapse.svg
+      homepage.description: Synapse/Matrix server
+      swag: enable
+      swag_proto: http
+      swag_url: matrix.${MY_TLD}
+      swag_port: 8448
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://matrix.${MY_TLD}  
+    ports:
+      - 8448:8448/tcp
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/synapse/:/data
+  synapse-db:
+    image: docker.io/postgres:16-alpine
+    environment:
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: ${SYNAPSE_POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: '--encoding: UTF-8 --lc-collate: C --lc-ctype: C'
+    volumes:
+      - synapse-db:/var/lib/postgresql/data
   tandoor:
     container_name: tandoor-recipes
     depends_on:
@@ -7058,8 +6977,6 @@ volumes:
     name: compose_lldap_data
   localai_data:
     name: compose_localai_data
-  mattermost-postgres:
-    name: compose_mattermost-postgres
   meshcentral-data:
   meshcentral-user_files:
   meshcentral-backup:
@@ -7106,6 +7023,8 @@ volumes:
     name: sonarqube-logs
   sonarqube-temp:
     name: sonarqube-temp
+  synapse-db:
+    name: synapse-db
   tandoor-pg:
     name: compose_tandoor-pg
   traccar-pg:
