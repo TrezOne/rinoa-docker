@@ -6045,6 +6045,35 @@ services:
         source: /etc/localtime
         target: /etc/localtime
         type: bind
+  vault:
+    cap_add:
+      - IPC_LOCK
+    command:
+      - server
+    container_name: hc-vault
+    environment:
+      - AWS_ACCESS_KEY_ID=${VAULT_HASHICORP_AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${VAULT_HASHICORP_AWS_SECRET_ACCESS_KEY}
+    image: hashicorp/vault:latest
+    labels:
+      - homepage.group=Code
+      - homepage.name=Vault
+      - homepage.icon=vault.png
+      - homepage.href=https://vault.${MY_TLD}
+      - homepage.description=Hashicorp Vault for secrets, key/value stores, etc.
+      - swag=enable
+      - swag_proto=http
+      - swag_port=8200
+      - swag_url=vault.${MY_TLD}
+      - swag.uptime-kuma.enabled=true
+      - swag.uptime-kuma.monitor.url=https://vault.${MY_TLD}
+    ports:
+      - 8200:8200
+      - 8250:8250
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/config/:/vault/config
+      - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/logs/:/vault/logs
   wallabag:
     container_name: wallabag
     depends_on:
