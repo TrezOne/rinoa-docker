@@ -39,6 +39,10 @@ jobs:
           echo ${{ secrets.RINOA_ENV }} > .env
 
       - name: Docker Compose Lint
-        uses: sjafferali/docker-compose-lint-action@v0.1.2
+        uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
-          compose-file: './docker-compose.yml'
+          file: docker-compose.yml
+          pull: true
+          pull-opts: --dry-run
+          up: true
+          up-opts: --dry-run -d --remove-orphans
