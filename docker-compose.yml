@@ -6056,7 +6056,7 @@ services:
       - AWS_SECRET_ACCESS_KEY=${VAULT_HASHICORP_AWS_SECRET_ACCESS_KEY}
     image: hashicorp/vault:latest
     labels:
-      - homepage.group=Code
+      - homepage.group=Code/DevOps
       - homepage.name=Vault
       - homepage.icon=vault.png
       - homepage.href=https://vault.${MY_TLD}
