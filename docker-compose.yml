@@ -4531,6 +4531,27 @@ services:
         type: bind
         bind:
           create_host_path: true
+  spotisub:
+    container_name: spotisub
+    environment:
+      SPOTIPY_CLIENT_ID: ${YOUR_SPOTIFY_ID}
+      SPOTIPY_CLIENT_SECRET: ${YOUR_SPOTIFY_SECRET}
+      SPOTIPY_REDIRECT_URI: http://127.0.0.1:8080/
+      SUBSONIC_API_HOST: http://navidrome
+      SUBSONIC_API_PORT: 4533
+      SUBSONIC_API_USER: ${NAVIDROME_USERNAME}
+      SUBSONIC_API_PASS: ${NAVIDROME_PASSWORD}
+    healthcheck:
+      test: curl -s http://127.0.0.1:5183/api/v1/utils/healthcheck | grep -q 'Ok!' || exit 1
+      interval: 30s
+      retries: 20
+      start_period: 30s
+    image: blastbeng/spotisub:latest
+    ports:
+      - 5183:5183
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/spotisub:/home/user/spotisub/cache
   swag:
     cap_add:
       - NET_ADMIN
