@@ -34,8 +34,11 @@ jobs:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           assignee: ${{ gitea.actor }}
 
-      - name: Linting
-        uses: super-linter/super-linter@v7.2.1
-        env:
-          GITHUB_CUSTOM_SERVER_URL: ${{ gitea.server_url }}
-          GITHUB_CUSTOM_API_URL: ${{ gitea.server_url }}/api/v1
+      - name: Generate ephemeral .env compose-file
+        run: |
+          echo ${{ secrets.RINOA_ENV }} > .env
+
+      - name: Docker Compose Lint
+        uses: sjafferali/docker-compose-lint-action@v0.1.2
+        with:
+          compose-file: './docker-compose.yml'
