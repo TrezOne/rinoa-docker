@@ -46,3 +46,5 @@ jobs:
           pull-opts: --dry-run
           up: true
           up-opts: --dry-run -d --remove-orphans
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
