@@ -23,7 +23,8 @@ jobs:
           tea login add --name gitea-rinoa --url ${{ vars.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep 'open|closed|merged' | awk -F, '{print $3}' | sed -e 's|"||g')
           echo "pr_state=$(echo ${pr_state})" >> "$GITHUB_OUTPUT"
-
+          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep 'open|closed|merged' | awk -F, '{print $1}' | sed -e 's|"||g')
+          echo "pr_index=$(echo ${pr_index})" >> "$GITHUB_OUTPUT"
 
       - name: Create PR
         if: steps.list-prs.outputs.pr_state == 'closed'
