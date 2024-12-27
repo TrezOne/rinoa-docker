@@ -21,8 +21,14 @@ jobs:
           chmod +x /usr/local/bin/tea
           echo "Listing PRs..."
           tea login add --name gitea-rinoa --url ${{ vars.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --output csv | egrep 'open' | awk -F, '{print $3}' | sed -e 's|"||g')
-          echo "pr_state=$(echo ${pr_state})" >> "$GITHUB_OUTPUT"
+          tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep -q 'open'
+          if [ $? -eq 0 ]; then
+            echo "PR already exists. Skipping PR creation."
+            echo "pr_state=open" >> "$GITHUB_OUTPUT"
+          else
+            echo "PR does not exist. Creating PR..."
+            echo "pr_state=closed" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Create PR
         if: steps.list-prs.outputs.pr_state != 'open'
