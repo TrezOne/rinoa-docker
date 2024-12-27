@@ -36,7 +36,7 @@ jobs:
 
       - name: Generate ephemeral .env compose-file
         run: |
-          echo ${{ secrets.RINOA_ENV }} > .env
+          echo "${{ secrets.RINOA_ENV }}"" > .env
 
       - name: Docker Compose Lint
         uses: yu-ichiro/spin-up-docker-compose-action@v1
