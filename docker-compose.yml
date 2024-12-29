@@ -6919,9 +6919,9 @@ services:
     container_name: zitadel
     image: ghcr.io/zitadel/zitadel:latest
     command: 'start-from-init --masterkeyFromEnv --config /config.yaml --config /secrets.yaml --config /init-steps.yaml --tlsMode external'
-    # depends_on:
-    #   zitadel-pg-db:
-    #     condition: 'service_healthy'
+    depends_on:
+      zitadel-pg-db:
+        condition: 'service_started'
     environment:
       ZITADEL_MASTERKEY: ${ZITADEL_MASTER_KEY}
     expose:
