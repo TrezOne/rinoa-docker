@@ -4579,11 +4579,14 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/synapse/:/data
   synapse-db:
-    image: docker.io/postgres:16-alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: synapse
       POSTGRES_PASSWORD: ${SYNAPSE_POSTGRES_PASSWORD}
-      POSTGRES_INITDB_ARGS: '--encoding: UTF-8 --lc-collate: C --lc-ctype: C'
+      POSTGRES_DB: synapse
+    expose:
+      - 5432
+    restart: unless-stopped
     volumes:
       - synapse-db:/var/lib/postgresql/data
   tandoor:
