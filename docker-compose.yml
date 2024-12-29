@@ -4560,6 +4560,8 @@ services:
       - synapse-db
     environment:
       SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+      PUID: ${PUID}
+      PGID: ${PGID}
     image: docker.io/matrixdotorg/synapse:latest
     labels:
       homepage.group: Social
@@ -4570,10 +4572,11 @@ services:
       swag: enable
       swag_proto: http
       swag_url: matrix.${MY_TLD}
-      swag_port: 8448
+      swag_port: 8008
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://matrix.${MY_TLD}  
     ports:
+      - 19345:8008
       - 8448:8448/tcp
     restart: unless-stopped
     volumes:
