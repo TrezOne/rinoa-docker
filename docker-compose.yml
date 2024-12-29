@@ -2006,15 +2006,15 @@ services:
       homepage.name: Jellyfin
       homepage.icon: jellyfin.svg
       homepage.href: http://jf.${MY_TLD}
-      # homepage.description: Movie/TV Streaming
-      # homepage.widget.type: jellyfin
-      # homepage.widget.url: http://jellyfin:8096
-      # homepage.widget.key: ${EMBY_HOMEPAGE_API_KEY}
-      # homepage.widget.enableBlocks: true
-      # homepage.widget.enableNowPlaying: true
-      # homepage.widget.enableUser: true
-      # homepage.widget.showEpisodeNumber: true
-      # homepage.widget.expandOneStreamToTwoRows: false
+      homepage.description: Movie/TV Streaming
+      homepage.widget.type: jellyfin
+      homepage.widget.url: http://jellyfin:8096
+      homepage.widget.key: ${JELLYFIN_API_KEY}
+      homepage.widget.enableBlocks: true
+      homepage.widget.enableNowPlaying: true
+      homepage.widget.enableUser: true
+      homepage.widget.showEpisodeNumber: true
+      homepage.widget.expandOneStreamToTwoRows: false
       swag: enable
       swag_url: jf.${MY_TLD}
       swag_port: 8096
