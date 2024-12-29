@@ -977,62 +977,6 @@ services:
         source: /home/charish/.config/appdata
         target: /source
         type: bind
-  emby:
-    container_name: emby
-    environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - DOCKER_MODS=ghcr.io/themepark-dev/theme.park:emby
-    hostname: Rinoa
-    image: emby/embyserver
-    labels:
-      - homepage.group=Media Library
-      - homepage.name=Emby
-      - homepage.icon=emby.png
-      - homepage.href=http://emby.${MY_TLD}
-      - homepage.description=Movie/TV Streaming
-      - homepage.widget.type=emby
-      - homepage.widget.url=http://emby:8096
-      - homepage.widget.key=${EMBY_HOMEPAGE_API_KEY}
-      - homepage.widget.enableBlocks=true
-      - homepage.widget.enableNowPlaying=true
-      - swag=enable
-      - swag.uptime-kuma.enabled=true
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8096"
-        target: 8096
-      - mode: ingress
-        protocol: tcp
-        published: "8920"
-        target: 8920
-    restart: unless-stopped
-    volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/emby
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /tmp
-        target: /transcode
-        type: bind
   fastenhealth:
     container_name: fastenhealth
     image: ghcr.io/fastenhealth/fasten-onprem:main
