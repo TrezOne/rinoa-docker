@@ -6944,12 +6944,12 @@ services:
   zitadel-pg-db:
     container_name: zitadel-pg-db
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USER: root
       POSTGRES_PASSWORD: ${ZITADEL_DB_ADMIN_PASSWORD}
     expose:
       - 5432
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "zitadel"]
+      test: ["CMD-SHELL", "pg_isready", "-d", "zitadel", "-U", "root" ]
       interval: '10s'
       timeout: '30s'
       retries: 5
