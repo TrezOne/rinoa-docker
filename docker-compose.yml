@@ -2016,6 +2016,9 @@ services:
       # homepage.widget.showEpisodeNumber: true
       # homepage.widget.expandOneStreamToTwoRows: false
       swag: enable
+      swag_url: jf.${MY_TLD}
+      swag_port: 8096
+      swag_proto: http
       swag.uptime-kuma.enabled: true
     ports:
       - 8487:8096
