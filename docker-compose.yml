@@ -4560,8 +4560,8 @@ services:
       - synapse-db
     environment:
       SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
-      PUID: ${PUID}
-      PGID: ${PGID}
+      PUID: 1000
+      PGID: 1000
     image: docker.io/matrixdotorg/synapse:latest
     labels:
       homepage.group: Social
