@@ -4002,6 +4002,7 @@ services:
       - SYS_RAWIO
     container_name: scrutiny
     devices:
+      - "/dev/nvme0n1:/dev/nvme0n1:rwm"
       - "/dev/sda:/dev/sda:rwm"
       - "/dev/sdb:/dev/sdb:rwm"
       - "/dev/sdc:/dev/sdc:rwm"
