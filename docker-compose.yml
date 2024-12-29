@@ -4564,11 +4564,6 @@ services:
       PGID: 1000
     image: docker.io/matrixdotorg/synapse:latest
     labels:
-      homepage.group: Social
-      homepage.name: Matrix-Synapse
-      homepage.href: https://matrix.${MY_TLD}
-      homepage.icon: matrix-synapse.svg
-      homepage.description: Synapse/Matrix server
       swag: enable
       swag_proto: http
       swag_url: matrix.${MY_TLD}
