@@ -2981,6 +2981,76 @@ services:
         type: bind
         bind:
           create_host_path: true
+  mastodon:
+    container_name: mastodon
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      LOCAL_DOMAIN: trez.wtf
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DB_HOST: mastodon-pg-db
+      DB_USER: mastodon
+      DB_NAME: mastodon
+      DB_PASS: ${MASTODON_PG_DB_PASSWORD}
+      DB_PORT: 5432
+      ES_ENABLED: false
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: 
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: 
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 
+      SECRET_KEY_BASE: 
+      OTP_SECRET: 
+      VAPID_PRIVATE_KEY: 
+      VAPID_PUBLIC_KEY: 
+      SMTP_SERVER: postal-smtp
+      SMTP_PORT: 25
+      SMTP_LOGIN: ${POSTAL_SMTP_AUTH_USER}
+      SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SMTP_FROM_ADDRESS: noreply@trez.wtf
+      S3_ENABLED: true
+      S3_BUCKET: mastodon
+      AWS_ACCESS_KEY_ID: ${MASTODON_MINIO_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${MASTODON_MINIO_SECRET_KEY}
+    image: lscr.io/linuxserver/mastodon:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 5678
+      swag_url: mastodon.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Mastodon
+      homepage.href: https://mastodon.${MY_TLD}
+      homepage.icon: mastodon.svg
+      homepage.description: Open-source social network
+      homepage.widget.type: mastodon
+      homepage.widget.url: http://mastodon
+    ports:
+      - 9044:80
+      - 3444:443
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/mastodon:/config
+  mastodon-pg-db:
+    container_name: mastodon-pg-db
+    environment:
+      POSTGRES_USER: mastodon
+      POSTGRES_PASSWORD: ${MASTODON_PG_DB_PASSWORD}
+      POSTGRES_DB: mastodon
+    expose:
+      - 5432
+    healthcheck:
+      test: pg_isready -q -t 2 -d $$POSTGRES_DB -U $$POSTGRES_USER
+      start_period: 20s
+      timeout: 30s
+      interval: 10s
+      retries: 5
+    image: postgres:17-alpine
+    restart: always
+    volumes:
+      - mastodon-pg-db:/var/lib/postgresql/data    
   meshcentral:
     container_name: meshcentral
     image: ghcr.io/ylianst/meshcentral:master
@@ -6905,89 +6975,91 @@ services:
       - zitadel-pg-db:/var/lib/postgresql/data
 volumes:
   authelia-pg-db:
-    name: compose_authelia-pg-db
+    name: authelia-pg-db
   bitmagnet-pg-db:
     name: bitmagnet-pg-db
   castopod-media:
     name: castopod-media
   crowdsec-config:
-    name: compose_crowdsec-config
+    name: crowdsec-config
   crowdsec-db:
-    name: compose_crowdsec-db
+    name: crowdsec-db
   dagu_config:
-    name: compose_dagu_config
+    name: dagu_config
   dagu_data:
-    name: compose_dagu_data
+    name: dagu_data
   fastenhealth-cache:
-    name: compose_fastenhealth-cache
+    name: fastenhealth-cache
   fastenhealth-db:
-    name: compose_fastenhealth-db
+    name: fastenhealth-db
   filebeat_etc:
     name: filebeat_etc
   filebeat_var:
     name: filebeat_var
   gitea-pg-db:
-    name: compose_gitea-pg-db
+    name: gitea-pg-db
   grafana-mimir-data:
-    name: compose_grafana-mimir-data
+    name: grafana-mimir-data
   grafana-tempo-data:
-    name: compose_grafana-tempo-data
+    name: grafana-tempo-data
   hortusfox_app_backup:
-    name: compose_hortusfox_app_backup
+    name: hortusfox_app_backup
   hortusfox_app_images:
-    name: compose_hortusfox_app_images
+    name: hortusfox_app_images
   hortusfox_app_logs:
-    name: compose_hortusfox_app_logs
+    name: hortusfox_app_logs
   hortusfox_app_migrate:
-    name: compose_hortusfox_app_migrate
+    name: hortusfox_app_migrate
   hortusfox_app_themes:
-    name: compose_hortusfox_app_themes
+    name: hortusfox_app_themes
   hortusfox_db_data:
-    name: compose_hortusfox_db_data
+    name: hortusfox_db_data
   invidious-postgres:
-    name: compose_invidious-postgres
+    name: invidious-postgres
   invoice_ninja_public:
-    name: compose_invoice_ninja_public
+    name: invoice_ninja_public
   jitsi-web-admin-theme:
-    name: compose_jitsi-web-admin-theme
+    name: jitsi-web-admin-theme
   jitsi-web-admin-upload:
-    name: compose_jitsi-web-admin-upload
+    name: jitsi-web-admin-upload
   joplin_data:
-    name: compose_joplin_data
+    name: joplin_data
   komodo-pg-data:
     name: komodo-pg-data
   lldap_data:
-    name: compose_lldap_data
+    name: lldap_data
   localai_data:
-    name: compose_localai_data
+    name: localai_data
+  mastodon-pg-db:
+    name: mastodon-pg-db
   meshcentral-data:
   meshcentral-user_files:
   meshcentral-backup:
   meshcentral-web:
   mongodb_config:
-    name: compose_mongo1_config
+    name: mongo1_config
   mongodb_data:
-    name: compose_mongo1_data
+    name: mongo1_data
   n8n-data:
     name: n8n-data
   netbox-pg-db:
     name: netbox-pg-db
   ollama:
-    name: compose_ollama
+    name: ollama
   paperless-ngx-data:
-    name: compose_paperless-ngx-data
+    name: paperless-ngx-data
   paperless-ngx-media:
-    name: compose_paperless-ngx-media
+    name: paperless-ngx-media
   paperless-ngx-pg:
-    name: compose_paperless-ngx-pg
+    name: paperless-ngx-pg
   plausible-db-data:
-    name: compose_plausible-db-data
+    name: plausible-db-data
   plausible-event-data:
-    name: compose_plausible-event-data
+    name: plausible-event-data
   plausible-event-logs:
-    name: compose_plausible-event-logs
+    name: plausible-event-logs
   reactive-resume-pg:
-    name: compose_reactive-resume-pg
+    name: reactive-resume-pg
   semaphore_config:
     name: semaphore_config
   semaphore_data:
@@ -7009,15 +7081,15 @@ volumes:
   synapse-db:
     name: synapse-db
   tandoor-pg:
-    name: compose_tandoor-pg
+    name: tandoor-pg
   traccar-pg:
-    name: compose_traccar-pg
+    name: traccar-pg
   unmanic-cache:
-    name: compose_unmanic-cache
+    name: unmanic-cache
   wallos-db:
-    name: compose_wallos-db
+    name: wallos-db
   wallos-logos:
-    name: compose_wallos-logos
+    name: wallos-logos
   wazuh-dashboard-config:
     name: wazuh-dashboard-config
   wazuh-dashboard-custom:
@@ -7044,19 +7116,19 @@ volumes:
     name: wazuh_wodles
   zammad-backup:
     driver: local
-    name: compose_zammad-backup
+    name: zammad-backup
   zammad-es-data:
     driver: local
-    name: compose_zammad-es-data
+    name: zammad-es-data
   zammad-pg-data:
     driver: local
-    name: compose_zammad-pg-data
+    name: zammad-pg-data
   zammad-redis-data:
     driver: local
-    name: compose_zammad-redis-data
+    name: zammad-redis-data
   zammad-storage:
     driver: local
-    name: compose_zammad-storage
+    name: zammad-storage
   zitadel-pg-db:
     name: zitadel-pg-db
 x-shared:
