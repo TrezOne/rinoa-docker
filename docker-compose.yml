@@ -1116,7 +1116,7 @@ services:
       homepage.widget.key: ${GITEA_HOMEPAGE_API_KEY}
       swag: enable
       swag_url: git.${MY_TLD}
-      swag_server_custom_directive: access_log /config/log/$host_access.log ; error_log /config/log/$host_error.log
+      swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://git.${MY_TLD}
     networks:
@@ -1595,7 +1595,7 @@ services:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:latest
     labels:
-      swag_server_custom_directive: access_log /config/log/$host_access.log ; error_log /config/log/$host_error.log
+      swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log
     networks:
       default: null
     ports:
