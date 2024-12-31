@@ -43,23 +43,31 @@ jobs:
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
 
-      - name: Subdomain YAML parsing
-        id: subdomain-yaml-parsing
+      - name: Setup go
+        uses: https://gitea.com/actions/setup-go@v3.3.0
+
+      - name: Domain check
+        id: domain-check
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
+          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
+          go version
+          go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
+          flarectl --help
           swag_url=$(yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sed ':a;N;$!ba;s/\n/|/g')
           echo ${swag_url}
-          echo "subdomain_list=${swag_url})" >> $GITHUB_OUTPUT
 
-      - name: Cloudflare DNS List
-        uses: addnab/docker-run-action@v3
-        env: 
-          CF_SUBDOMAINS: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}
-          DOCKER_HOST: tcp://dockerproxy:2375
-        with:
-            image: solidnerd/cloudflare
-            options: -v ${{ github.workspace }}:/workspace -e CF_API_TOKEN=${{ secrets.CF_API_TOKEN }} -e CF_ZONE_ID=${{ secrets.CF_ZONE_ID }} -e CF_SUBDOMAINS=${{ env.CF_SUBDOMAINS }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
-            run: |
-                /flarectl dns list --zone ${CF_ZONE_ID} --type CNAME --content trez.wtf
+      # - name: Cloudflare DNS List
+      #   uses: addnab/docker-run-action@v3
+      #   env: 
+      #     CF_SUBDOMAINS: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}
+      #     DOCKER_HOST: tcp://dockerproxy:2375
+      #   with:
+      #       image: solidnerd/cloudflare
+      #       options: -v ${{ github.workspace }}:/workspace -e CF_API_TOKEN=${{ secrets.CF_API_TOKEN }} -e CF_ZONE_ID=${{ secrets.CF_ZONE_ID }} -e CF_SUBDOMAINS=${{ env.CF_SUBDOMAINS }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
+      #       run: |
+      #           /flarectl dns list --zone ${CF_ZONE_ID} --type CNAME --content trez.wtf
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]
