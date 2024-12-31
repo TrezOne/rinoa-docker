@@ -43,7 +43,7 @@ jobs:
       - name: Cloudflare DNS Export
         uses: raiyansarker/cloudflare-dns-export@v1.1
         with:
-          NAME: ${{ gitea.repository }}
+          NAME: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ZONE_ID: ${{ secrets.CF_ZONE_ID }}
           API_KEY: ${{ secrets.CF_API_KEY }}
