@@ -44,8 +44,8 @@ jobs:
         id: subdomain-yaml-parsing
         uses: martinhaintz/ga-yaml-parser@v0.1.2
         with:
-          file: ./docker-compose.yml
-          key: swag_url
+          file: "./docker-compose.yml"
+          key: services[].labels.swag_url
 
       - name: Print subdomains from Compose
         run: |
