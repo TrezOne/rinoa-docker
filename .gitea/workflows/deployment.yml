@@ -56,12 +56,11 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
-          CF_DOMAIN: ${{ secrets.CF_DOMAIN }}
           CF_SUBDOMAINS: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
             image: solidnerd/cloudflare
-            options: -v ${{ github.workspace }}:/workspace
+            options: -v ${{ github.workspace }}:/workspace -e ${CF_API_TOKEN} -e ${CF_ZONE_ID} -e ${CF_DOMAIN} -e ${CF_SUBDOMAINS} -e ${CF_API_EMAIL}
             run: |
                 /flarectl dns list --zone ${CF_ZONE_ID} --type CNAME --content trez.wtf | grep -E "$(echo ${CF_SUBDOMAINS})"
   # docker-compose-test:
