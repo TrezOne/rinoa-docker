@@ -42,14 +42,14 @@ jobs:
 
       - name: Subdomain YAML parsing
         id: subdomain-yaml-parsing
-        uses: actions-betaon/yq-yaml-parser@v1.2.0
+        uses: martinhaintz/ga-yaml-parser@v0.1.2
         with:
-          file-path: ./docker-compose.yml
-          filtering-keys: services[].labels.swag_url
+          file: ./docker-compose.yml
+          key: swag_url
 
       - name: Print subdomains from Compose
         run: |
-          echo "Subdomain: ${{ steps.subdomain-yaml-parsing.outputs.swag_url }}"
+          echo "Subdomain: ${{ steps.subdomain-yaml-parsing.outputs.result }}"
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]
