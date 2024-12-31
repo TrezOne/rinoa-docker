@@ -34,18 +34,18 @@ services:
     hostname: Rinoa
     image: adguard/adguardhome:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_url=adgh.${MY_TLD}
-      - homepage.group=System Administration
-      - homepage.name=AdGuard Home
-      - homepage.icon=adguard-home.png
-      - homepage.href=https://adgh.${MY_TLD}
-      - homepage.description=Ad-blocking/DNS
-      - homepage.widget.type=adguard
-      - homepage.widget.url=http://adguard:80
-      - homepage.widget.username=admin
-      - homepage.widget.password=${ADGUARD_PASSWORD}
+      swag: enable
+      swag_proto: http
+      swag_url: adgh.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: AdGuard Home
+      homepage.icon: adguard-home.png
+      homepage.href: https://adgh.${MY_TLD}
+      homepage.description: Ad-blocking/DNS
+      homepage.widget.type: adguard
+      homepage.widget.url: http://adguard:80
+      homepage.widget.username: admin
+      homepage.widget.password: ${ADGUARD_PASSWORD}
     networks:
       default: null
     ports:
@@ -127,11 +127,11 @@ services:
     hostname: Rinoa
     image: lscr.io/linuxserver/apprise-api:latest
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Apprise
-      - homepage.icon=apprise.png
-      - homepage.href=http://192.168.1.254:8000
-      - homepage.description=Cemtralized, multi-channel notification API
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Apprise
+      homepage.icon: apprise.png
+      homepage.href: http://192.168.1.254:8000
+      homepage.description: Cemtralized, multi-channel notification API
     networks:
       default: null
     ports:
@@ -168,20 +168,20 @@ services:
     hostname: Rinoa
     image: ghcr.io/advplyr/audiobookshelf:latest
     labels:
-      - homepage.group=Media Library
-      - homepage.name=Audiobookshelf
-      - homepage.href=https://abs.${MY_TLD}
-      - homepage.icon=audiobookshelf.png
-      - homepage.description=Podcasts, eBooks, & Audiobooks
-      - homepage.widget.type=audiobookshelf
-      - homepage.widget.url=http://audiobookshelf:80
-      - homepage.widget.key=${AUDIOBOOKSHELF_ROOT_API_KEY}
-      - swag=enable
-      - swag_address=audiobookshelf
-      - swag_proto=http
-      - swag_url=abs.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://abs.${MY_TLD}
+      homepage.group: Media Library
+      homepage.name: Audiobookshelf
+      homepage.href: https://abs.${MY_TLD}
+      homepage.icon: audiobookshelf.png
+      homepage.description: Podcasts, eBooks, & Audiobooks
+      homepage.widget.type: audiobookshelf
+      homepage.widget.url: http://audiobookshelf:80
+      homepage.widget.key: ${AUDIOBOOKSHELF_ROOT_API_KEY}
+      swag: enable
+      swag_address: audiobookshelf
+      swag_proto: http
+      swag_url: abs.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://abs.${MY_TLD}
     networks:
       default: null
     ports:
@@ -231,17 +231,17 @@ services:
       - 9091
     image: authelia/authelia:master
     labels:
-      - homepage.group=Privacy/Security
-      - homepage.name=Authelia
-      - homepage.href=https://auth.${MY_TLD}
-      - homepage.icon=authelia.svg
-      - homepage.description=Authentication/authorization server with MFA & SSO
-      - swag=enable
-      - swag_proto=http
-      - swag_port=9091
-      - swag_url=auth.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://auth.${MY_TLD}
+      homepage.group: Privacy/Security
+      homepage.name: Authelia
+      homepage.href: https://auth.${MY_TLD}
+      homepage.icon: authelia.svg
+      homepage.description: Authentication/authorization server with MFA & SSO
+      swag: enable
+      swag_proto: http
+      swag_port: 9091
+      swag_url: auth.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://auth.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -279,18 +279,18 @@ services:
     hostname: Rinoa
     image: lscr.io/linuxserver/bazarr:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Bazarr
-      - homepage.href=https://bazarr.${MY_TLD}
-      - homepage.icon=bazarr.png
-      - homepage.description=Subtitle automation for TV shows/movies
-      - homepage.widget.type=bazarr
-      - homepage.widget.url=http://bazarr:6767
-      - homepage.widget.key=${BAZARR_API_KEY}
-      - swag=enable
-      - swag_proto=http
-      - swag_port=6767
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Servarr Stack
+      homepage.name: Bazarr
+      homepage.href: https://bazarr.${MY_TLD}
+      homepage.icon: bazarr.png
+      homepage.description: Subtitle automation for TV shows/movies
+      homepage.widget.type: bazarr
+      homepage.widget.url: http://bazarr:6767
+      homepage.widget.key: ${BAZARR_API_KEY}
+      swag: enable
+      swag_proto: http
+      swag_port: 6767
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -339,22 +339,22 @@ services:
       POSTGRES_USER: bitmagnet
     image: ghcr.io/bitmagnet-io/bitmagnet:latest
     labels:
-      - homepage.group=Downloaders
-      - homepage.name=Bitmagnet
-      - homepage.href=https://btmag.${MY_TLD}
-      - homepage.icon=/icons/bitmagnet.svg
-      - homepage.description=Torrent indexer, DHT crawler, search engine, & content classifier
-      - homepage.widget.type=gluetun
-      - homepage.widget.url=http://gluetun:8000
-      - swag=enable
-      - swag_proto=http
-      - swag_address=gluetun
-      - swag_auth=authelia
-      - swag_auth_bypass=/v1
-      - swag_port=3333
-      - swag_url=btmag.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://btmag.${MY_TLD}
+      homepage.group: Downloaders
+      homepage.name: Bitmagnet
+      homepage.href: https://btmag.${MY_TLD}
+      homepage.icon: /icons/bitmagnet.svg
+      homepage.description: Torrent indexer, DHT crawler, search engine, & content classifier
+      homepage.widget.type: gluetun
+      homepage.widget.url: http://gluetun:8000
+      swag: enable
+      swag_proto: http
+      swag_address: gluetun
+      swag_auth: authelia
+      swag_auth_bypass: /v1
+      swag_port: 3333
+      swag_url: btmag.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://btmag.${MY_TLD}
     network_mode: service:gluetun
     restart: always
     volumes:
@@ -406,16 +406,16 @@ services:
     hostname: Rinoa
     image: vaultwarden/server:latest
     labels:
-      - homepage.group=Privacy/Security
-      - homepage.name=Bitwarden
-      - homepage.icon=bitwarden.png
-      - homepage.href=https://bitwarden.${MY_TLD}
-      - homepage.description=Credential/Information Vault
-      - swag=enable
-      - swag_url=bitwarden.${MY_TLD}
-      - swag_proto=http
-      - swag_port=80
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Privacy/Security
+      homepage.name: Bitwarden
+      homepage.icon: bitwarden.png
+      homepage.href: https://bitwarden.${MY_TLD}
+      homepage.description: Credential/Information Vault
+      swag: enable
+      swag_url: bitwarden.${MY_TLD}
+      swag_proto: http
+      swag_port: 80
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -469,11 +469,11 @@ services:
       - 3000
     image: ghcr.io/bluesky-social/pds:latest
     labels:
-      - swag=enable
-      - swag_port=3000
-      - swag_url=bsky.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://bsky.${MY_TLD}
+      swag: enable
+      swag_port: 3000
+      swag_url: bsky.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://bsky.${MY_TLD}
     restart: unless-stopped
     volumes:
       - type: bind
@@ -496,10 +496,10 @@ services:
       - 3000
     image: ghcr.io/browserless/chromium:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_url=browse.${MY_TLD}
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: browse.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -528,16 +528,16 @@ services:
       - 8000
     image: castopod/castopod:latest
     labels:
-      - homepage.group=Social
-      - homepage.name=Castopod
-      - homepage.href=https://pod.${MY_TLD}
-      - homepage.icon=castopod.png
-      - homepage.description=Podcast self-hosting
-      - swag=enable
-      - swag_port=8000
-      - swag_url=pod.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://pod.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Castopod
+      homepage.href: https://pod.${MY_TLD}
+      homepage.icon: castopod.png
+      homepage.description: Podcast self-hosting
+      swag: enable
+      swag_port: 8000
+      swag_url: pod.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://pod.${MY_TLD}
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
@@ -591,10 +591,10 @@ services:
   crowdsec:
     container_name: crowdsec
     environment:
-      - DOCKER_HOST=tcp://dockerproxy:2375
-      - GID=1000
-      - BOUNCER_KEY_SWAG=${CROWDSEC_API_KEY}
-      - COLLECTIONS=crowdsecurity/nginx crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/linux crowdsecurity/iptables
+      DOCKER_HOST: tcp://dockerproxy:2375
+      GID: 1000
+      BOUNCER_KEY_SWAG: ${CROWDSEC_API_KEY}
+      COLLECTIONS: crowdsecurity/nginx crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/linux crowdsecurity/iptables
     image: crowdsecurity/crowdsec:latest
     networks:
       default: null
@@ -648,22 +648,22 @@ services:
       MGID: ${GID-1000}
     image: metabase/metabase
     labels:
-      - com.centurylinklabs.watchtower.enable=false
-      - homepage.group=Privacy/Security
-      - homepage.name=CrowdSec Dashboard
-      - homepage.href=https://csec.${MY_TLD}
-      - homepage.icon=crowdsec.svg
-      - homepage.description=Real-time & crowdsourced protection against aggressive IPs
-      - homepage.widget.type=crowdsec
-      - homepage.widget.url=http://crowdsec:8080
-      - homepage.widget.username=localhost
-      - homepage.widget.password=${CROWDSEC_LOCAL_API_KEY}
-      - swag=enable
-      - swag_port=3000
-      - swag_proto=http
-      - swag_url=csec.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://csec.${MY_TLD}
+      com.centurylinklabs.watchtower.enable: false
+      homepage.group: Privacy/Security
+      homepage.name: CrowdSec Dashboard
+      homepage.href: https://csec.${MY_TLD}
+      homepage.icon: crowdsec.svg
+      homepage.description: Real-time & crowdsourced protection against aggressive IPs
+      homepage.widget.type: crowdsec
+      homepage.widget.url: http://crowdsec:8080
+      homepage.widget.username: localhost
+      homepage.widget.password: ${CROWDSEC_LOCAL_API_KEY}
+      swag: enable
+      swag_port: 3000
+      swag_proto: http
+      swag_url: csec.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://csec.${MY_TLD}
     networks:
       default: null
     ports:
@@ -688,17 +688,17 @@ services:
       WEB_LISTENING_PORT: 5800
     image: jlesage/czkawka
     labels:
-      - homepage.group=System Administration
-      - homepage.name=Czkawka
-      - homepage.href=https://czkawka.${MY_TLD}
-      - homepage.icon=/icons/czkawka.png
-      - homepage.description=Smart file management
-      - swag=enable
-      - swag_port=5800
-      - swag_proto=http
-      - swag_url=czkawka.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://czkawka.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: Czkawka
+      homepage.href: https://czkawka.${MY_TLD}
+      homepage.icon: /icons/czkawka.png
+      homepage.description: Smart file management
+      swag: enable
+      swag_port: 5800
+      swag_proto: http
+      swag_url: czkawka.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://czkawka.${MY_TLD}
     networks:
       default: null
     ports:
@@ -741,17 +741,17 @@ services:
       DAGU_PORT: 8080
     image: ghcr.io/dagu-org/dagu:latest
     labels:
-      - homepage.group=System Administration
-      - homepage.name=Dagu
-      - homepage.href=https://cron.${MY_TLD}
-      - homepage.icon=/icons/dagu.png
-      - homepage.description=Cron alternative using DAGs (Directed Acyclic Graphs)
-      - swag=enable
-      - swag_port=8080
-      - swag_proto=http
-      - swag_url=cron.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://cron.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: Dagu
+      homepage.href: https://cron.${MY_TLD}
+      homepage.icon: /icons/dagu.png
+      homepage.description: Cron alternative using DAGs (Directed Acyclic Graphs)
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: cron.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://cron.${MY_TLD}
     networks:
       default: null
     ports:
@@ -794,20 +794,20 @@ services:
     hostname: Rinoa
     image: ghcr.io/binhex/arch-delugevpn:latest
     labels:
-      - homepage.group=Downloaders
-      - homepage.name=DelugeVPN
-      - homepage.href=https://deluge.${MY_TLD}
-      - homepage.icon=deluge.png
-      - homepage.description=Torrent over VPN
-      - homepage.widget.type=deluge
-      - homepage.widget.url=http://delugevpn:8112
-      - homepage.widget.password=${DELUGEVPN_PASSWORD}
-      - swag=enable
-      - swag_port=8112
-      - swag_proto=http
-      - swag_url=deluge.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://deluge.${MY_TLD}
+      homepage.group: Downloaders
+      homepage.name: DelugeVPN
+      homepage.href: https://deluge.${MY_TLD}
+      homepage.icon: deluge.png
+      homepage.description: Torrent over VPN
+      homepage.widget.type: deluge
+      homepage.widget.url: http://delugevpn:8112
+      homepage.widget.password: ${DELUGEVPN_PASSWORD}
+      swag: enable
+      swag_port: 8112
+      swag_proto: http
+      swag_url: deluge.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://deluge.${MY_TLD}
     networks:
       default: null
     ports:
@@ -855,27 +855,27 @@ services:
   docker-socket-proxy:
     container_name: dockerproxy
     environment:
-      - AUTH=1
-      - BUILD=1
-      - COMMIT=1
-      - CONFIGS=1
-      - CONTAINERS=1
-      - DISTRIBUTION=1
-      - EVENTS=1
-      - EXEC=1
-      - GPRC=1
-      - IMAGES=1
-      - INFO=1
-      - NETWORKS=1
-      - NODES=1
-      - POST=1
-      - PLUGINS=1
-      - SERVICES=1
-      - SESSION=1
-      - SYSTEM=1
-      - TASKS=1
-      - VOLUMES=1
-      - LOG_LEVEL=debug
+      AUTH: 1
+      BUILD: 1
+      COMMIT: 1
+      CONFIGS: 1
+      CONTAINERS: 1
+      DISTRIBUTION: 1
+      EVENTS: 1
+      EXEC: 1
+      GPRC: 1
+      IMAGES: 1
+      INFO: 1
+      NETWORKS: 1
+      NODES: 1
+      POST: 1
+      PLUGINS: 1
+      SERVICES: 1
+      SESSION: 1
+      SYSTEM: 1
+      TASKS: 1
+      VOLUMES: 1
+      LOG_LEVEL: debug
     image: ghcr.io/tecnativa/docker-socket-proxy:latest
     labels:
       komodo.skip: s
@@ -898,17 +898,17 @@ services:
     container_name: docuseal
     image: docuseal/docuseal:latest
     labels:
-      - homepage.group=Personal Services
-      - homepage.name=Docuseal
-      - homepage.href=https://docs.${MY_TLD}
-      - homepage.description=OSS Document Signing & Verification
-      - homepage.icon=docuseal.png
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_url=sign.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://sign.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: Docuseal
+      homepage.href: https://docs.${MY_TLD}
+      homepage.description: OSS Document Signing & Verification
+      homepage.icon: docuseal.png
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: sign.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://sign.${MY_TLD}
     networks:
       default: null
     ports:
@@ -932,15 +932,15 @@ services:
     hostname: Rinoa
     image: lscr.io/linuxserver/duplicati:latest
     labels:
-      - swag=enable
-      - swag_port=8200
-      - swag_proto=http
-      - swag_url=dup.${MY_TLD}
-      - homepage.group=Automation
-      - homepage.name=Duplicati
-      - homepage.href=https://dup.${MY_TLD}
-      - homepage.icon=duplicati.png
-      - homepage.description=Data backup
+      swag: enable
+      swag_port: 8200
+      swag_proto: http
+      swag_url: dup.${MY_TLD}
+      homepage.group: Automation
+      homepage.name: Duplicati
+      homepage.href: https://dup.${MY_TLD}
+      homepage.icon: duplicati.png
+      homepage.description: Data backup
     networks:
       default: null
     ports:
@@ -981,17 +981,17 @@ services:
     container_name: fastenhealth
     image: ghcr.io/fastenhealth/fasten-onprem:main
     labels:
-      - homepage.group=Lifestyle
-      - homepage.name=Fasten
-      - homepage.icon=/icons/fastenhealth.png
-      - homepage.href=http://health.${MY_TLD}
-      - homepage.description=Open-source, self-hosted, personal/family electronic medical record aggregator
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8080
-      - swag_url=health.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://health.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: Fasten
+      homepage.icon: /icons/fastenhealth.png
+      homepage.href: http://health.${MY_TLD}
+      homepage.description: Open-source, self-hosted, personal/family electronic medical record aggregator
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: health.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://health.${MY_TLD}
     networks:
       default: null
     ports:
@@ -1012,13 +1012,13 @@ services:
   flaresolverr:
     container_name: flaresolverr
     environment:
-      - CAPTCHA_SOLVER=none
-      - LOG_HTML=false
-      - LOG_LEVEL=info
-      - PORT=8191
-      - TZ=America/New_York
-      - BROWSER_TIMEOUT=40000
-      - TEST_URL=https://duckduckgo.com
+      CAPTCHA_SOLVER: none
+      LOG_HTML: false
+      LOG_LEVEL: info
+      PORT: 8191
+      TZ: America/New_York
+      BROWSER_TIMEOUT: 40000
+      TEST_URL: https://duckduckgo.com
     hostname: Rinoa
     image: ghcr.io/flaresolverr/flaresolverr:latest
     networks:
@@ -1051,33 +1051,33 @@ services:
         required: true
         restart: true
     environment:
-      - database__client=mysql
-      - database__connection__host=mariadb
-      - database__connection__port=3306
-      - database__connection__user=${GHOST_DB_USER}
-      - database__connection__password=${GHOST_DB_PASSWORD}
-      - database__connection__database=ghost_db
-      - mail__transport=SMTP
-      - mail__options__host=postal-smtp
-      - mail__options__port=25
-      - mail__options__secure=false
-      - mail__options__auth__user=${POSTAL_SMTP_AUTH_USER}
-      - mail__options__auth__pass=${POSTAL_SMTP_AUTH_PASSWORD}
-      - mail__from="noreply@trez.wtf"
-      - url=https://blog.${MY_TLD}
+      database__client: mysql
+      database__connection__host: mariadb
+      database__connection__port: 3306
+      database__connection__user: ${GHOST_DB_USER}
+      database__connection__password: ${GHOST_DB_PASSWORD}
+      database__connection__database: ghost_db
+      mail__transport: SMTP
+      mail__options__host: postal-smtp
+      mail__options__port: 25
+      mail__options__secure: false
+      mail__options__auth__user: ${POSTAL_SMTP_AUTH_USER}
+      mail__options__auth__pass: ${POSTAL_SMTP_AUTH_PASSWORD}
+      mail__from: "noreply@trez.wtf"
+      url: https://blog.${MY_TLD}
     image: ghost:latest
     labels:
-      - homepage.group=Lifestyle
-      - homepage.name=Ghost
-      - homepage.href=https://blog.${MY_TLD}
-      - homepage.icon=ghost.png
-      - homepage.description=Personal blog
-      - swag=enable
-      - swag_port=2368
-      - swag_proto=http
-      - swag_url=blog.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://blog.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: Ghost
+      homepage.href: https://blog.${MY_TLD}
+      homepage.icon: ghost.png
+      homepage.description: Personal blog
+      swag: enable
+      swag_port: 2368
+      swag_proto: http
+      swag_url: blog.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://blog.${MY_TLD}
     links:
       - mariadb
     networks:
@@ -1090,34 +1090,34 @@ services:
         condition: service_healthy
         required: true
     environment:
-      - USER_UID=${PUID}
-      - USER_GID=${PGID}
-      - GITEA__database__DB_TYPE=postgres
-      - GITEA__database__HOST=gitea-db:5432
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=${GITEA_PG_DB_PASSWORD}
-      - GITEA__mailer__ENABLED=true
-      - GITEA__mailer__FROM='"Gitea" <noreply@trez.wtf>'
-      - GITEA__mailer__PROTOCOL=smtp
-      - GITEA__mailer__SMTP_ADDR=postal-smtp
-      - GITEA__mailer__SMTP_PORT=25
-      - GITEA__mailer__USER=${POSTAL_SMTP_AUTH_USER}
-      - GITEA__mailer__PASSWD=${POSTAL_SMTP_AUTH_PASSWORD}
+      USER_UID: ${PUID}
+      USER_GID: ${PGID}
+      GITEA__database__DB_TYPE: postgres
+      GITEA__database__HOST: gitea-db:5432
+      GITEA__database__NAME: gitea
+      GITEA__database__USER: gitea
+      GITEA__database__PASSWD: ${GITEA_PG_DB_PASSWORD}
+      GITEA__mailer__ENABLED: true
+      GITEA__mailer__FROM: '"Gitea" <noreply@trez.wtf>'
+      GITEA__mailer__PROTOCOL: smtp
+      GITEA__mailer__SMTP_ADDR: postal-smtp
+      GITEA__mailer__SMTP_PORT: 25
+      GITEA__mailer__USER: ${POSTAL_SMTP_AUTH_USER}
+      GITEA__mailer__PASSWD: ${POSTAL_SMTP_AUTH_PASSWORD}
     image: gitea/gitea:1.22.2
     labels:
-      - homepage.group=Code/DevOps
-      - homepage.name=Gitea
-      - homepage.href=https://git.${MY_TLD}
-      - homepage.icon=gitea.svg
-      - homepage.description=Private Code Repo
-      - homepage.widget.type=gitea
-      - homepage.widget.url=http://gitea:3000
-      - homepage.widget.key=${GITEA_HOMEPAGE_API_KEY}
-      - swag=enable
-      - swag_url=git.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://git.${MY_TLD}
+      homepage.group: Code/DevOps
+      homepage.name: Gitea
+      homepage.href: https://git.${MY_TLD}
+      homepage.icon: gitea.svg
+      homepage.description: Private Code Repo
+      homepage.widget.type: gitea
+      homepage.widget.url: http://gitea:3000
+      homepage.widget.key: ${GITEA_HOMEPAGE_API_KEY}
+      swag: enable
+      swag_url: git.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://git.${MY_TLD}
     networks:
       default: null
     ports:
@@ -1282,40 +1282,40 @@ services:
   gotify:
     container_name: gotify
     environment:
-      - GOTIFY_SERVER_PORT=80
-      - GOTIFY_SERVER_KEEPALIVEPERIODSECONDS=0
-      - GOTIFY_SERVER_LISTENADDR=
-      - GOTIFY_SERVER_SSL_ENABLED=false
-      - GOTIFY_SERVER_SSL_REDIRECTTOHTTPS=true
-      - GOTIFY_SERVER_SSL_LISTENADDR=
-      - GOTIFY_SERVER_SSL_PORT=443
-      - GOTIFY_SERVER_SSL_CERTFILE=
-      - GOTIFY_SERVER_SSL_CERTKEY=
-      - GOTIFY_SERVER_SSL_LETSENCRYPT_ENABLED=false
-      - GOTIFY_SERVER_SSL_LETSENCRYPT_ACCEPTTOS=false
-      - GOTIFY_SERVER_SSL_LETSENCRYPT_CACHE=certs
-      - GOTIFY_SERVER_STREAM_PINGPERIODSECONDS=45
-      - GOTIFY_DATABASE_DIALECT=sqlite3
-      - GOTIFY_DATABASE_CONNECTION=data/gotify.db
-      - GOTIFY_DEFAULTUSER_NAME=admin
-      - GOTIFY_DEFAULTUSER_PASS=${GOTIFY_PASSWORD}
-      - GOTIFY_PASSSTRENGTH=10
-      - GOTIFY_UPLOADEDIMAGESDIR=data/images
-      - GOTIFY_PLUGINSDIR=data/plugins
-      - GOTIFY_REGISTRATION=false
+      GOTIFY_SERVER_PORT: 80
+      GOTIFY_SERVER_KEEPALIVEPERIODSECONDS: 0
+      GOTIFY_SERVER_LISTENADDR: 
+      GOTIFY_SERVER_SSL_ENABLED: false
+      GOTIFY_SERVER_SSL_REDIRECTTOHTTPS: true
+      GOTIFY_SERVER_SSL_LISTENADDR: 
+      GOTIFY_SERVER_SSL_PORT: 443
+      GOTIFY_SERVER_SSL_CERTFILE: 
+      GOTIFY_SERVER_SSL_CERTKEY: 
+      GOTIFY_SERVER_SSL_LETSENCRYPT_ENABLED: false
+      GOTIFY_SERVER_SSL_LETSENCRYPT_ACCEPTTOS: false
+      GOTIFY_SERVER_SSL_LETSENCRYPT_CACHE: certs
+      GOTIFY_SERVER_STREAM_PINGPERIODSECONDS: 45
+      GOTIFY_DATABASE_DIALECT: sqlite3
+      GOTIFY_DATABASE_CONNECTION: data/gotify.db
+      GOTIFY_DEFAULTUSER_NAME: admin
+      GOTIFY_DEFAULTUSER_PASS: ${GOTIFY_PASSWORD}
+      GOTIFY_PASSSTRENGTH: 10
+      GOTIFY_UPLOADEDIMAGESDIR: data/images
+      GOTIFY_PLUGINSDIR: data/plugins
+      GOTIFY_REGISTRATION: false
     image: gotify/server
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Gotify
-      - homepage.href=https://gotify.${MY_TLD}
-      - homepage.icon=gotify.png
-      - homepage.description=Notification System
-      - homepage.widget.type=gotify
-      - homepage.widget.url=http://gotify
-      - homepage.widget.key=${GOTIFY_HOMEPAGE_CLIENT_KEY}
-      - swag=enable
-      - swag_proto=http
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Gotify
+      homepage.href: https://gotify.${MY_TLD}
+      homepage.icon: gotify.png
+      homepage.description: Notification System
+      homepage.widget.type: gotify
+      homepage.widget.url: http://gotify
+      homepage.widget.key: ${GOTIFY_HOMEPAGE_CLIENT_KEY}
+      swag: enable
+      swag_proto: http
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -1342,20 +1342,20 @@ services:
     hostname: Rinoa
     image: grafana/grafana-enterprise:latest
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Grafana (LGTM)
-      - homepage.href=https://mon.${MY_TLD}
-      - homepage.description=Monitoring Dashboard for metrics, logs, traces, & profiles
-      - homepage.icon=grafana.png
-      - homepage.widget.type=grafana
-      - homepage.widget.url=http://grafana:3000
-      - homepage.widget.username=admin
-      - homepage.widget.password=${GRAFANA_ADMIN_PASSWORD}
-      - swag=enable
-      - swag_proto=http
-      - swag_url=mon.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://mon.${MY_TLD}
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Grafana (LGTM)
+      homepage.href: https://mon.${MY_TLD}
+      homepage.description: Monitoring Dashboard for metrics, logs, traces, & profiles
+      homepage.icon: grafana.png
+      homepage.widget.type: grafana
+      homepage.widget.url: http://grafana:3000
+      homepage.widget.username: admin
+      homepage.widget.password: ${GRAFANA_ADMIN_PASSWORD}
+      swag: enable
+      swag_proto: http
+      swag_url: mon.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://mon.${MY_TLD}
     networks:
       default: null
     ports:
@@ -1394,11 +1394,11 @@ services:
       - DOCKER_HOST=tcp://dockerproxy:2375
     image: grafana/alloy:latest
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Grafana Alloy
-      - homepage.description=Agent for metric/log/trace/profile collection and writing
-      - homepage.href=http://192.168.1.254:12345
-      - homepage.icon=/icons/grafana-alloy.svg
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Grafana Alloy
+      homepage.description: Agent for metric/log/trace/profile collection and writing
+      homepage.href: http://192.168.1.254:12345
+      homepage.icon: /icons/grafana-alloy.svg
     networks:
       default: null
     ports:
@@ -1470,11 +1470,11 @@ services:
         required: true
     image: grafana/mimir:latest
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Grafana Mimir
-      - homepage.href=http://192.168.1.254:9009
-      - homepage.description=Long-term metrics storage
-      - homepage.icon=/icons/grafana-mimir.png
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Grafana Mimir
+      homepage.href: http://192.168.1.254:9009
+      homepage.description: Long-term metrics storage
+      homepage.icon: /icons/grafana-mimir.png
     networks:
       default: null
     ports:
@@ -1500,11 +1500,11 @@ services:
         condition: service_started
         required: true
     environment:
-      - MEMCACHED_MEMORY_LIMIT=1g
-      - MEMCACHED_THREADS=4
-      - MEMCACHED_MAX_CONNECTIONS=2048
-      - MEMCACHED_TCP_PORT=11211
-      - MEMCACHED_UDP_PORT=11211
+      MEMCACHED_MEMORY_LIMIT: 1g
+      MEMCACHED_THREADS: 4
+      MEMCACHED_MAX_CONNECTIONS: 2048
+      MEMCACHED_TCP_PORT: 11211
+      MEMCACHED_UDP_PORT: 11211
     image: memcached
     networks:
       default: null
@@ -1524,11 +1524,11 @@ services:
         required: true
     image: grafana/pyroscope:latest
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Grafana Pyroscope
-      - homepage.description=Profiling for applications
-      - homepage.href=http://192.168.1.254:4040
-      - homepage.icon=/icons/grafana-pyroscope.svg
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Grafana Pyroscope
+      homepage.description: Profiling for applications
+      homepage.href: http://192.168.1.254:4040
+      homepage.icon: /icons/grafana-pyroscope.svg
     networks:
       default: null
     ports:
@@ -1593,6 +1593,8 @@ services:
   homepage:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:latest
+    labels:
+      swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log ;
     networks:
       default: null
     ports:
@@ -1640,16 +1642,16 @@ services:
       DB_USERNAME: hortusfox
     image: ghcr.io/danielbrendel/hortusfox-web:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_url=plants.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://plants.${MY_TLD}
-      - homepage.group=Lifestyle
-      - homepage.name=HortusFox
-      - homepage.href=https://plants.${MY_TLD}
-      - homepage.icon=hortusfox.png
-      - homepage.description=Plant management system
+      homepage: enable
+      homepage_proto: http
+      homepage_url: plants.${MY_TLD}
+      homepage.uptime-kuma.enabled: true
+      homepage.uptime-kuma.monitor.url: https://plants.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: HortusFox
+      homepage.href: https://plants.${MY_TLD}
+      homepage.icon: hortusfox.png
+      homepage.description: Plant management system
     networks:
       default: null
     ports:
@@ -1684,17 +1686,17 @@ services:
     container_name: hugo
     image: hugomods/hugo:exts
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=1313
-      - swag_url=it-services.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://it-services.${MY_TLD}
-      - homepage.group=Professional Services
-      - homepage.name=Hugo
-      - homepage.href=https://it-services.${MY_TLD}
-      - homepage.icon=hugo.svg
-      - homepage.description=Static site
+      swag: enable
+      swag_proto: http
+      swag_port: 1313
+      swag_url: it-services.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
+      homepage.group: Professional Services
+      homepage.name: Hugo
+      homepage.href: https://it-services.${MY_TLD}
+      homepage.icon: hugo.svg
+      homepage.description: Static site
     networks:
       default: null
     ports:
@@ -1741,17 +1743,17 @@ services:
       timeout: 5s
     image: quay.io/invidious/invidious:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_url=invid.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://invid.${MY_TLD}
-      - homepage.group=Social
-      - homepage.name=Invidious
-      - homepage.href=https://invid.${MY_TLD}
-      - homepage.icon=invidious.svg
-      - homepage.description=Alternative YouTube frontend (privacy-focused, ad-blocking)
+      homepage: enable
+      homepage_proto: http
+      homepage_port: 3000
+      homepage_url: invid.${MY_TLD}
+      homepage.uptime-kuma.enabled: true
+      homepage.uptime-kuma.monitor.url: https://invid.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Invidious
+      homepage.href: https://invid.${MY_TLD}
+      homepage.icon: invidious.svg
+      homepage.description: Alternative YouTube frontend (privacy-focused, ad-blocking)
     networks:
       default: null
     ports:
@@ -1887,16 +1889,16 @@ services:
       TRUSTED_PROXIES: 172.18.0.0/16
     image: nginx
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_url=biz.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://biz.${MY_TLD}
-      - homepage.group=Professional Services
-      - homepage.name=Invoice Ninja
-      - homepage.href=https://biz.${MY_TLD}
-      - homepage.icon=invoiceninja.svg
-      - homepage.description=Simple invoicing, multiple payment options, expense and vendor management, and more!
+      swag: enable
+      swag_proto: http
+      swag_url: biz.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://biz.${MY_TLD}
+      homepage.group: Professional Services
+      homepage.name: Invoice Ninja
+      homepage.href: https://biz.${MY_TLD}
+      homepage.icon: invoiceninja.svg
+      homepage.description: Simple invoicing, multiple payment options, expense and vendor management, and more!
     networks:
       default: null
     ports:
@@ -1922,16 +1924,16 @@ services:
     container_name: it-tools
     image: ghcr.io/corentinth/it-tools:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_url=itt.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://itt.${MY_TLD}
-      - homepage.group=Code/DevOps
-      - homepage.name=IT-Tools
-      - homepage.href=https://itt.${MY_TLD}
-      - homepage.icon=it-tools.svg
-      - homepage.description=Useful tools for developers and people working in IT
+      swag: enable
+      swag_proto: http
+      swag_url: itt.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://itt.${MY_TLD}
+      homepage.group: Code/DevOps
+      homepage.name: IT-Tools
+      homepage.href: https://itt.${MY_TLD}
+      homepage.icon: it-tools.svg
+      homepage.description: Useful tools for developers and people working in IT
     networks:
       default: null
     ports:
@@ -1979,11 +1981,11 @@ services:
   jitsi-etherpad:
     container_name: jitsi-etherpad
     environment:
-      - TITLE=${JITSI__ETHERPAD_TITLE}
-      - DEFAULT_PAD_TEXT=${JITSI__ETHERPAD_DEFAULT_PAD_TEXT}
-      - SKIN_NAME=${JITSI__ETHERPAD_SKIN_NAME}
-      - SKIN_VARIANTS=${JITSI__ETHERPAD_SKIN_VARIANTS}
-      - SUPPRESS_ERRORS_IN_PAD_TEXT=true
+      TITLE: ${JITSI__ETHERPAD_TITLE}
+      DEFAULT_PAD_TEXT: ${JITSI__ETHERPAD_DEFAULT_PAD_TEXT}
+      SKIN_NAME: ${JITSI__ETHERPAD_SKIN_NAME}
+      SKIN_VARIANTS: ${JITSI__ETHERPAD_SKIN_VARIANTS}
+      SUPPRESS_ERRORS_IN_PAD_TEXT: true
     image: etherpad/etherpad:1.8.6
     networks:
       default: null
@@ -1997,50 +1999,50 @@ services:
         condition: service_started
         required: true
     environment:
-      - AUTOSCALER_SIDECAR_KEY_FILE
-      - AUTOSCALER_SIDECAR_KEY_ID
-      - AUTOSCALER_SIDECAR_GROUP_NAME
-      - AUTOSCALER_SIDECAR_HOST_ID
-      - AUTOSCALER_SIDECAR_INSTANCE_ID
-      - AUTOSCALER_SIDECAR_PORT
-      - AUTOSCALER_SIDECAR_REGION
-      - AUTOSCALER_SIDECAR_SHUTDOWN_POLLING_INTERVAL
-      - AUTOSCALER_SIDECAR_STATS_POLLING_INTERVAL
-      - AUTOSCALER_URL
-      - CHROMIUM_FLAGS
-      - DISPLAY=:0
-      - ENABLE_STATS_D
-      - JIBRI_WEBHOOK_SUBSCRIBERS
-      - JIBRI_HTTP_API_EXTERNAL_PORT
-      - JIBRI_HTTP_API_INTERNAL_PORT
-      - JIBRI_RECORDING_RESOLUTION
-      - JIBRI_RECORDING_VIDEO_ENCODE_PRESET
-      - JIBRI_RECORDING_CONSTANT_RATE_FACTOR
-      - JIBRI_RECORDING_FRAMERATE
-      - JIBRI_RECORDING_QUEUE_SIZE
-      - JIBRI_RECORDING_STREAMING_MAX_BITRATE
-      - JIBRI_USAGE_TIMEOUT
-      - JIBRI_XMPP_USER
-      - JIBRI_XMPP_PASSWORD=${JITSI__JIBRI_XMPP_PASSWORD}
-      - JIBRI_BREWERY_MUC
-      - JIBRI_RECORDER_USER=jibri-recorder
-      - JIBRI_RECORDER_PASSWORD=${JITSI__JIBRI_RECORDER_PASSWORD}
-      - JIBRI_RECORDING_DIR
-      - JIBRI_FINALIZE_RECORDING_SCRIPT_PATH
-      - JIBRI_STRIP_DOMAIN_JID
-      - JIBRI_STATSD_HOST
-      - JIBRI_STATSD_PORT
-      - LOCAL_ADDRESS
-      - PUBLIC_URL=${JITSI__PUBLIC_URL}
-      - TZ=${JITSI__TZ}
-      - XMPP_AUTH_DOMAIN
-      - XMPP_DOMAIN
-      - XMPP_INTERNAL_MUC_DOMAIN
-      - XMPP_MUC_DOMAIN
-      - XMPP_RECORDER_DOMAIN
-      - XMPP_SERVER=
-      - XMPP_PORT
-      - XMPP_TRUST_ALL_CERTS
+      AUTOSCALER_SIDECAR_KEY_FILE: 
+      AUTOSCALER_SIDECAR_KEY_ID: 
+      AUTOSCALER_SIDECAR_GROUP_NAME: 
+      AUTOSCALER_SIDECAR_HOST_ID: 
+      AUTOSCALER_SIDECAR_INSTANCE_ID: 
+      AUTOSCALER_SIDECAR_PORT: 
+      AUTOSCALER_SIDECAR_REGION: 
+      AUTOSCALER_SIDECAR_SHUTDOWN_POLLING_INTERVAL: 
+      AUTOSCALER_SIDECAR_STATS_POLLING_INTERVAL: 
+      AUTOSCALER_URL: 
+      CHROMIUM_FLAGS: 
+      DISPLAY: :0
+      ENABLE_STATS_D: 
+      JIBRI_WEBHOOK_SUBSCRIBERS: 
+      JIBRI_HTTP_API_EXTERNAL_PORT: 
+      JIBRI_HTTP_API_INTERNAL_PORT: 
+      JIBRI_RECORDING_RESOLUTION: 
+      JIBRI_RECORDING_VIDEO_ENCODE_PRESET: 
+      JIBRI_RECORDING_CONSTANT_RATE_FACTOR: 
+      JIBRI_RECORDING_FRAMERATE: 
+      JIBRI_RECORDING_QUEUE_SIZE: 
+      JIBRI_RECORDING_STREAMING_MAX_BITRATE: 
+      JIBRI_USAGE_TIMEOUT: 
+      JIBRI_XMPP_USER: 
+      JIBRI_XMPP_PASSWORD: ${JITSI__JIBRI_XMPP_PASSWORD}
+      JIBRI_BREWERY_MUC: 
+      JIBRI_RECORDER_USER: jibri-recorder
+      JIBRI_RECORDER_PASSWORD: ${JITSI__JIBRI_RECORDER_PASSWORD}
+      JIBRI_RECORDING_DIR: 
+      JIBRI_FINALIZE_RECORDING_SCRIPT_PATH: 
+      JIBRI_STRIP_DOMAIN_JID: 
+      JIBRI_STATSD_HOST: 
+      JIBRI_STATSD_PORT: 
+      LOCAL_ADDRESS: 
+      PUBLIC_URL: ${JITSI__PUBLIC_URL}
+      TZ: ${JITSI__TZ}
+      XMPP_AUTH_DOMAIN: 
+      XMPP_DOMAIN:
+      XMPP_INTERNAL_MUC_DOMAIN: 
+      XMPP_MUC_DOMAIN: 
+      XMPP_RECORDER_DOMAIN: 
+      XMPP_SERVER:
+      XMPP_PORT: 
+      XMPP_TRUST_ALL_CERTS: 
     image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable}
     networks:
       default: null
@@ -2059,61 +2061,61 @@ services:
         condition: service_started
         required: true
     environment:
-      - AUTH_TYPE
-      - BRIDGE_AVG_PARTICIPANT_STRESS
-      - BRIDGE_STRESS_THRESHOLD
-      - ENABLE_AUTH
-      - ENABLE_AUTO_OWNER
-      - ENABLE_CODEC_VP8
-      - ENABLE_CODEC_VP9
-      - ENABLE_CODEC_H264
-      - ENABLE_CODEC_OPUS_RED
-      - ENABLE_JVB_XMPP_SERVER
-      - ENABLE_OCTO
-      - ENABLE_RECORDING=1
-      - ENABLE_SCTP
-      - ENABLE_AUTO_LOGIN
-      - JICOFO_AUTH_LIFETIME
-      - JICOFO_AUTH_PASSWORD=${JITSI__JICOFO_AUTH_PASSWORD}
-      - JICOFO_AUTH_TYPE
-      - JICOFO_BRIDGE_REGION_GROUPS
-      - JICOFO_ENABLE_AUTH
-      - JICOFO_ENABLE_BRIDGE_HEALTH_CHECKS
-      - JICOFO_CONF_INITIAL_PARTICIPANT_WAIT_TIMEOUT
-      - JICOFO_CONF_SINGLE_PARTICIPANT_TIMEOUT
-      - JICOFO_CONF_SOURCE_SIGNALING_DELAYS
-      - JICOFO_CONF_MAX_AUDIO_SENDERS
-      - JICOFO_CONF_MAX_VIDEO_SENDERS
-      - JICOFO_CONF_STRIP_SIMULCAST
-      - JICOFO_CONF_SSRC_REWRITING
-      - JICOFO_ENABLE_HEALTH_CHECKS
-      - JICOFO_ENABLE_REST
-      - JICOFO_HEALTH_CHECKS_USE_PRESENCE
-      - JICOFO_MULTI_STREAM_BACKWARD_COMPAT
-      - JICOFO_OCTO_REGION
-      - JIBRI_BREWERY_MUC
-      - JIBRI_REQUEST_RETRIES
-      - JIBRI_PENDING_TIMEOUT
-      - JIGASI_BREWERY_MUC
-      - JIGASI_SIP_URI
-      - JVB_BREWERY_MUC
-      - JVB_XMPP_AUTH_DOMAIN
-      - JVB_XMPP_INTERNAL_MUC_DOMAIN
-      - JVB_XMPP_PORT
-      - JVB_XMPP_SERVER
-      - MAX_BRIDGE_PARTICIPANTS
-      - OCTO_BRIDGE_SELECTION_STRATEGY
-      - SENTRY_DSN="${JICOFO_SENTRY_DSN:-0}"
-      - SENTRY_ENVIRONMENT
-      - SENTRY_RELEASE
-      - TZ=${JITSI__JIGAGI_SIP_SERVER}
-      - XMPP_DOMAIN
-      - XMPP_AUTH_DOMAIN
-      - XMPP_INTERNAL_MUC_DOMAIN
-      - XMPP_MUC_DOMAIN
-      - XMPP_RECORDER_DOMAIN
-      - XMPP_SERVER=
-      - XMPP_PORT
+      AUTH_TYPE: 
+      BRIDGE_AVG_PARTICIPANT_STRESS: 
+      BRIDGE_STRESS_THRESHOLD: 
+      ENABLE_AUTH: 
+      ENABLE_AUTO_OWNER: 
+      ENABLE_CODEC_VP8: 
+      ENABLE_CODEC_VP9: 
+      ENABLE_CODEC_H264: 
+      ENABLE_CODEC_OPUS_RED: 
+      ENABLE_JVB_XMPP_SERVER: 
+      ENABLE_OCTO: 
+      ENABLE_RECORDING: 1
+      ENABLE_SCTP: 
+      ENABLE_AUTO_LOGIN: 
+      JICOFO_AUTH_LIFETIME: 
+      JICOFO_AUTH_PASSWORD: ${JITSI__JICOFO_AUTH_PASSWORD}
+      JICOFO_AUTH_TYPE: 
+      JICOFO_BRIDGE_REGION_GROUPS: 
+      JICOFO_ENABLE_AUTH: 
+      JICOFO_ENABLE_BRIDGE_HEALTH_CHECKS: 
+      JICOFO_CONF_INITIAL_PARTICIPANT_WAIT_TIMEOUT: 
+      JICOFO_CONF_SINGLE_PARTICIPANT_TIMEOUT: 
+      JICOFO_CONF_SOURCE_SIGNALING_DELAYS: 
+      JICOFO_CONF_MAX_AUDIO_SENDERS: 
+      JICOFO_CONF_MAX_VIDEO_SENDERS: 
+      JICOFO_CONF_STRIP_SIMULCAST: 
+      JICOFO_CONF_SSRC_REWRITING: 
+      JICOFO_ENABLE_HEALTH_CHECKS: 
+      JICOFO_ENABLE_REST: 
+      JICOFO_HEALTH_CHECKS_USE_PRESENCE: 
+      JICOFO_MULTI_STREAM_BACKWARD_COMPAT: 
+      JICOFO_OCTO_REGION: 
+      JIBRI_BREWERY_MUC: 
+      JIBRI_REQUEST_RETRIES: 
+      JIBRI_PENDING_TIMEOUT: 
+      JIGASI_BREWERY_MUC: 
+      JIGASI_SIP_URI: 
+      JVB_BREWERY_MUC: 
+      JVB_XMPP_AUTH_DOMAIN: 
+      JVB_XMPP_INTERNAL_MUC_DOMAIN: 
+      JVB_XMPP_PORT: 
+      JVB_XMPP_SERVER: 
+      MAX_BRIDGE_PARTICIPANTS: 
+      OCTO_BRIDGE_SELECTION_STRATEGY: 
+      SENTRY_DSN: "${JICOFO_SENTRY_DSN:-0}"
+      SENTRY_ENVIRONMENT: 
+      SENTRY_RELEASE: 
+      TZ: ${JITSI__JIGAGI_SIP_SERVER}
+      XMPP_DOMAIN: 
+      XMPP_AUTH_DOMAIN: 
+      XMPP_INTERNAL_MUC_DOMAIN: 
+      XMPP_MUC_DOMAIN: 
+      XMPP_RECORDER_DOMAIN: 
+      XMPP_SERVER: 
+      XMPP_PORT: 
     image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable}
     networks:
       default: null
@@ -2134,47 +2136,47 @@ services:
         condition: service_started
         required: true
     environment:
-      - ENABLE_AUTH=1
-      - ENABLE_GUESTS=1
-      - XMPP_AUTH_DOMAIN
-      - XMPP_GUEST_DOMAIN
-      - XMPP_MUC_DOMAIN
-      - XMPP_INTERNAL_MUC_DOMAIN
-      - XMPP_SERVER
-      - XMPP_PORT
-      - XMPP_DOMAIN
-      - PUBLIC_URL=${JITSI__PUBLIC_URL}
-      - JIGASI_DISABLE_SIP
-      - JIGASI_SIP_URI=${JITSI__SIP_URI}
-      - JIGASI_SIP_PASSWORD=${JITSI__JIGAGI_SIP_PASSWORD}
-      - JIGASI_SIP_SERVER=${JITSI__JIGAGI_SIP_SERVER}
-      - JIGASI_SIP_PORT=${JITSI__JIGAGI_SIP_PORT}
-      - JIGASI_SIP_TRANSPORT=${JITSI__JIGAGI_SIP_TRANSPORT}
-      - JIGASI_SIP_DEFAULT_ROOM
-      - JIGASI_XMPP_USER
-      - JIGASI_XMPP_PASSWORD=${JITSI__JIGASI_XMPP_PASSWORD}
-      - JIGASI_BREWERY_MUC
-      - JIGASI_PORT_MIN
-      - JIGASI_PORT_MAX
-      - JIGASI_HEALTH_CHECK_SIP_URI
-      - JIGASI_HEALTH_CHECK_INTERVAL
-      - JIGASI_SIP_KEEP_ALIVE_METHOD
-      - JIGASI_ENABLE_SDES_SRTP
-      - ENABLE_TRANSCRIPTIONS
-      - JIGASI_TRANSCRIBER_ADVERTISE_URL
-      - JIGASI_TRANSCRIBER_RECORD_AUDIO
-      - JIGASI_TRANSCRIBER_SEND_TXT
-      - GC_PROJECT_ID
-      - GC_PRIVATE_KEY_ID
-      - GC_PRIVATE_KEY
-      - GC_CLIENT_EMAIL
-      - GC_CLIENT_ID
-      - GC_CLIENT_CERT_URL
-      - SHUTDOWN_REST_ENABLED
-      - SENTRY_DSN="${JIGASI_SENTRY_DSN:-0}"
-      - SENTRY_ENVIRONMENT
-      - SENTRY_RELEASE
-      - TZ=${JITSI__TZ}
+      ENABLE_AUTH: 1
+      ENABLE_GUESTS: 1
+      XMPP_AUTH_DOMAIN:
+      XMPP_GUEST_DOMAIN:
+      XMPP_MUC_DOMAIN:
+      XMPP_INTERNAL_MUC_DOMAIN:
+      XMPP_SERVER:
+      XMPP_PORT:
+      XMPP_DOMAIN:
+      PUBLIC_URL: ${JITSI__PUBLIC_URL}
+      JIGASI_DISABLE_SIP:
+      JIGASI_SIP_URI: ${JITSI__SIP_URI}
+      JIGASI_SIP_PASSWORD: ${JITSI__JIGAGI_SIP_PASSWORD}
+      JIGASI_SIP_SERVER: ${JITSI__JIGAGI_SIP_SERVER}
+      JIGASI_SIP_PORT: ${JITSI__JIGAGI_SIP_PORT}
+      JIGASI_SIP_TRANSPORT: ${JITSI__JIGAGI_SIP_TRANSPORT}
+      JIGASI_SIP_DEFAULT_ROOM:
+      JIGASI_XMPP_USER:
+      JIGASI_XMPP_PASSWORD: ${JITSI__JIGASI_XMPP_PASSWORD}
+      JIGASI_BREWERY_MUC:
+      JIGASI_PORT_MIN:
+      JIGASI_PORT_MAX:
+      JIGASI_HEALTH_CHECK_SIP_URI:
+      JIGASI_HEALTH_CHECK_INTERVAL:
+      JIGASI_SIP_KEEP_ALIVE_METHOD:
+      JIGASI_ENABLE_SDES_SRTP:
+      ENABLE_TRANSCRIPTIONS:
+      JIGASI_TRANSCRIBER_ADVERTISE_URL:
+      JIGASI_TRANSCRIBER_RECORD_AUDIO:
+      JIGASI_TRANSCRIBER_SEND_TXT:
+      GC_PROJECT_ID:
+      GC_PRIVATE_KEY_ID:
+      GC_PRIVATE_KEY:
+      GC_CLIENT_EMAIL:
+      GC_CLIENT_ID:
+      GC_CLIENT_CERT_URL:
+      SHUTDOWN_REST_ENABLED:
+      SENTRY_DSN: "${JIGASI_SENTRY_DSN:-0}"
+      SENTRY_ENVIRONMENT:
+      SENTRY_RELEASE:
+      TZ: ${JITSI__TZ}
     image: jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable}
     networks:
       default: null
@@ -2201,39 +2203,39 @@ services:
         condition: service_started
         required: true
     environment:
-      - DOCKER_HOST_ADDRESS
-      - ENABLE_COLIBRI_WEBSOCKET
-      - ENABLE_JVB_XMPP_SERVER
-      - ENABLE_OCTO
-      - JVB_ADVERTISE_IPS
-      - JVB_ADVERTISE_PRIVATE_CANDIDATES
-      - JVB_AUTH_USER
-      - JVB_AUTH_PASSWORD=${JITSI__JVB_AUTH_PASSWORD}
-      - JVB_BREWERY_MUC
-      - JVB_DISABLE_STUN
-      - JVB_PORT
-      - JVB_MUC_NICKNAME
-      - JVB_STUN_SERVERS
-      - JVB_OCTO_BIND_ADDRESS
-      - JVB_OCTO_REGION
-      - JVB_OCTO_RELAY_ID
-      - JVB_WS_DOMAIN
-      - JVB_WS_SERVER_ID
-      - JVB_XMPP_AUTH_DOMAIN
-      - JVB_XMPP_INTERNAL_MUC_DOMAIN
-      - JVB_XMPP_PORT
-      - JVB_XMPP_SERVER
-      - PUBLIC_URL=${JITSI__PUBLIC_URL}
-      - SENTRY_DSN="${JVB_SENTRY_DSN:-0}"
-      - SENTRY_ENVIRONMENT
-      - SENTRY_RELEASE
-      - COLIBRI_REST_ENABLED
-      - SHUTDOWN_REST_ENABLED
-      - TZ=${JITSI__JIGAGI_SIP_SERVER}
-      - XMPP_AUTH_DOMAIN
-      - XMPP_INTERNAL_MUC_DOMAIN
-      - XMPP_SERVER=
-      - XMPP_PORT
+      DOCKER_HOST_ADDRESS:
+      ENABLE_COLIBRI_WEBSOCKET:
+      ENABLE_JVB_XMPP_SERVER:
+      ENABLE_OCTO:
+      JVB_ADVERTISE_IPS:
+      JVB_ADVERTISE_PRIVATE_CANDIDATES:
+      JVB_AUTH_USER:
+      JVB_AUTH_PASSWORD: ${JITSI__JVB_AUTH_PASSWORD}
+      JVB_BREWERY_MUC:
+      JVB_DISABLE_STUN:
+      JVB_PORT:
+      JVB_MUC_NICKNAME:
+      JVB_STUN_SERVERS:
+      JVB_OCTO_BIND_ADDRESS:
+      JVB_OCTO_REGION:
+      JVB_OCTO_RELAY_ID:
+      JVB_WS_DOMAIN:
+      JVB_WS_SERVER_ID:
+      JVB_XMPP_AUTH_DOMAIN:
+      JVB_XMPP_INTERNAL_MUC_DOMAIN:
+      JVB_XMPP_PORT:
+      JVB_XMPP_SERVER:
+      PUBLIC_URL: ${JITSI__PUBLIC_URL}
+      SENTRY_DSN: "${JVB_SENTRY_DSN:-0}"
+      SENTRY_ENVIRONMENT:
+      SENTRY_RELEASE:
+      COLIBRI_REST_ENABLED:
+      SHUTDOWN_REST_ENABLED:
+      TZ: ${JITSI__JIGAGI_SIP_SERVER}
+      XMPP_AUTH_DOMAIN:
+      XMPP_INTERNAL_MUC_DOMAIN:
+      XMPP_SERVER:
+      XMPP_PORT:
     image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable}
     networks:
       default: null
@@ -2251,92 +2253,92 @@ services:
   jitsi-prosody:
     container_name: xmpp.meet.jitsi
     environment:
-      - AUTH_TYPE
-      - DISABLE_POLLS
-      - ENABLE_AUTH
-      - ENABLE_AV_MODERATION
-      - ENABLE_BREAKOUT_ROOMS
-      - ENABLE_END_CONFERENCE
-      - ENABLE_GUESTS=1
-      - ENABLE_IPV6
-      - ENABLE_LOBBY
-      - ENABLE_RECORDING=1
-      - ENABLE_XMPP_WEBSOCKET
-      - ENABLE_JAAS_COMPONENTS
-      - GC_TYPE
-      - GC_INC_TH
-      - GC_INC_SPEED
-      - GC_INC_STEP_SIZE
-      - GC_GEN_MIN_TH
-      - GC_GEN_MAX_TH
-      - GLOBAL_CONFIG
-      - GLOBAL_MODULES
-      - JIBRI_RECORDER_USER
-      - JIBRI_RECORDER_PASSWORD=${JITSI__JIBRI_RECORDER_PASSWORD}
-      - JIBRI_XMPP_USER
-      - JIBRI_XMPP_PASSWORD=${JITSI__JIBRI_XMPP_PASSWORD}
-      - JICOFO_AUTH_PASSWORD=${JITSI__JICOFO_AUTH_PASSWORD}
-      - JICOFO_COMPONENT_SECRET
-      - JIGASI_XMPP_USER
-      - JIGASI_XMPP_PASSWORD=${JITSI__JIGASI_XMPP_PASSWORD}
-      - JVB_AUTH_USER
-      - JVB_AUTH_PASSWORD=${JITSI__JVB_AUTH_PASSWORD}
-      - JWT_APP_ID
-      - JWT_APP_SECRET
-      - JWT_ACCEPTED_ISSUERS
-      - JWT_ACCEPTED_AUDIENCES
-      - JWT_ASAP_KEYSERVER
-      - JWT_ALLOW_EMPTY
-      - JWT_AUTH_TYPE
-      - JWT_ENABLE_DOMAIN_VERIFICATION
-      - JWT_TOKEN_AUTH_MODULE
-      - MATRIX_UVS_URL
-      - MATRIX_UVS_ISSUER
-      - MATRIX_UVS_AUTH_TOKEN
-      - MATRIX_UVS_SYNC_POWER_LEVELS
-      - LOG_LEVEL
-      - LDAP_AUTH_METHOD
-      - LDAP_BASE
-      - LDAP_BINDDN
-      - LDAP_BINDPW
-      - LDAP_FILTER
-      - LDAP_VERSION
-      - LDAP_TLS_CIPHERS
-      - LDAP_TLS_CHECK_PEER
-      - LDAP_TLS_CACERT_FILE
-      - LDAP_TLS_CACERT_DIR
-      - LDAP_START_TLS
-      - LDAP_URL
-      - LDAP_USE_TLS
-      - MAX_PARTICIPANTS
-      - PROSODY_AUTH_TYPE
-      - PROSODY_RESERVATION_ENABLED
-      - PROSODY_RESERVATION_REST_BASE_URL
-      - PROSODY_ENABLE_RATE_LIMITS
-      - PROSODY_RATE_LIMIT_LOGIN_RATE
-      - PROSODY_RATE_LIMIT_SESSION_RATE
-      - PROSODY_RATE_LIMIT_TIMEOUT
-      - PROSODY_RATE_LIMIT_ALLOW_RANGES
-      - PROSODY_RATE_LIMIT_CACHE_SIZE
-      - PUBLIC_URL=${JITSI__PUBLIC_URL}
-      - TURN_CREDENTIALS
-      - TURN_HOST
-      - TURNS_HOST
-      - TURN_PORT
-      - TURNS_PORT
-      - TURN_TRANSPORT
-      - TZ=${JITSI__JIGAGI_SIP_SERVER}
-      - XMPP_DOMAIN
-      - XMPP_AUTH_DOMAIN
-      - XMPP_GUEST_DOMAIN
-      - XMPP_MUC_DOMAIN
-      - XMPP_INTERNAL_MUC_DOMAIN
-      - XMPP_MODULES
-      - XMPP_MUC_MODULES
-      - XMPP_MUC_CONFIGURATION
-      - XMPP_INTERNAL_MUC_MODULES
-      - XMPP_RECORDER_DOMAIN
-      - XMPP_PORT
+      AUTH_TYPE:
+      DISABLE_POLLS:
+      ENABLE_AUTH:
+      ENABLE_AV_MODERATION:
+      ENABLE_BREAKOUT_ROOMS:
+      ENABLE_END_CONFERENCE:
+      ENABLE_GUESTS: 1
+      ENABLE_IPV6:
+      ENABLE_LOBBY:
+      ENABLE_RECORDING: 1
+      ENABLE_XMPP_WEBSOCKET:
+      ENABLE_JAAS_COMPONENTS:
+      GC_TYPE:
+      GC_INC_TH:
+      GC_INC_SPEED:
+      GC_INC_STEP_SIZE:
+      GC_GEN_MIN_TH:
+      GC_GEN_MAX_TH:
+      GLOBAL_CONFIG:
+      GLOBAL_MODULES:
+      JIBRI_RECORDER_USER:
+      JIBRI_RECORDER_PASSWORD: ${JITSI__JIBRI_RECORDER_PASSWORD}
+      JIBRI_XMPP_USER:
+      JIBRI_XMPP_PASSWORD: ${JITSI__JIBRI_XMPP_PASSWORD}
+      JICOFO_AUTH_PASSWORD: ${JITSI__JICOFO_AUTH_PASSWORD}
+      JICOFO_COMPONENT_SECRET:
+      JIGASI_XMPP_USER:
+      JIGASI_XMPP_PASSWORD: ${JITSI__JIGASI_XMPP_PASSWORD}
+      JVB_AUTH_USER:
+      JVB_AUTH_PASSWORD: ${JITSI__JVB_AUTH_PASSWORD}
+      JWT_APP_ID:
+      JWT_APP_SECRET:
+      JWT_ACCEPTED_ISSUERS:
+      JWT_ACCEPTED_AUDIENCES:
+      JWT_ASAP_KEYSERVER:
+      JWT_ALLOW_EMPTY:
+      JWT_AUTH_TYPE:
+      JWT_ENABLE_DOMAIN_VERIFICATION:
+      JWT_TOKEN_AUTH_MODULE:
+      MATRIX_UVS_URL:
+      MATRIX_UVS_ISSUER:
+      MATRIX_UVS_AUTH_TOKEN:
+      MATRIX_UVS_SYNC_POWER_LEVELS:
+      LOG_LEVEL:
+      LDAP_AUTH_METHOD:
+      LDAP_BASE:
+      LDAP_BINDDN:
+      LDAP_BINDPW:
+      LDAP_FILTER:
+      LDAP_VERSION:
+      LDAP_TLS_CIPHERS:
+      LDAP_TLS_CHECK_PEER:
+      LDAP_TLS_CACERT_FILE:
+      LDAP_TLS_CACERT_DIR:
+      LDAP_START_TLS:
+      LDAP_URL:
+      LDAP_USE_TLS:
+      MAX_PARTICIPANTS:
+      PROSODY_AUTH_TYPE:
+      PROSODY_RESERVATION_ENABLED:
+      PROSODY_RESERVATION_REST_BASE_URL:
+      PROSODY_ENABLE_RATE_LIMITS:
+      PROSODY_RATE_LIMIT_LOGIN_RATE:
+      PROSODY_RATE_LIMIT_SESSION_RATE:
+      PROSODY_RATE_LIMIT_TIMEOUT:
+      PROSODY_RATE_LIMIT_ALLOW_RANGES:
+      PROSODY_RATE_LIMIT_CACHE_SIZE:
+      PUBLIC_URL: ${JITSI__PUBLIC_URL}
+      TURN_CREDENTIALS:
+      TURN_HOST:
+      TURNS_HOST:
+      TURN_PORT:
+      TURNS_PORT:
+      TURN_TRANSPORT:
+      TZ: ${JITSI__JIGAGI_SIP_SERVER}
+      XMPP_DOMAIN:
+      XMPP_AUTH_DOMAIN:
+      XMPP_GUEST_DOMAIN:
+      XMPP_MUC_DOMAIN:
+      XMPP_INTERNAL_MUC_DOMAIN:
+      XMPP_MODULES:
+      XMPP_MUC_MODULES:
+      XMPP_MUC_CONFIGURATION:
+      XMPP_INTERNAL_MUC_MODULES:
+      XMPP_RECORDER_DOMAIN:
+      XMPP_PORT:
     expose:
       - ${XMPP_PORT:-5222}
       - "5347"
@@ -2361,161 +2363,161 @@ services:
   jitsi-web:
     container_name: meet.jitsi
     environment:
-      - AMPLITUDE_ID
-      - ANALYTICS_SCRIPT_URLS
-      - ANALYTICS_WHITELISTED_EVENTS
-      - AUDIO_QUALITY_OPUS_BITRATE
-      - AUTO_CAPTION_ON_RECORD
-      - BRANDING_DATA_URL
-      - CALLSTATS_CUSTOM_SCRIPT_URL
-      - CALLSTATS_ID
-      - CALLSTATS_SECRET
-      - CHROME_EXTENSION_BANNER_JSON
-      - COLIBRI_WEBSOCKET_PORT
-      - CONFCODE_URL
-      - CONFIG_EXTERNAL_CONNECT
-      - DEFAULT_LANGUAGE
-      - DEPLOYMENTINFO_ENVIRONMENT
-      - DEPLOYMENTINFO_ENVIRONMENT_TYPE
-      - DEPLOYMENTINFO_REGION
-      - DEPLOYMENTINFO_SHARD
-      - DEPLOYMENTINFO_USERREGION
-      - DESKTOP_SHARING_FRAMERATE_MIN
-      - DESKTOP_SHARING_FRAMERATE_MAX
-      - DIALIN_NUMBERS_URL
-      - DIALOUT_AUTH_URL
-      - DIALOUT_CODES_URL
-      - DISABLE_AUDIO_LEVELS
-      - DISABLE_DEEP_LINKING
-      - DISABLE_GRANT_MODERATOR
-      - DISABLE_HTTPS
-      - DISABLE_KICKOUT
-      - DISABLE_LOCAL_RECORDING
-      - DISABLE_POLLS
-      - DISABLE_PRIVATE_CHAT
-      - DISABLE_PROFILE
-      - DISABLE_REACTIONS
-      - DISABLE_REMOTE_VIDEO_MENU
-      - DISABLE_START_FOR_ALL
-      - DROPBOX_APPKEY
-      - DROPBOX_REDIRECT_URI
-      - DYNAMIC_BRANDING_URL
-      - ENABLE_AUDIO_PROCESSING
-      - ENABLE_AUTH
-      - ENABLE_BREAKOUT_ROOMS
-      - ENABLE_CALENDAR
-      - ENABLE_COLIBRI_WEBSOCKET
-      - ENABLE_E2EPING
-      - ENABLE_FILE_RECORDING_SHARING
-      - ENABLE_GUESTS=1
-      - ENABLE_HSTS
-      - ENABLE_HTTP_REDIRECT
-      - ENABLE_IPV6
-      - ENABLE_LETSENCRYPT
-      - ENABLE_LIPSYNC
-      - ENABLE_NO_AUDIO_DETECTION
-      - ENABLE_NOISY_MIC_DETECTION
-      - ENABLE_OCTO
-      - ENABLE_OPUS_RED
-      - ENABLE_PREJOIN_PAGE
-      - ENABLE_P2P
-      - ENABLE_WELCOME_PAGE
-      - ENABLE_CLOSE_PAGE
-      - ENABLE_LIVESTREAMING
-      - ENABLE_LIVESTREAMING_DATA_PRIVACY_LINK
-      - ENABLE_LIVESTREAMING_HELP_LINK
-      - ENABLE_LIVESTREAMING_TERMS_LINK
-      - ENABLE_LIVESTREAMING_VALIDATOR_REGEXP_STRING
-      - ENABLE_LOCAL_RECORDING_NOTIFY_ALL_PARTICIPANT
-      - ENABLE_LOCAL_RECORDING_SELF_START
-      - ENABLE_RECORDING=1
-      - ENABLE_REMB
-      - ENABLE_REQUIRE_DISPLAY_NAME
-      - ENABLE_SERVICE_RECORDING
-      - ENABLE_SIMULCAST
-      - ENABLE_STATS_ID
-      - ENABLE_STEREO
-      - ENABLE_SUBDOMAINS
-      - ENABLE_TALK_WHILE_MUTED
-      - ENABLE_TCC
-      - ENABLE_TRANSCRIPTIONS
-      - ENABLE_XMPP_WEBSOCKET
-      - ENABLE_JAAS_COMPONENTS
-      - ETHERPAD_PUBLIC_URL
-      - ETHERPAD_URL_BASE=${JITSI__ETHERPAD_URL_BASE}
-      - E2EPING_NUM_REQUESTS
-      - E2EPING_MAX_CONFERENCE_SIZE
-      - E2EPING_MAX_MESSAGE_PER_SECOND
-      - GOOGLE_ANALYTICS_ID
-      - GOOGLE_API_APP_CLIENT_ID
-      - HIDE_PREMEETING_BUTTONS
-      - HIDE_PREJOIN_DISPLAY_NAME
-      - HIDE_PREJOIN_EXTRA_BUTTONS
-      - INVITE_SERVICE_URL
-      - LETSENCRYPT_DOMAIN
-      - LETSENCRYPT_EMAIL
-      - LETSENCRYPT_USE_STAGING
-      - MATOMO_ENDPOINT
-      - MATOMO_SITE_ID
-      - MICROSOFT_API_APP_CLIENT_ID
-      - NGINX_RESOLVER
-      - NGINX_WORKER_PROCESSES
-      - NGINX_WORKER_CONNECTIONS
-      - PEOPLE_SEARCH_URL
-      - PREFERRED_LANGUAGE
-      - PUBLIC_URL=${JITSI__PUBLIC_URL}
-      - P2P_PREFERRED_CODEC
-      - RESOLUTION
-      - RESOLUTION_MIN
-      - RESOLUTION_WIDTH
-      - RESOLUTION_WIDTH_MIN
-      - START_AUDIO_MUTED
-      - START_AUDIO_ONLY
-      - START_BITRATE
-      - START_SILENT
-      - START_WITH_AUDIO_MUTED
-      - START_VIDEO_MUTED
-      - START_WITH_VIDEO_MUTED
-      - TESTING_CAP_SCREENSHARE_BITRATE
-      - TESTING_OCTO_PROBABILITY
-      - TOKEN_AUTH_URL
-      - TOOLBAR_BUTTONS
-      - TRANSLATION_LANGUAGES
-      - TRANSLATION_LANGUAGES_HEAD
-      - TZ=${JITSI__JIGAGI_SIP_SERVER}
-      - USE_APP_LANGUAGE
-      - VIDEOQUALITY_BITRATE_H264_LOW
-      - VIDEOQUALITY_BITRATE_H264_STANDARD
-      - VIDEOQUALITY_BITRATE_H264_HIGH
-      - VIDEOQUALITY_BITRATE_VP8_LOW
-      - VIDEOQUALITY_BITRATE_VP8_STANDARD
-      - VIDEOQUALITY_BITRATE_VP8_HIGH
-      - VIDEOQUALITY_BITRATE_VP9_LOW
-      - VIDEOQUALITY_BITRATE_VP9_STANDARD
-      - VIDEOQUALITY_BITRATE_VP9_HIGH
-      - VIDEOQUALITY_ENFORCE_PREFERRED_CODEC
-      - VIDEOQUALITY_PREFERRED_CODEC
-      - XMPP_AUTH_DOMAIN
-      - XMPP_BOSH_URL_BASE
-      - XMPP_DOMAIN
-      - XMPP_GUEST_DOMAIN
-      - XMPP_MUC_DOMAIN
-      - XMPP_RECORDER_DOMAIN
-      - XMPP_PORT
-      - WHITEBOARD_ENABLED
-      - WHITEBOARD_COLLAB_SERVER_PUBLIC_URL
+      AMPLITUDE_ID:
+      ANALYTICS_SCRIPT_URLS:
+      ANALYTICS_WHITELISTED_EVENTS:
+      AUDIO_QUALITY_OPUS_BITRATE:
+      AUTO_CAPTION_ON_RECORD:
+      BRANDING_DATA_URL:
+      CALLSTATS_CUSTOM_SCRIPT_URL:
+      CALLSTATS_ID:
+      CALLSTATS_SECRET:
+      CHROME_EXTENSION_BANNER_JSON:
+      COLIBRI_WEBSOCKET_PORT:
+      CONFCODE_URL:
+      CONFIG_EXTERNAL_CONNECT:
+      DEFAULT_LANGUAGE:
+      DEPLOYMENTINFO_ENVIRONMENT:
+      DEPLOYMENTINFO_ENVIRONMENT_TYPE:
+      DEPLOYMENTINFO_REGION:
+      DEPLOYMENTINFO_SHARD:
+      DEPLOYMENTINFO_USERREGION:
+      DESKTOP_SHARING_FRAMERATE_MIN:
+      DESKTOP_SHARING_FRAMERATE_MAX:
+      DIALIN_NUMBERS_URL:
+      DIALOUT_AUTH_URL:
+      DIALOUT_CODES_URL:
+      DISABLE_AUDIO_LEVELS:
+      DISABLE_DEEP_LINKING:
+      DISABLE_GRANT_MODERATOR:
+      DISABLE_HTTPS:
+      DISABLE_KICKOUT:
+      DISABLE_LOCAL_RECORDING:
+      DISABLE_POLLS:
+      DISABLE_PRIVATE_CHAT:
+      DISABLE_PROFILE:
+      DISABLE_REACTIONS:
+      DISABLE_REMOTE_VIDEO_MENU:
+      DISABLE_START_FOR_ALL:
+      DROPBOX_APPKEY:
+      DROPBOX_REDIRECT_URI:
+      DYNAMIC_BRANDING_URL:
+      ENABLE_AUDIO_PROCESSING:
+      ENABLE_AUTH:
+      ENABLE_BREAKOUT_ROOMS:
+      ENABLE_CALENDAR:
+      ENABLE_COLIBRI_WEBSOCKET:
+      ENABLE_E2EPING:
+      ENABLE_FILE_RECORDING_SHARING:
+      ENABLE_GUESTS: 1
+      ENABLE_HSTS:
+      ENABLE_HTTP_REDIRECT:
+      ENABLE_IPV6:
+      ENABLE_LETSENCRYPT:
+      ENABLE_LIPSYNC:
+      ENABLE_NO_AUDIO_DETECTION:
+      ENABLE_NOISY_MIC_DETECTION:
+      ENABLE_OCTO:
+      ENABLE_OPUS_RED:
+      ENABLE_PREJOIN_PAGE:
+      ENABLE_P2P:
+      ENABLE_WELCOME_PAGE:
+      ENABLE_CLOSE_PAGE:
+      ENABLE_LIVESTREAMING:
+      ENABLE_LIVESTREAMING_DATA_PRIVACY_LINK:
+      ENABLE_LIVESTREAMING_HELP_LINK:
+      ENABLE_LIVESTREAMING_TERMS_LINK:
+      ENABLE_LIVESTREAMING_VALIDATOR_REGEXP_STRING:
+      ENABLE_LOCAL_RECORDING_NOTIFY_ALL_PARTICIPANT:
+      ENABLE_LOCAL_RECORDING_SELF_START:
+      ENABLE_RECORDING: 1
+      ENABLE_REMB:
+      ENABLE_REQUIRE_DISPLAY_NAME:
+      ENABLE_SERVICE_RECORDING:
+      ENABLE_SIMULCAST:
+      ENABLE_STATS_ID:
+      ENABLE_STEREO:
+      ENABLE_SUBDOMAINS:
+      ENABLE_TALK_WHILE_MUTED:
+      ENABLE_TCC:
+      ENABLE_TRANSCRIPTIONS:
+      ENABLE_XMPP_WEBSOCKET:
+      ENABLE_JAAS_COMPONENTS:
+      ETHERPAD_PUBLIC_URL:
+      ETHERPAD_URL_BASE: ${JITSI__ETHERPAD_URL_BASE}
+      E2EPING_NUM_REQUESTS:
+      E2EPING_MAX_CONFERENCE_SIZE:
+      E2EPING_MAX_MESSAGE_PER_SECOND:
+      GOOGLE_ANALYTICS_ID:
+      GOOGLE_API_APP_CLIENT_ID:
+      HIDE_PREMEETING_BUTTONS:
+      HIDE_PREJOIN_DISPLAY_NAME:
+      HIDE_PREJOIN_EXTRA_BUTTONS:
+      INVITE_SERVICE_URL:
+      LETSENCRYPT_DOMAIN:
+      LETSENCRYPT_EMAIL:
+      LETSENCRYPT_USE_STAGING:
+      MATOMO_ENDPOINT:
+      MATOMO_SITE_ID:
+      MICROSOFT_API_APP_CLIENT_ID:
+      NGINX_RESOLVER:
+      NGINX_WORKER_PROCESSES:
+      NGINX_WORKER_CONNECTIONS:
+      PEOPLE_SEARCH_URL:
+      PREFERRED_LANGUAGE:
+      PUBLIC_URL: ${JITSI__PUBLIC_URL}
+      P2P_PREFERRED_CODEC:
+      RESOLUTION:
+      RESOLUTION_MIN:
+      RESOLUTION_WIDTH:
+      RESOLUTION_WIDTH_MIN:
+      START_AUDIO_MUTED:
+      START_AUDIO_ONLY:
+      START_BITRATE:
+      START_SILENT:
+      START_WITH_AUDIO_MUTED:
+      START_VIDEO_MUTED:
+      START_WITH_VIDEO_MUTED:
+      TESTING_CAP_SCREENSHARE_BITRATE:
+      TESTING_OCTO_PROBABILITY:
+      TOKEN_AUTH_URL:
+      TOOLBAR_BUTTONS:
+      TRANSLATION_LANGUAGES:
+      TRANSLATION_LANGUAGES_HEAD:
+      TZ: ${JITSI__JIGAGI_SIP_SERVER}
+      USE_APP_LANGUAGE:
+      VIDEOQUALITY_BITRATE_H264_LOW:
+      VIDEOQUALITY_BITRATE_H264_STANDARD:
+      VIDEOQUALITY_BITRATE_H264_HIGH:
+      VIDEOQUALITY_BITRATE_VP8_LOW:
+      VIDEOQUALITY_BITRATE_VP8_STANDARD:
+      VIDEOQUALITY_BITRATE_VP8_HIGH:
+      VIDEOQUALITY_BITRATE_VP9_LOW:
+      VIDEOQUALITY_BITRATE_VP9_STANDARD:
+      VIDEOQUALITY_BITRATE_VP9_HIGH:
+      VIDEOQUALITY_ENFORCE_PREFERRED_CODEC:
+      VIDEOQUALITY_PREFERRED_CODEC:
+      XMPP_AUTH_DOMAIN:
+      XMPP_BOSH_URL_BASE:
+      XMPP_DOMAIN:
+      XMPP_GUEST_DOMAIN:
+      XMPP_MUC_DOMAIN:
+      XMPP_RECORDER_DOMAIN:
+      XMPP_PORT:
+      WHITEBOARD_ENABLED:
+      WHITEBOARD_COLLAB_SERVER_PUBLIC_URL:
     image: jitsi/web:${JITSI_IMAGE_VERSION:-stable}
     labels:
-      - swag=enable
-      - swag_proto=https
-      - swag_url=meet.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://meet.${MY_TLD}
-      - homepage.group=Social
-      - homepage.name=Jitsi
-      - homepage.href=https://meet.${MY_TLD}
-      - homepage.icon=jitsi.png
-      - homepage.description=Web Conferencing
+      swag: enable
+      swag_proto: https
+      swag_url: meet.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://meet.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Jitsi
+      homepage.href: https://meet.${MY_TLD}
+      homepage.icon: jitsi.png
+      homepage.description: Web Conferencing
     networks:
       default: null
     ports:
@@ -2561,25 +2563,25 @@ services:
   joplin:
     container_name: joplin
     environment:
-      - ACCOUNT_TYPES_ENABLED=true
-      - APP_PORT=${JOPLIN_APP_PORT}
-      - APP_BASE_URL=${JOPLIN_APP_BASE_URL}
-      - DB_CLIENT=pg
-      - INSTANCE_NAME='Joplin @ Rinoa'
-      - IS_ADMIN_INSTANCE=true
-      - MAILER_ENABLED=1
-      - MAILER_HOST=postal-SMTP
-      - MAILER_PORT=25
-      - MAILER_SECURITY=none
-      - MAILER_AUTH_USER=${POSTAL_SMTP_AUTH_USER}
-      - MAILER_AUTH_PASSWORD=${POSTAL_SMTP_AUTH_PASSWORD}
-      - MAILER_NOREPLY_NAME=Joplin @ Rinoa
-      - MAILER_NOREPLY_EMAIL=noreply@trez.wtf
-      - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD}
-      - POSTGRES_DATABASE=${JOPLIN_POSTGRES_DATABASE}
-      - POSTGRES_USER=${JOPLIN_POSTGRES_USER}
-      - POSTGRES_PORT=5432
-      - POSTGRES_HOST=joplin-db
+      ACCOUNT_TYPES_ENABLED: true
+      APP_PORT: ${JOPLIN_APP_PORT}
+      APP_BASE_URL: ${JOPLIN_APP_BASE_URL}
+      DB_CLIENT: pg
+      INSTANCE_NAME: 'Joplin @ Rinoa'
+      IS_ADMIN_INSTANCE: true
+      MAILER_ENABLED: 1
+      MAILER_HOST: postal-SMTP
+      MAILER_PORT: 25
+      MAILER_SECURITY: none
+      MAILER_AUTH_USER: ${POSTAL_SMTP_AUTH_USER}
+      MAILER_AUTH_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      MAILER_NOREPLY_NAME: Joplin @ Rinoa
+      MAILER_NOREPLY_EMAIL: noreply@trez.wtf
+      POSTGRES_PASSWORD: ${JOPLIN_POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${JOPLIN_POSTGRES_DATABASE}
+      POSTGRES_USER: ${JOPLIN_POSTGRES_USER}
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: joplin-db
     image: joplin/server:latest
     labels:
       homepage.group: Personal Services
@@ -2666,29 +2668,29 @@ services:
   librespeed:
     container_name: librespeed
     environment:
-      - DB_HOSTNAME=
-      - DB_NAME=
-      - DB_PASSWORD=
-      - DB_TYPE=sqlite
-      - DB_USERNAME=
-      - PASSWORD=
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - DOCKER_MODS=ghcr.io/themepark-dev/theme.park:librespeed
+      DB_HOSTNAME: 
+      DB_NAME: 
+      DB_PASSWORD: 
+      DB_TYPE: sqlite
+      DB_USERNAME: 
+      PASSWORD: 
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      DOCKER_MODS: ghcr.io/themepark-dev/theme.park:librespeed
     hostname: Rinoa
     image: lscr.io/linuxserver/librespeed:latest
     labels:
-      - homepage.group=System Administration
-      - homepage.name=LibreSpeed
-      - homepage.href=https://speed.${MY_TLD}
-      - homepage.icon=librespeed.png
-      - homepage.description=Speed test
-      - swag=enable
-      - swag_proto=http
-      - swag_url=speed.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://speed.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: LibreSpeed
+      homepage.href: https://speed.${MY_TLD}
+      homepage.icon: librespeed.png
+      homepage.description: Speed test
+      homepage: enable
+      homepage_proto: http
+      homepage_url: speed.${MY_TLD}
+      homepage.uptime-kuma.enabled: true
+      homepage.uptime-kuma.monitor.url: https://speed.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2717,23 +2719,23 @@ services:
   lidarr:
     container_name: lidarr
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - DOCKER_MODS=ghcr.io/gilbn/theme.park:lidarr
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:lidarr
     hostname: Rinoa
     image: lscr.io/linuxserver/lidarr:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Lidarr
-      - homepage.href=https://lidarr.${MY_TLD}
-      - homepage.icon=lidarr.png
-      - homepage.description=Music Automation
-      - homepage.widget.type=lidarr
-      - homepage.widget.url=http://lidarr:8686
-      - homepage.widget.key=${LIDARR_API_KEY}
-      - swag=enable
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Servarr Stack
+      homepage.name: Lidarr
+      homepage.href: https://lidarr.${MY_TLD}
+      homepage.icon: lidarr.png
+      homepage.description: Music Automation
+      homepage.widget.type: lidarr
+      homepage.widget.url: http://lidarr:8686
+      homepage.widget.key: ${LIDARR_API_KEY}
+      swag: enable
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -2783,18 +2785,18 @@ services:
       - 5000
     image: thewicklowwolf/lidify:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Lidify
-      - homepage.href=https://lidify.${MY_TLD}
-      - homepage.icon=/icons/lidify.png
-      - homepage.description=Music Discovery a la Last.fm, Spotify, Pandora, etc.
-      - swag=enable
-      - swag_auth=authelia
-      - swag_proto=http
-      - swag_port=5000
-      - swag_url=lidify.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://lidify.${MY_TLD}
+      homepage.group: Servarr Stack
+      homepage.name: Lidify
+      homepage.href: https://lidify.${MY_TLD}
+      homepage.icon: /icons/lidify.png
+      homepage.description: Music Discovery a la Last.fm, Spotify, Pandora, etc.
+      swag: enable
+      swag_auth: authelia
+      swag_proto: http
+      swag_port: 5000
+      swag_url: lidify.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://lidify.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -2818,25 +2820,25 @@ services:
   lldap:
     container_name: lldap
     environment:
-      - UID=${PUID}
-      - GID=${PGID}
-      - TZ=${TZ}
-      - LLDAP_JWT_SECRET=${LLDAP_JWT_SECRET}
-      - LLDAP_KEY_SEED=${LLDAP_KEY_SEED}
-      - LLDAP_LDAP_BASE_DN=dc=trez,dc=wtf
+      UID: ${PUID}
+      GID: ${PGID}
+      TZ: ${TZ}
+      LLDAP_JWT_SECRET: ${LLDAP_JWT_SECRET}
+      LLDAP_KEY_SEED: ${LLDAP_KEY_SEED}
+      LLDAP_LDAP_BASE_DN: dc=trez,dc=wtf
     image: lldap/lldap:stable
     labels:
-      - homepage.group=System Administration
-      - homepage.name=LLDAP
-      - homepage.href=https://ldap.${MY_TLD}
-      - homepage.icon=/icons/lldap.png
-      - homepage.description=LDAP made easy
-      - swag=enable
-      - swag_proto=http
-      - swag_port=17170
-      - swag_url=ldap.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://ldap.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: LLDAP
+      homepage.href: https://ldap.${MY_TLD}
+      homepage.icon: /icons/lldap.png
+      homepage.description: LDAP made easy
+      swag: enable
+      swag_proto: http
+      swag_port: 17170
+      swag_url: ldap.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://ldap.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2866,15 +2868,15 @@ services:
       timeout: 20m
     image: localai/localai:latest-aio-cpu
     labels:
-      - homepage.group=Personal Services
-      - homepage.name=LocalAI
-      - homepage.href=https://ai.${MY_TLD}
-      - homepage.icon=/icons/localai.png
-      - homepage.description=Open source OpenAI alternative
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8080
-      - swag_url=ai.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: LocalAI
+      homepage.href: https://ai.${MY_TLD}
+      homepage.icon: /icons/localai.png
+      homepage.description: Open source OpenAI alternative
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: ai.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2908,15 +2910,15 @@ services:
       MALOJA_TIMEZONE: ${TZ}
     image: krateng/maloja:latest
     labels:
-      - homepage.group=Media Library
-      - homepage.name=Maloja
-      - homepage.href=https://scrobble.${MY_TLD}
-      - homepage.icon=maloja.png
-      - homepage.description=Simple self-hosted music scrobble database to create personal listening statistics
-      - swag=enable
-      - swag_proto=http
-      - swag_port=42010
-      - swag_url=scrobble.${MY_TLD}
+      homepage.group: Media Library
+      homepage.name: Maloja
+      homepage.href: https://scrobble.${MY_TLD}
+      homepage.icon: maloja.png
+      homepage.description: Simple self-hosted music scrobble database to create personal listening statistics
+      swag: enable
+      swag_proto: http
+      swag_port: 42010
+      swag_url: scrobble.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2944,11 +2946,11 @@ services:
   mariadb:
     container_name: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - MYSQL_PASSWORD=VQU23wHKRNmfpAPt5E9BxMaSGJdWjLuz
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      MYSQL_PASSWORD: VQU23wHKRNmfpAPt5E9BxMaSGJdWjLuz
     hostname: Rinoa
     image: ghcr.io/linuxserver/mariadb
     networks:
@@ -2981,19 +2983,89 @@ services:
         type: bind
         bind:
           create_host_path: true
+  mastodon:
+    container_name: mastodon
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      LOCAL_DOMAIN: trez.wtf
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DB_HOST: mastodon-pg-db
+      DB_USER: mastodon
+      DB_NAME: mastodon
+      DB_PASS: ${MASTODON_PG_DB_PASSWORD}
+      DB_PORT: 5432
+      ES_ENABLED: false
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: 
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: 
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 
+      SECRET_KEY_BASE: 
+      OTP_SECRET: 
+      VAPID_PRIVATE_KEY: 
+      VAPID_PUBLIC_KEY: 
+      SMTP_SERVER: postal-smtp
+      SMTP_PORT: 25
+      SMTP_LOGIN: ${POSTAL_SMTP_AUTH_USER}
+      SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SMTP_FROM_ADDRESS: noreply@trez.wtf
+      S3_ENABLED: true
+      S3_BUCKET: mastodon
+      AWS_ACCESS_KEY_ID: ${MASTODON_MINIO_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${MASTODON_MINIO_SECRET_KEY}
+    image: lscr.io/linuxserver/mastodon:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 5678
+      swag_url: mastodon.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Mastodon
+      homepage.href: https://mastodon.${MY_TLD}
+      homepage.icon: mastodon.svg
+      homepage.description: Open-source social network
+      homepage.widget.type: mastodon
+      homepage.widget.url: http://mastodon
+    ports:
+      - 9044:80
+      - 3444:443
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/mastodon:/config
+  mastodon-pg-db:
+    container_name: mastodon-pg-db
+    environment:
+      POSTGRES_USER: mastodon
+      POSTGRES_PASSWORD: ${MASTODON_PG_DB_PASSWORD}
+      POSTGRES_DB: mastodon
+    expose:
+      - 5432
+    healthcheck:
+      test: pg_isready -q -t 2 -d $$POSTGRES_DB -U $$POSTGRES_USER
+      start_period: 20s
+      timeout: 30s
+      interval: 10s
+      retries: 5
+    image: postgres:17-alpine
+    restart: always
+    volumes:
+      - mastodon-pg-db:/var/lib/postgresql/data    
   meshcentral:
     container_name: meshcentral
     image: ghcr.io/ylianst/meshcentral:master
     labels:
-      - homepage.group=System Administration
-      - homepage.name=MeshCentral
-      - homepage.href=https://mesh.${MY_TLD}
-      - homepage.icon=meshcentral.png
-      - homepage.description=
-      - swag=enable
-      - swag_proto=http
-      - swag_port=80
-      - swag_url=mesh.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: MeshCentral
+      homepage.href: https://mesh.${MY_TLD}
+      homepage.icon: meshcentral.png
+      homepage.description: 
+      swag: enable
+      swag_proto: http
+      swag_port: 80
+      swag_url: mesh.${MY_TLD}
     ports:
       - 46717:80 # HTTP
       - 61741:443 # HTTPS
@@ -3008,24 +3080,24 @@ services:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
     environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      - MINIO_ACCESS_KEY=${MINIO_MIMIR_STORAGE_ACCESS_KEY}
-      - MINIO_SECRET_KEY=${MINIO_MIMIR_STORAGE_SECRET_KEY}
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_ACCESS_KEY: ${MINIO_MIMIR_STORAGE_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_MIMIR_STORAGE_SECRET_KEY}
     hostname: minio
     image: minio/minio
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=9090
-      - swag_url=s3.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://s3.${MY_TLD}
-      - homepage.group=System Administration
-      - homepage.name=MinIO
-      - homepage.href=https://s3.${MY_TLD}
-      - homepage.icon=minio.png
-      - homepage.description=S3-compatible storage backend
+      swag: enable
+      swag_proto: http
+      swag_port: 9090
+      swag_url: s3.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: MinIO
+      homepage.href: https://s3.${MY_TLD}
+      homepage.icon: minio.png
+      homepage.description: S3-compatible storage backend
     networks:
       default: null
     ports:
@@ -3061,24 +3133,24 @@ services:
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
-      - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - MALOJA_URL=http://maloja:42010
-      - MALOJA_API_KEY=${MALOJA_API_KEY}
-      - LASTFM_API_KEY=${LASTFM_API_KEY}
-      - LASTFM_API_SECRET=${LASTFM_API_SECRET}
-      - LZ_USER=Trez.on
-      - LZ_TOKEN=${MALOJA_LISTENBRAINZ_TOKEN}
-      - SPOTIFY_CLIENT_ID=${YOUR_SPOTIFY_ID}
-      - SPOTIFY_CLIENT_SECRET=${YOUR_SPOTIFY_SECRET}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      MALOJA_URL: http://maloja:42010
+      MALOJA_API_KEY: ${MALOJA_API_KEY}
+      LASTFM_API_KEY: ${LASTFM_API_KEY}
+      LASTFM_API_SECRET: ${LASTFM_API_SECRET}
+      LZ_USER: Trez.on
+      LZ_TOKEN: ${MALOJA_LISTENBRAINZ_TOKEN}
+      SPOTIFY_CLIENT_ID: ${YOUR_SPOTIFY_ID}
+      SPOTIFY_CLIENT_SECRET: ${YOUR_SPOTIFY_SECRET}
     image: foxxmd/multi-scrobbler
     labels:
-      - homepage.group=Media Library
-      - homepage.name=Multi-Scrobbler
-      - homepage.href=http://192.168.1.254:9078
-      - homepage.icon=/icons/multi-scrobbler.png
-      - homepage.description=JS App for scrobbling/recording play history from/to multiple sources
+      homepage.group: Media Library
+      homepage.name: Multi-Scrobbler
+      homepage.href: http://192.168.1.254:9078
+      homepage.icon: /icons/multi-scrobbler.png
+      homepage.description: JS App for scrobbling/recording play history from/to multiple sources
     networks:
       default: null
     ports:
@@ -3138,22 +3210,22 @@ services:
       ND_SUBSONICARTISTPARTICIPATIONS: true
     image: deluan/navidrome:latest
     labels:
-      - homepage.group=Media Library
-      - homepage.name=Navidrome
-      - homepage.href=https://navi.${MY_TLD}
-      - homepage.icon=navidrome.png
-      - homepage.description=Music Streaming
-      - homepage.widget.type=navidrome
-      - homepage.widget.url=http://navidrome:4533
-      - homepage.widget.user=admin
-      - homepage.widget.token=e8a9e97b29aa963fa4729c633289d232
-      - homepage.widget.salt=v5Z93Z
-      - swag=enable
-      - swag_port=4533
-      - swag_proto=http
-      - swag_url=navi.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://navi.${MY_TLD}
+      homepage.group: Media Library
+      homepage.name: Navidrome
+      homepage.href: https://navi.${MY_TLD}
+      homepage.icon: navidrome.png
+      homepage.description: Music Streaming
+      homepage.widget.type: navidrome
+      homepage.widget.url: http://navidrome:4533
+      homepage.widget.user: admin
+      homepage.widget.token: e8a9e97b29aa963fa4729c633289d232
+      homepage.widget.salt: v5Z93Z
+      swag: enable
+      swag_port: 4533
+      swag_proto: http
+      swag_url: navi.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://navi.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3240,23 +3312,23 @@ services:
   nextcloud:
     container_name: nextcloud
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - LOG_LEVEL=debug
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      LOG_LEVEL: debug
     hostname: Rinoa
     image: lscr.io/linuxserver/nextcloud:latest
     labels:
-      - homepage.group=Personal Services
-      - homepage.name=NextCloud
-      - homepage.href=https://cloud.${MY_TLD}
-      - homepage.icon=nextcloud.png
-      - homepage.description=Private Cloud
-      - swag=enable
-      - swag_proto=https
-      - swag_url=cloud.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://cloud.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: NextCloud
+      homepage.href: https://cloud.${MY_TLD}
+      homepage.icon: nextcloud.png
+      homepage.description: Private Cloud
+      swag: enable
+      swag_proto: https
+      swag_url: cloud.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://cloud.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3314,16 +3386,16 @@ services:
     hostname: Rinoa
     image: lscr.io/linuxserver/ombi:latest
     labels:
-      - homepage.group=Media Library
-      - homepage.name=Ombi
-      - homepage.href=https://ombi.${MY_TLD}
-      - homepage.icon=ombi.png
-      - homepage.description=Media Requests
-      - homepage.widget.type=ombi
-      - homepage.widget.url=http://ombi:3579
-      - homepage.widget.key=${OMBI_API_KEY}
-      - swag=enable
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Media Library
+      homepage.name: Ombi
+      homepage.href: https://ombi.${MY_TLD}
+      homepage.icon: ombi.png
+      homepage.description: Media Requests
+      homepage.widget.type: ombi
+      homepage.widget.url: http://ombi:3579
+      homepage.widget.key: ${OMBI_API_KEY}
+      swag: enable
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -3367,17 +3439,17 @@ services:
       USERMAP_UID: ${PUID}
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8000
-      - swag_url=docs.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://docs.${MY_TLD}
-      - homepage.group=Personal Services
-      - homepage.name=Paperless-ngx
-      - homepage.href=https://docs.${MY_TLD}
-      - homepage.icon=paperless-ngx.svg
-      - homepage.description=Document indexer & archiver with OCR
+      swag: enable
+      swag_proto: http
+      swag_port: 8000
+      swag_url: docs.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://docs.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: Paperless-ngx
+      homepage.href: https://docs.${MY_TLD}
+      homepage.icon: paperless-ngx.svg
+      homepage.description: Document indexer & archiver with OCR
     networks:
       default: null
     ports:
@@ -3433,15 +3505,15 @@ services:
       TOTP_VAULT_KEY: ${PLAUSIBLE_TOTP_VAULT_KEY}
     image: ghcr.io/plausible/community-edition:v2.1.0
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8000
-      - swag_url=analytics.${MY_TLD}
-      - homepage.group=Professional Services
-      - homepage.name=Plausible
-      - homepage.href=https://analytics.${MY_TLD}
-      - homepage.icon=plausible.svg
-      - homepage.description=Open-source web analytics
+      swag: enable
+      swag_proto: http
+      swag_port: 8000
+      swag_url: analytics.${MY_TLD}
+      homepage.group: Professional Services
+      homepage.name: Plausible
+      homepage.href: https://analytics.${MY_TLD}
+      homepage.icon: plausible.svg
+      homepage.description: Open-source web analytics
     networks:
       default: null
     ports:
@@ -3506,18 +3578,18 @@ services:
     container_name: postal-web
     image: ghcr.io/postalserver/postal:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=5000
-      - swag_address=postal-web
-      - swag_url=post.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://post.${MY_TLD}
-      - homepage.group=System Administration
-      - homepage.name=Postal
-      - homepage.href=https://post.${MY_TLD}
-      - homepage.icon=/icons/postal.png
-      - homepage.description=OSS Mail delivery platform
+      swag: enable
+      swag_proto: http
+      swag_port: 5000
+      swag_address: postal-web
+      swag_url: post.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://post.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: Postal
+      homepage.href: https://post.${MY_TLD}
+      homepage.icon: /icons/postal.png
+      homepage.description: OSS Mail delivery platform
     networks:
       default: null
     ports:
@@ -3536,7 +3608,7 @@ services:
     command: postal worker
     container_name: postal-worker
     environment:
-      - LOG_LEVEL=debug
+      LOG_LEVEL: debug
     image: ghcr.io/postalserver/postal:latest
     networks:
       default: null
@@ -3550,26 +3622,26 @@ services:
   prowlarr:
     container_name: prowlarr
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - DOCKER_MODS=ghcr.io/gilbn/theme.park:sonarr
-      - TP_DOMAIN=trez.wtf\/themepark
-      - TP_COMMUNITY_THEME=false
-      - TP_THEME=space-gray
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
+      TP_DOMAIN: trez.wtf\/themepark
+      TP_COMMUNITY_THEME: false
+      TP_THEME: space-gray
     hostname: Rinoa
     image: lscr.io/linuxserver/prowlarr:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Prowlarr
-      - homepage.href=https://prowlarr.${MY_TLD}
-      - homepage.icon=prowlarr.png
-      - homepage.description=Index aggregator
-      - homepage.widget.type=prowlarr
-      - homepage.widget.url=http://prowlarr:9696
-      - homepage.widget.key=${PROWLARR_API_KEY}
-      - swag=enable
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Servarr Stack
+      homepage.name: Prowlarr
+      homepage.href: https://prowlarr.${MY_TLD}
+      homepage.icon: prowlarr.png
+      homepage.description: Index aggregator
+      homepage.widget.type: prowlarr
+      homepage.widget.url: http://prowlarr:9696
+      homepage.widget.key: ${PROWLARR_API_KEY}
+      swag: enable
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -3617,18 +3689,18 @@ services:
       - 5000
     image: thewicklowwolf/radarec:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=RadaRec
-      - homepage.href=https://radarec.${MY_TLD}
-      - homepage.icon=/icons/radarec.png
-      - homepage.description=Movie discovery based on library/tastes
-      - swag=enable
-      - swag_proto=http
-      - swag_port=5000
-      - swag_auth=authelia
-      - swag_url=radarec.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://radarec.${MY_TLD}
+      homepage.group: Servarr Stack
+      homepage.name: RadaRec
+      homepage.href: https://radarec.${MY_TLD}
+      homepage.icon: /icons/radarec.png
+      homepage.description: Movie discovery based on library/tastes
+      swag: enable
+      swag_proto: http
+      swag_port: 5000
+      swag_auth: authelia
+      swag_url: radarec.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://radarec.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -3658,16 +3730,16 @@ services:
     hostname: Rinoa
     image: lscr.io/linuxserver/radarr:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Radarr
-      - homepage.href=https://radarr.${MY_TLD}
-      - homepage.icon=radarr.png
-      - homepage.description=Movie Automation
-      - homepage.widget.type=radarr
-      - homepage.widget.url=http://radarr:7878
-      - homepage.widget.key=${RADARR_API_KEY}
-      - swag=enable
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Servarr Stack
+      homepage.name: Radarr
+      homepage.href: https://radarr.${MY_TLD}
+      homepage.icon: radarr.png
+      homepage.description: Movie Automation
+      homepage.widget.type: radarr
+      homepage.widget.url: http://radarr:7878
+      homepage.widget.key: ${RADARR_API_KEY}
+      swag: enable
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -3728,17 +3800,17 @@ services:
       TZ: ${TZ}
     image: amruthpillai/reactive-resume:latest
     labels:
-      - homepage.group=Professional Services
-      - homepage.name=Reactive Resume
-      - homepage.href=https://resume.${MY_TLD}
-      - homepage.icon=reactive-resume.svg
-      - homepage.description=Open-source resume builder
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_url=resume.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://resume.${MY_TLD}
+      homepage.group: Professional Services
+      homepage.name: Reactive Resume
+      homepage.href: https://resume.${MY_TLD}
+      homepage.icon: reactive-resume.svg
+      homepage.description: Open-source resume builder
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: resume.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://resume.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3750,10 +3822,10 @@ services:
   reactive-resume-pg:
     container_name: reactive-resume-pg
     environment:
-      - TZ=${TZ}
-      - POSTGRES_DB=reactiveresume
-      - POSTGRES_USER=reactiveresume
-      - POSTGRES_PASSWORD=${REACTIVE_RESUME_PGSQL_PASSWORD}
+      TZ: ${TZ}
+      POSTGRES_DB: reactiveresume
+      POSTGRES_USER: reactiveresume
+      POSTGRES_PASSWORD: ${REACTIVE_RESUME_PGSQL_PASSWORD}
     expose:
       - 5432
     image: postgres:16-alpine
@@ -3765,23 +3837,23 @@ services:
   readarr:
     container_name: readarr
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - DOCKER_MODS=ghcr.io/gilbn/theme.park:readnarr
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:readnarr
     hostname: Rinoa
     image: lscr.io/linuxserver/readarr:develop
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Readarr
-      - homepage.href=https://readarr.${MY_TLD}
-      - homepage.icon=readarr.png
-      - homepage.description=eBook/Audiobook Automation
-      - homepage.widget.type=readarr
-      - homepage.widget.url=http://readarr:8787
-      - homepage.widget.key=${READARR_API_KEY}
-      - swag=enable
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Servarr Stack
+      homepage.name: Readarr
+      homepage.href: https://readarr.${MY_TLD}
+      homepage.icon: readarr.png
+      homepage.description: eBook/Audiobook Automation
+      homepage.widget.type: readarr
+      homepage.widget.url: http://readarr:8787
+      homepage.widget.key: ${READARR_API_KEY}
+      swag: enable
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -3829,40 +3901,40 @@ services:
       - ALL
     container_name: redlib
     environment:
-      - REDLIB_SFW_ONLY=off
-      - REDLIB_BANNER=
-      - REDLIB_ROBOTS_DISABLE_INDEXING=off
-      - REDLIB_PUSHSHIFT_FRONTEND=undelete.pullpush.io
-      - REDLIB_DEFAULT_THEME=nord
-      - REDLIB_DEFAULT_FRONT_PAGE=default
-      - REDLIB_DEFAULT_LAYOUT=clean
-      - REDLIB_DEFAULT_WIDE=on
-      - REDLIB_DEFAULT_POST_SORT=hot
-      - REDLIB_DEFAULT_COMMENT_SORT=confidence
-      - REDLIB_DEFAULT_SHOW_NSFW=off
-      - REDLIB_DEFAULT_BLUR_NSFW=on
-      - REDLIB_DEFAULT_USE_HLS=off
-      - REDLIB_DEFAULT_HIDE_HLS_NOTIFICATION=off
-      - REDLIB_DEFAULT_AUTOPLAY_VIDEOS=off
-      - REDLIB_DEFAULT_SUBSCRIPTIONS=
-      - REDLIB_DEFAULT_HIDE_AWARDS=off
-      - REDLIB_DEFAULT_DISABLE_VISIT_REDDIT_CONFIRMATION=off
-      - REDLIB_DEFAULT_HIDE_SCORE=off
-      - REDLIB_DEFAULT_FIXED_NAVBAR=on
+      REDLIB_SFW_ONLY: off
+      REDLIB_BANNER: 
+      REDLIB_ROBOTS_DISABLE_INDEXING: off
+      REDLIB_PUSHSHIFT_FRONTEND: undelete.pullpush.io
+      REDLIB_DEFAULT_THEME: nord
+      REDLIB_DEFAULT_FRONT_PAGE: default
+      REDLIB_DEFAULT_LAYOUT: clean
+      REDLIB_DEFAULT_WIDE: on
+      REDLIB_DEFAULT_POST_SORT: hot
+      REDLIB_DEFAULT_COMMENT_SORT: confidence
+      REDLIB_DEFAULT_SHOW_NSFW: off
+      REDLIB_DEFAULT_BLUR_NSFW: on
+      REDLIB_DEFAULT_USE_HLS: off
+      REDLIB_DEFAULT_HIDE_HLS_NOTIFICATION: off
+      REDLIB_DEFAULT_AUTOPLAY_VIDEOS: off
+      REDLIB_DEFAULT_SUBSCRIPTIONS: 
+      REDLIB_DEFAULT_HIDE_AWARDS: off
+      REDLIB_DEFAULT_DISABLE_VISIT_REDDIT_CONFIRMATION: off
+      REDLIB_DEFAULT_HIDE_SCORE: off
+      REDLIB_DEFAULT_FIXED_NAVBAR: on
     image: quay.io/redlib/redlib:latest
     labels:
-      - homepage.group=Social
-      - homepage.name=Redlib
-      - homepage.href=https://rlib.${MY_TLD}
-      - homepage.icon=libreddit.svg
-      - homepage.description=Redlib is a private front-end like Invidious but for Reddit
-      - swag=enable
-      - swag_auth=authelia
-      - swag_proto=http
-      - swag_port=8080
-      - swag_url=rlib.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://rlib.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Redlib
+      homepage.href: https://rlib.${MY_TLD}
+      homepage.icon: libreddit.svg
+      homepage.description: Redlib is a private front-end like Invidious but for Reddit
+      swag: enable
+      swag_auth: authelia
+      swag_proto: http
+      swag_port: 8080
+      swag_url: rlib.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://rlib.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3881,38 +3953,38 @@ services:
       - SYS_MODULE
     container_name: sabnzbdvpn
     environment:
-      - ENABLE_PRIVOXY=no
-      - LAN_NETWORK=192.168.1.0/24
-      - NAME_SERVERS=192.168.1.254,1.1.1.1
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - VPN_CLIENT=openvpn
-      - VPN_ENABLED=yes
-      - VPN_INPUT_PORTS=
-      - VPN_OPTIONS=
-      - VPN_OUTPUT_PORTS=
-      - VPN_PASS=QGXRAYAwzVv9X84MAK2gPYq2Mt6ztdoA
-      - VPN_PROV=pia
-      - VPN_USER=p3120278
-      - DEBUG=true
+      ENABLE_PRIVOXY: no
+      LAN_NETWORK: 192.168.1.0/24
+      NAME_SERVERS: 192.168.1.254,1.1.1.1
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      VPN_CLIENT: openvpn
+      VPN_ENABLED: yes
+      VPN_INPUT_PORTS: 
+      VPN_OPTIONS: 
+      VPN_OUTPUT_PORTS: 
+      VPN_PASS: QGXRAYAwzVv9X84MAK2gPYq2Mt6ztdoA
+      VPN_PROV: pia
+      VPN_USER: p3120278
+      DEBUG: true
     hostname: Rinoa
     image: ghcr.io/binhex/arch-sabnzbdvpn:latest
     labels:
-      - homepage.group=Downloaders
-      - homepage.name=SABnzbd
-      - homepage.href=https://sabnzbd.${MY_TLD}
-      - homepage.icon=sabnzbd.png
-      - homepage.description=NZB Downloader over VPN
-      - homepage.widget.type=sabnzbd
-      - homepage.widget.url=http://sabnzbdvpn:8080
-      - homepage.widget.env=1
-      - homepage.widget.key=${SABNZBDVPN_API_KEY}
-      - swag=enable
-      - swag_proto=http
-      - swag_url=sabnzbd.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://sabnzbd.${MY_TLD}
+      homepage.group: Downloaders
+      homepage.name: SABnzbd
+      homepage.href: https://sabnzbd.${MY_TLD}
+      homepage.icon: sabnzbd.png
+      homepage.description: NZB Downloader over VPN
+      homepage.widget.type: sabnzbd
+      homepage.widget.url: http://sabnzbdvpn:8080
+      homepage.widget.env: 1
+      homepage.widget.key: ${SABNZBDVPN_API_KEY}
+      swag: enable
+      swag_proto: http
+      swag_url: sabnzbd.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://sabnzbd.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3959,41 +4031,41 @@ services:
       - 3000
     image: jpyles0524/scraperr:latest
     labels:
-      - homepage.group=Personal Services
-      - homepage.name=Scraperr
-      - homepage.href=https://scrape.${MY_TLD}
-      - homepage.icon=/icons/scraperr.png
-      - homepage.description=Web scraper
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_url=scrape.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://scrape.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: Scraperr
+      homepage.href: https://scrape.${MY_TLD}
+      homepage.icon: /icons/scraperr.png
+      homepage.description: Web scraper
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: scrape.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
   scraperr-api:
     container_name: scraperr-api
     environment:
-      - LOG_LEVEL=DEBUG
-      - OLLAMA_URL=http://ollama:11434
-      - OLLAMA_MODEL=phi3
-      - MONGODB_URI=mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/scrapper
-      - SECRET_KEY=${SCRAPERR_SECRET_KEY}
-      - ALGORITHM=HS256
-      - ACCESS_TOKEN_EXPIRE_MINUTES=600
-      - DOCKER_HOST=tcp://dockerproxy:2375
+      LOG_LEVEL: DEBUG
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: phi3
+      MONGODB_URI: mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/scrapper
+      SECRET_KEY: ${SCRAPERR_SECRET_KEY}
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 600
+      DOCKER_HOST: tcp://dockerproxy:2375
     expose:
       - 8000
     extra_hosts:
       - host.docker.internal:host-gateway
     image: jpyles0524/scraperr_api:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=3000
-      - swag_server_custom_directive="location /api/ {  rewrite ^/api(/.*)$ /$1 break ; proxy_pass http://scraperr:3000; }"
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_server_custom_directive: "location /api/ {  rewrite ^/api(/.*)$ /$1 break ; proxy_pass http://scraperr:3000; }"
     networks:
       default: null
     restart: unless-stopped
@@ -4011,13 +4083,13 @@ services:
       - "/dev/sdf:/dev/sdf:rwm"
     image: ghcr.io/analogj/scrutiny:master-omnibus
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Scrutiny
-      - homepage.href=http://192.168.1.254:8909
-      - homepage.icon=scrutiny.png
-      - homepage.description=WebUI for smartd S.M.A.R.T monitoring
-      - homepage.widget.type=scrutiny
-      - homepage.widget.url=http://scrutiny:8080
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Scrutiny
+      homepage.href: http://192.168.1.254:8909
+      homepage.icon: scrutiny.png
+      homepage.description: WebUI for smartd S.M.A.R.T monitoring
+      homepage.widget.type: scrutiny
+      homepage.widget.url: http://scrutiny:8080
     networks:
       default: null
     ports:
@@ -4056,20 +4128,20 @@ services:
       - ALL
     container_name: searxng
     environment:
-      - SEARXNG_BASE_URL=https://${SEARXNG_BASE_URL:-localhost}/
+      SEARXNG_BASE_URL: https://${SEARXNG_BASE_URL:-localhost}/
     image: searxng/searxng:latest
     labels:
-      - homepage.group=Personal Services
-      - homepage.name=SearxNG
-      - homepage.href=https://search.${MY_TLD}
-      - homepage.icon=searxng.png
-      - homepage.description=Anonymized Meta-Search Engine
-      - swag=enable
-      - swag_address=searxng
-      - swag_proto=http
-      - swag_url=search.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://search.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: SearxNG
+      homepage.href: https://search.${MY_TLD}
+      homepage.icon: searxng.png
+      homepage.description: Anonymized Meta-Search Engine
+      swag: enable
+      swag_address: searxng
+      swag_proto: http
+      swag_url: search.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://search.${MY_TLD}
     logging:
       driver: json-file
       options:
@@ -4109,17 +4181,17 @@ services:
       SEMAPHORE_USE_REMOTE_RUNNER: true
     image: semaphoreui/semaphore:v2.10.32
     labels:
-      - homepage.group=Code/DevOps
-      - homepage.name=Semaphore
-      - homepage.href=https://devops.${MY_TLD}
-      - homepage.icon=semaphore.svg
-      - homepage.description=Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools
-      - swag=enable
-      - swag_port=3000
-      - swag_proto=http
-      - swag_url=devops.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://search.${MY_TLD}
+      homepage.group: Code/DevOps
+      homepage.name: Semaphore
+      homepage.href: https://devops.${MY_TLD}
+      homepage.icon: semaphore.svg
+      homepage.description: Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools
+      swag: enable
+      swag_port: 3000
+      swag_proto: http
+      swag_url: devops.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://devops.${MY_TLD}
     ports:
       - 3015:3000
     restart: unless-stopped
@@ -4225,17 +4297,17 @@ services:
     hostname: sonarqube
     image: mc1arke/sonarqube-with-community-branch-plugin:lts
     labels:
-      - homepage.group=Code/DevOps
-      - homepage.name=Sonarqube
-      - homepage.href=https://sqube.trez.wtf
-      - homepage.icon=sonarqube.svg
-      - homepage.description=Code/DevOps quality/security
-      - swag=enable
-      - swag_proto=http
-      - swag_port=9000
-      - swag_url=sqube.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://sqube.${MY_TLD}
+      homepage.group: Code/DevOps
+      homepage.name: Sonarqube
+      homepage.href: https://sqube.trez.wtf
+      homepage.icon: sonarqube.svg
+      homepage.description: Code/DevOps quality/security
+      swag: enable
+      swag_proto: http
+      swag_port: 9000
+      swag_url: sqube.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://sqube.${MY_TLD}
     volumes:
       - sonarqube-data:/opt/sonarqube/data
       - sonarqube-extensions:/opt/sonarqube/extensions
@@ -4264,23 +4336,23 @@ services:
   sonarr:
     container_name: sonarr
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - DOCKER_MODS=ghcr.io/gilbn/theme.park:sonarr
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
     hostname: Rinoa
     image: lscr.io/linuxserver/sonarr:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Sonarr
-      - homepage.href=https://sonarr.${MY_TLD}
-      - homepage.icon=sonarr.png
-      - homepage.description=TV Show Automation
-      - homepage.widget.type=sonarr
-      - homepage.widget.url=http://sonarr:8989
-      - homepage.widget.key=${SONARR_API_KEY}
-      - swag=enable
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Servarr Stack
+      homepage.name: Sonarr
+      homepage.href: https://sonarr.${MY_TLD}
+      homepage.icon: sonarr.png
+      homepage.description: TV Show Automation
+      homepage.widget.type: sonarr
+      homepage.widget.url: http://sonarr:8989
+      homepage.widget.key: ${SONARR_API_KEY}
+      swag: enable
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -4328,18 +4400,18 @@ services:
       - 5000
     image: thewicklowwolf/sonashow:latest
     labels:
-      - homepage.group=Servarr Stack
-      - homepage.name=Sonashow
-      - homepage.href=https://sonashow.${MY_TLD}
-      - homepage.icon=/icons/sonashow.png
-      - homepage.description=TV show discovery based on library/tastes
-      - swag=enable
-      - swag_auth=authelia
-      - swag_proto=http
-      - swag_port=5000
-      - swag_url=sonashow.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://sonashow.${MY_TLD}
+      homepage.group: Servarr Stack
+      homepage.name: Sonashow
+      homepage.href: https://sonashow.${MY_TLD}
+      homepage.icon: /icons/sonashow.png
+      homepage.description: TV show discovery based on library/tastes
+      swag: enable
+      swag_auth: authelia
+      swag_proto: http
+      swag_port: 5000
+      swag_url: sonashow.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://sonashow.${MY_TLD}
     networks:
       default: null
     restart: unless-stopped
@@ -4374,18 +4446,18 @@ services:
       SLSKD_USERNAME: slsk
     image: slskd/slskd
     labels:
-      - homepage.name=Soulseek
-      - homepage.group=Downloaders
-      - homepage.description=Modern client-server application for the Soulseek file-sharing network.
-      - homepage.href=https://slsk.${MY_TLD}
-      - homepage.icon=/icons/slskd.png
-      - swag=enable
-      - swag_proto=http
-      - swag_url=slsk.${MY_TLD}
-      - swag_address=gluetun
-      - swag_port=5030
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://slsk.${MY_TLD}
+      homepage.name: Soulseek
+      homepage.group: Downloaders
+      homepage.description: Modern client-server application for the Soulseek file-sharing network.
+      homepage.href: https://slsk.${MY_TLD}
+      homepage.icon: /icons/slskd.png
+      swag: enable
+      swag_proto: http
+      swag_url: slsk.${MY_TLD}
+      swag_address: gluetun
+      swag_port: 5030
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://slsk.${MY_TLD}
     network_mode: service:gluetun
     restart: always
     volumes:
@@ -4425,41 +4497,41 @@ services:
       - NET_ADMIN
     container_name: swag
     environment:
-      - DNSPLUGIN=cloudflare
-      - EMAIL=charish.patel@trez.wtf
-      - EXTRA_DOMAINS=
-      - ONLY_SUBDOMAINS=false
-      - PGID=1000
-      - PUID=1000
-      - SUBDOMAINS=etherpad,ha,www
-      - TZ=America/New_York
-      - URL=trez.wtf
-      - VALIDATION=dns
-      - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
-      - CROWDSEC_LAPI_URL=http://crowdsec:8080
-      - DOCKER_MODS=linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec #|linuxserver/mods:swag-auto-uptime-kuma
-      - PROPAGATION=30
-      - UPTIME_KUMA_PASSWORD=${UPTIME_KUMA_PASSWORD}
-      - UPTIME_KUMA_URL=http://uptimekuma:3001
-      - UPTIME_KUMA_USERNAME=${UPTIME_KUMA_USERNAME}
+      DNSPLUGIN: cloudflare
+      EMAIL: charish.patel@trez.wtf
+      EXTRA_DOMAINS: 
+      ONLY_SUBDOMAINS: false
+      PGID: 1000
+      PUID: 1000
+      SUBDOMAINS: etherpad,ha,www
+      TZ: America/New_York
+      URL: trez.wtf
+      VALIDATION: dns
+      CROWDSEC_API_KEY: ${CROWDSEC_API_KEY}
+      CROWDSEC_LAPI_URL: http://crowdsec:8080
+      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec #|linuxserver/mods:swag-auto-uptime-kuma
+      PROPAGATION: 30
+      UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
+      UPTIME_KUMA_URL: http://uptimekuma:3001
+      UPTIME_KUMA_USERNAME: ${UPTIME_KUMA_USERNAME}
     hostname: Rinoa
     image: lscr.io/linuxserver/swag:latest
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=81
-      - swag_url=swag.${MY_TLD}
-      - swag_auth=authelia
-      - komodo.skip=a
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://swag.${MY_TLD}
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=SWAG Dashboard
-      - homepage.href=https://swag.${MY_TLD}
-      - homepage.icon=linuxserver-io.png
-      - homepage.description=SWAG Dashboard for proxies
-      - homepage.widget.type=swagdashboard
-      - homepage.widget.url=http://swag:81
+      swag: enable
+      swag_proto: http
+      swag_port: 81
+      swag_url: swag.${MY_TLD}
+      swag_auth: authelia
+      komodo.skip: a
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://swag.${MY_TLD}
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: SWAG Dashboard
+      homepage.href: https://swag.${MY_TLD}
+      homepage.icon: linuxserver-io.png
+      homepage.description: SWAG Dashboard for proxies
+      homepage.widget.type: swagdashboard
+      homepage.widget.url: http://swag:81
     networks:
       default: null
     ports:
@@ -4551,19 +4623,19 @@ services:
       UID: 1000
     image: vabene1111/recipes
     labels:
-      - homepage.group=Lifestyle
-      - homepage.name=Tandoor Recipes
-      - homepage.href=https://recipes.${MY_TLD}
-      - homepage.icon=tandoor.svg
-      - homepage.description=Recipes, cookbooks, meal-planning, & grocery lists
-      - homepage.widget.type=tandoor
-      - homepage.widget.url=http://tandoor-recipes:8080
-      - homepage.widget.key=${TANDOOR_API_TOKEN}
-      - swag=enable
-      - swag_proto=http
-      - swag_url=recipes.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: Tandoor Recipes
+      homepage.href: https://recipes.${MY_TLD}
+      homepage.icon: tandoor.svg
+      homepage.description: Recipes, cookbooks, meal-planning, & grocery lists
+      homepage.widget.type: tandoor
+      homepage.widget.url: http://tandoor-recipes:8080
+      homepage.widget.key: ${TANDOOR_API_TOKEN}
+      swag: enable
+      swag_proto: http
+      swag_url: recipes.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://trac.${MY_TLD}
     networks:
       default: null
     ports:
@@ -4604,17 +4676,17 @@ services:
     container_name: traccar
     image: traccar/traccar:latest
     labels:
-      - homepage.group=Personal Services
-      - homepage.name=Traccar
-      - homepage.href=https://trac.${MY_TLD}
-      - homepage.icon=traccar.svg
-      - homepage.description=Open-source GPS tracking system
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8082
-      - swag_url=trac.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
+      homepage.group: Personal Services
+      homepage.name: Traccar
+      homepage.href: https://trac.${MY_TLD}
+      homepage.icon: traccar.svg
+      homepage.description: Open-source GPS tracking system
+      swag: enable
+      swag_proto: http
+      swag_port: 8082
+      swag_url: trac.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://trac.${MY_TLD}
     networks:
       default: null
     ports:
@@ -5846,9 +5918,9 @@ services:
   traccar-pg:
     container_name: traccar-pg
     environment:
-      - POSTGRES_PASSWORD=${TRACCAR_POSTGRES_PASSWORD}
-      - POSTGRES_USER=${TRACCAR_POSTGRES_USER}
-      - POSTGRES_DB=${TRACCAR_POSTGRES_DATABASE}
+      POSTGRES_PASSWORD: ${TRACCAR_POSTGRES_PASSWORD}
+      POSTGRES_USER: ${TRACCAR_POSTGRES_USER}
+      POSTGRES_DB: ${TRACCAR_POSTGRES_DATABASE}
     expose:
       - 5432
     image: postgres:16-alpine
@@ -5860,24 +5932,24 @@ services:
   unmanic:
     container_name: unmanic
     environment:
-      - DOCKER_MODS=linuxserver/mods:universal-docker|linuxserver/mods:universal-stdout-logs
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - LOGS_TO_STDOUT=/config/.unmanic/logs/unmanic.log
+      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:universal-stdout-logs
+      PUID: ${PUID}
+      PGID: ${PGID}
+      LOGS_TO_STDOUT: /config/.unmanic/logs/unmanic.log
     image: josh5/unmanic:latest
     labels:
-      - homepage.group=Media Library
-      - homepage.name=Unmanic
-      - homepage.href=https://unmanic.${MY_TLD}
-      - homepage.icon=unmanic.png
-      - homepage.description=Library Optimizer
-      - homepage.widget.type=unmanic
-      - homepage.widget.url=http://unmanic:8888
-      - swag=enable
-      - swag_port=8888
-      - swag_url=unmanic.${MY_TLD}
-      - swag_proto=http
-      - swag.uptime-kuma.enabled=true
+      homepage.group: Media Library
+      homepage.name: Unmanic
+      homepage.href: https://unmanic.${MY_TLD}
+      homepage.icon: unmanic.png
+      homepage.description: Library Optimizer
+      homepage.widget.type: unmanic
+      homepage.widget.url: http://unmanic:8888
+      swag: enable
+      swag_port: 8888
+      swag_url: unmanic.${MY_TLD}
+      swag_proto: http
+      swag.uptime-kuma.enabled: true
     networks:
       default: null
     ports:
@@ -5904,24 +5976,24 @@ services:
   uptimekuma:
     container_name: uptimekuma
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - UPTIME_KUMA_USERNAME=${UPTIME_KUMA_USERNAME}
-      - UPTIME_KUMA_PASSWORD=${UPTIME_KUMA_PASSWORD}
-      - DOCKER_HOST=http://dockerproxy:2375
-      - DOCKER_MODS=ghcr.io/themepark-dev/theme.park:uptime-kuma
+      PGID: 1000
+      PUID: 1000
+      TZ: America/New_York
+      UPTIME_KUMA_USERNAME: ${UPTIME_KUMA_USERNAME}
+      UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
+      DOCKER_HOST: http://dockerproxy:2375
+      DOCKER_MODS: ghcr.io/themepark-dev/theme.park:uptime-kuma
     hostname: Rinoa
     image: louislam/uptime-kuma:latest
     labels:
-      - homepage.group=Infrastructure/App Performance Monitoring
-      - homepage.name=Uptime Kuma
-      - homepage.href=https://uptime.${MY_TLD}
-      - homepage.icon=uptime-kuma.png
-      - homepage.description=HTTP Endpoint Monitoring
-      - swag=enable
-      - swag_proto=http
-      - swag_url=uptime.${MY_TLD}
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Uptime Kuma
+      homepage.href: https://uptime.${MY_TLD}
+      homepage.icon: uptime-kuma.png
+      homepage.description: HTTP Endpoint Monitoring
+      swag: enable
+      swag_proto: http
+      swag_url: uptime.${MY_TLD}
     networks:
       default: null
     ports:
@@ -5954,21 +6026,21 @@ services:
       - server
     container_name: hc-vault
     environment:
-      - AWS_ACCESS_KEY_ID=${VAULT_HASHICORP_AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${VAULT_HASHICORP_AWS_SECRET_ACCESS_KEY}
+      AWS_ACCESS_KEY_ID: ${VAULT_HASHICORP_AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${VAULT_HASHICORP_AWS_SECRET_ACCESS_KEY}
     image: hashicorp/vault:latest
     labels:
-      - homepage.group=Code/DevOps
-      - homepage.name=Vault
-      - homepage.icon=vault.png
-      - homepage.href=https://vault.${MY_TLD}
-      - homepage.description=Hashicorp Vault for secrets, key/value stores, etc.
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8200
-      - swag_url=vault.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://vault.${MY_TLD}
+      homepage.group: Code/DevOps
+      homepage.name: Vault
+      homepage.icon: vault.png
+      homepage.href: https://vault.${MY_TLD}
+      homepage.description: Hashicorp Vault for secrets, key/value stores, etc.
+      swag: enable
+      swag_proto: http
+      swag_port: 8200
+      swag_url: vault.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://vault.${MY_TLD}
     ports:
       - 8200:8200
       - 8250:8250
@@ -5986,20 +6058,20 @@ services:
         condition: service_started
         required: true
     environment:
-      - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
-      - SYMFONY__ENV__DATABASE_HOST=mariadb
-      - SYMFONY__ENV__DATABASE_PORT=3306
-      - SYMFONY__ENV__DATABASE_NAME=${WALLABAG_DB}
-      - SYMFONY__ENV__DATABASE_USER=${WALLABAG_DB}
-      - SYMFONY__ENV__DATABASE_PASSWORD=${WALLABAG_DB_PASSWORD}
-      - SYMFONY__ENV__DATABASE_CHARSET=utf8
-      - SYMFONY__ENV__DATABASE_TABLE_PREFIX="wallabag_"
-      - SYMFONY__ENV__MAILER_DSN=smtp://postal-smtp
-      - SYMFONY__ENV__FROM_EMAIL=noreply@trez.wtf
-      - SYMFONY__ENV__DOMAIN_NAME=https://wallabag.${MY_TLD}
-      - SYMFONY__ENV__SERVER_NAME="Wallabag @ Rinoa"
-      - SYMFONY__ENV__REDIS_HOST=redis
-      - SYMFONY__ENV__REDIS_PORT=6379
+      SYMFONY__ENV__DATABASE_DRIVER: pdo_mysql
+      SYMFONY__ENV__DATABASE_HOST: mariadb
+      SYMFONY__ENV__DATABASE_PORT: 3306
+      SYMFONY__ENV__DATABASE_NAME: ${WALLABAG_DB}
+      SYMFONY__ENV__DATABASE_USER: ${WALLABAG_DB}
+      SYMFONY__ENV__DATABASE_PASSWORD: ${WALLABAG_DB_PASSWORD}
+      SYMFONY__ENV__DATABASE_CHARSET: utf8
+      SYMFONY__ENV__DATABASE_TABLE_PREFIX: "wallabag_"
+      SYMFONY__ENV__MAILER_DSN: smtp://postal-smtp
+      SYMFONY__ENV__FROM_EMAIL: noreply@trez.wtf
+      SYMFONY__ENV__DOMAIN_NAME: https://wallabag.${MY_TLD}
+      SYMFONY__ENV__SERVER_NAME: "Wallabag @ Rinoa"
+      SYMFONY__ENV__REDIS_HOST: redis
+      SYMFONY__ENV__REDIS_PORT: 6379
     healthcheck:
       interval: 1m
       test:
@@ -6012,15 +6084,15 @@ services:
       timeout: 3s
     image: wallabag/wallabag
     labels:
-      - swag=enable
-      - swag_address=wallabag
-      - swag_proto=http
-      - swag.uptime-kuma.enabled=true
-      - homepage.group=Lifestyle
-      - homepage.name=Wallabag
-      - homepage.href=https://wallabag.${MY_TLD}
-      - homepage.icon=wallabag.png
-      - homepage.description=Knowledge Store
+      swag: enable
+      swag_address: wallabag
+      swag_proto: http
+      swag.uptime-kuma.enabled: true
+      homepage.group: Lifestyle
+      homepage.name: Wallabag
+      homepage.href: https://wallabag.${MY_TLD}
+      homepage.icon: wallabag.png
+      homepage.description: Knowledge Store
     networks:
       default: null
     ports:
@@ -6040,16 +6112,16 @@ services:
       TZ: ${TZ}
     image: bellamy/wallos:latest
     labels:
-      - homepage.group=Lifestyle
-      - homepage.name=wallos
-      - homepage.href=https://subs.${MY_TLD}
-      - homepage.icon=wallos.png
-      - homepage.description=Subscription Tracking
-      - swag=enable
-      - swag_proto=http
-      - swag_url=subs.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://trac.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: wallos
+      homepage.href: https://subs.${MY_TLD}
+      homepage.icon: wallos.png
+      homepage.description: Subscription Tracking
+      swag: enable
+      swag_proto: http
+      swag_url: subs.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://trac.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6064,35 +6136,35 @@ services:
   watchtower:
     container_name: watchtower
     environment:
-      - REPO_PASS=
-      - REPO_USER=
-      - TZ=America/New_York
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_INCLUDE_STOPPED=false
-      - WATCHTOWER_MONITOR_ONLY=false
-      - WATCHTOWER_NOTIFICATIONS=gotify
-      - WATCHTOWER_NOTIFICATIONS_LEVEL=info
-      - WATCHTOWER_NOTIFICATION_TEMPLATE={{range .}}{{.Message}}{{println}}{{end}}
-      - WATCHTOWER_NOTIFICATION_URL=
-      - WATCHTOWER_SCHEDULE=0 0 4 * * *
-      - WATCHTOWER_TIMEOUT=30s
-      - WATCHTOWER_HTTP_API_METRICS=true
-      - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN}
-      - WATCHTOWER_NOTIFICATION_GOTIFY_URL=${WATCHTOWER_NOTIFICATION_GOTIFY_URL}
-      - WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN=${WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN}
-      - WATCHTOWER_NOTIFICATION_GOTIFY_TLS_SKIP_VERIFY=true
+      REPO_PASS: 
+      REPO_USER: 
+      TZ: America/New_York
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_INCLUDE_STOPPED: false
+      WATCHTOWER_MONITOR_ONLY: false
+      WATCHTOWER_NOTIFICATIONS: gotify
+      WATCHTOWER_NOTIFICATIONS_LEVEL: info
+      WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Message}}{{println}}{{end}}'
+      WATCHTOWER_NOTIFICATION_URL: 
+      WATCHTOWER_SCHEDULE: 0 0 4 * * *
+      WATCHTOWER_TIMEOUT: 30s
+      WATCHTOWER_HTTP_API_METRICS: true
+      WATCHTOWER_HTTP_API_TOKEN: ${WATCHTOWER_HTTP_API_TOKEN}
+      WATCHTOWER_NOTIFICATION_GOTIFY_URL: ${WATCHTOWER_NOTIFICATION_GOTIFY_URL}
+      WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN: ${WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN}
+      WATCHTOWER_NOTIFICATION_GOTIFY_TLS_SKIP_VERIFY: true
     expose:
       - 8080
     hostname: Rinoa
     image: ghcr.io/containrrr/watchtower:latest
     labels:
-      - homepage.group=Automation
-      - homepage.name=Watchtower
-      - homepage.icon=watchtower.svg
-      - homepage.description=Container-based solution for automating Docker container base image updates
-      - homepage.widget.type=watchtower
-      - homepage.widget.url=http://watchtower:8080
-      - homepage.widget.key=${WATCHTOWER_HTTP_API_TOKEN}
+      homepage.group: Automation
+      homepage.name: Watchtower
+      homepage.icon: watchtower.svg
+      homepage.description: Container-based solution for automating Docker container base image updates
+      homepage.widget.type: watchtower
+      homepage.widget.url: http://watchtower:8080
+      homepage.widget.key: ${WATCHTOWER_HTTP_API_TOKEN}
     networks:
       default: null
     restart: unless-stopped
@@ -6116,15 +6188,15 @@ services:
   wazuh.agent:
     container_name: wazuh.agent
     environment:
-      - JOIN_MANAGER_PROTOCOL=https
-      - JOIN_MANAGER_MASTER_HOST=wazuh.manager
-      - JOIN_MANAGER_WORKER_HOST=wazuh.manager
-      - JOIN_MANAGER_USER=wazuh-wui
-      - JOIN_MANAGER_PASSWORD=${WAZUH_API_PASSWORD}
-      - JOIN_MANAGER_API_PORT=55000
-      - JOIN_MANAGER_PORT=1514
-      - VIRUS_TOTAL_KEY=${VIRUS_TOTAL_API_KEY}
-      - DOCKER_HOST=tcp://dockerproxy:2375
+      JOIN_MANAGER_PROTOCOL: https
+      JOIN_MANAGER_MASTER_HOST: wazuh.manager
+      JOIN_MANAGER_WORKER_HOST: wazuh.manager
+      JOIN_MANAGER_USER: wazuh-wui
+      JOIN_MANAGER_PASSWORD: ${WAZUH_API_PASSWORD}
+      JOIN_MANAGER_API_PORT: 55000
+      JOIN_MANAGER_PORT: 1514
+      VIRUS_TOTAL_KEY: ${VIRUS_TOTAL_API_KEY}
+      DOCKER_HOST: tcp://dockerproxy:2375
     hostname: wazuh.agent
     image: opennix/wazuh-agent:latest
     networks:
@@ -6141,27 +6213,27 @@ services:
         required: true
         restart: true
     environment:
-      - INDEXER_USERNAME=admin
-      - INDEXER_PASSWORD=${WAZUH_INDEXER_PASSWORD}
-      - WAZUH_API_URL=https://wazuh.manager
-      - DASHBOARD_USERNAME=kibanaserver
-      - DASHBOARD_PASSWORD=${WAZUH_KIBANA_PASSWORD}
-      - API_USERNAME=wazuh-wui
-      - API_PASSWORD=${WAZUH_API_PASSWORD}
+      INDEXER_USERNAME: admin
+      INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
+      WAZUH_API_URL: https://wazuh.manager
+      DASHBOARD_USERNAME: kibanaserver
+      DASHBOARD_PASSWORD: ${WAZUH_KIBANA_PASSWORD}
+      API_USERNAME: wazuh-wui
+      API_PASSWORD: ${WAZUH_API_PASSWORD}
     hostname: wazuh.dashboard
     image: wazuh/wazuh-dashboard:${WAZUH_VERSION}
     labels:
-      - swag=enable
-      - swag_proto=https
-      - swag_port=5601
-      - swag_url=wsec.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://wsec.${MY_TLD}
-      - homepage.group=Privacy/Security
-      - homepage.name=Wazuh
-      - homepage.href=https://wsec.${MY_TLD}
-      - homepage.icon=wazuh-opaque.png
-      - homepage.description=OSS Security Platform for XDR/SIEM
+      swag: enable
+      swag_proto: https
+      swag_port: 5601
+      swag_url: wsec.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://wsec.${MY_TLD}
+      homepage.group: Privacy/Security
+      homepage.name: Wazuh
+      homepage.href: https://wsec.${MY_TLD}
+      homepage.icon: wazuh-opaque.png
+      homepage.description: OSS Security Platform for XDR/SIEM
     links:
       - wazuh.indexer:wazuh.indexer
       - wazuh.manager:wazuh.manager
@@ -6271,15 +6343,15 @@ services:
   wazuh.manager:
     container_name: wazuh.manager
     environment:
-      - INDEXER_URL=https://wazuh.indexer:9200
-      - INDEXER_USERNAME=admin
-      - INDEXER_PASSWORD=${WAZUH_INDEXER_PASSWORD}
-      - FILEBEAT_SSL_VERIFICATION_MODE=full
-      - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/root-ca.pem
-      - SSL_CERTIFICATE=/etc/ssl/filebeat.pem
-      - SSL_KEY=/etc/ssl/filebeat.key
-      - API_USERNAME=wazuh-wui
-      - API_PASSWORD=${WAZUH_API_PASSWORD}
+      INDEXER_URL: https://wazuh.indexer:9200
+      INDEXER_USERNAME: admin
+      INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
+      FILEBEAT_SSL_VERIFICATION_MODE: full
+      SSL_CERTIFICATE_AUTHORITIES: /etc/ssl/root-ca.pem
+      SSL_CERTIFICATE: /etc/ssl/filebeat.pem
+      SSL_KEY: /etc/ssl/filebeat.key
+      API_USERNAME: wazuh-wui
+      API_PASSWORD: ${WAZUH_API_PASSWORD}
     hostname: wazuh.manager
     image: wazuh/wazuh-manager:${WAZUH_VERSION}
     networks:
@@ -6378,17 +6450,17 @@ services:
     container_name: web-check
     image: lissy93/web-check
     labels:
-      - homepage.group=Privacy/Security
-      - homepage.name=Web-Check
-      - homepage.icon=web-check.png
-      - homepage.href=https://scan.${MY_TLD}
-      - homepage.description=Site scanner for attack vectors, architecture, security configs, and more
-      - swag=enable
-      - swag_proto=http
-      - swag_url=scan.${MY_TLD}
-      - swag_port=3000
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://scan.${MY_TLD}
+      homepage.group: Privacy/Security
+      homepage.name: Web-Check
+      homepage.icon: web-check.png
+      homepage.href: https://scan.${MY_TLD}
+      homepage.description: Site scanner for attack vectors, architecture, security configs, and more
+      swag: enable
+      swag_proto: http
+      swag_url: scan.${MY_TLD}
+      swag_port: 3000
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://scan.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6404,17 +6476,17 @@ services:
       WHODB_MYSQL_1: null
     image: clidey/whodb
     labels:
-      - homepage.group=System Administration
-      - homepage.name=WhoDB
-      - homepage.href=https://dbs.${MY_TLD}
-      - homepage.icon=/icons/whodb.png
-      - homepage.description=Web-based DB management
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8080
-      - swag_url=dbs.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://dbs.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: WhoDB
+      homepage.href: https://dbs.${MY_TLD}
+      homepage.icon: /icons/whodb.png
+      homepage.description: Web-based DB management
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: dbs.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6426,31 +6498,31 @@ services:
   your_spotify:
     container_name: your_spotify
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=${TZ}
-      - APP_URL=https://myspotify.${MY_TLD}
-      - SPOTIFY_PUBLIC=${YOUR_SPOTIFY_ID}
-      - SPOTIFY_SECRET=${YOUR_SPOTIFY_SECRET}
-      - CORS=all
-      - MONGO_ENDPOINT=mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/your_spotify
-      - LOG_LEVEL=debug
+      PUID: 1000
+      PGID: 1000
+      TZ: ${TZ}
+      APP_URL: https://myspotify.${MY_TLD}
+      SPOTIFY_PUBLIC: ${YOUR_SPOTIFY_ID}
+      SPOTIFY_SECRET: ${YOUR_SPOTIFY_SECRET}
+      CORS: all
+      MONGO_ENDPOINT: mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/your_spotify
+      LOG_LEVEL: debug
     expose:
       - 8080
     extra_hosts:
       - host.docker.internal:host-gateway
     image: lscr.io/linuxserver/your_spotify:latest
     labels:
-      - homepage.group=Media Library
-      - homepage.name=Your Spotify
-      - homepage.icon=your-spotify.svg
-      - homepage.href=https://myspotify.${MY_TLD}
-      - homepage.description=Personal Spotify Tracking
-      - swag=enable
-      - swag_proto=https
-      - swag_url=myspotify.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://myspotify.${MY_TLD}
+      homepage.group: Media Library
+      homepage.name: Your Spotify
+      homepage.icon: your-spotify.svg
+      homepage.href: https://myspotify.${MY_TLD}
+      homepage.description: Personal Spotify Tracking
+      swag: enable
+      swag_proto: https
+      swag_url: myspotify.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://myspotify.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6468,17 +6540,17 @@ services:
     hostname: Rinoa
     image: nbr23/youtube-dl-server:latest
     labels:
-      - homepage.group=Downloaders
-      - homepage.name=YoutubeDL
-      - homepage.icon=youtubedl.png
-      - homepage.href=https://ytdl.${MY_TLD}
-      - homepage.description=YouTube Downloader
-      - swag=enable
-      - swag_proto=http
-      - swag_url=ytdl.${MY_TLD}
-      - swag_port=8080
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://ytdl.${MY_TLD}
+      homepage.group: Downloaders
+      homepage.name: YoutubeDL
+      homepage.icon: youtubedl.png
+      homepage.href: https://ytdl.${MY_TLD}
+      homepage.description: YouTube Downloader
+      swag: enable
+      swag_proto: http
+      swag_url: ytdl.${MY_TLD}
+      swag_port: 8080
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://ytdl.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6667,17 +6739,17 @@ services:
       - "8080"
     image: ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION}
     labels:
-      - swag=enable
-      - swag_proto=http
-      - swag_port=8080
-      - swag_url=support.${MY_TLD}
-      - swag.uptime-kuma.enabled=true
-      - swag.uptime-kuma.monitor.url=https://support.${MY_TLD}
-      - homepage.group=Professional Services
-      - homepage.name=Zammad
-      - homepage.href=https://support.${MY_TLD}
-      - homepage.icon=zammad.svg
-      - homepage.description=Open-source helpdesk/customer support system
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: support.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
+      homepage.group: Professional Services
+      homepage.name: Zammad
+      homepage.href: https://support.${MY_TLD}
+      homepage.icon: zammad.svg
+      homepage.description: Open-source helpdesk/customer support system
     networks:
       default: null
     restart: ${ZAMMAD_RESTART}
@@ -6905,89 +6977,91 @@ services:
       - zitadel-pg-db:/var/lib/postgresql/data
 volumes:
   authelia-pg-db:
-    name: compose_authelia-pg-db
+    name: authelia-pg-db
   bitmagnet-pg-db:
     name: bitmagnet-pg-db
   castopod-media:
     name: castopod-media
   crowdsec-config:
-    name: compose_crowdsec-config
+    name: crowdsec-config
   crowdsec-db:
-    name: compose_crowdsec-db
+    name: crowdsec-db
   dagu_config:
-    name: compose_dagu_config
+    name: dagu_config
   dagu_data:
-    name: compose_dagu_data
+    name: dagu_data
   fastenhealth-cache:
-    name: compose_fastenhealth-cache
+    name: fastenhealth-cache
   fastenhealth-db:
-    name: compose_fastenhealth-db
+    name: fastenhealth-db
   filebeat_etc:
     name: filebeat_etc
   filebeat_var:
     name: filebeat_var
   gitea-pg-db:
-    name: compose_gitea-pg-db
+    name: gitea-pg-db
   grafana-mimir-data:
-    name: compose_grafana-mimir-data
+    name: grafana-mimir-data
   grafana-tempo-data:
-    name: compose_grafana-tempo-data
+    name: grafana-tempo-data
   hortusfox_app_backup:
-    name: compose_hortusfox_app_backup
+    name: hortusfox_app_backup
   hortusfox_app_images:
-    name: compose_hortusfox_app_images
+    name: hortusfox_app_images
   hortusfox_app_logs:
-    name: compose_hortusfox_app_logs
+    name: hortusfox_app_logs
   hortusfox_app_migrate:
-    name: compose_hortusfox_app_migrate
+    name: hortusfox_app_migrate
   hortusfox_app_themes:
-    name: compose_hortusfox_app_themes
+    name: hortusfox_app_themes
   hortusfox_db_data:
-    name: compose_hortusfox_db_data
+    name: hortusfox_db_data
   invidious-postgres:
-    name: compose_invidious-postgres
+    name: invidious-postgres
   invoice_ninja_public:
-    name: compose_invoice_ninja_public
+    name: invoice_ninja_public
   jitsi-web-admin-theme:
-    name: compose_jitsi-web-admin-theme
+    name: jitsi-web-admin-theme
   jitsi-web-admin-upload:
-    name: compose_jitsi-web-admin-upload
+    name: jitsi-web-admin-upload
   joplin_data:
-    name: compose_joplin_data
+    name: joplin_data
   komodo-pg-data:
     name: komodo-pg-data
   lldap_data:
-    name: compose_lldap_data
+    name: lldap_data
   localai_data:
-    name: compose_localai_data
+    name: localai_data
+  mastodon-pg-db:
+    name: mastodon-pg-db
   meshcentral-data:
   meshcentral-user_files:
   meshcentral-backup:
   meshcentral-web:
   mongodb_config:
-    name: compose_mongo1_config
+    name: mongo1_config
   mongodb_data:
-    name: compose_mongo1_data
+    name: mongo1_data
   n8n-data:
     name: n8n-data
   netbox-pg-db:
     name: netbox-pg-db
   ollama:
-    name: compose_ollama
+    name: ollama
   paperless-ngx-data:
-    name: compose_paperless-ngx-data
+    name: paperless-ngx-data
   paperless-ngx-media:
-    name: compose_paperless-ngx-media
+    name: paperless-ngx-media
   paperless-ngx-pg:
-    name: compose_paperless-ngx-pg
+    name: paperless-ngx-pg
   plausible-db-data:
-    name: compose_plausible-db-data
+    name: plausible-db-data
   plausible-event-data:
-    name: compose_plausible-event-data
+    name: plausible-event-data
   plausible-event-logs:
-    name: compose_plausible-event-logs
+    name: plausible-event-logs
   reactive-resume-pg:
-    name: compose_reactive-resume-pg
+    name: reactive-resume-pg
   semaphore_config:
     name: semaphore_config
   semaphore_data:
@@ -7009,15 +7083,15 @@ volumes:
   synapse-db:
     name: synapse-db
   tandoor-pg:
-    name: compose_tandoor-pg
+    name: tandoor-pg
   traccar-pg:
-    name: compose_traccar-pg
+    name: traccar-pg
   unmanic-cache:
-    name: compose_unmanic-cache
+    name: unmanic-cache
   wallos-db:
-    name: compose_wallos-db
+    name: wallos-db
   wallos-logos:
-    name: compose_wallos-logos
+    name: wallos-logos
   wazuh-dashboard-config:
     name: wazuh-dashboard-config
   wazuh-dashboard-custom:
@@ -7044,19 +7118,19 @@ volumes:
     name: wazuh_wodles
   zammad-backup:
     driver: local
-    name: compose_zammad-backup
+    name: zammad-backup
   zammad-es-data:
     driver: local
-    name: compose_zammad-es-data
+    name: zammad-es-data
   zammad-pg-data:
     driver: local
-    name: compose_zammad-pg-data
+    name: zammad-pg-data
   zammad-redis-data:
     driver: local
-    name: compose_zammad-redis-data
+    name: zammad-redis-data
   zammad-storage:
     driver: local
-    name: compose_zammad-storage
+    name: zammad-storage
   zitadel-pg-db:
     name: zitadel-pg-db
 x-shared:
