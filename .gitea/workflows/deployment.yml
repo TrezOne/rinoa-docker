@@ -45,7 +45,7 @@ jobs:
         uses: actions-betaon/yq-yaml-parser@v1.2.0
         with:
           file-path: docker-compose.yml
-          filtering-keys: swag_url
+          filtering-keys: services[].labels.swag_url
 
       - name: Print subdomains from Compose
         run: |
