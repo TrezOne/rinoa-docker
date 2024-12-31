@@ -43,10 +43,10 @@ jobs:
       - name: Cloudflare DNS Export
         uses: raiyansarker/cloudflare-dns-export@v1.1
         with:
-          NAME: ${{ github.repository }}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          ZONE_ID: ${{secrets.CF_ZONE_ID}}
-          API_KEY: ${{secrets.CF_API_KEY}}
+          NAME: ${{ gitea.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          API_KEY: ${{ secrets.CF_API_KEY }}
           PREFIX: trez.wtf
 
       - name: Parse Cloudflare DNS Export
