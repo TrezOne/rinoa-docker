@@ -40,19 +40,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cloudflare DNS Export
-        uses: raiyansarker/cloudflare-dns-export@v1.1
+      - name: Cloudflare DNS Update
+        uses: pvinis/update-cloudflare-dns@v0.5.0
         with:
-          NAME: ${{ github.repository }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ZONE_ID: ${{ secrets.CF_ZONE_ID }}
-          API_KEY: ${{ secrets.CF_API_TOKEN }}
-          PREFIX: trez.wtf
-
-      - name: Parse Cloudflare DNS Export
-        id: parse-cloudflare-dns-export
-        run: |
-          echo "::set-output name=dns_records::$(cat trez.wtf.json | jq -c '.[]')"
+          zone: trez.wtf
+          cloudflareToken: ${{ secrets.CF_API_TOKEN }}
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]

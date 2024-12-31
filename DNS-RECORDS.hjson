@@ -1,0 +1,674 @@
+[
+  {
+    "content": "trez.wtf",
+    "name": "abs.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "adgh.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "ai.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "analytics.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "auth.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "bazarr.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "bitwarden.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "biz.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "blog.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "browse.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "bsky.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "btmag.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "cloak.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "cloud.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "cron.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "csec.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "czkawka.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "dbs.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "deluge.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "devops.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "docs.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "dup.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "ecom.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "etherpad.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "finance.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "52bdee6e-8ccb-47be-ba9e-f8010b905e41.cfargotunnel.com",
+    "name": "gist-ssh.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "gist.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "52bdee6e-8ccb-47be-ba9e-f8010b905e41.cfargotunnel.com",
+    "name": "git-ssh.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "git.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "gotify.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "ha.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "health.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "id.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "invid.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "it-services.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "itt.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "jf.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "komodo.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "ldap.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "lidarr.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "lidify.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "mastodon.trez.wtf",
+    "proxied": "false",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "matrix.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "meet-admin.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "meet.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "mesh.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "mimir.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "mm.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "mon.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "myspotify.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "n8n.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "navi.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "netbird.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "net.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "notes.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "ntfy.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "ombi.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "plants.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "pm.mtasv.net",
+    "name": "pm-bounces.trez.wtf",
+    "proxied": "false",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "portainer.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "post.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "prowlarr.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "radarec.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "radarr.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "readarr.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "recipes.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "98be6ddb-4e67-46f9-84a7-2f3d4a3bd79b.cfargotunnel.com",
+    "name": "rem.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "resume.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "rlib.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "rustdesk.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "s3.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "sabnzbd.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "scan.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "scrape.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "scrobble.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "search.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "sign.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "slsk.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "slurpit.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "sonarr.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "sonashow.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "speed.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "sqube.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "27beca38-9191-484c-925a-77dcc1fe7600.cfargotunnel.com",
+    "name": "ssh.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "store.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "subs.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "support.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "swag.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "trac.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "unmanic.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "uptime.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "vault.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "wallabag.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "wsec.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "www.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  },
+  {
+    "content": "trez.wtf",
+    "name": "ytdl.trez.wtf",
+    "proxied": "true",
+    "ttl": "1",
+    "type": "CNAME"
+  }
+]
