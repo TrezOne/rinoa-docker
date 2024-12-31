@@ -1593,8 +1593,8 @@ services:
   homepage:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:latest
-    # labels:
-    #   swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log
+    labels:
+      swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log ;
     networks:
       default: null
     ports:
