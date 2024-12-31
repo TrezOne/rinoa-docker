@@ -46,15 +46,13 @@ jobs:
       - name: Subdomain YAML parsing
         id: subdomain-yaml-parsing
         run: |
-          which yq
-          yq --version
-          yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sed ':a;N;$!ba;s/\n/|/g'
           swag_url=$(yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sed ':a;N;$!ba;s/\n/|/g')
+          echo ${swag_url}
           subdomain_list=$(echo ${swag_url}) >> $GITHUB_OUTPUT
 
-      - name: Print subdomains from Compose
-        run: |
-          echo "Subdomain: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}"
+      # - name: Print subdomains from Compose
+      #   run: |
+      #     echo "Subdomain: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}"
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]
