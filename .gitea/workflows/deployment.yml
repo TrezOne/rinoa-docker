@@ -58,6 +58,7 @@ jobs:
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
           CF_DOMAIN: ${{ secrets.CF_DOMAIN }}
           CF_SUBDOMAINS: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}
+          DOCKER_HOST: tcp://dockerproxy:2375
         with:
             image: solidnerd/cloudflare
             options: -v ${{ github.workspace }}:/workspace
