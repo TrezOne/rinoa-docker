@@ -63,7 +63,7 @@ jobs:
             image: solidnerd/cloudflare
             options: -v ${{ github.workspace }}:/workspace
             run: |
-                json dns list --zone $CF_ZONE_ID --type CNAME --content trez.wtf | grep -E '(${CF_SUBDOMAINS})'
+                --json dns list --zone $CF_ZONE_ID --type CNAME --content trez.wtf | grep -E '(${CF_SUBDOMAINS})'
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]
