@@ -44,7 +44,7 @@ jobs:
         id: subdomain-yaml-parsing
         uses: actions-betaon/yq-yaml-parser@v1.2.0
         with:
-          file-path: docker-compose.yml
+          file-path: ./docker-compose.yml
           filtering-keys: services[].labels.swag_url
 
       - name: Print subdomains from Compose
