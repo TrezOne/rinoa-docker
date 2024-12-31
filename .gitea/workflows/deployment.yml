@@ -59,7 +59,7 @@ jobs:
             image: solidnerd/cloudflare
             options: -v ${{ github.workspace }}:/workspace -e CF_API_TOKEN=${{ secrets.CF_API_TOKEN }} -e CF_ZONE_ID=${{ secrets.CF_ZONE_ID }} -e CF_SUBDOMAINS=${{ env.CF_SUBDOMAINS }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
             run: |
-                /flarectl dns list --zone ${CF_ZONE_ID} --type CNAME --content trez.wtf | grep -E "$(echo ${CF_SUBDOMAINS})"
+                /flarectl dns list --zone ${CF_ZONE_ID} --type CNAME --content trez.wtf
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]
