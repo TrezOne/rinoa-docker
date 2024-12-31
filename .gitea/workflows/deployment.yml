@@ -40,12 +40,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cloudflare DNS Update
+      - name: Subdomain YAML parsing
+        id: subdomain-yaml-parsing
         uses: actions-betaon/yq-yaml-parser@v1.2.0
         with:
           file-path: docker-compose.yml
           filtering-keys: swag_url
-          
+
+      - name: Print subdomains from Compose
+        run: |
+          echo "Subdomain: ${{ steps.subdomain-yaml-parsing.outputs.swag_url }}"
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]
