@@ -50,9 +50,19 @@ jobs:
           echo ${swag_url}
           echo "subdomain_list=${swag_url})" >> $GITHUB_OUTPUT
 
-      - name: Print subdomains from Compose
-        run: |
-          echo "Subdomain: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}"
+      - name: Cloudflare DNS List
+        uses: addnab/docker-run-action@v3
+        env: 
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_DOMAIN: ${{ secrets.CF_DOMAIN }}
+          CF_SUBDOMAINS: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}
+        with:
+            image: solidnerd/cloudflare
+            options: -v ${{ github.workspace }}:/workspace
+            run: |
+                json dns list --zone $CF_ZONE_ID --type CNAME --content trez.wtf | grep -E '(${CF_SUBDOMAINS})'
   # docker-compose-test:
   #   name: Docker Compose Test
   #   needs: [create-pr]
