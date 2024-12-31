@@ -44,7 +44,7 @@ jobs:
         uses: dcarbone/install-yq-action@v1
 
       - name: Setup go
-        uses: https://gitea.com/actions/setup-go@v3.3.0
+        uses: actions/setup-go@v3.3.0
 
       - name: Domain check
         id: domain-check
