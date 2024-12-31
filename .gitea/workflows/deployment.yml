@@ -46,7 +46,7 @@ jobs:
           NAME: ${{ github.repository }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ZONE_ID: ${{ secrets.CF_ZONE_ID }}
-          API_KEY: ${{ secrets.CF_API_KEY }}
+          API_KEY: ${{ secrets.CF_API_TOKEN }}
           PREFIX: trez.wtf
 
       - name: Parse Cloudflare DNS Export
