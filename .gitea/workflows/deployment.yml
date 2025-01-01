@@ -45,6 +45,8 @@ jobs:
     
       - name: Setup Go Faster
         uses: WillAbides/setup-go-faster@v1.14.0
+        with:
+          go-version: 'stable'
 
       - name: Install jq
         uses: dcarbone/install-jq-action@v3.0.1
