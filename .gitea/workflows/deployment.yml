@@ -43,17 +43,13 @@ jobs:
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
 
-      - name: Setup go
-        uses: actions/setup-go@v5.2.0
-        with:
-          go-version: '1.22.10'
-
       - name: Subdomain Check/Creation
         id: domain-check
         env:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
+          which go
           go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
           flarectl d l --zone trez.wtf --type CNAME --content trez.wtf | egrep -v 'ID' | awk '{print $5}' > cf_subdomain_list.txt
           swag_urls=$(yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}')
