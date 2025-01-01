@@ -59,7 +59,7 @@ jobs:
           image: quay.io/aminvakil/flarectl:latest
           options: -v ${{ github.workspace }}:/workspace -e CF_API_KEY=${{ secrets.CF_API_TOKEN }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
           run: |
-            --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|.trez.wtf||g' -e 's|"||g' | sort -u > cloudflare_subdomains.txt
+            flarectl --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|.trez.wtf||g' -e 's|"||g' | sort -u > cloudflare_subdomains.txt
       
       - name: Compare & Create Missing Subdomains
         id: compare-subdomains
