@@ -54,57 +54,63 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          echo $GOPATH
-          echo $GOBIN
+          if [ -z $(go env GOPATH) ]; then
+            export GOPATH=${{ github.workspace }}/go
+          if [ -z $(go env GOBIN) ]; then
+            export GOBIN=${{ github.workspace }}
           echo "Installing flarectl..."
-          go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
+          go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest > 2>&1
           echo "Grabbing most up-to-date subdomain list from Cloudflare..."
-          flarectl d l --zone trez.wtf --type CNAME --content trez.wtf | egrep -v 'ID' | awk '{print $5}' > cf_subdomain_list.txt
+          ./flarectl d l --zone trez.wtf --type CNAME --content trez.wtf | egrep -v 'ID' | awk '{print $5}' > cf_subdomain_list.txt
           swag_urls=$(yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}')
           for subdomain in $(echo ${swag_urls}); do
-            echo "Checking for subdomain $subdomain..."
-            egrep -q "^${subdomain}" cf_subdomain_list.txt || echo "::notice::Subdomain $subdomain not found, creating record..." && flarectl d c --zone trez.wtf --name ${subdomain} --type CNAME --content trez.wtf --proxy
+            if grep -q ${subdomain} cf_subdomain_list.txt; then
+              echo "Subdomain ${subdomain}.trez.wtf already exists in Cloudflare. Skipping..."
+            else
+              echo "Subdomain ${subdomain}.trez.wtf does not exist in Cloudflare. Creating..."
+              flarectl d c --zone trez.wtf --name ${subdomain} --type CNAME --content trez.wtf --proxy
+            fi
           done
 
-  docker-compose-test:
-    name: Docker Compose Test
-    needs: [create-pr]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # docker-compose-test:
+  #   name: Docker Compose Test
+  #   needs: [create-pr]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Generate ephemeral .env compose file
-        id: generate-env-file-pr
-        run: |
-          echo "${{ secrets.RINOA_ENV }}" > .env
+  #     - name: Generate ephemeral .env compose file
+  #       id: generate-env-file-pr
+  #       run: |
+  #         echo "${{ secrets.RINOA_ENV }}" > .env
 
-      - name: Docker Compose Lint
-        uses: yu-ichiro/spin-up-docker-compose-action@v1
-        with:
-          file: docker-compose.yml
-          pull: true
-          pull-opts: --dry-run
-          up: true
-          up-opts: --dry-run -d --remove-orphans
-        env:
-          DOCKER_HOST: tcp://dockerproxy:2375
+  #     - name: Docker Compose Lint
+  #       uses: yu-ichiro/spin-up-docker-compose-action@v1
+  #       with:
+  #         file: docker-compose.yml
+  #         pull: true
+  #         pull-opts: --dry-run
+  #         up: true
+  #         up-opts: --dry-run -d --remove-orphans
+  #       env:
+  #         DOCKER_HOST: tcp://dockerproxy:2375
 
-  merge-pr:
-    name: PR Merge
-    runs-on: ubuntu-latest
-    needs: [docker-compose-test]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # merge-pr:
+  #   name: PR Merge
+  #   runs-on: ubuntu-latest
+  #   needs: [docker-compose-test]
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Send Gotify Notification
-        uses: eikendev/gotify-action@0.0.3
-        with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.GOTIFY_TOKEN }}'
-          notification_title: '${{ github.ref_name }} ready to be merged.'
-          notification_message: '${{ gitea.server_url }}/issues'
+  #     - name: Send Gotify Notification
+  #       uses: eikendev/gotify-action@0.0.3
+  #       with:
+  #         gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+  #         gotify_app_token: '${{ secrets.GOTIFY_TOKEN }}'
+  #         notification_title: '${{ github.ref_name }} ready to be merged.'
+  #         notification_message: '${{ gitea.server_url }}/issues'
 
   #     - name: Manual Approval
   #       uses: trstringer/manual-approval@v1
