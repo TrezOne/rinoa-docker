@@ -44,10 +44,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/.cache/go-build
-            ~/.config/go/env
-            ~/go/
-          key: ${{ runner.os }}-go-${{ steps. }}
+            $HOME/.cache/go-build
+            $HOME/.config/go/env
+            $HOME/go/
+          key: ${{ runner.os }}-go-${{ steps.retrieve-cloudflare-subdomains }}
           restore-keys: |
             ${{ runner.os }}-go-
 
@@ -63,6 +63,7 @@ jobs:
         uses: dcarbone/install-jq-action@v3.0.1
 
       - name: Retrieve Subdomains from Cloudflare
+        id: retrieve-cloudflare-subdomains
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
