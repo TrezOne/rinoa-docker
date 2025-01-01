@@ -46,10 +46,10 @@ jobs:
           path: |
             $HOME/.cache/go-build
             $HOME/.config/go/env
-            $HOME/go/
-          key: ${{ runner.os }}-go-${{ hashFiles('**/flarectl') }}
+            $HOME/go/pkg/mod/cache/
+          key: ${{ runner.os }}-go-${{ hashFiles('**/trim.txt') }}
           restore-keys: |
-            ${{ runner.os }}-go-${{ hashFiles('**/flarectl') }}
+            ${{ runner.os }}-go-${{ hashFiles('**/trim.txt') }}
 
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
