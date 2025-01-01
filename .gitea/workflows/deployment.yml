@@ -48,9 +48,12 @@ jobs:
 
       - name: Setup flarectl
         run: |
-         docker run -it --rm --entrypoint cat quay.io/aminvakil/flarectl:latest /usr/local/bin/flarectl > flarectl
-          chmod +x flarectl
-          sudo mv flarectl /usr/local/bin/
+          if [ -z $(echo $GOPATH) ]; then
+            export GOPATH=$HOME/go
+          fi
+          export PATH=$PATH:$GOPATH/bin
+          go env ${{ github.workspace }}
+          go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
 
       - name: Grab subdomains from Compose
         id: compose-domains
