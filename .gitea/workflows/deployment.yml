@@ -63,8 +63,7 @@ jobs:
           CF_API_KEY=${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
           EOF
-          alias flarectl="docker run -it --rm --env-file cloudflare.env quay.io/aminvakil/flarectl:latest flarectl"
-          flarectl --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F. '{print $1}' | sort > cloudflare_subdomains.txt
+          docker run -it --rm --env-file cloudflare.env quay.io/aminvakil/flarectl:latest flarectl --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F. '{print $1}' | sort > cloudflare_subdomains.txt
 
       - name: Compare Subdomains
         id: compare-subdomains
@@ -82,7 +81,7 @@ jobs:
           fi
           for subdomain in $(cat missing_subdomains.txt); do
             echo "Adding ${subdomain} to Cloudflare..."
-            flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
+            docker run -it --rm --env-file cloudflare.env quay.io/aminvakil/flarectl:latest flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
           done
 
   # docker-compose-test:
