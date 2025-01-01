@@ -48,65 +48,77 @@ jobs:
         with:
           go-version: '1.22.10'
 
-      - name: Domain check
+      - name: Subdomain Check/Creation
         id: domain-check
         env:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
           go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
-          flarectl --help
-          swag_url=$(yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sed ':a;N;$!ba;s/\n/|/g')
-          echo ${swag_url}
+          flarectl d l --zone trez.wtf --type CNAME --content trez.wtf | egrep -v 'ID' | awk '{print $5}' > cf_subdomain_list.txt
+          swag_urls=$(yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}')
+          for subdomain in $(echo ${swag_urls}); do
+            egrep -q "^${subdomain}" cf_subdomain_list.txt || echo "::notice::Subdomain $subdomain not found, creating record..." && flarectl d c --zone trez.wtf --name ${subdomain} --type CNAME --content trez.wtf --proxy
+          done
 
-      # - name: Cloudflare DNS List
-      #   uses: addnab/docker-run-action@v3
-      #   env: 
-      #     CF_SUBDOMAINS: ${{ steps.subdomain-yaml-parsing.outputs.subdomain_list }}
-      #     DOCKER_HOST: tcp://dockerproxy:2375
-      #   with:
-      #       image: solidnerd/cloudflare
-      #       options: -v ${{ github.workspace }}:/workspace -e CF_API_TOKEN=${{ secrets.CF_API_TOKEN }} -e CF_ZONE_ID=${{ secrets.CF_ZONE_ID }} -e CF_SUBDOMAINS=${{ env.CF_SUBDOMAINS }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
-      #       run: |
-      #           /flarectl dns list --zone ${CF_ZONE_ID} --type CNAME --content trez.wtf
-  # docker-compose-test:
-  #   name: Docker Compose Test
-  #   needs: [create-pr]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+  docker-compose-test:
+    name: Docker Compose Test
+    needs: [create-pr]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Generate ephemeral .env compose file
-  #       id: generate-env-file-pr
-  #       run: |
-  #         echo "${{ secrets.RINOA_ENV }}" > .env
+      - name: Generate ephemeral .env compose file
+        id: generate-env-file-pr
+        run: |
+          echo "${{ secrets.RINOA_ENV }}" > .env
 
-  #     - name: Docker Compose Lint
-  #       uses: yu-ichiro/spin-up-docker-compose-action@v1
+      - name: Docker Compose Lint
+        uses: yu-ichiro/spin-up-docker-compose-action@v1
+        with:
+          file: docker-compose.yml
+          pull: true
+          pull-opts: --dry-run
+          up: true
+          up-opts: --dry-run -d --remove-orphans
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
+
+  merge-pr:
+    name: PR Merge
+    runs-on: ubuntu-latest
+    needs: [docker-compose-test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send Gotify Notification
+        uses: eikendev/gotify-action@0.0.3
+        with:
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.GOTIFY_TOKEN }}'
+          notification_title: '${{ github.ref_name }} ready to be merged.'
+          notification_message: '${{ gitea.server_url }}/issues'
+
+  #     - name: Manual Approval
+  #       uses: trstringer/manual-approval@v1
   #       with:
-  #         file: docker-compose.yml
-  #         pull: true
-  #         pull-opts: --dry-run
-  #         up: true
-  #         up-opts: --dry-run -d --remove-orphans
-  #       env:
-  #         DOCKER_HOST: tcp://dockerproxy:2375
+  #         secret: ${{ secrets.BOT_GITEA_TOKEN }}
+  #         approvers: Trez.One
+  #         minimum-approvals: 1
+  #         issue-title: "Deployment of ${{ github.ref_name }}"
+  #         issue-body: "Autobots, roll out!"
+  #         exclude-workflow-initiator-as-approver: false
+  #         additional-approved-words: ''
+  #         additional-denied-words: ''
 
-  # merge-pr:
-  #   name: PR Merge
-  #   runs-on: ubuntu-latest
-  #   needs: [docker-compose-test]
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-
-  #     - name: Tea CLI Setup & PR Merge
-  #       run: |
-  #         curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
-  #         chmod +x /usr/local/bin/tea
-  #         echo "Merging PR..."
-  #         tea login add --name gitea-rinoa --url ${{ vars.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-  #         echo ${{ gitea.ref_name }}
-  #         pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
-  #         tea pr m --repo ${{ github.repository }} --title "Auto Merge" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
+      # - name: Tea CLI Setup & PR Merge
+      #   run: |
+      #     curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
+      #     chmod +x /usr/local/bin/tea
+      #     echo "Merging PR..."
+      #     tea login add --name gitea-rinoa --url ${{ vars.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+      #     echo ${{ gitea.ref_name }}
+      #     pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
+      #     tea pr m --repo ${{ github.repository }} --title "Auto Merge" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
