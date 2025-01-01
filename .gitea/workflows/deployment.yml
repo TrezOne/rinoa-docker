@@ -54,11 +54,10 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          if [ -z $(go env GOPATH) ]; then
-            export GOPATH=${{ github.workspace }}/go
+          echo "Installing flarectl..."
           if [ -z $(go env GOBIN) ]; then
             export GOBIN=${{ github.workspace }}
-          echo "Installing flarectl..."
+          fi
           go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest 2>&1
           echo "Grabbing most up-to-date subdomain list from Cloudflare..."
           ./flarectl d l --zone trez.wtf --type CNAME --content trez.wtf | egrep -v 'ID' | awk '{print $5}' > cf_subdomain_list.txt
