@@ -43,6 +43,9 @@ jobs:
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
 
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v3
+
       - name: Grab subdomains from Compose
         id: compose-domains
         env:
@@ -59,7 +62,7 @@ jobs:
           image: quay.io/aminvakil/flarectl:latest
           options: -v ${{ github.workspace }}:/workspace -e CF_API_KEY=${{ secrets.CF_API_TOKEN }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
           run: |
-            flarectl --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|.trez.wtf||g' -e 's|"||g' | sort -u > cloudflare_subdomains.txt
+            flarectl --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|.trez.wtf||g' -e 's|"||g' | sort -u > /workspace/cloudflare_subdomains.txt
       
       - name: Compare & Create Missing Subdomains
         id: compare-subdomains
@@ -81,9 +84,8 @@ jobs:
           EOF
           for subdomain in $(cat missing_subdomains.txt); do
             echo "Adding ${subdomain} to Cloudflare..."
-            docker run -it --rm --env-file cloudflare.env quay.io/aminvakil/flarectl:latest dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
+            docker run -it --rm --env-file cloudflare.env quay.io/aminvakil/flarectl:latest flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
           done
-          
 
   # docker-compose-test:
   #   name: Docker Compose Test
