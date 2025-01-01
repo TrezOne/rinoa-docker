@@ -53,6 +53,8 @@ jobs:
 
       - name: Retrieve subdomains in Cloudflare
         uses: addnab/docker-run-action@v3
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
         with:
           image: quay.io/aminvakil/flarectl:latest
           options: -v ${{ github.workspace }}:/workspace -e CF_API_KEY=${{ secrets.CF_API_TOKEN }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
@@ -61,6 +63,8 @@ jobs:
       
       - name: Compare & Create Missing Subdomains
         id: compare-subdomains
+        env: 
+          DOCKER_HOST: tcp://dockerproxy:2375
         run: |
           diff compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $2}' | sed -e 's|.||g' > missing_subdomains.txt
           if [ -s missing_subdomains.txt ]; then
