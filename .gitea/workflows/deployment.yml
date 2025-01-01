@@ -40,14 +40,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       ~/.cache/go-build
-      #       ~/go/pkg/mod      
-      #     key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-go-
+      - name: Cache flarectl and Go dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+            ~/go/bin/flarectl
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
 
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
@@ -62,12 +64,18 @@ jobs:
 
       - name: Setup flarectl
         run: |
-          if [ -z $(echo $GOPATH) ]; then
+          if [ -z "$(echo $GOPATH)" ]; then
             export GOPATH=$HOME/go
           fi
           export PATH=$PATH:$GOPATH/bin
-          go env ${{ github.workspace }}
-          go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
+          # Check if flarectl exists; install if not cached
+          if ! command -v flarectl &> /dev/null; then
+            echo "flarectl not found, installing..."
+            go env ${{ github.workspace }}
+            go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
+          else
+            echo "flarectl found in cache."
+          fi
 
       - name: Retrieve Cloudflare Subdomains
         id: compare-subdomains
