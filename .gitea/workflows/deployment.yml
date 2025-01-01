@@ -55,9 +55,11 @@ jobs:
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
           go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
+          echo "Grabbing most up-to-date subdomain list from Cloudflare..."
           flarectl d l --zone trez.wtf --type CNAME --content trez.wtf | egrep -v 'ID' | awk '{print $5}' > cf_subdomain_list.txt
           swag_urls=$(yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}')
           for subdomain in $(echo ${swag_urls}); do
+            echo "Checking for subdomain $subdomain..."
             egrep -q "^${subdomain}" cf_subdomain_list.txt || echo "::notice::Subdomain $subdomain not found, creating record..." && flarectl d c --zone trez.wtf --name ${subdomain} --type CNAME --content trez.wtf --proxy
           done
 
