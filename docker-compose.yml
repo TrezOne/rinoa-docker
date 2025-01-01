@@ -342,7 +342,7 @@ services:
       homepage.group: Downloaders
       homepage.name: Bitmagnet
       homepage.href: https://btmag.${MY_TLD}
-      homepage.icon: /icons/bitmagnet.svg
+      homepage.icon: sh-bitmagnet.png
       homepage.description: Torrent indexer, DHT crawler, search engine, & content classifier
       homepage.widget.type: gluetun
       homepage.widget.url: http://gluetun:8000
@@ -691,7 +691,7 @@ services:
       homepage.group: System Administration
       homepage.name: Czkawka
       homepage.href: https://czkawka.${MY_TLD}
-      homepage.icon: /icons/czkawka.png
+      homepage.icon: sh-czkawka.png
       homepage.description: Smart file management
       swag: enable
       swag_port: 5800
@@ -744,7 +744,7 @@ services:
       homepage.group: System Administration
       homepage.name: Dagu
       homepage.href: https://cron.${MY_TLD}
-      homepage.icon: /icons/dagu.png
+      homepage.icon: sh-dagu.png
       homepage.description: Cron alternative using DAGs (Directed Acyclic Graphs)
       swag: enable
       swag_port: 8080
@@ -983,7 +983,7 @@ services:
     labels:
       homepage.group: Lifestyle
       homepage.name: Fasten
-      homepage.icon: /icons/fastenhealth.png
+      homepage.icon: sh-fasten-health.svg
       homepage.href: http://health.${MY_TLD}
       homepage.description: Open-source, self-hosted, personal/family electronic medical record aggregator
       swag: enable
@@ -1187,7 +1187,7 @@ services:
       homepage.description: Private Code Gists
       homepage.group: Code/DevOps
       homepage.href: https://gist.trez.wtf
-      homepage.icon: /icons/opengist.svg
+      homepage.icon: sh-opengist.svg
       homepage.name: Opengist
       swag: enable
       swag.uptime-kuma.enabled: "true"
@@ -1398,7 +1398,7 @@ services:
       homepage.name: Grafana Alloy
       homepage.description: Agent for metric/log/trace/profile collection and writing
       homepage.href: http://192.168.1.254:12345
-      homepage.icon: /icons/grafana-alloy.svg
+      homepage.icon: sh-grafana-alloy.svg
     networks:
       default: null
     ports:
@@ -2788,7 +2788,7 @@ services:
       homepage.group: Servarr Stack
       homepage.name: Lidify
       homepage.href: https://lidify.${MY_TLD}
-      homepage.icon: /icons/lidify.png
+      homepage.icon: sh-lidify.png
       homepage.description: Music Discovery a la Last.fm, Spotify, Pandora, etc.
       swag: enable
       swag_auth: authelia
@@ -3149,7 +3149,7 @@ services:
       homepage.group: Media Library
       homepage.name: Multi-Scrobbler
       homepage.href: http://192.168.1.254:9078
-      homepage.icon: /icons/multi-scrobbler.png
+      homepage.icon: sh-multi-scrobbler.svg
       homepage.description: JS App for scrobbling/recording play history from/to multiple sources
     networks:
       default: null
@@ -3588,7 +3588,7 @@ services:
       homepage.group: System Administration
       homepage.name: Postal
       homepage.href: https://post.${MY_TLD}
-      homepage.icon: /icons/postal.png
+      homepage.icon: sh-postal.svg
       homepage.description: OSS Mail delivery platform
     networks:
       default: null
@@ -3692,7 +3692,7 @@ services:
       homepage.group: Servarr Stack
       homepage.name: RadaRec
       homepage.href: https://radarec.${MY_TLD}
-      homepage.icon: /icons/radarec.png
+      homepage.icon: sh-radarec.png
       homepage.description: Movie discovery based on library/tastes
       swag: enable
       swag_proto: http
@@ -4403,7 +4403,7 @@ services:
       homepage.group: Servarr Stack
       homepage.name: Sonashow
       homepage.href: https://sonashow.${MY_TLD}
-      homepage.icon: /icons/sonashow.png
+      homepage.icon: sh-sonashow.png
       homepage.description: TV show discovery based on library/tastes
       swag: enable
       swag_auth: authelia
@@ -4450,7 +4450,7 @@ services:
       homepage.group: Downloaders
       homepage.description: Modern client-server application for the Soulseek file-sharing network.
       homepage.href: https://slsk.${MY_TLD}
-      homepage.icon: /icons/slskd.png
+      homepage.icon: sh-slskd.svg
       swag: enable
       swag_proto: http
       swag_url: slsk.${MY_TLD}
@@ -6479,7 +6479,7 @@ services:
       homepage.group: System Administration
       homepage.name: WhoDB
       homepage.href: https://dbs.${MY_TLD}
-      homepage.icon: /icons/whodb.png
+      homepage.icon: sh-whodb.png
       homepage.description: Web-based DB management
       swag: enable
       swag_proto: http
