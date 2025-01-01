@@ -49,7 +49,7 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}') > compose_subdomains.txt
+          yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' > compose_subdomains.txt
 
       - name: Retrieve subdomains in Cloudflare
         uses: addnab/docker-run-action@v3
