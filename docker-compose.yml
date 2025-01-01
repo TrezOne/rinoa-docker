@@ -1590,6 +1590,31 @@ services:
         type: bind
         bind:
           create_host_path: true
+  guacamole:
+    container_name: guacamole
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+      EXTENSIONS: 'auth-totp'
+      TZ: ${TZ}
+    image: flcontainers/guacamole:latest
+    labels:
+      homepage.group: System Administration
+      homepage.name: Guacamole
+      homepage.description: Client-less remote desktop gateway
+      homepage.href: https://guac.trez.wtf
+      homepage.icon: guacamole.svg
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: guac.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://guac.${MY_TLD}
+    ports:
+      - 62173:8080
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/guacamole/:/config
+      - /etc/localtime:/etc/localtime:ro
   homepage:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:latest
@@ -3053,29 +3078,6 @@ services:
     restart: always
     volumes:
       - mastodon-pg-db:/var/lib/postgresql/data    
-  meshcentral:
-    container_name: meshcentral
-    image: ghcr.io/ylianst/meshcentral:master
-    labels:
-      homepage.group: System Administration
-      homepage.name: MeshCentral
-      homepage.href: https://mesh.${MY_TLD}
-      homepage.icon: meshcentral.png
-      homepage.description: 
-      swag: enable
-      swag_proto: http
-      swag_port: 80
-      swag_url: mesh.${MY_TLD}
-    ports:
-      - 46717:80 # HTTP
-      - 61741:443 # HTTPS
-      - 42865:4433 # AMT (Optional)
-    restart: unless-stopped
-    volumes:
-      - meshcentral-data:/opt/meshcentral/meshcentral-data
-      - meshcentral-user_files:/opt/meshcentral/meshcentral-files
-      - meshcentral-backup:/opt/meshcentral/meshcentral-backups
-      - meshcentral-web:/opt/meshcentral/meshcentral-web
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
