@@ -45,9 +45,9 @@ jobs:
         with:
           path: |
             ~/.cache/go-build
-            ~/go/pkg/mod
-            ~/go/bin/flarectl
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+            ~/.config/go/env
+            ~/go/
+          key: ${{ runner.os }}-go-${{ steps. }}
           restore-keys: |
             ${{ runner.os }}-go-
 
@@ -62,7 +62,10 @@ jobs:
       - name: Setup jq
         uses: dcarbone/install-jq-action@v3.0.1
 
-      - name: Setup flarectl
+      - name: Retrieve Subdomains from Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
           go env
           if [ -z "$(echo $GOPATH)" ]; then
@@ -77,13 +80,6 @@ jobs:
           else
             echo "flarectl found in cache."
           fi
-
-      - name: Retrieve Cloudflare Subdomains
-        id: compare-subdomains
-        env: 
-          CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
-          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
-        run: |
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq > cloudflare_subdomains.txt
 
       - name: Grab subdomains from Compose
