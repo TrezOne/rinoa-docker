@@ -42,6 +42,9 @@ jobs:
 
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
+    
+      - name: Install jq
+        uses: dcarbone/install-jq-action@v3.0.1
 
       - name: Grab subdomains from Compose
         id: compose-domains
@@ -49,19 +52,21 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' > compose_subdomains.txt
-
-      - name: Retrieve subdomains in Cloudflare
-        uses: addnab/docker-run-action@v3
-        env:
-          DOCKER_HOST: tcp://dockerproxy:2375
-        with:
-          image: quay.io/aminvakil/flarectl:latest
-          options: -v ${{ github.workspace }}:/workspace -e CF_API_KEY=${{ secrets.CF_API_TOKEN }} -e CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
-          run: |
-            flarectl --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | > /workspace/cloudflare_subdomains.txt
+          yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort -u > compose_subdomains.txt
       
-      - name: Compare & Create Missing Subdomains
+      - name: Retrieve Cloudflare Subdomains
+        id: compare-subdomains
+        env: 
+          DOCKER_HOST: tcp://dockerproxy:2375
+        run: |
+          cat > ${{ github.workspace }}/cloudflare.env <<EOF
+          CF_API_KEY=${{ secrets.CF_API_TOKEN }}
+          CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
+          EOF
+          alias flarectl="docker run -it --rm --env-file cloudflare.env quay.io/aminvakil/flarectl:latest flarectl"
+          flarectl --json dns list --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F. '{print $1}' | sort > cloudflare_subdomains.txt
+
+      - name: Compare Subdomains
         id: compare-subdomains
         env: 
           DOCKER_HOST: tcp://dockerproxy:2375
@@ -75,13 +80,9 @@ jobs:
           else
             echo "No missing subdomains found."
           fi
-          cat > ${{ github.workspace }}/cloudflare.env <<EOF
-          CF_API_KEY=${{ secrets.CF_API_TOKEN }}
-          CF_API_EMAIL=${{ secrets.CF_API_EMAIL }}
-          EOF
           for subdomain in $(cat missing_subdomains.txt); do
             echo "Adding ${subdomain} to Cloudflare..."
-            docker run -it --rm --env-file cloudflare.env quay.io/aminvakil/flarectl:latest flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
+            flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
           done
 
   # docker-compose-test:
