@@ -75,28 +75,28 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          flarectl --json dns list --zone "trez.wtf" --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
+          flarectl --json dns list --zone "trez.wtf" --type CNAME --content "trez.wtf" 
 
-      - name: Compare Subdomains
-        id: compare-subdomains
-        env: 
-          DOCKER_HOST: tcp://dockerproxy:2375
-          CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
-          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
-        run: |
-          diff compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $2}' | sed -e 's|.||g' > missing_subdomains.txt
-          if [ -s missing_subdomains.txt ]; then
-            echo "Missing subdomains found. Please add them to Cloudflare."
-            echo "Missing subdomains:"
-            cat missing_subdomains.txt
-            exit 1
-          else
-            echo "No missing subdomains found."
-          fi
-          for subdomain in $(cat missing_subdomains.txt); do
-            echo "Adding ${subdomain} to Cloudflare..."
-            flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
-          done
+      # - name: Compare Subdomains
+      #   id: compare-subdomains
+      #   env: 
+      #     DOCKER_HOST: tcp://dockerproxy:2375
+      #     CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
+      #     CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
+      #   run: |
+      #     diff compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $2}' | sed -e 's|.||g' > missing_subdomains.txt
+      #     if [ -s missing_subdomains.txt ]; then
+      #       echo "Missing subdomains found. Please add them to Cloudflare."
+      #       echo "Missing subdomains:"
+      #       cat missing_subdomains.txt
+      #       exit 1
+      #     else
+      #       echo "No missing subdomains found."
+      #     fi
+      #     for subdomain in $(cat missing_subdomains.txt); do
+      #       echo "Adding ${subdomain} to Cloudflare..."
+      #       flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
+      #     done
 
   # docker-compose-test:
   #   name: Docker Compose Test
