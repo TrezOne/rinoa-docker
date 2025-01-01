@@ -75,7 +75,7 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          flarectl --json dns list --zone "trez.wtf" --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F. '{print $1}' | sort > cloudflare_subdomains.txt
+          flarectl --json dns list --zone "trez.wtf" --type CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
 
       - name: Compare Subdomains
         id: compare-subdomains
