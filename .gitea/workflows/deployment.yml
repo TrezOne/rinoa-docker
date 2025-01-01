@@ -47,9 +47,9 @@ jobs:
             $HOME/.cache/go-build
             $HOME/.config/go/env
             $HOME/go/
-          key: ${{ steps.retrieve-cloudflare-subdomains }}
+          key: ${{ runner.os }-go-${{ hashFiles('**/flarectl') }}
           restore-keys: |
-            ${{ steps.retrieve-cloudflare-subdomains }}
+            ${{ runner.os }-go-${{ hashFiles('**/flarectl') }}
 
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
