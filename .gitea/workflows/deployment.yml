@@ -69,11 +69,6 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: |
-          go env
-          if [ -z "$(echo $GOPATH)" ]; then
-            export GOPATH=$HOME/go
-          fi
-          export PATH=$PATH:$GOPATH/bin
           # Check if flarectl exists; install if not cached
           if ! command -v flarectl &> /dev/null; then
             echo "flarectl not found, installing..."
