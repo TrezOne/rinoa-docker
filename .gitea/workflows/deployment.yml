@@ -52,12 +52,12 @@ jobs:
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
     
-      - name: Setup Go Faster
+      - name: Setup Go
         uses: WillAbides/setup-go-faster@v1.14.0
         with:
           go-version: 'stable'
 
-      - name: Install jq
+      - name: Setup jq
         uses: dcarbone/install-jq-action@v3.0.1
 
       - name: Setup flarectl
@@ -69,6 +69,14 @@ jobs:
           go env ${{ github.workspace }}
           go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
 
+      - name: Retrieve Cloudflare Subdomains
+        id: compare-subdomains
+        env: 
+          CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
+          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
+        run: |
+          flarectl --json dns list --zone=trez.wtf --type CNAME --content "trez.wtf" | jq > cloudflare_subdomains.txt
+
       - name: Grab subdomains from Compose
         id: compose-domains
         env:
@@ -76,14 +84,6 @@ jobs:
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort -u > compose_subdomains.txt
-      
-      - name: Retrieve Cloudflare Subdomains
-        id: compare-subdomains
-        env: 
-          CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
-          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
-        run: |
-          flarectl --json dns list --zone=trez.wtf --type CNAME --content "trez.wtf"
 
       # - name: Compare Subdomains
       #   id: compare-subdomains
