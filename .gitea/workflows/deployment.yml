@@ -64,6 +64,7 @@ jobs:
 
       - name: Setup flarectl
         run: |
+          go env
           if [ -z "$(echo $GOPATH)" ]; then
             export GOPATH=$HOME/go
           fi
