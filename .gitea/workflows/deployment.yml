@@ -94,6 +94,8 @@ jobs:
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
+          cat compose_subdomains.txt
+          cat cloudflare_subdomains.txt
           diff compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $2}' | sed -e 's|.||g' > missing_subdomains.txt
           if [ -s missing_subdomains.txt ]; then
             echo "Missing subdomains found. Please add them to Cloudflare."
