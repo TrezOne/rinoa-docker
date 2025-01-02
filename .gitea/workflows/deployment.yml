@@ -66,8 +66,8 @@ jobs:
       - name: Retrieve Subdomains from Cloudflare
         id: retrieve-cloudflare-subdomains
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
           # Check if flarectl exists; install if not cached
           if ! command -v flarectl &> /dev/null; then
