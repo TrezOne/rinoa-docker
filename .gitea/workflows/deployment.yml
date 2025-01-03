@@ -69,6 +69,7 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
+          go env
           # Check if flarectl exists; install if not cached
           if ! command -v flarectl &> /dev/null; then
             echo "flarectl not found, installing..."
@@ -93,6 +94,7 @@ jobs:
         with:
           old: cloudflare_subdomains.txt
           new: compose_subdomains.txt
+          mode: mixed-worse
           output: missing_subdomains.txt
 
       - name: Add missing subdomains to Cloudflare
