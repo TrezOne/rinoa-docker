@@ -50,9 +50,6 @@ jobs:
           go-version: 'stable'
           check-latest: true
           cache: true
-          cache-dependency-path: |
-            **/go.sum
-            **/go.mod
           token: ${{ secrets.BOT_GITEA_TOKEN }}
 
       - name: Setup jq
