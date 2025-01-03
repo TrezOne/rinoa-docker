@@ -118,30 +118,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Send Gotify Notification
-        uses: eikendev/gotify-action@0.0.3
-        with:
-          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.GOTIFY_TOKEN }}'
-          notification_title: '${{ github.ref_name }} ready to be merged.'
-          notification_message: '${{ gitea.server_url }}/issues'
-
-      - name: Manual Approval
-        uses: macnev2013/manual-approval@v1.0.18
-        with:
-          secret: ${{ secrets.BOT_GITEA_TOKEN }}
-          approvers: Trez.One
-          minimum-approvals: 1
-          approval-wait: 600
-          issue-title: "Deployment of ${{ github.ref_name }}"
-          issue-body: "Autobots, roll out!"
-
-  #     - name: Tea CLI Setup & PR Merge
-  #       run: |
-  #         curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
-  #         chmod +x /usr/local/bin/tea
-  #         echo "Merging PR..."
-  #         tea login add --name gitea-rinoa --url ${{ vars.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-  #         echo ${{ gitea.ref_name }}
-  #         pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
-  #         tea pr m --repo ${{ github.repository }} --title "Auto Merge" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
+      - name: Tea CLI Setup & PR Merge
+        run: |
+          curl -sSL https://dl.gitea.com/tea/main/tea-main-linux-amd64 -o /usr/local/bin/tea
+          chmod +x /usr/local/bin/tea
+          echo "Merging PR..."
+          tea login add --name gitea-rinoa --url ${{ vars.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
+          tea pr m --repo ${{ github.repository }} --title "Auto Merge of ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
