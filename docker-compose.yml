@@ -503,6 +503,51 @@ services:
     networks:
       default: null
     restart: unless-stopped
+  bunkerweb:
+    container_name: bunkerweb
+    environment:
+      SERVER_NAME: www.trez.wtf
+      API_WHITELIST_IP: 172.18.0.0/16 192.168.1.0/24
+      USE_REAL_IP: yes
+      REAL_IP_FROM: 172.18.0.0/16
+      REAL_IP_HEADER: X-Forwarded-For
+    expose:
+      - 8080
+      - 8443
+    image: bunkerity/bunkerweb:latest
+    labels:
+      bunkerweb.INSTANCE: yes
+  bunkerweb-scheduler:
+    container_name: bunkerweb-scheduler
+    depends_on:
+      - bunkerweb
+      - docker-socket-proxy
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+    image: bunkerity/bunkerweb-scheduler:latest
+    volumes:
+      - bunkerweb-data:/data
+  bunkerweb-ui:
+    container_name: bunkerweb-ui
+    depends_on:
+      - bunkerweb
+      - docker-socket-proxy
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+    expose:
+      - 7000
+    image: bunkerity/bunkerweb-ui:latest
+    labels:
+      homepage.group: Privacy/Security
+      homepage.name: Bunkerweb
+      homepage.href: https://bunker.${MY_TLD}
+      homepage.icon: bunker.svg
+      homepage.description: Next-gen WAF
+      swag: enable
+      swag_port: 7000
+      swag_url: bunker.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://bunker.${MY_TLD}
   castopod:
     container_name: castopod
     depends_on:
@@ -6930,6 +6975,8 @@ volumes:
     name: authelia-pg-db
   bitmagnet-pg-db:
     name: bitmagnet-pg-db
+  bunkerweb-data:
+    name: bunkerweb-data
   castopod-media:
     name: castopod-media
   crowdsec-config:
@@ -6984,10 +7031,6 @@ volumes:
     name: localai_data
   mastodon-pg-db:
     name: mastodon-pg-db
-  meshcentral-data:
-  meshcentral-user_files:
-  meshcentral-backup:
-  meshcentral-web:
   mongodb_config:
     name: mongo1_config
   mongodb_data:
