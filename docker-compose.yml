@@ -548,6 +548,8 @@ services:
       swag_url: bunker.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://bunker.${MY_TLD}
+    volumes:
+      - bunkerweb-data:/data
   castopod:
     container_name: castopod
     depends_on:
