@@ -49,6 +49,7 @@ jobs:
           language-type: 'go'
           repository: cloudflare-go
           repository-owner: cloudflare
+          version: "latest"
 
   #     - name: Setup Go
   #       id: setup-go
