@@ -43,6 +43,20 @@ jobs:
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
       
+      - name: Setup Go
+        id: setup-go
+        uses: actions/setup-go@v5.2.0
+        with:
+          go-version: 'stable'
+          cache: true
+          cache-dependency-path: |
+            **/go.sum
+            **/go.mod
+            **/flarectl
+      
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v3.0.1
+      
       - name: Install flarectl
         uses: tj-actions/setup-bin@v1.2.1
         with:
@@ -50,20 +64,6 @@ jobs:
           repository: cloudflare-go
           repository-owner: cloudflare
           version: "latest"
-
-  #     - name: Setup Go
-  #       id: setup-go
-  #       uses: actions/setup-go@v5.2.0
-  #       with:
-  #         go-version: 'stable'
-  #         cache: true
-  #         cache-dependency-path: |
-  #           **/go.sum
-  #           **/go.mod
-  #           **/flarectl
-
-  #     - name: Setup jq
-  #       uses: dcarbone/install-jq-action@v3.0.1
 
   #     - name: Retrieve Subdomains from Cloudflare & Compose
   #       id: retrieve-cloudflare-subdomains
