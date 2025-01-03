@@ -48,7 +48,6 @@ jobs:
         uses: actions/setup-go@v5.2.0
         with:
           go-version: 'stable'
-          check-latest: true
           cache: true
           token: ${{ secrets.BOT_GITEA_TOKEN }}
 
