@@ -46,18 +46,6 @@ services:
       homepage.widget.url: http://adguard:80
       homepage.widget.username: admin
       homepage.widget.password: ${ADGUARD_PASSWORD}
-      swag: enable
-      swag_proto: http
-      swag_url: adgh.${MY_TLD}
-      homepage.group: System Administration
-      homepage.name: AdGuard Home
-      homepage.icon: adguard-home.png
-      homepage.href: https://adgh.${MY_TLD}
-      homepage.description: Ad-blocking/DNS
-      homepage.widget.type: adguard
-      homepage.widget.url: http://adguard:80
-      homepage.widget.username: admin
-      homepage.widget.password: ${ADGUARD_PASSWORD}
     networks:
       default: null
     ports:
@@ -486,11 +474,6 @@ services:
       swag_url: bsky.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://bsky.${MY_TLD}
-      swag: enable
-      swag_port: 3000
-      swag_url: bsky.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://bsky.${MY_TLD}
     restart: unless-stopped
     volumes:
       - type: bind
@@ -513,10 +496,6 @@ services:
       - 3000
     image: ghcr.io/browserless/chromium:latest
     labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 3000
-      swag_url: browse.${MY_TLD}
       swag: enable
       swag_proto: http
       swag_port: 3000
@@ -2866,12 +2845,6 @@ services:
   lldap:
     container_name: lldap
     environment:
-      UID: ${PUID}
-      GID: ${PGID}
-      TZ: ${TZ}
-      LLDAP_JWT_SECRET: ${LLDAP_JWT_SECRET}
-      LLDAP_KEY_SEED: ${LLDAP_KEY_SEED}
-      LLDAP_LDAP_BASE_DN: dc=trez,dc=wtf
       UID: ${PUID}
       GID: ${PGID}
       TZ: ${TZ}
