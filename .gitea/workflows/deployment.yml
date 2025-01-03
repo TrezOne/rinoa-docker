@@ -112,6 +112,7 @@ jobs:
   merge-pr:
     name: PR Merge
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: [cloudflare-dns-setup]
     steps:
       - name: Checkout
