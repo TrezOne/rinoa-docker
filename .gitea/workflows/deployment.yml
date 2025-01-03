@@ -40,21 +40,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache flarectl and Go dependencies
-        id: cache-flarectl
-        uses: actions/cache@v4
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-${{ hashFiles('**/go.sum') }}
-
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
     
       - name: Setup Go
-        id: setup-go-faster
-        uses: WillAbides/setup-go-faster@v1.14.0
+        id: setup-go
+        uses: actions/setup-go@v5.2.0
         with:
           go-version: 'stable'
+          check-latest: true
+          cache: true
+          cache-dependency-path: '**/go.sum'
 
       - name: Setup jq
         uses: dcarbone/install-jq-action@v3.0.1
@@ -85,7 +81,6 @@ jobs:
       - name: Add missing subdomains to Cloudflare
         if: steps.compare-subdomains.outputs.output != ''
         env: 
-          DOCKER_HOST: tcp://dockerproxy:2375
           CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
