@@ -49,7 +49,10 @@ jobs:
         with:
           go-version: 'stable'
           cache: true
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          cache-dependency-path: |
+            **/go.sum
+            **/go.mod
+            **/flarectl
 
       - name: Setup jq
         uses: dcarbone/install-jq-action@v3.0.1
