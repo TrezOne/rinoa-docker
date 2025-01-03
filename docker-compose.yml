@@ -46,6 +46,18 @@ services:
       homepage.widget.url: http://adguard:80
       homepage.widget.username: admin
       homepage.widget.password: ${ADGUARD_PASSWORD}
+      swag: enable
+      swag_proto: http
+      swag_url: adgh.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: AdGuard Home
+      homepage.icon: adguard-home.png
+      homepage.href: https://adgh.${MY_TLD}
+      homepage.description: Ad-blocking/DNS
+      homepage.widget.type: adguard
+      homepage.widget.url: http://adguard:80
+      homepage.widget.username: admin
+      homepage.widget.password: ${ADGUARD_PASSWORD}
     networks:
       default: null
     ports:
@@ -474,6 +486,11 @@ services:
       swag_url: bsky.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://bsky.${MY_TLD}
+      swag: enable
+      swag_port: 3000
+      swag_url: bsky.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://bsky.${MY_TLD}
     restart: unless-stopped
     volumes:
       - type: bind
@@ -496,6 +513,10 @@ services:
       - 3000
     image: ghcr.io/browserless/chromium:latest
     labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: browse.${MY_TLD}
       swag: enable
       swag_proto: http
       swag_port: 3000
@@ -691,7 +712,7 @@ services:
       homepage.group: System Administration
       homepage.name: Czkawka
       homepage.href: https://czkawka.${MY_TLD}
-      homepage.icon: sh-czkawka.png
+      homepage.icon: /icons/czkawka.png
       homepage.description: Smart file management
       swag: enable
       swag_port: 5800
@@ -2851,6 +2872,12 @@ services:
       LLDAP_JWT_SECRET: ${LLDAP_JWT_SECRET}
       LLDAP_KEY_SEED: ${LLDAP_KEY_SEED}
       LLDAP_LDAP_BASE_DN: dc=trez,dc=wtf
+      UID: ${PUID}
+      GID: ${PGID}
+      TZ: ${TZ}
+      LLDAP_JWT_SECRET: ${LLDAP_JWT_SECRET}
+      LLDAP_KEY_SEED: ${LLDAP_KEY_SEED}
+      LLDAP_LDAP_BASE_DN: dc=trez,dc=wtf
     image: lldap/lldap:stable
     labels:
       homepage.group: System Administration
@@ -3008,52 +3035,19 @@ services:
         type: bind
         bind:
           create_host_path: true
-  mastodon:
-    container_name: mastodon
-    environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
-      LOCAL_DOMAIN: trez.wtf
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      DB_HOST: mastodon-pg-db
-      DB_USER: mastodon
-      DB_NAME: mastodon
-      DB_PASS: ${MASTODON_PG_DB_PASSWORD}
-      DB_PORT: 5432
-      ES_ENABLED: false
-      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: 
-      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: 
-      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 
-      SECRET_KEY_BASE: 
-      OTP_SECRET: 
-      VAPID_PRIVATE_KEY: 
-      VAPID_PUBLIC_KEY: 
-      SMTP_SERVER: postal-smtp
-      SMTP_PORT: 25
-      SMTP_LOGIN: ${POSTAL_SMTP_AUTH_USER}
-      SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      SMTP_FROM_ADDRESS: noreply@trez.wtf
-      S3_ENABLED: true
-      S3_BUCKET: mastodon
-      AWS_ACCESS_KEY_ID: ${MASTODON_MINIO_ACCESS_KEY}
-      AWS_SECRET_ACCESS_KEY: ${MASTODON_MINIO_SECRET_KEY}
-    image: lscr.io/linuxserver/mastodon:latest
+  meshcentral:
+    container_name: meshcentral
+    image: ghcr.io/ylianst/meshcentral:master
     labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 5678
-      swag_url: mastodon.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
-      homepage.group: Social
-      homepage.name: Mastodon
-      homepage.href: https://mastodon.${MY_TLD}
-      homepage.icon: mastodon.svg
-      homepage.description: Open-source social network
-      homepage.widget.type: mastodon
-      homepage.widget.url: http://mastodon
+      - homepage.group=System Administration
+      - homepage.name=MeshCentral
+      - homepage.href=https://mesh.${MY_TLD}
+      - homepage.icon=meshcentral.png
+      - homepage.description=
+      - swag=enable
+      - swag_proto=http
+      - swag_port=80
+      - swag_url=mesh.${MY_TLD}
     ports:
       - 9044:80
       - 3444:443
@@ -4405,7 +4399,7 @@ services:
       homepage.group: Servarr Stack
       homepage.name: Sonashow
       homepage.href: https://sonashow.${MY_TLD}
-      homepage.icon: sh-sonashow.png
+      homepage.icon: /icons/sonashow.png
       homepage.description: TV show discovery based on library/tastes
       swag: enable
       swag_auth: authelia
@@ -4452,7 +4446,7 @@ services:
       homepage.group: Downloaders
       homepage.description: Modern client-server application for the Soulseek file-sharing network.
       homepage.href: https://slsk.${MY_TLD}
-      homepage.icon: sh-slskd.svg
+      homepage.icon: /icons/slskd.png
       swag: enable
       swag_proto: http
       swag_url: slsk.${MY_TLD}
@@ -6481,7 +6475,7 @@ services:
       homepage.group: System Administration
       homepage.name: WhoDB
       homepage.href: https://dbs.${MY_TLD}
-      homepage.icon: sh-whodb.png
+      homepage.icon: /icons/whodb.png
       homepage.description: Web-based DB management
       swag: enable
       swag_proto: http
