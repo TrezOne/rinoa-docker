@@ -80,7 +80,8 @@ jobs:
         with:
           old: cloudflare_subdomains.txt
           new: compose_subdomains.txt
-          mode: mixed-better
+          mode: addition
+          tolerance: mixed-better
           output: missing_subdomains.txt
 
   #     - name: Add missing subdomains to Cloudflare
