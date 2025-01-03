@@ -83,7 +83,10 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
+          flarectl dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf"
+          echo "Grabbing subdomains from Cloudflare..."
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
+          echo "Grabbing subdomains from docker-compose.yml..."
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
           sdiff -l -s compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $1}' | egrep '^[a-z]' > missing_subdomains.txt
           if [ -s missing_subdomains.txt ]; then
