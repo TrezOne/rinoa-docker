@@ -32,6 +32,30 @@ jobs:
           token: ${{ secrets.BOT_GITEA_TOKEN }}
           assignee: ${{ gitea.actor }}
 
+  docker-compose-test:
+    name: Docker Compose Test
+    needs: [cloudflare-dns-setup]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate ephemeral .env compose file
+        id: generate-env-file-pr
+        run: |
+          echo "${{ secrets.RINOA_ENV }}" > .env
+
+      - name: Docker Compose Lint
+        uses: yu-ichiro/spin-up-docker-compose-action@v1
+        with:
+          file: docker-compose.yml
+          pull: true
+          pull-opts: --dry-run
+          up: true
+          up-opts: --dry-run -d --remove-orphans
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
+
   cloudflare-dns-setup:
     name: Cloudflare DNS Setup
     needs: [check-and-create-pr]
@@ -40,22 +64,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup yq
-        uses: dcarbone/install-yq-action@v1
-      
-      # - name: Setup Go
-      #   id: setup-go
-      #   uses: actions/setup-go@v5.2.0
-      #   with:
-      #     go-version: 'stable'
-      #     cache: true
-      #     cache-dependency-path: |
-      #       **/go.sum
-      #       **/go.mod
-      #       **/flarectl
-      
-      - name: Setup jq
+      - name: Install jq
         uses: dcarbone/install-jq-action@v3.0.1
+
+      - name: Install yq
+        uses: dcarbone/install-yq-action@v1
       
       - name: Install flarectl
         uses: supplypike/setup-bin@v4
@@ -64,79 +77,51 @@ jobs:
           name: 'flarectl'
           version: '0.113.0'
 
-      - name: Retrieve Subdomains from Cloudflare & Compose
-        id: retrieve-cloudflare-subdomains
+      - name: Subdomain/CNAME Comparison & Creation
+        id: compare-subdomains
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
-          diff compose_subdomains.txt cloudflare_subdomains.txt > missing_subdomains.txt || true
-          echo "::set-output name=output::$(cat missing_subdomains.txt)"
+          sdiff -l -s compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $1}' | egrep '^[a-z]' > missing_subdomains.txt
+          if [ -s missing_subdomains.txt ]; then
+            for subdomain in $(cat missing_subdomains.txt); do
+              echo "Adding ${subdomain} to Cloudflare..."
+              flarectl dns create --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
+            done
+          else
+          echo "No missing subdomains found."
+          fi
 
-      - name: Add missing subdomains to Cloudflare
-        if: steps.compare-subdomains.outputs.output != ''
-        env: 
-          CF_API_KEY: ${{ secrets.CF_API_TOKEN }}
-          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
-        run: |
-          for subdomain in $(cat missing_subdomains.txt); do
-            echo "Adding ${subdomain} to Cloudflare..."
-            flarectl dns creeate --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
-          done
+  merge-pr:
+    name: PR Merge
+    runs-on: ubuntu-latest
+    needs: [docker-compose-test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  # docker-compose-test:
-  #   name: Docker Compose Test
-  #   needs: [cloudflare-dns-setup]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+      - name: Send Gotify Notification
+        uses: eikendev/gotify-action@0.0.3
+        with:
+          gotify_api_base: '${{ secrets.GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.GOTIFY_TOKEN }}'
+          notification_title: '${{ github.ref_name }} ready to be merged.'
+          notification_message: '${{ gitea.server_url }}/issues'
 
-  #     - name: Generate ephemeral .env compose file
-  #       id: generate-env-file-pr
-  #       run: |
-  #         echo "${{ secrets.RINOA_ENV }}" > .env
-
-  #     - name: Docker Compose Lint
-  #       uses: yu-ichiro/spin-up-docker-compose-action@v1
-  #       with:
-  #         file: docker-compose.yml
-  #         pull: true
-  #         pull-opts: --dry-run
-  #         up: true
-  #         up-opts: --dry-run -d --remove-orphans
-  #       env:
-  #         DOCKER_HOST: tcp://dockerproxy:2375
-
-  # merge-pr:
-  #   name: PR Merge
-  #   runs-on: ubuntu-latest
-  #   needs: [docker-compose-test]
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-
-  #     - name: Send Gotify Notification
-  #       uses: eikendev/gotify-action@0.0.3
-  #       with:
-  #         gotify_api_base: '${{ secrets.GOTIFY_URL }}'
-  #         gotify_app_token: '${{ secrets.GOTIFY_TOKEN }}'
-  #         notification_title: '${{ github.ref_name }} ready to be merged.'
-  #         notification_message: '${{ gitea.server_url }}/issues'
-
-  #     - name: Manual Approval
-  #       uses: trstringer/manual-approval@v1
-  #       with:
-  #         secret: ${{ secrets.BOT_GITEA_TOKEN }}
-  #         approvers: Trez.One
-  #         minimum-approvals: 1
-  #         issue-title: "Deployment of ${{ github.ref_name }}"
-  #         issue-body: "Autobots, roll out!"
-  #         exclude-workflow-initiator-as-approver: false
-  #         additional-approved-words: ''
-  #         additional-denied-words: ''
+      - name: Manual Approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.BOT_GITEA_TOKEN }}
+          approvers: Trez.One
+          minimum-approvals: 1
+          issue-title: "Deployment of ${{ github.ref_name }}"
+          issue-body: "Autobots, roll out!"
+          exclude-workflow-initiator-as-approver: false
+          additional-approved-words: ''
+          additional-denied-words: ''
 
       # - name: Tea CLI Setup & PR Merge
       #   run: |
