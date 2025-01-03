@@ -89,13 +89,15 @@ jobs:
           echo "Grabbing subdomains from docker-compose.yml..."
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
           sdiff -l -s compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $1}' | egrep '^[a-z]' > missing_subdomains.txt
+          cat missing_subdomains.txt
           if [ -s missing_subdomains.txt ]; then
-            for subdomain in $(cat missing_subdomains.txt); do
-              echo "Adding ${subdomain} to Cloudflare..."
-              flarectl dns create --zone ${{ secrets.CF_ZONE_ID }} --type CNAME --name "${subdomain}" --content "trez.wtf" --proxy true
-            done
+            echo "Missing subdomains found. Creating them..."
+            while IFS= read -r subdomain; do
+              echo "Creating $subdomain.trez.wtf..."
+              flarectl dns create --zone "trez.wtf" --name "$subdomain" --type CNAME --content "trez.wtf"
+            done < missing_subdomains.txt
           else
-          echo "No missing subdomains found."
+            echo "No missing subdomains found."
           fi
 
   merge-pr:
