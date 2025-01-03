@@ -95,7 +95,7 @@ jobs:
           old: compose_subdomains.txt
           new: cloudflare_subdomains.txt
           mode: addition
-          tolerance: mixed-better
+          tolerance: better
           output: domain_compare.txt
 
       - name: Create Missing Subdomains
