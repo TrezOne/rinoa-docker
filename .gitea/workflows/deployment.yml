@@ -42,7 +42,12 @@ jobs:
 
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
-    
+      
+      - name: Install flarectl
+        if: steps.setup-go.outputs.cache-hit != 'true'
+        run: |
+          go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
+
       - name: Setup Go
         id: setup-go
         uses: actions/setup-go@v5.2.0
@@ -57,10 +62,6 @@ jobs:
       - name: Setup jq
         uses: dcarbone/install-jq-action@v3.0.1
 
-      - name: Install flarectl
-        if: steps.setup-go.outputs.cache-hit != 'true'
-        run: |
-          go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
 
       - name: Retrieve Subdomains from Cloudflare & Compose
         id: retrieve-cloudflare-subdomains
