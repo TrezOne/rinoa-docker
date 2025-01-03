@@ -44,12 +44,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            $HOME/.cache/go-build
-            $HOME/.config/go/env
-            $HOME/go/pkg/mod/cache/
-          key: ${{ runner.os }}-go-${{ steps.setup-go-faster.outputs.GOROOT }}
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go-${{ steps.setup-go-faster.outputs.GOROOT }}
+            ${{ runner.os }}-go-
 
       - name: Setup yq
         uses: dcarbone/install-yq-action@v1
