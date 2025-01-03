@@ -34,7 +34,7 @@ jobs:
 
   docker-compose-test:
     name: Docker Compose Test
-    needs: [cloudflare-dns-setup]
+    needs: [check-and-create-pr]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -58,7 +58,7 @@ jobs:
 
   cloudflare-dns-setup:
     name: Cloudflare DNS Setup
-    needs: [check-and-create-pr]
+    needs: [docker-compose-test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -98,7 +98,7 @@ jobs:
   merge-pr:
     name: PR Merge
     runs-on: ubuntu-latest
-    needs: [docker-compose-test]
+    needs: [cloudflare-dns-setup]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
