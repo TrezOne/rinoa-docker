@@ -101,7 +101,7 @@ jobs:
       - name: Create Missing Subdomains
         if: steps.compare-subdomains.outputs.output != ''
         run: |
-          cat domain_compare.txt | egrep '^-[a-z]
+          cat domain_compare.txt | egrep '^-[a-z]'
 
   # merge-pr:
   #   name: PR Merge
