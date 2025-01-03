@@ -95,13 +95,13 @@ jobs:
           old: compose_subdomains.txt
           new: cloudflare_subdomains.txt
           mode: addition
-          tolerance: better
+          tolerance: mixed-better
           output: domain_compare.txt
 
       - name: Create Missing Subdomains
         if: steps.compare-subdomains.outputs.output != ''
         run: |
-          cat domain_compare.txt
+          cat domain_compare.txt | egrep '^-[a-z]
 
   # merge-pr:
   #   name: PR Merge
