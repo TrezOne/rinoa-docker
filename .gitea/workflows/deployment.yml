@@ -50,7 +50,10 @@ jobs:
           go-version: 'stable'
           check-latest: true
           cache: true
-          cache-dependency-path: "**/go.sum"
+          cache-dependency-path: |
+            **/go.sum
+            **/go.mod
+          token: ${{ secrets.BOT_GITEA_TOKEN }}
 
       - name: Setup jq
         uses: dcarbone/install-jq-action@v3.0.1
