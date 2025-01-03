@@ -56,7 +56,7 @@ jobs:
         uses: dcarbone/install-jq-action@v3.0.1
 
       - name: Install flarectl
-        if: steps.cache-flarectl.outputs.cache-hit != 'true'
+        if: steps.setup-go.outputs.cache-hit != 'true'
         run: |
           go install github.com/cloudflare/cloudflare-go/cmd/flarectl@latest
 
