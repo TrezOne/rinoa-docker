@@ -126,16 +126,14 @@ jobs:
           notification_message: '${{ gitea.server_url }}/issues'
 
       - name: Manual Approval
-        uses: trstringer/manual-approval@v1
+        uses: macnev2013/manual-approval@v1.0.18
         with:
           secret: ${{ secrets.BOT_GITEA_TOKEN }}
           approvers: Trez.One
           minimum-approvals: 1
+          approval-wait: 600
           issue-title: "Deployment of ${{ github.ref_name }}"
           issue-body: "Autobots, roll out!"
-          exclude-workflow-initiator-as-approver: false
-          additional-approved-words: ''
-          additional-denied-words: ''
 
   #     - name: Tea CLI Setup & PR Merge
   #       run: |
