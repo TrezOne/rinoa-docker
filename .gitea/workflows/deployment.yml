@@ -88,7 +88,7 @@ jobs:
           echo "Grabbing subdomains from Cloudflare..."
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
           
-      - name: Compare Subdomains and Create Missing Ones
+      - name: Compare Subdomains
         id: compare-subdomains
         uses: LouisBrunner/diff-action@v2.2.0
         with:
@@ -98,10 +98,10 @@ jobs:
           tolerance: mixed-better
           output: domain_compare.txt
 
-      # - name: Create Missing Subdomains
-      #   if: steps.compare-subdomains.outputs.output != ''
-      #   run: |
-      #     cat ${{ steps.compare-subdomains.outputs.output }}
+      - name: Create Missing Subdomains
+        if: steps.compare-subdomains.outputs.output != ''
+        run: |
+          cat domain_compare.txt
 
   # merge-pr:
   #   name: PR Merge
