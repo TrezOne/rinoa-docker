@@ -50,7 +50,7 @@ jobs:
           go-version: 'stable'
           check-latest: true
           cache: true
-          cache-dependency-path: '**/go.sum'
+          cache-dependency-path: "**/go.sum"
 
       - name: Setup jq
         uses: dcarbone/install-jq-action@v3.0.1
