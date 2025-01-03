@@ -88,7 +88,7 @@ jobs:
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
           echo "Grabbing subdomains from docker-compose.yml..."
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
-          sdiff -l -s compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $1}' | egrep '^[a-z]' > missing_subdomains.txt
+          diff --side-by-side --left-column --suppress-common-lines compose_subdomains.txt cloudflare_subdomains.txt | awk '{print $1}' | egrep '^[a-z]' > missing_subdomains.txt
           cat missing_subdomains.txt
           if [ -s missing_subdomains.txt ]; then
             echo "Missing subdomains found. Creating them..."
