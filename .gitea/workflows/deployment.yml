@@ -98,8 +98,11 @@ jobs:
           tolerance: mixed-better
           output: domain_compare.txt
 
-      - name: Create Missing Subdomains
+      - name: Create Subdomains
         if: steps.compare-subdomains.outputs.output != ''
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
           cat domain_compare.txt | egrep '^-[a-z]' | sed -e 's|-||g' | while read -r subdomain; do
             echo "Creating $subdomain.trez.wtf..."
