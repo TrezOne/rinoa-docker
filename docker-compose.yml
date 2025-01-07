@@ -4434,6 +4434,9 @@ services:
         type: bind
   soularr:
     container_name: soularr
+    depends_on:
+      - lidarr
+      - soulseek
     environment: 
       PUID: ${PUID}
       PGID: ${PGID}
