@@ -517,6 +517,7 @@ services:
     image: bunkerity/bunkerweb:latest
     labels:
       bunkerweb.INSTANCE: yes
+    restart: unless-stopped
   bunkerweb-scheduler:
     container_name: bunkerweb-scheduler
     depends_on:
@@ -525,6 +526,7 @@ services:
     environment:
       DOCKER_HOST: tcp://dockerproxy:2375
     image: bunkerity/bunkerweb-scheduler:latest
+    restart: unless-stopped
     volumes:
       - bunkerweb-data:/data
   bunkerweb-ui:
@@ -548,6 +550,7 @@ services:
       swag_url: bunker.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://bunker.${MY_TLD}
+    restart: unless-stopped
     volumes:
       - bunkerweb-data:/data
   castopod:
