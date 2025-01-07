@@ -21,7 +21,7 @@ jobs:
             -X 'GET' \
             -H 'Accept: application/json' \
             -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -s | jq '{index: .number, state: .state}')
+            -sS | jq '{index: .number, state: .state}')
           pr_state=$(echo ${pr_check} | jq -r '.state')
 
       - name: Create PR
