@@ -4429,6 +4429,21 @@ services:
         source: /etc/localtime
         target: /etc/localtime
         type: bind
+  soularr:
+    container_name: soularr
+    environment: 
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      #Script interval in seconds
+      SCRIPT_INTERVAL: 300
+    image: mrusse08/soularr:latest
+    restart: unless-stopped
+    volumes:
+      #"You can set /downloads to whatever you want but will then need to change the Slskd download dir in your config file"
+      - ${DOCKER_VOLUME_STORAGEE}/downloads:/downloads
+      #Select where you are storing your config file. Leave "/data" since thats where the script expects the config file to be
+      - ${DOCKER_VOLUME_CONFIG}/soularr:/data
   soulseek:
     container_name: soulseek
     depends_on:
