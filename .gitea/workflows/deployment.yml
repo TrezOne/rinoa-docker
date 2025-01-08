@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate ephemeral .env compose file
-        uses: Simporter/get-env-file-from-vault@v1.0.2
+        uses: n4mespace/get-env-file-from-vault-action@v1.0.0
         with:
           VAULT_ADDR: https://vault.trez.wtf
           VAULT_USERNAME: gitea
