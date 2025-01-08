@@ -33,7 +33,7 @@ jobs:
           pr_state=$(echo ${pr_check} | jq -r '.state')
 
       - name: Create PR
-        if: steps.list-prs.outputs.pr_state == null
+        if: steps.list-prs-action.outputs.pullRequestNumbers == ''
         uses: arifer612/Gitea-PR-action@v1.2.0
         with:
           url: ${{ gitea.server_url }}
