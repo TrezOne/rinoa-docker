@@ -16,8 +16,9 @@ jobs:
 
       - name: PR List (Action)
         id: list-prs-action
-        uses: vicamo/gitea-list-pull-requests@v1.0.1
+        uses: andrea-armstrong/github-list-pull-requests@v1.0.0
         with:
+          token: ${{ secrets.BOT_GITEA_TOKEN }}
           state: all
 
       - name: PR list
@@ -32,7 +33,7 @@ jobs:
           pr_state=$(echo ${pr_check} | jq -r '.state')
 
       - name: Create PR
-        if: steps.list-prs.outputs.pr_state = null
+        if: steps.list-prs.outputs.pr_state == null
         uses: arifer612/Gitea-PR-action@v1.2.0
         with:
           url: ${{ gitea.server_url }}
