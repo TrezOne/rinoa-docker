@@ -24,20 +24,17 @@ jobs:
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
   
-      - name: PR list
+      - name: Check if PR exists & Create
         id: list-prs
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea pr ls --repo ${{ gitea.repository }} --state all --output yaml
-          echo "pr_state=$(tea pr ls --repo ${{ gitea.repository }} --state open --output yaml | yq '.[].state')" >> $GITHUB_OUTPUT
-
-      - name: Create PR
-        if: steps.list-prs.outputs.pr_state != '"open"'
-        uses: arifer612/Gitea-PR-action@v1.2.0
-        with:
-          url: ${{ github.server_url }}
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
-          pr-label: 'auto-deploy-pr'
+          tea login default gitea-rinoa
+          pr_state=$(tea pr ls --repo ${{ gitea.repository }} --state open --output yaml | yq '.[].state')
+          if [ ${pr_state} != 'open' ]; then
+            tea pr c -r ${{ gitea.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
+          elif [ ${pr_state} == 'open' ]; then
+            echo "PR already exists, skipping creation..."
+          fi
 
   docker-compose-test:
     name: Docker Compose Test
@@ -97,7 +94,6 @@ jobs:
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
           echo "Grabbing subdomains from Cloudflare..."
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
-          yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml
           
       - name: Compare Subdomains
         id: compare-subdomains
@@ -129,15 +125,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - run: echo ${{ env.readme_list }}
+      - name: Install yq
+        uses: dcarbone/install-yq-action@v1
+      
+      - name: Generate README list
+        id: readme-list
+        run: |
+          services_list=$(yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml)
+          echo "SERVICES_LIST=${services_list}" >> $GITHUB_ENV
 
-      # - name: Regenerate README
-      #   uses: VisualBean/reactive-readme@v1
-      #   with:
-      #     value: ${{ env.readme_list }}
-      #     section: compose-services
-      #     branch: ${{ github.ref_name }}
-      #     token: ${{ secrets.BOT_GITEA_TOKEN }}
+      - name: Regenerate README
+        uses: VisualBean/reactive-readme@v1
+        with:
+          value: ${{ env.SERVICES_LIST }}
+          section: compose-services
+          branch: ${{ github.ref_name }}
+          token: ${{ secrets.BOT_GITEA_TOKEN }}
 
       # - name: Add/Commit/Push README.md
       #   uses: mgrybyk-org/git-commit-pull-push-action@v1
