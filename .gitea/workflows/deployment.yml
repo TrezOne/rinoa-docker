@@ -29,8 +29,7 @@ jobs:
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
-          tea pr ls --repo ${{ github.repository }} --state open
-          pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --output yaml | yq -r '.[].state')
+          pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
           if [ "${pr_state}" != open ]; then
             tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
           elif [ "${pr_state}" = open ]; then
