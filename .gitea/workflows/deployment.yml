@@ -23,15 +23,13 @@ jobs:
       
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
-
-      - run: |
-          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea login default gitea-rinoa
-   
+  
       - name: PR list
         id: list-prs
         run: |
-          tea pr ls --state open --output yaml | yq '.[].state'
+          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea login default gitea-rinoa
+          tea pr ls --state all --output yaml | yq '.[].state'
           echo "pr_state=$(tea pr ls --state open --output yaml | yq '.[].state')" >> $GITHUB_OUTPUT
 
       - name: Create PR
