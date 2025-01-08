@@ -18,7 +18,7 @@ jobs:
         id: list-prs-action
         uses: vicamo/gitea-list-pull-requests@v1.0.1
         with:
-          state: open
+          state: all
 
       - name: PR list
         id: list-prs
