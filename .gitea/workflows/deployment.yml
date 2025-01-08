@@ -29,9 +29,10 @@ jobs:
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
-          pr_state=$(tea pr ls --repo ${{ gitea.repository }} --state open --output yaml | yq -r '.[].state')
+          tea pr ls --repo ${{ github.repository }} --state open
+          pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --output yaml | yq -r '.[].state')
           if [ "${pr_state}" != open ]; then
-            tea pr c -r ${{ gitea.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
+            tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
           elif [ "${pr_state}" = open ]; then
             echo "PR already exists, skipping creation..."
           fi
