@@ -14,26 +14,28 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: PR List (Action)
-        id: list-prs-action
-        uses: andrea-armstrong/github-list-pull-requests@v1.0.0
+      - name: Install tea
+        uses: supplypike/setup-bin@v4
         with:
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
-          state: all
+          uri: https://dl.gitea.com/tea/main/tea-main-linux-amd64
+          name: tea
+          version: main
+      
+      - name: Install yq
+        uses: dcarbone/install-yq-action@v1
 
+      - run: |
+          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea login default gitea-rinoa
+   
       - name: PR list
         id: list-prs
         run: |
-          pr_check=$(curl ${{ secrets.RINOA_GITEA_URL }}/api/v1/repos/${{ github.repository }}/pulls/main/${{ github.ref_name }} \
-            -X 'GET' \
-            -H 'Accept: application/json' \
-            -H 'Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}' \
-            -sS | jq '{index: .number, state: .state}')
-          echo "PR List: ${pr_check}"
-          pr_state=$(echo ${pr_check} | jq -r '.state')
+          tea pr ls --state open --output yaml | yq '.[].state'
+          echo "pr_state=$(tea pr ls --state open --output yaml | yq '.[].state')" >> $GITHUB_OUTPUT
 
       - name: Create PR
-        if: steps.list-prs-action.outputs.pullRequestNumbers == ''
+        if: steps.list-prs.outputs.pr_state != '"open"'
         uses: arifer612/Gitea-PR-action@v1.2.0
         with:
           url: ${{ gitea.server_url }}
@@ -98,8 +100,7 @@ jobs:
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
           echo "Grabbing subdomains from Cloudflare..."
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
-          readme_list=$(yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml)
-          echo "readme_list=${readme_list}" >> $GITHUB_ENV
+          yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml
           
       - name: Compare Subdomains
         id: compare-subdomains
