@@ -111,6 +111,7 @@ jobs:
 
       - name: Create Subdomains
         if: steps.compare-subdomains.outputs.output != ''
+        continue-on-error: true
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
@@ -160,6 +161,13 @@ jobs:
     outputs:
       CONTINUE_JOBS: ${{ steps.deploy-trigger.outputs.CONTINUE_JOBS }}
     steps:
+      - name: Install tea
+        uses: supplypike/setup-bin@v4
+        with:
+          uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
+          name: 'tea'
+          version: '0.9.2'
+
       - name: PR Merge
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
@@ -192,13 +200,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-
-      - name: Install tea
-        uses: supplypike/setup-bin@v4
-        with:
-          uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
-          name: 'tea'
-          version: '0.9.2'
       
       - name: Install Vault
         uses: cpanato/vault-installer@main
