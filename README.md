@@ -1,8 +1,9 @@
 # List of Services
 
 `~> yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml`
-```json
+
 <!-- SERVICES_LIST_START -->
+```json
 [
   {
     "service": "actual_server",
@@ -585,5 +586,5 @@
     "image": "postgres:16-alpine"
   }
 ]
-<!-- SERVICES_LIST_END -->
 ```
+<!-- SERVICES_LIST_END -->
