@@ -57,7 +57,7 @@ jobs:
 
       - name: Generate .env file for linting
         run: |
-           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' > .env
+           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
       - name: Docker Compose Lint
         uses: yu-ichiro/spin-up-docker-compose-action@v1
