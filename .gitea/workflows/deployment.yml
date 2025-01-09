@@ -148,7 +148,7 @@ jobs:
         with:
           file: ./services.yml
 
-      - run: echo ${{ steps.service-table.outputs.table }}
+      - run: echo "${{ steps.service-table.outputs.table }}"
 
       - name: Regenerate README
         uses: gnpaone/dynamic-update-readme@v1.0.2
