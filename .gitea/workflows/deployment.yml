@@ -29,6 +29,7 @@ jobs:
           echo "List all PRs"
           tea pr ls --repo ${{ github.repository }} --state all
           echo "Check if PR exists for ${{ github.ref_name }}"
+          tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g'
           pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
           if [ "${pr_state}" != open ]; then
             tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
