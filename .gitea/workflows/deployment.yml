@@ -26,7 +26,6 @@ jobs:
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           which tea
-          tea login default gitea-rinoa
           echo "List all PRs"
           tea pr ls --state all
           echo "Check if PR exists for ${{ github.ref_name }}"
