@@ -171,6 +171,7 @@ jobs:
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
+          echo "PR_INDEX=${pr_index}" >> $GITHUB_OUPUT
     
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -182,9 +183,15 @@ jobs:
 
       - name: Trigger Deployment
         id: deploy-trigger
-        uses: benhamiltonpro/manual-trigger@v1
+        uses: macnev2013/manual-approval@latest
         with:
-          RUN_NAME: "docker-compose-deploy"
+          secret: ${{ github.TOKEN }}
+          approvers: Trez.One
+          minimum-approvals: 1
+          approval-wait: 600
+          issue-title: 'Manual Approval for #${pr_index} - ${{ gitea.ref_name }}'
+          issue-body: |
+            "Autobots, roll out!"
 
   docker-compose-deploy:
     name: Merge and Deploy
