@@ -27,7 +27,7 @@ jobs:
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           which tea
           echo "List all PRs"
-          tea pr ls --state all
+          tea pr ls --repo ${{ github.repository }} --state all
           echo "Check if PR exists for ${{ github.ref_name }}"
           pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
           if [ "${pr_state}" != open ]; then
