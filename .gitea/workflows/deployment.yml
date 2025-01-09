@@ -145,24 +145,19 @@ jobs:
         with:
           marker_text: "SERVICES_LIST"
           markdown_text: |
-            ```json
+            ```yaml
             ${{ env.SERVICES_LIST }}
             ````
+          commit_email: noreply@trez.wtf
+          commit_username: gitea-sonarqube-bot
+          commit_message: "docs: regenerate README"
 
-      - name: Add/Commit/Push README.md
-        uses: mgrybyk-org/git-commit-pull-push-action@v1
+      - name: Install tea
+        uses: supplypike/setup-bin@v4
         with:
-          add_args: README.md
-          repository: ${{ github.repository }}
-          branch: ${{ github.head_ref }}
-          commit_message: Regenerate README.md
-
-      # - name: Install tea
-      #   uses: supplypike/setup-bin@v4
-      #   with:
-      #     uri: https://dl.gitea.com/tea/main/tea-main-linux-amd64
-      #     name: tea
-      #     version: main
+          uri: https://dl.gitea.com/tea/main/tea-main-linux-amd64
+          name: tea
+          version: main
 
       # - name: PR Merge
       #   run: |
