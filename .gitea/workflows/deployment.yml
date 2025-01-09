@@ -140,15 +140,14 @@ jobs:
           echo "${services_list}" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - run: echo "${{ env.SERVICES_LIST }}"
-
       - name: Regenerate README
-        uses: VisualBean/reactive-readme@v1
+        uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
-          value: ${{ env.SERVICES_LIST }}
-          section: compose-services
-          branch: ${{ github.ref_name }}
-          token: ${{ secrets.BOT_GITEA_TOKEN }}
+          marker_text: <!-- SERVICES_LIST_START --><!-- SERVICES_LIST_END -->
+          markdown_text: |
+            ```yaml
+            ${{ env.SERVICES_LIST }}
+            ````
 
       # - name: Add/Commit/Push README.md
       #   uses: mgrybyk-org/git-commit-pull-push-action@v1
