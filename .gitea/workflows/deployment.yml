@@ -37,17 +37,27 @@ jobs:
     name: Docker Compose Test
     needs: [check-and-create-pr]
     runs-on: ubuntu-latest
+    env:
+      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+      VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Install jq
+        uses: dcarbone/install-jq-action@v3.0.1
 
-      - name: Generate ephemeral .env compose file
-        uses: n4mespace/get-env-file-from-vault-action@v1.0.0
+      - name: Install Vault
+        uses: cpanato/vault-installer@main
         with:
-          VAULT_ADDR: https://vault.trez.wtf
-          VAULT_USERNAME: gitea
-          VAULT_PASSWORD: ${{ secrets.VAULT_GITEA_PASSWORD }}
-          VAULT_SECRETS_PATH: ${{ secrets.VAULT_SECRETS_PATH }}
+          vault-release: '1.18.3'
+
+      - name: Check install
+        run: vault version
+
+      - name: Generate .env file for linting
+        run: |
+           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' > .env
 
       - name: Docker Compose Lint
         uses: yu-ichiro/spin-up-docker-compose-action@v1
