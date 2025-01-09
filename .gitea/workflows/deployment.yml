@@ -160,8 +160,6 @@ jobs:
     name: Deployment Trigger
     needs: [generate-readme, docker-compose-test, regenerate-readme]
     runs-on: ubuntu-latest
-    outputs:
-      CONTINUE_JOBS: ${{ steps.deploy-trigger.outputs.CONTINUE_JOBS }}
     steps:
       - name: Install tea
         uses: supplypike/setup-bin@v4
