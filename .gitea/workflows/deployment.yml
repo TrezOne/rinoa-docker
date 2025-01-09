@@ -140,18 +140,22 @@ jobs:
         run: |
           yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
 
+      - run: cat services.yml
+
       - name: Generate Markdown Table
         uses: gazab/create-markdown-table@v1
-        id: service_table
+        id: service-table
         with:
           file: ./services.yml
+
+      - run: echo ${{ steps.service-table.outputs.table }}
 
       - name: Regenerate README
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
           marker_text: "SERVICES_LIST"
           markdown_text: |
-            ${{ steps.service_table.outputs.table }}
+            ${{ steps.service-table.outputs.table }}
           commit_email: noreply@trez.wtf
           commit_username: gitea-sonarqube-bot
           commit_message: "docs: regenerate README"
