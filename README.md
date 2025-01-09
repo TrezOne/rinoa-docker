@@ -3,7 +3,7 @@
 `~> yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml`
 
 <!-- SERVICES_LIST_START -->
-```json
+```yaml
 - service: actual_server
   image: docker.io/actualbudget/actual-server:latest
 - service: adguard
