@@ -124,7 +124,6 @@ jobs:
   regenerate-readme:
     name: Update README
     runs-on: ubuntu-latest
-    if: ${{ always() }}
     needs: [cloudflare-dns-setup]
     steps:
       - name: Checkout
