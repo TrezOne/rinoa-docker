@@ -132,22 +132,22 @@ jobs:
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
       
-      - name: Generate README list
-        id: readme-list
+      - name: Generate service list
         run: |
-          services_list=$(yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml)
-          echo "SERVICES_LIST<<EOF" >> $GITHUB_ENV
-          echo "${services_list}" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
+
+      - name: Generate Markdown Table
+        uses: gazab/create-markdown-table@v1
+        id: service_table
+        with:
+          file: ./services.yml
 
       - name: Regenerate README
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
           marker_text: "SERVICES_LIST"
           markdown_text: |
-            ```yaml
-            ${{ env.SERVICES_LIST }}
-            ````
+            ${{ steps.service_table.outputs.table }}
           commit_email: noreply@trez.wtf
           commit_username: gitea-sonarqube-bot
           commit_message: "docs: regenerate README"
