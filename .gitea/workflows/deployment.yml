@@ -135,9 +135,10 @@ jobs:
       - name: Generate README list
         id: readme-list
         run: |
-          yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml
           services_list=$(yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml)
-          echo "SERVICES_LIST=${services_list}" >> $GITHUB_ENV
+          echo "SERVICES_LIST<<EOF" >> $GITHUB_ENV
+          echo "${services_list}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - run: echo "${{ env.SERVICES_LIST }}"
 
