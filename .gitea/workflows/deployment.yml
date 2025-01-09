@@ -52,9 +52,6 @@ jobs:
         with:
           vault-release: '1.18.3'
 
-      - name: Check install
-        run: vault version
-
       - name: Generate .env file for linting
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
@@ -138,7 +135,7 @@ jobs:
       - name: Generate README list
         id: readme-list
         run: |
-          yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml
+          yq ".services | to_entries | map({service: .key, image: .value.image})" docker-compose.yml
           services_list=$(yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml)
           echo "SERVICES_LIST=${services_list}" >> $GITHUB_ENV
 
