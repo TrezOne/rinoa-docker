@@ -192,6 +192,7 @@ jobs:
     name: Merge and Deploy
     if: ${{ needs.deployment-trigger.outputs.CONTINUE_JOB  == 'manual-step' }}
     runs-on: ubuntu-latest
+    needs: [deployment-trigger]
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
