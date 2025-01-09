@@ -155,7 +155,6 @@ jobs:
 
   deployment-trigger:
     name: Deployment Trigger
-    if: ${{ always() }}
     needs: [generate-readme]
     runs-on: ubuntu-latest
     outputs:
