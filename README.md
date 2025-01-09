@@ -3,307 +3,158 @@
 `~> yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml`
 
 <!-- SERVICES_LIST_START -->
-```yaml
-- service: actual_server
-  image: docker.io/actualbudget/actual-server:latest
-- service: adguard
-  image: adguard/adguardhome:latest
-- service: apprise
-  image: lscr.io/linuxserver/apprise-api:latest
-- service: audiobookshelf
-  image: ghcr.io/advplyr/audiobookshelf:latest
-- service: authelia
-  image: authelia/authelia:master
-- service: authelia-pg
-  image: postgres:16-alpine
-- service: bazarr
-  image: lscr.io/linuxserver/bazarr:latest
-- service: bitmagnet
-  image: ghcr.io/bitmagnet-io/bitmagnet:latest
-- service: bitmagnet-pg-db
-  image: postgres:17-alpine
-- service: bitwarden
-  image: vaultwarden/server:latest
-- service: bluesky-pds
-  image: ghcr.io/bluesky-social/pds:latest
-- service: browserless
-  image: ghcr.io/browserless/chromium:latest
-- service: bunkerweb
-  image: bunkerity/bunkerweb:latest
-- service: bunkerweb-scheduler
-  image: bunkerity/bunkerweb-scheduler:latest
-- service: bunkerweb-ui
-  image: bunkerity/bunkerweb-ui:latest
-- service: castopod
-  image: castopod/castopod:latest
-- service: cloudflared
-  image: 'cloudflare/cloudflared:latest'
-- service: cloudflareddns
-  image: ghcr.io/hotio/cloudflareddns:latest
-- service: crowdsec
-  image: crowdsecurity/crowdsec:latest
-- service: crowdsec-dashboard
-  image: metabase/metabase
-- service: czkawka
-  image: jlesage/czkawka
-- service: dagu-scheduler
-  image: ghcr.io/dagu-org/dagu:latest
-- service: dagu-server
-  image: ghcr.io/dagu-org/dagu:latest
-- service: delugevpn
-  image: ghcr.io/binhex/arch-delugevpn:latest
-- service: docker-socket-proxy
-  image: ghcr.io/tecnativa/docker-socket-proxy:latest
-- service: docuseal
-  image: docuseal/docuseal:latest
-- service: duplicati
-  image: lscr.io/linuxserver/duplicati:latest
-- service: fastenhealth
-  image: ghcr.io/fastenhealth/fasten-onprem:main
-- service: flaresolverr
-  image: ghcr.io/flaresolverr/flaresolverr:latest
-- service: ghost
-  image: ghost:latest
-- service: gitea
-  image: gitea/gitea:1.22.6
-- service: gitea-db
-  image: postgres:14
-- service: gitea-opengist
-  image: ghcr.io/thomiceli/opengist:latest
-- service: gitea-runner
-  image: gitea/act_runner:latest
-- service: gitea-sonarqube-bot
-  image: justusbunsi/gitea-sonarqube-bot:v0.4.0
-- service: gluetun
-  image: qmcgaw/gluetun:latest
-- service: gotify
-  image: gotify/server
-- service: grafana
-  image: grafana/grafana-enterprise:latest
-- service: grafana-alloy
-  image: grafana/alloy:latest
-- service: grafana-loki
-  image: grafana/loki:latest
-- service: grafana-mimir
-  image: grafana/mimir:latest
-- service: grafana-mimir-memcached
-  image: memcached
-- service: grafana-pyroscope
-  image: grafana/pyroscope:latest
-- service: grafana-tempo
-  image: grafana/tempo:latest
-- service: guacamole
-  image: flcontainers/guacamole:latest
-- service: homepage
-  image: ghcr.io/gethomepage/homepage:latest
-- service: hortusfox
-  image: ghcr.io/danielbrendel/hortusfox-web:latest
-- service: hugo
-  image: hugomods/hugo:exts
-- service: invidious
-  image: quay.io/invidious/invidious:latest
-- service: invidious-db
-  image: docker.io/library/postgres:14
-- service: invoice_ninja
-  image: invoiceninja/invoiceninja:5
-- service: invoice_ninja_proxy
-  image: nginx
-- service: it-tools
-  image: ghcr.io/corentinth/it-tools:latest
-- service: jellyfin
-  image: jellyfin/jellyfin
-- service: jitsi-etherpad
-  image: etherpad/etherpad:1.8.6
-- service: jitsi-jibri
-  image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable}
-- service: jitsi-jicofo
-  image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable}
-- service: jitsi-jigasi
-  image: jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable}
-- service: jitsi-jvb
-  image: jitsi/jvb:${JITSI_IMAGE_VERSION:-stable}
-- service: jitsi-prosody
-  image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable}
-- service: jitsi-web
-  image: jitsi/web:${JITSI_IMAGE_VERSION:-stable}
-- service: joplin-db
-  image: postgres:17-alpine
-- service: joplin
-  image: joplin/server:latest
-- service: komodo-core
-  image: ghcr.io/mbecker20/komodo:latest
-- service: komodo-ferretdb
-  image: ghcr.io/ferretdb/ferretdb
-- service: komodo-periphery
-  image: ghcr.io/mbecker20/periphery:latest
-- service: komodo-pg-db
-  image: postgres:17-alpine
-- service: librespeed
-  image: lscr.io/linuxserver/librespeed:latest
-- service: lidarr
-  image: lscr.io/linuxserver/lidarr:latest
-- service: lidify
-  image: thewicklowwolf/lidify:latest
-- service: lldap
-  image: lldap/lldap:stable
-- service: localai
-  image: localai/localai:latest-aio-cpu
-- service: maloja
-  image: krateng/maloja:latest
-- service: mariadb
-  image: ghcr.io/linuxserver/mariadb
-- service: mastodon-pg-db
-  image: postgres:17-alpine
-- service: minio
-  image: minio/minio
-- service: mongodb
-  image: mongo:7.0
-- service: multi-scrobbler
-  image: foxxmd/multi-scrobbler
-- service: n8n
-  image: docker.n8n.io/n8nio/n8n
-- service: navidrome
-  image: deluan/navidrome:latest
-- service: netbox
-  image: lscr.io/linuxserver/netbox:latest
-- service: netbox-db
-  image: postgres:17-alpine
-- service: nextcloud
-  image: lscr.io/linuxserver/nextcloud:latest
-- service: ollama
-  image: ollama/ollama
-- service: ombi
-  image: lscr.io/linuxserver/ombi:latest
-- service: paperless-ngx
-  image: ghcr.io/paperless-ngx/paperless-ngx:latest
-- service: plausible
-  image: ghcr.io/plausible/community-edition:v2.1.0
-- service: plausible_db
-  image: postgres:16-alpine
-- service: plausible_events_db
-  image: clickhouse/clickhouse-server:24.3.3.102-alpine
-- service: postal-smtp
-  image: ghcr.io/postalserver/postal:latest
-- service: postal-web
-  image: ghcr.io/postalserver/postal:latest
-- service: postal-worker
-  image: ghcr.io/postalserver/postal:latest
-- service: prowlarr
-  image: lscr.io/linuxserver/prowlarr:latest
-- service: radarec
-  image: thewicklowwolf/radarec:latest
-- service: radarr
-  image: lscr.io/linuxserver/radarr:latest
-- service: reactive-resume
-  image: amruthpillai/reactive-resume:latest
-- service: reactive-resume-pg
-  image: postgres:16-alpine
-- service: readarr
-  image: lscr.io/linuxserver/readarr:develop
-- service: redis
-  image: redis:alpine
-- service: redlib
-  image: quay.io/redlib/redlib:latest
-- service: sabnzbdvpn
-  image: ghcr.io/binhex/arch-sabnzbdvpn:latest
-- service: scraperr
-  image: jpyles0524/scraperr:latest
-- service: scraperr-api
-  image: jpyles0524/scraperr_api:latest
-- service: scrutiny
-  image: ghcr.io/analogj/scrutiny:master-omnibus
-- service: searxng
-  image: searxng/searxng:latest
-- service: semaphore
-  image: semaphoreui/semaphore:v2.10.32
-- service: slurpit-portal
-  image: slurpit/portal:latest
-- service: slurpit-scanner
-  image: slurpit/scanner:latest
-- service: slurpit-scraper
-  image: slurpit/scraper:latest
-- service: slurpit-warehouse
-  image: slurpit/warehouse:latest
-- service: sonarqube
-  image: mc1arke/sonarqube-with-community-branch-plugin:lts
-- service: sonarqube-pg-db
-  image: postgres:17-alpine
-- service: sonarr
-  image: lscr.io/linuxserver/sonarr:latest
-- service: sonashow
-  image: thewicklowwolf/sonashow:latest
-- service: soularr
-  image: mrusse08/soularr:latest
-- service: soulseek
-  image: slskd/slskd
-- service: spotisub
-  image: blastbeng/spotisub:latest
-- service: swag
-  image: lscr.io/linuxserver/swag:latest
-- service: synapse
-  image: docker.io/matrixdotorg/synapse:latest
-- service: synapse-db
-  image: postgres:16-alpine
-- service: tandoor
-  image: vabene1111/recipes
-- service: tandoor-pg
-  image: postgres:16-alpine
-- service: traccar
-  image: traccar/traccar:latest
-- service: traccar-pg
-  image: postgres:16-alpine
-- service: unmanic
-  image: josh5/unmanic:latest
-- service: uptimekuma
-  image: louislam/uptime-kuma:latest
-- service: vault
-  image: hashicorp/vault:latest
-- service: wallabag
-  image: wallabag/wallabag
-- service: wallos
-  image: bellamy/wallos:latest
-- service: watchtower
-  image: ghcr.io/containrrr/watchtower:latest
-- service: wazuh.agent
-  image: opennix/wazuh-agent:latest
-- service: wazuh.dashboard
-  image: wazuh/wazuh-dashboard:${WAZUH_VERSION}
-- service: wazuh.indexer
-  image: wazuh/wazuh-indexer:${WAZUH_VERSION}
-- service: wazuh.manager
-  image: wazuh/wazuh-manager:${WAZUH_VERSION}
-- service: web-check
-  image: lissy93/web-check
-- service: whodb
-  image: clidey/whodb
-- service: your_spotify
-  image: lscr.io/linuxserver/your_spotify:latest
-- service: youtubedl
-  image: nbr23/youtube-dl-server:latest
-- service: zammad-backup
-  image: postgres:${ZAMMAD_POSTGRES_VERSION}
-- service: zammad-elasticsearch
-  image: bitnami/elasticsearch:${ZAMMAD_ELASTICSEARCH_VERSION}
-- service: zammad-init
-  image: ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION}
-- service: zammad-memcached
-  image: memcached:${ZAMMAD_MEMCACHE_VERSION}
-- service: zammad-nginx
-  image: ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION}
-- service: zammad-postgresql
-  image: postgres:${ZAMMAD_POSTGRES_VERSION}
-- service: zammad-railsserver
-  image: ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION}
-- service: zammad-redis
-  image: redis:${ZAMMAD_REDIS_VERSION}
-- service: zammad-scheduler
-  image: ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION}
-- service: zammad-websocket
-  image: ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION}
-- service: zitadel
-  image: ghcr.io/zitadel/zitadel:latest
-- service: zitadel-pg-db
-  image: postgres:16-alpine
-````
+| Service | Image |
+| --- | --- |
+| actual_server | docker.io/actualbudget/actual-server:latest |
+| adguard | adguard/adguardhome:latest |
+| apprise | lscr.io/linuxserver/apprise-api:latest |
+| audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
+| authelia | authelia/authelia:master |
+| authelia-pg | postgres:16-alpine |
+| bazarr | lscr.io/linuxserver/bazarr:latest |
+| bitmagnet | ghcr.io/bitmagnet-io/bitmagnet:latest |
+| bitmagnet-pg-db | postgres:17-alpine |
+| bitwarden | vaultwarden/server:latest |
+| bluesky-pds | ghcr.io/bluesky-social/pds:latest |
+| browserless | ghcr.io/browserless/chromium:latest |
+| bunkerweb | bunkerity/bunkerweb:latest |
+| bunkerweb-scheduler | bunkerity/bunkerweb-scheduler:latest |
+| bunkerweb-ui | bunkerity/bunkerweb-ui:latest |
+| castopod | castopod/castopod:latest |
+| cloudflared | cloudflare/cloudflared:latest |
+| cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
+| crowdsec | crowdsecurity/crowdsec:latest |
+| crowdsec-dashboard | metabase/metabase |
+| czkawka | jlesage/czkawka |
+| dagu-scheduler | ghcr.io/dagu-org/dagu:latest |
+| dagu-server | ghcr.io/dagu-org/dagu:latest |
+| delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
+| docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
+| docuseal | docuseal/docuseal:latest |
+| duplicati | lscr.io/linuxserver/duplicati:latest |
+| fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
+| flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
+| ghost | ghost:latest |
+| gitea | gitea/gitea:1.22.6 |
+| gitea-db | postgres:14 |
+| gitea-opengist | ghcr.io/thomiceli/opengist:latest |
+| gitea-runner | gitea/act_runner:latest |
+| gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |
+| gluetun | qmcgaw/gluetun:latest |
+| gotify | gotify/server |
+| grafana | grafana/grafana-enterprise:latest |
+| grafana-alloy | grafana/alloy:latest |
+| grafana-loki | grafana/loki:latest |
+| grafana-mimir | grafana/mimir:latest |
+| grafana-mimir-memcached | memcached |
+| grafana-pyroscope | grafana/pyroscope:latest |
+| grafana-tempo | grafana/tempo:latest |
+| guacamole | flcontainers/guacamole:latest |
+| homepage | ghcr.io/gethomepage/homepage:latest |
+| hortusfox | ghcr.io/danielbrendel/hortusfox-web:latest |
+| hugo | hugomods/hugo:exts |
+| invidious | quay.io/invidious/invidious:latest |
+| invidious-db | docker.io/library/postgres:14 |
+| invoice_ninja | invoiceninja/invoiceninja:5 |
+| invoice_ninja_proxy | nginx |
+| it-tools | ghcr.io/corentinth/it-tools:latest |
+| jellyfin | jellyfin/jellyfin |
+| jitsi-etherpad | etherpad/etherpad:1.8.6 |
+| jitsi-jibri | jitsi/jibri:${JITSI_IMAGE_VERSION:-stable} |
+| jitsi-jicofo | jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable} |
+| jitsi-jigasi | jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable} |
+| jitsi-jvb | jitsi/jvb:${JITSI_IMAGE_VERSION:-stable} |
+| jitsi-prosody | jitsi/prosody:${JITSI_IMAGE_VERSION:-stable} |
+| jitsi-web | jitsi/web:${JITSI_IMAGE_VERSION:-stable} |
+| joplin-db | postgres:17-alpine |
+| joplin | joplin/server:latest |
+| komodo-core | ghcr.io/mbecker20/komodo:latest |
+| komodo-ferretdb | ghcr.io/ferretdb/ferretdb |
+| komodo-periphery | ghcr.io/mbecker20/periphery:latest |
+| komodo-pg-db | postgres:17-alpine |
+| librespeed | lscr.io/linuxserver/librespeed:latest |
+| lidarr | lscr.io/linuxserver/lidarr:latest |
+| lidify | thewicklowwolf/lidify:latest |
+| lldap | lldap/lldap:stable |
+| localai | localai/localai:latest-aio-cpu |
+| maloja | krateng/maloja:latest |
+| mariadb | ghcr.io/linuxserver/mariadb |
+| mastodon-pg-db | postgres:17-alpine |
+| minio | minio/minio |
+| mongodb | mongo:7.0 |
+| multi-scrobbler | foxxmd/multi-scrobbler |
+| n8n | docker.n8n.io/n8nio/n8n |
+| navidrome | deluan/navidrome:latest |
+| netbox | lscr.io/linuxserver/netbox:latest |
+| netbox-db | postgres:17-alpine |
+| nextcloud | lscr.io/linuxserver/nextcloud:latest |
+| ollama | ollama/ollama |
+| ombi | lscr.io/linuxserver/ombi:latest |
+| paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
+| plausible | ghcr.io/plausible/community-edition:v2.1.0 |
+| plausible_db | postgres:16-alpine |
+| plausible_events_db | clickhouse/clickhouse-server:24.3.3.102-alpine |
+| postal-smtp | ghcr.io/postalserver/postal:latest |
+| postal-web | ghcr.io/postalserver/postal:latest |
+| postal-worker | ghcr.io/postalserver/postal:latest |
+| prowlarr | lscr.io/linuxserver/prowlarr:latest |
+| radarec | thewicklowwolf/radarec:latest |
+| radarr | lscr.io/linuxserver/radarr:latest |
+| reactive-resume | amruthpillai/reactive-resume:latest |
+| reactive-resume-pg | postgres:16-alpine |
+| readarr | lscr.io/linuxserver/readarr:develop |
+| redis | redis:alpine |
+| redlib | quay.io/redlib/redlib:latest |
+| sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
+| scraperr | jpyles0524/scraperr:latest |
+| scraperr-api | jpyles0524/scraperr_api:latest |
+| scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
+| searxng | searxng/searxng:latest |
+| semaphore | semaphoreui/semaphore:v2.10.32 |
+| slurpit-portal | slurpit/portal:latest |
+| slurpit-scanner | slurpit/scanner:latest |
+| slurpit-scraper | slurpit/scraper:latest |
+| slurpit-warehouse | slurpit/warehouse:latest |
+| sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts |
+| sonarqube-pg-db | postgres:17-alpine |
+| sonarr | lscr.io/linuxserver/sonarr:latest |
+| sonashow | thewicklowwolf/sonashow:latest |
+| soularr | mrusse08/soularr:latest |
+| soulseek | slskd/slskd |
+| spotisub | blastbeng/spotisub:latest |
+| swag | lscr.io/linuxserver/swag:latest |
+| synapse | docker.io/matrixdotorg/synapse:latest |
+| synapse-db | postgres:16-alpine |
+| tandoor | vabene1111/recipes |
+| tandoor-pg | postgres:16-alpine |
+| traccar | traccar/traccar:latest |
+| traccar-pg | postgres:16-alpine |
+| unmanic | josh5/unmanic:latest |
+| uptimekuma | louislam/uptime-kuma:latest |
+| vault | hashicorp/vault:latest |
+| wallabag | wallabag/wallabag |
+| wallos | bellamy/wallos:latest |
+| watchtower | ghcr.io/containrrr/watchtower:latest |
+| wazuh.agent | opennix/wazuh-agent:latest |
+| wazuh.dashboard | wazuh/wazuh-dashboard:${WAZUH_VERSION} |
+| wazuh.indexer | wazuh/wazuh-indexer:${WAZUH_VERSION} |
+| wazuh.manager | wazuh/wazuh-manager:${WAZUH_VERSION} |
+| web-check | lissy93/web-check |
+| whodb | clidey/whodb |
+| your_spotify | lscr.io/linuxserver/your_spotify:latest |
+| youtubedl | nbr23/youtube-dl-server:latest |
+| zammad-backup | postgres:${ZAMMAD_POSTGRES_VERSION} |
+| zammad-elasticsearch | bitnami/elasticsearch:${ZAMMAD_ELASTICSEARCH_VERSION} |
+| zammad-init | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
+| zammad-memcached | memcached:${ZAMMAD_MEMCACHE_VERSION} |
+| zammad-nginx | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
+| zammad-postgresql | postgres:${ZAMMAD_POSTGRES_VERSION} |
+| zammad-railsserver | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
+| zammad-redis | redis:${ZAMMAD_REDIS_VERSION} |
+| zammad-scheduler | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
+| zammad-websocket | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
+| zitadel | ghcr.io/zitadel/zitadel:latest |
+| zitadel-pg-db | postgres:16-alpine |
+
 
 <!-- SERVICES_LIST_END -->
