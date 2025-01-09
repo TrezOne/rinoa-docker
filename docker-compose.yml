@@ -4447,7 +4447,7 @@ services:
     restart: unless-stopped
     volumes:
       #"You can set /downloads to whatever you want but will then need to change the Slskd download dir in your config file"
-      - ${DOCKER_VOLUME_STORAGEE}/downloads:/downloads
+      - ${DOCKER_VOLUME_STORAGE}/downloads:/downloads
       #Select where you are storing your config file. Leave "/data" since thats where the script expects the config file to be
       - ${DOCKER_VOLUME_CONFIG}/soularr:/data
   soulseek:
