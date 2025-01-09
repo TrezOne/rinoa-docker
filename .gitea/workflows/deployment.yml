@@ -149,13 +149,13 @@ jobs:
             ${{ env.SERVICES_LIST }}
             ````
 
-      # - name: Add/Commit/Push README.md
-      #   uses: mgrybyk-org/git-commit-pull-push-action@v1
-      #   with:
-      #     add_args: README.md
-      #     repository: ${{ github.repository }}
-      #     branch: ${{ github.head_ref }}
-      #     commit_message: Regenerate README.md
+      - name: Add/Commit/Push README.md
+        uses: mgrybyk-org/git-commit-pull-push-action@v1
+        with:
+          add_args: README.md
+          repository: ${{ github.repository }}
+          branch: ${{ github.head_ref }}
+          commit_message: Regenerate README.md
 
       # - name: Install tea
       #   uses: supplypike/setup-bin@v4
