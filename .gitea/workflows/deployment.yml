@@ -187,7 +187,7 @@ jobs:
 
       - name: Trigger Deployment
         id: deploy-trigger
-        uses: macnev2013/manual-approval@latest
+        uses: macnev2013/manual-approval@v1.0.18
         with:
           secret: ${{ github.TOKEN }}
           approvers: Trez.One
