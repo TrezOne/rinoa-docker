@@ -152,8 +152,8 @@ jobs:
           marker_text: "SERVICES_LIST"
           markdown_text: |
             ${{ steps.service-table.outputs.table }}
-          commit_email: ${{ secrets.CF_API_EMAIL}}
-          commit_username: Trez.One
+          commit_email: noreply@trez.wtf
+          commit_username: gitea-sonarqube-bot
           commit_message: "docs: regenerate README"
 
   deployment-trigger:
