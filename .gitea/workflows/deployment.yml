@@ -200,31 +200,30 @@ jobs:
           issue-body: |
             "Autobots, roll out!"
 
-  docker-compose-deploy:
-    name: Merge and Deploy
-    if: ${{ needs.deployment-trigger.outputs.CONTINUE_JOBS == 'true' }}
-    runs-on: ubuntu-latest
-    needs: [deployment-trigger]
-    env:
-      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
-      VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
+  # docker-compose-deploy:
+  #   name: Merge and Deploy
+  #   runs-on: ubuntu-latest
+  #   needs: [deployment-trigger]
+  #   env:
+  #     VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+  #     VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         ref: main
       
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
+  #     - name: Install Vault
+  #       uses: cpanato/vault-installer@main
 
-      - name: Generate .env file for deployment
-        run: |
-           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+  #     - name: Generate .env file for deployment
+  #       run: |
+  #          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
-      - name: Docker Compose Deployment
-        uses: Autom3/docker-deployment-action@3.0.1
-        with: 
-          remote_docker_host: gitea-deploy@192.168.1.254
-          ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
-          ssh_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
+  #     - name: Docker Compose Deployment
+  #       uses: Autom3/docker-deployment-action@3.0.1
+  #       with: 
+  #         remote_docker_host: gitea-deploy@192.168.1.254
+  #         ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+  #         ssh_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
   
