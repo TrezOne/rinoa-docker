@@ -150,6 +150,7 @@ jobs:
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
           marker_text: "SERVICES_LIST"
+          table: true
           markdown_text: |
             ${{ steps.service-table.outputs.table }}
           commit_email: noreply@trez.wtf
