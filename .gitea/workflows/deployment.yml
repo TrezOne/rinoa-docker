@@ -186,9 +186,16 @@ jobs:
 
       - name: manual-trigger
         id: manual-trigger
-        uses: benhamiltonpro/manual-trigger@v1
+        uses: trstringer/manual-approval@v1.9.1
         with:
-          RUN_NAME: "merge-and-deploy"
+          secret: ${{ secrets.BOT_GITEA_TOKEN }}
+          approvers: Trez.One
+          minimum-approvals: 1
+          issue-title: "Deploying ${{ github.ref_name }} (PR #{{ steps.pr_merge.outputs.pr_index }})"
+          issue-body: "Testing for now"
+          exclude-workflow-initiator-as-approver: false
+          additional-approved-words: ''
+          additional-denied-words: ''
 
   docker-compose-deploy:
     name: Deploy via Docker Compose
@@ -197,6 +204,7 @@ jobs:
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
+    environment: approval-environment
     steps:
       - name: Checkout
         uses: actions/checkout@v4
