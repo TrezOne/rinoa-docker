@@ -1154,7 +1154,7 @@ services:
       GITEA__mailer__SMTP_PORT: 25
       GITEA__mailer__USER: ${POSTAL_SMTP_AUTH_USER}
       GITEA__mailer__PASSWD: ${POSTAL_SMTP_AUTH_PASSWORD}
-    image: gitea/gitea:1.22.6
+    image: gitea/gitea:1.23.1
     labels:
       homepage.group: Code/DevOps
       homepage.name: Gitea
