@@ -159,6 +159,26 @@ jobs:
     needs: [generate-readme, docker-compose-test, regenerate-readme]
     runs-on: ubuntu-latest
     steps:
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_GOTIFY_TOKEN }}'
+          notification_title: 'Ready to Deploy'
+          notification_message: 'Ready to deploy: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}'
+          
+      - name: Trigger Deployment
+        id: deploy-trigger
+        uses: macnev2013/manual-approval@v1.0.18
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: Trez.One
+          minimum-approvals: 1
+          approval-wait: 600
+          issue-title: 'Manual Approval for #${{ steps.pr_merge.outputs.pr_index }} - ${{ gitea.ref_name }}'
+          issue-body: |
+            "Autobots, roll out!"
+
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
@@ -181,26 +201,6 @@ jobs:
             pr_state=$(tea pr ls --repo ${{ github.repository }} --state merged --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
             if [ "${pr_state}" == "merged" ]; then
               break
-
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_GOTIFY_TOKEN }}'
-          notification_title: 'Ready to Deploy'
-          notification_message: 'Ready to deploy: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}'
-
-      - name: Trigger Deployment
-        id: deploy-trigger
-        uses: macnev2013/manual-approval@v1.0.18
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: Trez.One
-          minimum-approvals: 1
-          approval-wait: 600
-          issue-title: 'Manual Approval for #${{ steps.pr_merge.outputs.pr_index }} - ${{ gitea.ref_name }}'
-          issue-body: |
-            "Autobots, roll out!"
 
   # docker-compose-deploy:
   #   name: Merge and Deploy
