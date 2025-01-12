@@ -193,7 +193,7 @@ jobs:
   docker-compose-deploy:
     name: Deploy via Docker Compose
     runs-on: ubuntu-latest
-    needs: [deployment-trigger]
+    needs: [merge-and-trigger]
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
