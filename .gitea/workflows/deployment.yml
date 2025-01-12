@@ -25,13 +25,13 @@ jobs:
         id: list-prs
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          which tea
-          echo "Check if PR exists for ${{ github.ref_name }}"
+          tea login default gitea-rinoa
+          echo "Checking if PR exists for ${{ github.ref_name }}"
           pr_state=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
-          if [ ${pr_state} != 'open' ]; then
+          if [ "${pr_state}" != 'open' ]; then
             echo "PR does not exist, creating..."
-            tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
-          elif [ ${pr_state} = 'open' ]; then
+            tea pr c -r "${{ github.repository }}" -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
+          elif [ "${pr_state}" = 'open' ]; then
             echo "PR already exists, skipping creation..."
           fi
 
