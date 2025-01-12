@@ -25,11 +25,15 @@ jobs:
         id: list-prs
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea login default gitea-rinoa
-          pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
-          if [ "${pr_state}" != open ]; then
+          which tea
+          echo "List all PRs"
+          tea pr ls --repo ${{ github.repository }} --state all
+          echo "Check if PR exists for ${{ github.ref_name }}"
+          pr_state=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
+          echo "PR_STATE: ${pr_state}"
+          if [ ${pr_state} != open ]; then
             tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
-          elif [ "${pr_state}" = open ]; then
+          elif [ ${pr_state} = open ]; then
             echo "PR already exists, skipping creation..."
           fi
 
@@ -132,32 +136,27 @@ jobs:
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
       
-      - name: Generate README list
-        id: readme-list
+      - name: Generate service list
         run: |
-          services_list=$(yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml)
-          echo "SERVICES_LIST<<EOF" >> $GITHUB_ENV
-          echo "${services_list}" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
+
+      - name: Generate Markdown Table
+        uses: gazab/create-markdown-table@v1
+        id: service-table
+        with:
+          file: ./services.yml
 
       - name: Regenerate README
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
           marker_text: "SERVICES_LIST"
           markdown_text: |
-            ```yaml
-            ${{ env.SERVICES_LIST }}
-            ````
-          commit_email: noreply@trez.wtf
-          commit_username: gitea-sonarqube-bot
-          commit_message: "docs: regenerate README"
+            ${{ steps.service-table.outputs.table }}
 
   deployment-trigger:
     name: Deployment Trigger
-    needs: [generate-readme]
+    needs: [generate-readme, docker-compose-test, regenerate-readme]
     runs-on: ubuntu-latest
-    outputs:
-      CONTINUE_JOBS: ${{ steps.deploy-trigger.outputs.CONTINUE_JOBS }}
     steps:
       - name: Install tea
         uses: supplypike/setup-bin@v4
@@ -169,8 +168,10 @@ jobs:
       - name: PR Merge
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea pr ls --repo ${{ github.repository }} --state all
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
+          echo "PR_INDEX=${pr_index}" >> $GITHUB_OUPUT
     
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -182,35 +183,40 @@ jobs:
 
       - name: Trigger Deployment
         id: deploy-trigger
-        uses: benhamiltonpro/manual-trigger@v1
+        uses: macnev2013/manual-approval@v1.0.18
         with:
-          RUN_NAME: "docker-compose-deploy"
+          secret: ${{ github.TOKEN }}
+          approvers: Trez.One
+          minimum-approvals: 1
+          approval-wait: 600
+          issue-title: 'Manual Approval for #${pr_index} - ${{ gitea.ref_name }}'
+          issue-body: |
+            "Autobots, roll out!"
 
-  docker-compose-deploy:
-    name: Merge and Deploy
-    if: ${{ needs.deployment-trigger.outputs.CONTINUE_JOB  == 'manual-step' }}
-    runs-on: ubuntu-latest
-    needs: [deployment-trigger]
-    env:
-      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
-      VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
+  # docker-compose-deploy:
+  #   name: Merge and Deploy
+  #   runs-on: ubuntu-latest
+  #   needs: [deployment-trigger]
+  #   env:
+  #     VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+  #     VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         ref: main
       
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
+  #     - name: Install Vault
+  #       uses: cpanato/vault-installer@main
 
-      - name: Generate .env file for deployment
-        run: |
-           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+  #     - name: Generate .env file for deployment
+  #       run: |
+  #          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
-      - name: Docker Compose Deployment
-        uses: Autom3/docker-deployment-action@3.0.1
-        with: 
-          remote_docker_host: gitea-deploy@192.168.1.254
-          ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
-          ssh_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
+  #     - name: Docker Compose Deployment
+  #       uses: Autom3/docker-deployment-action@3.0.1
+  #       with: 
+  #         remote_docker_host: gitea-deploy@192.168.1.254
+  #         ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+  #         ssh_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
   
