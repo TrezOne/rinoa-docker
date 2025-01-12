@@ -166,13 +166,21 @@ jobs:
           version: '0.9.2'
 
       - name: PR Merge
+        id: pr_merge
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea pr ls --repo ${{ github.repository }} --state all
+          tea login default gitea-rinoa
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
-          echo "PR_INDEX=${pr_index}" >> $GITHUB_OUPUT
-    
+          echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
+
+      - name: Wait for PR to be merged
+        run: |
+          while true; do
+            pr_state=$(tea pr ls --repo ${{ github.repository }} --state merged --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
+            if [ "${pr_state}" == "merged" ]; then
+              break
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -189,7 +197,7 @@ jobs:
           approvers: Trez.One
           minimum-approvals: 1
           approval-wait: 600
-          issue-title: 'Manual Approval for #${pr_index} - ${{ gitea.ref_name }}'
+          issue-title: 'Manual Approval for #${{ steps.pr_merge.outputs.pr_index }} - ${{ gitea.ref_name }}'
           issue-body: |
             "Autobots, roll out!"
 
