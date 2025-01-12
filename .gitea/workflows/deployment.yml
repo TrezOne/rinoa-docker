@@ -153,8 +153,8 @@ jobs:
           table: true
           markdown_text: |
             ${{ steps.service-table.outputs.table }}
-          commit_email: noreply@trez.wtf
-          commit_user: gitea-sonarqube-bot
+          commit_email: ${{ secrets.CF_API_EMAIL }}
+          commit_user: Trez.One
           commit_message: "Update README with services list"
 
   deployment-trigger:
