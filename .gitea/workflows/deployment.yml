@@ -144,20 +144,15 @@ jobs:
         with:
           file: ./services.yml
 
-      - name: Update README
-        uses: VisualBean/reactive-readme@v1
+      - name: Regenerate README
+        uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
-          value: ${{ steps.service-table.outputs.table }}
-          section: services
-
-      # - name: Regenerate README
-      #   uses: gnpaone/dynamic-update-readme@v1.0.2
-      #   with:
-      #     commit_email: noreply@trez.wtf
-      #     table: true
-      #     marker_text: "SERVICES_LIST"
-      #     markdown_text: |
-      #       ${{ steps.service-table.outputs.table }}
+          commit_email: noreply@trez.wtf
+          table: true
+          marker_text: "SERVICES_LIST"
+          markdown_text: |
+            ${{ steps.service-table.outputs.table }}
+            __________________________________________________
 
   merge-and-trigger:
     name: Merge PR & Trigger Deployment
