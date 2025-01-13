@@ -28,7 +28,6 @@ jobs:
           tea login default gitea-rinoa
           echo "Checking if PR exists for ${{ github.ref_name }}"
           pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
-          echo "${pr_state}"
           if [ "${pr_state}" != 'open' ]; then
             echo "PR does not exist, creating..."
             tea pr c -r "${{ github.repository }}" -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
@@ -148,7 +147,6 @@ jobs:
       - name: Regenerate README
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
-          table: true
           marker_text: "SERVICES_LIST"
           markdown_text: |
             ${{ steps.service-table.outputs.table }}
@@ -205,6 +203,7 @@ jobs:
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
+      DOCKER_HOST: tcp://dockerproxy:2375
     environment: approval-environment
     steps:
       - name: Checkout
