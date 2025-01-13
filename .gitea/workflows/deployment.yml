@@ -147,10 +147,12 @@ jobs:
       - name: Regenerate README
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
-          table: true
           marker_text: "SERVICES_LIST"
           markdown_text: |
+          
             ${{ steps.service-table.outputs.table }}
+
+          table: true
 
   merge-and-trigger:
     name: Merge PR & Trigger Deployment
