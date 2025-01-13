@@ -144,14 +144,20 @@ jobs:
         with:
           file: ./services.yml
 
-      - name: Regenerate README
-        uses: gnpaone/dynamic-update-readme@v1.0.2
+      - name: Update README
+        uses: VisualBean/reactive-readme@v1
         with:
-          commit_email: noreply@trez.wtf
-          table: true
-          marker_text: "SERVICES_LIST"
-          markdown_text: |
-            ${{ steps.service-table.outputs.table }}
+          value: ${{ steps.service-table.outputs.table }}
+          section: services
+
+      # - name: Regenerate README
+      #   uses: gnpaone/dynamic-update-readme@v1.0.2
+      #   with:
+      #     commit_email: noreply@trez.wtf
+      #     table: true
+      #     marker_text: "SERVICES_LIST"
+      #     markdown_text: |
+      #       ${{ steps.service-table.outputs.table }}
 
   merge-and-trigger:
     name: Merge PR & Trigger Deployment
@@ -226,4 +232,3 @@ jobs:
           remote_docker_host: gitea-deploy@192.168.1.254
           ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           ssh_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
-  
