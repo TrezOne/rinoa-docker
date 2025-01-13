@@ -56,6 +56,7 @@ jobs:
 
       - name: Generate .env file for linting
         run: |
+          vault login -no-print -method=userpass username=${{ secrets.RINOA_VAULT_USER }} password=${{ secrets.VAULT_GITEA_PASSWORD }}
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
       - name: Docker Compose Lint
