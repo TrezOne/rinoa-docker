@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
-      VAULT_TOKEN: ${{ secrets.RINOA_VAULT_TOKEN }}
+      VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,7 +56,6 @@ jobs:
 
       - name: Generate .env file for linting
         run: |
-          vault login -no-print -method=userpass username=${{ secrets.VAULT_GITEA_USER }} password=${{ secrets.VAULT_GITEA_PASSWORD }}
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
       - name: Docker Compose Lint
