@@ -1706,6 +1706,7 @@ services:
       mariadb:
         condition: service_started
         required: true
+        restart: true
     environment:
       APP_ADMIN_EMAIL: charish.patel@trez.wtf
       APP_ADMIN_PASSWORD: ${HORTUSFOX_ADMIN_PASSWORD}
@@ -3311,6 +3312,11 @@ services:
         volume: {}
   nextcloud:
     container_name: nextcloud
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        required: true
+        restart: true
     environment:
       PGID: 1000
       PUID: 1000
@@ -3423,6 +3429,11 @@ services:
         type: bind
   paperless-ngx:
     container_name: paperless-ngx
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        required: true
+        restart: true
     environment:
       PAPERLESS_DBENGINE: mariadb
       PAPERLESS_DBHOST: mariadb
@@ -6072,6 +6083,7 @@ services:
       mariadb:
         condition: service_started
         required: true
+        restart: true
       redis:
         condition: service_started
         required: true
