@@ -1,8 +1,7 @@
 # List of Services
 
-`~> yq '.services | to_entries | map({service: .key, image: .value.image})' docker-compose.yml`
 
-<!-- SERVICES_LIST_START -->
+
 | Service | Image |
 | --- | --- |
 | actual_server | docker.io/actualbudget/actual-server:latest |
@@ -60,12 +59,12 @@
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
 | jitsi-etherpad | etherpad/etherpad:1.8.6 |
-| jitsi-jibri | jitsi/jibri:${JITSI_IMAGE_VERSION:-stable} |
-| jitsi-jicofo | jitsi/jicofo:${JITSI_IMAGE_VERSION:-stable} |
-| jitsi-jigasi | jitsi/jigasi:${JITSI_IMAGE_VERSION:-stable} |
-| jitsi-jvb | jitsi/jvb:${JITSI_IMAGE_VERSION:-stable} |
-| jitsi-prosody | jitsi/prosody:${JITSI_IMAGE_VERSION:-stable} |
-| jitsi-web | jitsi/web:${JITSI_IMAGE_VERSION:-stable} |
+| jitsi-jibri | jitsi/jibri:stable |
+| jitsi-jicofo | jitsi/jicofo:stable |
+| jitsi-jigasi | jitsi/jigasi:stable |
+| jitsi-jvb | jitsi/jvb:stable |
+| jitsi-prosody | jitsi/prosody:stable |
+| jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
 | komodo-core | ghcr.io/mbecker20/komodo:latest |
@@ -136,25 +135,23 @@
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
 | wazuh.agent | opennix/wazuh-agent:latest |
-| wazuh.dashboard | wazuh/wazuh-dashboard:${WAZUH_VERSION} |
-| wazuh.indexer | wazuh/wazuh-indexer:${WAZUH_VERSION} |
-| wazuh.manager | wazuh/wazuh-manager:${WAZUH_VERSION} |
+| wazuh.dashboard | wazuh/wazuh-dashboard: |
+| wazuh.indexer | wazuh/wazuh-indexer: |
+| wazuh.manager | wazuh/wazuh-manager: |
 | web-check | lissy93/web-check |
 | whodb | clidey/whodb |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
-| zammad-backup | postgres:${ZAMMAD_POSTGRES_VERSION} |
-| zammad-elasticsearch | bitnami/elasticsearch:${ZAMMAD_ELASTICSEARCH_VERSION} |
-| zammad-init | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
-| zammad-memcached | memcached:${ZAMMAD_MEMCACHE_VERSION} |
-| zammad-nginx | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
-| zammad-postgresql | postgres:${ZAMMAD_POSTGRES_VERSION} |
-| zammad-railsserver | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
-| zammad-redis | redis:${ZAMMAD_REDIS_VERSION} |
-| zammad-scheduler | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
-| zammad-websocket | ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION} |
+| zammad-backup | postgres: |
+| zammad-elasticsearch | bitnami/elasticsearch: |
+| zammad-init | : |
+| zammad-memcached | memcached: |
+| zammad-nginx | : |
+| zammad-postgresql | postgres: |
+| zammad-railsserver | : |
+| zammad-redis | redis: |
+| zammad-scheduler | : |
+| zammad-websocket | : |
 | zitadel | ghcr.io/zitadel/zitadel:latest |
 | zitadel-pg-db | postgres:16-alpine |
 
-
-<!-- SERVICES_LIST_END -->
