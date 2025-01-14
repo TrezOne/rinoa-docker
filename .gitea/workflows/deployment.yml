@@ -209,6 +209,8 @@ jobs:
       - name: Docker Compose Deployment
         uses: Autom3/docker-deployment-action@3.0.1
         with: 
+          # docker_prune: true
+          args: up -d --remove-orphans
           remote_docker_host: gitea-deploy@192.168.1.254
           ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           ssh_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
