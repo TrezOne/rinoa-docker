@@ -127,6 +127,8 @@ jobs:
     name: Update README
     runs-on: ubuntu-latest
     needs: [cloudflare-dns-setup]
+    outputs:
+      pr-pushed: ${{ steps.commit-readme.outputs.pushed }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -151,10 +153,18 @@ jobs:
           marker_text: "SERVICES_LIST"
           markdown_text: |
             ${{ steps.service-table.outputs.table }}
-            __________________________________________________
+          confirm_and_push: false
+
+      - name: Add/Commit README.md
+        id: commit-readme
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "chore: Update README"
+          add: "README.md"
 
   merge-and-trigger:
     name: Merge PR & Trigger Deployment
+    if: ${{ regenerate-readme.outputs.pr-pushed == 'true' }}
     needs: [generate-readme, docker-compose-test, regenerate-readme]
     runs-on: ubuntu-latest
     steps:
