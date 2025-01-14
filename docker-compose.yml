@@ -3031,7 +3031,7 @@ services:
       TZ: America/New_York
       MYSQL_PASSWORD: VQU23wHKRNmfpAPt5E9BxMaSGJdWjLuz
     healthcheck:
-      test: /usr/bin/mariadb -u root -p${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
+      test: [ "CMD", "/usr/bin/mariadb", "-u", "root", "-p${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}", "-e", "\"SHOW DATABASES;\"" ]
       interval: 10s
       timeout: 5s
       retries: 3
