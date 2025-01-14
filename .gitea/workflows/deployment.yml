@@ -150,6 +150,9 @@ jobs:
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
           table: true
+          commit_user: markdown-update-bot
+          commit_email: bot@github.com
+          commit_message: "chore: Update README"
           marker_text: "SERVICES_LIST"
           markdown_text: |
             ${{ steps.service-table.outputs.table }}
