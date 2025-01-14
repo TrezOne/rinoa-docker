@@ -160,8 +160,7 @@ jobs:
           add: "README.md"
 
   trigger-and-merge:
-    name: Merge PR & Trigger Deployment
-    if: ${{ regenerate-readme.outputs.pr-pushed == 'true' }}
+    name: Trigger Deployment
     needs: [generate-readme, docker-compose-test, regenerate-readme]
     runs-on: ubuntu-latest
     steps:
