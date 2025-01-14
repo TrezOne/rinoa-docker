@@ -27,7 +27,9 @@ jobs:
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
           echo "Checking if PR exists for ${{ github.ref_name }}"
-          pr_state=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
+          tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state
+          pr_state=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep '${{ gitea.ref_name }}' | head -1 |awk -F, '{print $4}' | sed -e 's|"||g')
+          echo "PR state: ${pr_state}"
           if [ "${pr_state}" != 'open' ]; then
             echo "PR does not exist, creating..."
             tea pr c -r "${{ github.repository }}" -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
@@ -181,14 +183,7 @@ jobs:
           tea login default gitea-rinoa
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
-          echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
 
-      - name: Wait for PR to be merged
-        run: |
-          while true; do
-            pr_state=$(tea pr ls --repo ${{ github.repository }} --state merged --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
-            if [ "${pr_state}" == "merged" ]; then
-              break
 
   docker-compose-deploy:
     name: Deploy via Docker Compose
