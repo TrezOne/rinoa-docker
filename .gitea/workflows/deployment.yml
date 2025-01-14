@@ -28,7 +28,7 @@ jobs:
           tea login default gitea-rinoa
           echo "Checking if PR exists for ${{ github.ref_name }}"
           tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state
-          tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep -q '${{ gitea.ref_name }}' 
+          tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep -q '${{ github.ref_name }}' 
           if [ $? -eq 0 ]; then
             echo "PR exists, checking state..."
             pr_state=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep '${{ github.ref_name }}' | awk -F',' '{print $4}')
