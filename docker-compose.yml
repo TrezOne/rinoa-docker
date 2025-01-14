@@ -3035,11 +3035,6 @@ services:
       PUID: 1000
       TZ: America/New_York
       MYSQL_PASSWORD: VQU23wHKRNmfpAPt5E9BxMaSGJdWjLuz
-    healthcheck:
-      test: [ "CMD", "/usr/bin/mariadb", "-u", "root", "-p${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}", "-e", "\"SHOW DATABASES;\"" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
     hostname: Rinoa
     image: ghcr.io/linuxserver/mariadb
     networks:
