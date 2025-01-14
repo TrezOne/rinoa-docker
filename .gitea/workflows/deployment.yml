@@ -149,7 +149,6 @@ jobs:
       - name: Regenerate README
         run: |
           echo "# List of Services" > README.md
-          echo "___________________________________________" >> README.md
           echo -e "\n\n" >> README.md
           echo "${{ steps.service-table.outputs.table }}" >> README.md
 
@@ -160,51 +159,51 @@ jobs:
           message: "chore: Update README"
           add: "README.md"
 
-  # merge-and-trigger:
-  #   name: Merge PR & Trigger Deployment
-  #   if: ${{ regenerate-readme.outputs.pr-pushed == 'true' }}
-  #   needs: [generate-readme, docker-compose-test, regenerate-readme]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+  trigger-and-merge:
+    name: Merge PR & Trigger Deployment
+    if: ${{ regenerate-readme.outputs.pr-pushed == 'true' }}
+    needs: [generate-readme, docker-compose-test, regenerate-readme]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: PR Merge
-  #       id: pr_merge
-  #       run: |
-  #         tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-  #         tea login default gitea-rinoa
-  #         pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
-  #         tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
-  #         echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_GOTIFY_TOKEN }}'
+          notification_title: 'Ready to Deploy'
+          notification_message: 'Ready to deploy: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}'
 
-  #     - name: Wait for PR to be merged
-  #       run: |
-  #         while true; do
-  #           pr_state=$(tea pr ls --repo ${{ github.repository }} --state merged --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
-  #           if [ "${pr_state}" == "merged" ]; then
-  #             break
+      - name: manual-trigger
+        id: manual-trigger
+        uses: trstringer/manual-approval@v1.9.1
+        with:
+          secret: ${{ secrets.BOT_GITEA_TOKEN }}
+          approvers: Trez.One
+          minimum-approvals: 1
+          issue-title: "Deploying ${{ github.ref_name }} (PR #{{ steps.pr_merge.outputs.pr_index }})"
+          issue-body: "Testing for now"
+          exclude-workflow-initiator-as-approver: false
+          additional-approved-words: ''
+          additional-denied-words: ''
 
-  #     - name: Gotify Notification
-  #       uses: eikendev/gotify-action@master
-  #       with:
-  #         gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-  #         gotify_app_token: '${{ secrets.RINOA_GOTIFY_TOKEN }}'
-  #         notification_title: 'Ready to Deploy'
-  #         notification_message: 'Ready to deploy: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job }}'
+      # - name: PR Merge
+      #   id: pr_merge
+      #   run: |
+      #     tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+      #     tea login default gitea-rinoa
+      #     pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
+      #     tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
+      #     echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
 
-  #     - name: manual-trigger
-  #       id: manual-trigger
-  #       uses: trstringer/manual-approval@v1.9.1
-  #       with:
-  #         secret: ${{ secrets.BOT_GITEA_TOKEN }}
-  #         approvers: Trez.One
-  #         minimum-approvals: 1
-  #         issue-title: "Deploying ${{ github.ref_name }} (PR #{{ steps.pr_merge.outputs.pr_index }})"
-  #         issue-body: "Testing for now"
-  #         exclude-workflow-initiator-as-approver: false
-  #         additional-approved-words: ''
-  #         additional-denied-words: ''
+      # - name: Wait for PR to be merged
+      #   run: |
+      #     while true; do
+      #       pr_state=$(tea pr ls --repo ${{ github.repository }} --state merged --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F, '{print $4}' | sed -e 's|"||g')
+      #       if [ "${pr_state}" == "merged" ]; then
+      #         break
 
   # docker-compose-deploy:
   #   name: Deploy via Docker Compose
