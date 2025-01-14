@@ -40,7 +40,7 @@ jobs:
             fi
           elif [ $? -eq 1 ]; then
             echo "PR does not exist, creating..."
-            tea pr c -r "${{ github.repository }}" -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}
+            tea pr c -r "${{ github.repository }}" -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
           fi
 
   docker-compose-test:
