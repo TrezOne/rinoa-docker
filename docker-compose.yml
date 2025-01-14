@@ -3322,7 +3322,7 @@ services:
     container_name: nextcloud
     depends_on:
       mariadb:
-        condition: service_healthy
+        condition: service_started
         required: true
         restart: true
     environment:
