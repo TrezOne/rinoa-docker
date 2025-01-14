@@ -147,7 +147,6 @@ jobs:
       - name: Regenerate README
         uses: gnpaone/dynamic-update-readme@v1.0.2
         with:
-          commit_email: noreply@trez.wtf
           table: true
           marker_text: "SERVICES_LIST"
           markdown_text: |
