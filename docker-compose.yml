@@ -1182,7 +1182,7 @@ services:
     restart: always
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gitea
-        target: /data
+        target: /data/gitea
         type: bind
         bind:
           create_host_path: true
@@ -3027,7 +3027,7 @@ services:
       TZ: America/New_York
       MYSQL_PASSWORD: VQU23wHKRNmfpAPt5E9BxMaSGJdWjLuz
     hostname: Rinoa
-    image: ghcr.io/linuxserver/mariadb
+    image: linuxserver/mariadb
     networks:
       default: null
     ports:
