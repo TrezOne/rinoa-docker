@@ -556,7 +556,9 @@ services:
   castopod:
     container_name: castopod
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
+        required: true
     environment:
       MYSQL_DATABASE: castopod
       MYSQL_USER: castopod
@@ -1097,7 +1099,7 @@ services:
     container_name: ghost_blog
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -1704,7 +1706,7 @@ services:
     container_name: hortusfox
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
     environment:
       APP_ADMIN_EMAIL: charish.patel@trez.wtf
@@ -3026,6 +3028,11 @@ services:
       PUID: 1000
       TZ: America/New_York
       MYSQL_PASSWORD: VQU23wHKRNmfpAPt5E9BxMaSGJdWjLuz
+    healthcheck:
+      test: "/usr/bin/mariadb -u root -p${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD} -e \"SHOW DATABASES;\""
+      interval: 30s
+      timeout: 3s
+      retries: 5
     hostname: Rinoa
     image: linuxserver/mariadb
     networks:
@@ -3311,6 +3318,10 @@ services:
         volume: {}
   nextcloud:
     container_name: nextcloud
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        required: true
     environment:
       PGID: 1000
       PUID: 1000
@@ -3423,6 +3434,10 @@ services:
         type: bind
   paperless-ngx:
     container_name: paperless-ngx
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        required: true
     environment:
       PAPERLESS_DBENGINE: mariadb
       PAPERLESS_DBHOST: mariadb
@@ -6070,7 +6085,7 @@ services:
     container_name: wallabag
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
       redis:
         condition: service_started
