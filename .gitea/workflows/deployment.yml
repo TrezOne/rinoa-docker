@@ -30,7 +30,7 @@ jobs:
           tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state
           pr_state=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep '${{ gitea.ref_name }}' | head -1 |awk -F, '{print $4}' | sed -e 's|"||g')
           echo "PR state: ${pr_state}"
-          if [ -z "${pr_state}" ]; then
+          if [ "${pr_state}" != 'open' ]; then
             echo "PR does not exist, creating..."
             tea pr c -r "${{ github.repository }}" -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
           elif [ "${pr_state}" = 'open' ]; then
