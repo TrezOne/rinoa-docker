@@ -31,10 +31,7 @@ jobs:
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
           echo "Creating PR for branch: ${{ github.ref_name }}"
-          pr_index_recent=$(tea pr ls --state all --fields index --output csv | sed -e 's|"||g' | head -2 | tail -1)
-          pr_index_new=$((${pr_index_recent} + 1))
-          echo "PR index: ${pr_index_new}" 
-          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - ${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
+          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
 
       #     echo "Checking if any open PRs exist for branch: ${{ github.ref_name }}"
       #     PR_STATE=$(tea pr ls --repo "${{ github.repository }}" --state all --fields index,title,head,state --output csv | grep "${{ github.ref_name }}") | head -1 | awk -F',' '{print $4}' | tr -d '"'
