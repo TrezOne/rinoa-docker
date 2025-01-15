@@ -26,7 +26,7 @@ jobs:
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
-          pr_exists=$(tea pr list --state open --head ${{ github.ref_name }} --repo ${{ github.repository }} | wc -l)
+          pr_exists=$(tea pr list repo ${{ github.repository }} --state open --head ${{ github.ref_name }} | wc -l)
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
 
       - name: Create PR
