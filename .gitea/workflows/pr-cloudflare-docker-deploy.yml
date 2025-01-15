@@ -1,4 +1,4 @@
-name: Gitea Branch PR, SonarQube Analyze, and Merge Workflow
+name: Gitea Branch PR, Cloudflare DNS, README generation, & Docker Deployment
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-  # Job 1: Check if PR exists and create one if the branch is new
   check-and-create-pr:
     name: Check and Create PR
     runs-on: ubuntu-latest
