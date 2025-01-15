@@ -30,7 +30,7 @@ jobs:
           tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head,state --output csv | egrep '${{ github.ref_name }}' | head -1 | egrep -q 'open'
           if [ $? -eq 0 ]; then
             echo "An open PR exists, skipping creation..."
-          elif [ $? -eq 1 ]; then
+          elif [ $? -ne 0 ]; then
             echo "No open PRs, creating one..."
             tea pr c -r "${{ github.repository }}" -t "Automated PR for ${{ github.ref_name }}" -d "Automated PR for ${{ github.ref_name }}"
           fi
