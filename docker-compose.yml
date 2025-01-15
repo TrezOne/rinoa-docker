@@ -3067,6 +3067,58 @@ services:
         type: bind
         bind:
           create_host_path: true
+  mastodon:
+    container_name: mastodon
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      LOCAL_DOMAIN: trez.wtf
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DB_HOST: mastodon-pg-db
+      DB_USER: mastodon
+      DB_NAME: mastodon
+      DB_PASS: ${MASTODON_PG_DB_PASSWORD}
+      DB_PORT: 5432
+      ES_ENABLED: false
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY: 
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY: 
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT: 
+      SECRET_KEY_BASE: 
+      OTP_SECRET: 
+      VAPID_PRIVATE_KEY: 
+      VAPID_PUBLIC_KEY: 
+      SMTP_SERVER: postal-smtp
+      SMTP_PORT: 25
+      SMTP_LOGIN: ${POSTAL_SMTP_AUTH_USER}
+      SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SMTP_FROM_ADDRESS: noreply@trez.wtf
+      S3_ENABLED: true
+      S3_BUCKET: mastodon
+      AWS_ACCESS_KEY_ID: ${MASTODON_MINIO_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${MASTODON_MINIO_SECRET_KEY}
+    image: lscr.io/linuxserver/mastodon:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 5678
+      swag_url: mastodon.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Mastodon
+      homepage.href: https://mastodon.${MY_TLD}
+      homepage.icon: mastodon.svg
+      homepage.description: Open-source social network
+      homepage.widget.type: mastodon
+      homepage.widget.url: http://mastodon
+    ports:
+      - 9044:80
+      - 3444:443
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/mastodon:/config
   mastodon-pg-db:
     container_name: mastodon-pg-db
     environment:
