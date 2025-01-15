@@ -34,7 +34,7 @@
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
 | ghost | ghost:latest |
-| gitea | gitea/gitea:1.22.6 |
+| gitea | gitea/gitea:1.23.1 |
 | gitea-db | postgres:14 |
 | gitea-opengist | ghcr.io/thomiceli/opengist:latest |
 | gitea-runner | gitea/act_runner:latest |
@@ -77,7 +77,8 @@
 | lldap | lldap/lldap:stable |
 | localai | localai/localai:latest-aio-cpu |
 | maloja | krateng/maloja:latest |
-| mariadb | ghcr.io/linuxserver/mariadb |
+| mariadb | linuxserver/mariadb |
+| mastodon | lscr.io/linuxserver/mastodon:latest |
 | mastodon-pg-db | postgres:17-alpine |
 | minio | minio/minio |
 | mongodb | mongo:7.0 |
