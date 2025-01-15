@@ -29,6 +29,7 @@ jobs:
 
           echo "Checking if any open PRs exist for branch: ${{ github.ref_name }}"
           PR_STATE=$(tea pr ls --repo "${{ github.repository }}" --state all --fields index,title,head,state --output csv | grep "${{ github.ref_name }}") | head -1 | awk -F',' '{print $4}' | tr -d '"'
+          echo "PR_STATE: $PR_STATE"
           PR_EXISTS=$(echo "$PR_STATE" | wc -l)
 
           if [ "$PR_EXISTS" -ge 1 ]; then
