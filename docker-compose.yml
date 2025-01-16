@@ -974,7 +974,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/dockge:/app/data
-      - ${HOME}/rinoa-docker:/opt/stacks    
+      - .:/opt/stacks
   docuseal:
     container_name: docuseal
     image: docuseal/docuseal:latest
