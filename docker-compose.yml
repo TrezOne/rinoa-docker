@@ -6535,7 +6535,7 @@ services:
       homepage.name: Yacht
       homepage.href: https://yacht.${MY_TLD}
       homepage.icon: yacht.svg
-      homepage.description: TV show discovery based on library/tastes
+      homepage.description: Web interface for managing docker containers
       swag: enable
       swag_proto: http
       swag_port: 8000
