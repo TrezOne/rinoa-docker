@@ -947,34 +947,6 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
-  dockge:
-    container_name: dockge
-    depends_on:
-      docker-socket-proxy:
-        condition: service_started
-        required: true
-    environment:
-      DOCKGE_STACKS_DIR: /opt/stacks
-      DOCKER_HOST: tcp://dockerproxy:2375
-    image: louislam/dockge:latest
-    labels:
-      homepage.group: System Administration
-      homepage.name: Dockge
-      homepage.href: https://dockge.${MY_TLD}
-      homepage.icon: dockge.svg
-      homepage.description: Docker Stack/Container Management
-      swag: enable
-      swag_port: 5001
-      swag_proto: http
-      swag_url: dockge.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://deluge.${MY_TLD}
-    ports:
-      - 5002:5001
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/dockge:/app/data
-      - .:/opt/stacks
   docuseal:
     container_name: docuseal
     image: docuseal/docuseal:latest
@@ -6549,6 +6521,32 @@ services:
         published: "8900"
         target: 8080
     restart: unless-stopped
+  yacht:
+    container_name: yacht
+    depends_on:
+      docker-socket-proxy:
+        condition: service_started
+        required: true
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+    image: selfhostedpro/yacht
+    labels:
+      homepage.group: System Administration
+      homepage.name: Yacht
+      homepage.href: https://yacht.${MY_TLD}
+      homepage.icon: yacht.svg
+      homepage.description: TV show discovery based on library/tastes
+      swag: enable
+      swag_proto: http
+      swag_port: 8000
+      swag_url: yacht.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://yacht.${MY_TLD}
+    ports:
+      - 19733:8000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/yacht:/config
   your_spotify:
     container_name: your_spotify
     environment:
