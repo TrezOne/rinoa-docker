@@ -31,8 +31,6 @@ jobs:
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == 0 }}
         run: |
-          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea login default gitea-rinoa
           echo "Creating PR for branch: ${{ github.ref_name }}"
           tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
 
