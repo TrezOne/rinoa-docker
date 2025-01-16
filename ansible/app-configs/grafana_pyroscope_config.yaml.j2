@@ -1,0 +1,15 @@
+{% set vault_addr = https://vault.trez.wtf %}
+{% set secrets_path = rinoa-docker/env %}
+
+storage:
+  backend: s3
+  s3:
+    bucket_name: pyroscope
+    endpoint: minio:9000
+    region: us-east-fh-pln
+    access_key_id: "{{ lookup('community.hashi_vault.hashi_vault', secrets_path + '/access_key_id', url=vault_addr) }}"
+    secret_access_key: "{{ lookup('community.hashi_vault.hashi_vault', secrets_path + '/secret_access_key', url=vault_addr) }}"
+    insecure: true
+
+analytics:
+  reporting_enabled: false

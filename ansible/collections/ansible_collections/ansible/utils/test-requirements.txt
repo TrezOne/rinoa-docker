@@ -1,0 +1,14 @@
+# For ansible-tox-linters
+black==23.3.0 ; python_version >= '3.7'
+flake8
+yamllint
+
+# Unit test runner
+pytest-ansible
+pytest-xdist
+
+# For integration tests
+pexpect
+git+https://github.com/ansible-network/pytest-ansible-network-integration.git
+ipaddress ; python_version < '3.0'
+netaddr==0.10.1

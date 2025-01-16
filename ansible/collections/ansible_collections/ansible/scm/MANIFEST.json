@@ -1,0 +1,42 @@
+{
+ "collection_info": {
+  "namespace": "ansible",
+  "name": "scm",
+  "version": "2.0.0",
+  "authors": [
+   "Ansible Network Community (ansible-network)"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "application",
+   "cloud",
+   "database",
+   "infrastructure",
+   "linux",
+   "monitoring",
+   "networking",
+   "security",
+   "storage",
+   "tools",
+   "windows"
+  ],
+  "description": "A collection of scm utilities",
+  "license": [],
+  "license_file": "LICENSE",
+  "dependencies": {
+   "ansible.utils": ">=3.0.0"
+  },
+  "repository": "https://github.com/ansible-collections/ansible.scm",
+  "documentation": null,
+  "homepage": null,
+  "issues": "https://github.com/ansible-collections/ansible.scm/issues"
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "5bd6b99abe90dab98b772287029d0577d27935268985a7e3bb0a741c71b9312c",
+  "format": 1
+ },
+ "format": 1
+}

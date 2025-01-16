@@ -1,0 +1,8 @@
+download_url: https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/community-hashi_vault-6.2.0.tar.gz
+format_version: 1.0.0
+name: hashi_vault
+namespace: community
+server: https://galaxy.ansible.com/api/
+signatures: []
+version: 6.2.0
+version_url: /api/v3/plugin/ansible/content/published/collections/index/community/hashi_vault/versions/6.2.0/

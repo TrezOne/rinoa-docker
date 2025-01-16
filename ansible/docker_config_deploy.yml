@@ -1,0 +1,34 @@
+---
+- name: Deploy config templates and trigger GitHub workflow
+  hosts: all
+  vars:
+    appdata_base_path: "~/.docker/config/appdata"
+  tasks:
+    - name: Ensure target directories exist
+      ansible.builtin.file:
+        path: "{{ appdata_base_path }}/{{ item | basename | regex_replace('\\.j2$', '') | regex_replace('_', '/') | regex_replace('/[^/]+$', '') }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ lookup('fileglob', 'app-configs/*.j2') }}"
+
+    - name: Deploy configuration templates
+      ansible.builtin.template:
+        src: "{{ item }}"
+        dest: "{{ appdata_base_path }}/{{ item | basename | regex_replace('\\.j2$', '') | regex_replace('_', '/') }}"
+        mode: '0644'
+      loop: "{{ lookup('fileglob', 'app-configs/*.j2') }}"
+
+    # - name: Trigger GitHub workflow
+    #   uri:
+    #     url: "https://api.github.com/repos/<owner>/<repo>/actions/workflows/<workflow_id>/dispatches"
+    #     method: POST
+    #     headers:
+    #       Authorization: "Bearer {{ github_token }}"
+    #       Accept: "application/vnd.github.v3+json"
+    #     body:
+    #       ref: "main"
+    #     body_format: json
+    #   vars:
+    #     github_token: "YOUR_GITHUB_PERSONAL_ACCESS_TOKEN"
+    #     # Replace <owner>, <repo>, and <workflow_id> with actual values
+    #   delegate_to: localhost

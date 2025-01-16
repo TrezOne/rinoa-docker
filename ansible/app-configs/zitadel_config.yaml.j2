@@ -1,0 +1,43 @@
+{% set vault_addr = https://vault.trez.wtf %}
+{% set secrets_path = rinoa-docker/env %}
+
+# All possible options and their defaults: https://github.com/zitadel/zitadel/blob/main/cmd/defaults.yaml
+Log:
+  Level: 'debug'
+
+# Make ZITADEL accessible over HTTPs, not HTTP
+ExternalSecure: true
+ExternalDomain: 'id.trez.wtf'
+ExternalPort: 443
+
+# If not using the docker compose example, adjust these values for connecting ZITADEL to your PostgreSQL
+Database:
+  postgres:
+    Host: 'zitadel-pg-db'
+    Port: 5432
+    Database: zitadel
+    User:
+      SSL:
+        Mode: 'disable'
+    Admin:
+      SSL:
+        Mode: 'disable'
+
+DefaultInstance:
+  DomainPolicy:
+    UserLoginMustBeDomain: false
+
+LogStore:
+  Access:
+    Stdout:
+      Enabled: true
+
+SMTPConfiguration:
+    # Configuration of the host
+    SMTP:
+      # must include the port, like smtp.mailtrap.io:2525. IPv6 is also supported, like [2001:db8::1]:2525
+      Host: 'postal-smtp:25'
+      User: "{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='POSTAL_SMTP_AUTH_USER') }}"
+      Password: "{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='POSTAL_SMTP_AUTH_PASSWORD') }}"
+    From: 'noreply@trez.wtf'
+    FromName: 'Zitadel @ Rinoa'
