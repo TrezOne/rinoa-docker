@@ -1,8 +1,8 @@
 ---
 - name: Deploy config templates and trigger GitHub workflow
-  hosts: all
+  hosts: rinoa
   vars:
-    appdata_base_path: "~/.docker/config/appdata"
+    appdata_base_path: "/home/charish/.docker/config/appdata"
   tasks:
     - name: Ensure target directories exist
       ansible.builtin.file:
