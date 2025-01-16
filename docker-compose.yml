@@ -1834,7 +1834,7 @@ services:
         db:
           dbname: invidious
           user: kemal
-          password: kemal
+          password: ${INVID_PG_DB_PASSWORD}
           host: invidious-db
           port: 5432
         check_tables: true
@@ -1873,7 +1873,7 @@ services:
     container_name: invidious-db
     environment:
       POSTGRES_DB: invidious
-      POSTGRES_PASSWORD: kemal
+      POSTGRES_PASSWORD: ${INVID_PG_DB_PASSWORD}
       POSTGRES_USER: kemal
     healthcheck:
       test:
@@ -2998,7 +2998,7 @@ services:
       PGID: 1000
       PUID: 1000
       TZ: America/New_York
-      MYSQL_PASSWORD: VQU23wHKRNmfpAPt5E9BxMaSGJdWjLuz
+      MYSQL_PASSWORD: ${NEXTCLOUD_MARIADB_PASSWORD}
     hostname: Rinoa
     image: linuxserver/mariadb
     networks:

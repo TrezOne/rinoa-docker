@@ -124,7 +124,7 @@ jobs:
         run: |
           cat domain_compare.txt | egrep '^-[a-z]' | sed -e 's|-||g' | while read -r subdomain; do
             echo "Creating $subdomain.trez.wtf..."
-            flarectl dns create --zone "trez.wtf" --name "${subdomain}" --type=CNAME --content "trez.wtf"
+            flarectl dns create --zone "trez.wtf" --name "${subdomain}" --type=CNAME --content "trez.wtf" --proxy true
           done
 
   regenerate-readme:
