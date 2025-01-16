@@ -29,6 +29,7 @@
 | dagu-server | ghcr.io/dagu-org/dagu:latest |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
+| dockge | louislam/dockge:latest |
 | docuseal | docuseal/docuseal:latest |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
@@ -67,10 +68,6 @@
 | jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
-| komodo-core | ghcr.io/mbecker20/komodo:latest |
-| komodo-ferretdb | ghcr.io/ferretdb/ferretdb |
-| komodo-periphery | ghcr.io/mbecker20/periphery:latest |
-| komodo-pg-db | postgres:17-alpine |
 | librespeed | lscr.io/linuxserver/librespeed:latest |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
