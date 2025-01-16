@@ -950,7 +950,7 @@ services:
   dockge:
     container_name: dockge
     depends_on:
-      docker_socket_proxy:
+      docker-socket-proxy:
         condition: service_started
         required: true
     environment:
