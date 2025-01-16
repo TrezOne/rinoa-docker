@@ -955,6 +955,7 @@ services:
         required: true
     environment:
       DOCKGE_STACKS_DIR: /opt/stacks
+      DOCKER_HOST: tcp://dockerproxy:2375
     image: louislam/dockge:latest
     labels:
       homepage.group: System Administration
@@ -973,8 +974,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/dockge:/app/data
-      - ${HOME}/rinoa-docker:/opt/stacks
-    
+      - ${HOME}/rinoa-docker:/opt/stacks    
   docuseal:
     container_name: docuseal
     image: docuseal/docuseal:latest
