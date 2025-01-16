@@ -29,7 +29,6 @@
 | dagu-server | ghcr.io/dagu-org/dagu:latest |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
-| dockge | louislam/dockge:latest |
 | docuseal | docuseal/docuseal:latest |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
@@ -138,6 +137,7 @@
 | wazuh.manager | wazuh/wazuh-manager: |
 | web-check | lissy93/web-check |
 | whodb | clidey/whodb |
+| yacht | selfhostedpro/yacht |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
 | zammad-backup | postgres: |
