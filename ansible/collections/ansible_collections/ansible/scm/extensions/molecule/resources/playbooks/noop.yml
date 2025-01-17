@@ -1,4 +1,0 @@
-- name: Noop
-  hosts: localhost
-  gather_facts: false
-  tasks:

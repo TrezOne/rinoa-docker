@@ -1,3 +1,0 @@
----
-- import_tasks: module_vault_kv2_delete_setup.yml
-- import_tasks: module_vault_kv2_delete_test.yml
