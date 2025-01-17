@@ -67,7 +67,7 @@ jobs:
         uses: ansible/ansible-lint@v24.12.2
         with:
           working_directory: "ansible"
-          requirements_file: "collections/ansible_collections/requirements.yml"
+          requirements_file: "collections/requirements.yml"
 
       - name: Generate .env file for docker compose linting
         run: |
