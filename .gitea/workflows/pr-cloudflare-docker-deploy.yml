@@ -221,17 +221,6 @@ jobs:
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
-      - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "2.18.1"
-
-      - name: Run Ansible Playbook
-        uses: euclid1990/actions-ansible@v2
-        with:
-          playbook: ansible/docker_config_deploy.yml
-          inventory: ansible/ansible-inventory
-
       - name: Docker Compose Deployment
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
