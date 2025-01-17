@@ -9,7 +9,7 @@ collections/*
 __pycache__/
 *.py[cod]
 *$py.class
-
+**/.cache*
 # Ansible Vault Password Files
 *.pass
 
