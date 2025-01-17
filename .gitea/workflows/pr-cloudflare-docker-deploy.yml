@@ -214,8 +214,19 @@ jobs:
         with:
           ref: main
 
+      - name: Install Ansible
+        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        with:
+          version: "2.18.1"
+
       - name: Install Vault
         uses: cpanato/vault-installer@main
+
+      - name: Run Ansible Playbook for Docker Service Configs
+        uses: actions-ansible@v2
+        with:
+          playbook: ./ansible/docker_config_deploy.yml
+          inventory: ./ansible/ansible-inventory
 
       - name: Generate .env file for deployment
         run: |
