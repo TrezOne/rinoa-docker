@@ -3956,6 +3956,10 @@ services:
     user: nobody
   rundeck:
     container_name: rundeck
+    depends_on:
+      rundeck-pg-db:
+        condition: service_started
+        required: true
     image: rundeck/rundeck:5.8.0
     environment:
       RUNDECK_SERVER_ADDRESS: 0.0.0.0
@@ -3963,7 +3967,7 @@ services:
       RUNDECK_SERVER_FORWARDED: true
       RUNDECK_DATABASE_DRIVER: jdbc:postgresql://rundeck-pg-db/rundeck?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       RUNDECK_DATABASE_USERNAME: rundeck
-      RUNDECK_DATABASE_PASSWORD: ${RUNDECK_POSTGRES_DB_PASSWD}
+      RUNDECK_DATABASE_PASSWORD: ${RUNDECK_PG_DB_PASSWD}
       RUNDECK_MAIL_SMTP_HOST: postal-smtp
       RUNDECK_MAIL_SMTP_PORT: 25
       RUNDECK_MAIL_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
@@ -3992,7 +3996,7 @@ services:
     environment:
       POSTGRES_DB: rundeck
       POSTGRES_USER: rundeck
-      POSTGRES_PASSWORD: ${RUNDECK_POSTGRES_DB_PASSWD}
+      POSTGRES_PASSWORD: ${RUNDECK_PG_DB_PASSWD}
     volumes:
       - rundeck-db-data:/var/lib/postgresql/data
   sabnzbdvpn:
