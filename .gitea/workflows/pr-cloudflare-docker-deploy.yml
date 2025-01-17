@@ -196,34 +196,11 @@ jobs:
           echo "${pr_index}"
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" --output table ${pr_index}
 
-  ansible-config-deply:
-    name: Deploy Service Configs via Ansible
-    runs-on: ubuntu-latest
-    needs: [pr-merge]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
-
-      - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "2.18.1"
-
-      - name: Run Ansible Playbook
-        uses: euclid1990/actions-ansible@v2
-        with:
-          playbook: ansible/playbook.yml
-          inventory: ansible/inventory
-
-  docker-compose-and-ansible-config-deploy:
+  ansible-config-docker-compose-deploy:
     name: Deploy via Ansible & Docker Compose
     runs-on: ubuntu-latest
-    needs: [ansible-config-deploy]
+    needs: [pr-merge]
+    if: ${{ github.event.pull_request.merged == true }
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
