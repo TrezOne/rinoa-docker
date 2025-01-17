@@ -229,8 +229,8 @@ jobs:
       - name: Run Ansible Playbook
         uses: euclid1990/actions-ansible@v2
         with:
-          playbook: ansible/playbook.yml
-          inventory: ansible/inventory
+          playbook: ansible/docker_config_deploy.yml
+          inventory: ansible/ansible-inventory
 
       - name: Docker Compose Deployment
         uses: keatonLiu/docker-compose-remote-action@v1.2
