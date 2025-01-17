@@ -1,5 +1,5 @@
-{% set vault_addr = https://vault.trez.wtf %}
-{% set secrets_path = rinoa-docker/env %}
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
 
 # All possible options and their defaults: https://github.com/zitadel/zitadel/blob/main/cmd/setup/steps.yaml
 FirstInstance:
@@ -8,6 +8,6 @@ FirstInstance:
       # use the loginname root@my-org.my.domain
       Username: 'root'
       Password: 'RootPassword1!'
-      Email: 
+      Email:
         Address: 'charish.patel@trez.wtf'
         Verified: true

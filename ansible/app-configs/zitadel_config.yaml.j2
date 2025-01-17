@@ -1,5 +1,5 @@
-{% set vault_addr = https://vault.trez.wtf %}
-{% set secrets_path = rinoa-docker/env %}
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
 
 # All possible options and their defaults: https://github.com/zitadel/zitadel/blob/main/cmd/defaults.yaml
 Log:
@@ -37,7 +37,7 @@ SMTPConfiguration:
     SMTP:
       # must include the port, like smtp.mailtrap.io:2525. IPv6 is also supported, like [2001:db8::1]:2525
       Host: 'postal-smtp:25'
-      User: "{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='POSTAL_SMTP_AUTH_USER') }}"
-      Password: "{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='POSTAL_SMTP_AUTH_PASSWORD') }}"
+      User: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}
+      Password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}
     From: 'noreply@trez.wtf'
     FromName: 'Zitadel @ Rinoa'

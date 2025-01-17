@@ -1,5 +1,5 @@
-{% set vault_addr = https://vault.trez.wtf %}
-{% set secrets_path = rinoa-docker/env %}
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
 
 ---
 # For configuration options and examples, please see:
@@ -15,9 +15,9 @@
 - resources:
     label: Storage
     expanded: true
-    disk: 
+    disk:
         - /
-        - /rinoa-storage 
+        - /rinoa-storage
 
 - search:
     provider: custom
@@ -30,4 +30,4 @@
     longitude: -73.85
     units: imperial
     provider: openweathermap
-    cache: 10                                         
+    cache: 10

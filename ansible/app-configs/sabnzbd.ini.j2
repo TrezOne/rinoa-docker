@@ -1,5 +1,5 @@
-{% set vault_addr = https://vault.trez.wtf %}
-{% set secrets_path = rinoa-docker/env %}
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
 
 __version__ = 19
 __encoding__ = utf-8
@@ -22,7 +22,7 @@ host = 0.0.0.0
 port = 8080
 https_port = 8090
 username = thetrezuredone
-password = {{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='SABNZBDVPN_PASSWORD') }}
+password = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SABNZBDVPN_PASSWORD'] }}
 bandwidth_max = 1000M
 cache_limit = 1G
 web_dir = Glitter
@@ -33,7 +33,7 @@ https_chain = ""
 enable_https = 1
 inet_exposure = 0
 local_ranges = ,
-api_key = {{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='SABNZBDVPN_API_KEY') }}
+api_key = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SABNZBDVPN_API_KEY'] }}
 nzb_key = 3c0fa874bb2748b58c1bd7512e649946
 permissions = 775
 download_dir = /storage/downloads/incomplete
@@ -342,7 +342,7 @@ host = news.newshosting.com
 port = 563
 timeout = 60
 username = thetrezuredone
-password = "{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='SLSKD_PASSWORD') }}"
+password = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_PASSWORD'] }}
 connections = 8
 ssl = 1
 ssl_verify = 3
@@ -363,7 +363,7 @@ host = news.easynews.com
 port = 443
 timeout = 60
 username = TrezOne
-password = "{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='SABNZBDVPN_EASYNEWS_PASSWORD') }}"
+password = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SABNZBDVPN_EASYNEWS_PASSWORD'] }}
 connections = 60
 ssl = 0
 ssl_verify = 3

@@ -1,5 +1,5 @@
-{% set vault_addr = https://vault.trez.wtf %}
-{% set secrets_path = rinoa-docker/env %}
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
 
 <?xml version='1.0' encoding='UTF-8'?>
 
@@ -24,6 +24,6 @@
     <entry key='database.driver'>org.postgresql.Driver</entry>
     <entry key='database.url'>jdbc:postgresql://traccar-pg:5432/traccar-db</entry>
     <entry key='database.user'>traccar</entry>
-    <entry key='database.password'>"{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='WAZUH_API_PASSWORD') }}"</entry>
+    <entry key='database.password'>{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['WAZUH_API_PASSWORD'] }}</entry>
 
 </properties>

@@ -1,5 +1,5 @@
-{% set vault_addr = https://vault.trez.wtf %}
-{% set secrets_path = rinoa-docker/env %}
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
 
 general:
   # Debug mode, only for development. Is overwritten by ${SEARXNG_DEBUG}
@@ -82,7 +82,7 @@ server:
   # If your instance owns a /etc/searxng/settings.yml file, then set the following
   # values there.
 
-  secret_key: "{{ lookup('community.hashi_vault.vault_kv2_get', token=token, url=vault_url, mount_point=secrets_path, key='SEARXNG_SECRET_KEY') }}"  # Is overwritten by ${SEARXNG_SECRET}
+  secret_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SEARXNG_SECRET_KEY'] }}  # Is overwritten by ${SEARXNG_SECRET}
   # Proxying image results through searx
   image_proxy: true
   # 1.0 and 1.1 are supported
@@ -1278,7 +1278,7 @@ engines:
     url: https://thepiratebay.org/
     timeout: 3.0
 
-  # Required dependency: psychopg2
+  {# # Required dependency: psychopg2
   #  - name: postgresql
   #    engine: postgresql
   #    database: postgres
@@ -1286,7 +1286,7 @@ engines:
   #    password: postgres
   #    limit: 10
   #    query_str: 'SELECT * from my_table WHERE my_column = %(query)s'
-  #    shortcut : psql
+  #    shortcut : psql #}
 
   - name: pub.dev
     engine: xpath
@@ -1362,7 +1362,7 @@ engines:
     categories: [videos, web]
     network: qwant
 
-  # - name: library
+  {# # - name: library
   #   engine: recoll
   #   shortcut: lib
   #   base_url: 'https://recoll.example.org/'
@@ -1382,7 +1382,7 @@ engines:
   #   shortcut: libr
   #   timeout: 30.0
   #   categories: files
-  #   disabled: true
+  #   disabled: true #}
 
   - name: radio browser
     engine: radio_browser
@@ -1393,7 +1393,7 @@ engines:
     shortcut: re
     page_size: 25
 
-  # Required dependency: redis
+  {# # Required dependency: redis
   # - name: myredis
   #   shortcut : rds
   #   engine: redis_server
@@ -1408,7 +1408,7 @@ engines:
   #  - name: scanr structures
   #    shortcut: scs
   #    engine: scanr_structures
-  #    disabled: true
+  #    disabled: true #}
 
   - name: sepiasearch
     engine: sepiasearch
@@ -1451,20 +1451,20 @@ engines:
     shortcut: frl
     disabled: true
 
-  # - name: searx
+  {# # - name: searx
   #   engine: searx_engine
   #   shortcut: se
   #   instance_urls :
   #       - http://127.0.0.1:8888/
   #       - ...
-  #   disabled: true
+  #   disabled: true #}
 
   - name: semantic scholar
     engine: semantic_scholar
     disabled: true
     shortcut: se
 
-  # Spotify needs API credentials
+  {# # Spotify needs API credentials
   # - name: spotify
   #   engine: spotify
   #   shortcut: stf
@@ -1488,7 +1488,7 @@ engines:
   #   # working API key, for test & debug: "a69685087d07eca9f13db62f65b8f601"
   #   api_key: 'unset'
   #   shortcut: springer
-  #   timeout: 15.0
+  #   timeout: 15.0 #}
 
   - name: startpage
     engine: startpage
@@ -2151,84 +2151,84 @@ engines:
       use_official_api: false
       require_api_key: false
       results: HTML
+{# 
+Doku engine lets you access to any Doku wiki instance:
+A public one or a privete/corporate one.
+ - name: ubuntuwiki
+   engine: doku
+   shortcut: uw
+   base_url: 'https://doc.ubuntu-fr.org'
 
-# Doku engine lets you access to any Doku wiki instance:
-# A public one or a privete/corporate one.
-#  - name: ubuntuwiki
-#    engine: doku
-#    shortcut: uw
-#    base_url: 'https://doc.ubuntu-fr.org'
+Be careful when enabling this engine if you are
+running a public instance. Do not expose any sensitive
+information. You can restrict access by configuring a list
+of access tokens under tokens.
+ - name: git grep
+   engine: command
+   command: ['git', 'grep', '{{QUERY}}']
+   shortcut: gg
+   tokens: []
+   disabled: true
+   delimiter:
+       chars: ':'
+       keys: ['filepath', 'code']
 
-# Be careful when enabling this engine if you are
-# running a public instance. Do not expose any sensitive
-# information. You can restrict access by configuring a list
-# of access tokens under tokens.
-#  - name: git grep
-#    engine: command
-#    command: ['git', 'grep', '{{QUERY}}']
-#    shortcut: gg
-#    tokens: []
-#    disabled: true
-#    delimiter:
-#        chars: ':'
-#        keys: ['filepath', 'code']
+Be careful when enabling this engine if you are
+running a public instance. Do not expose any sensitive
+information. You can restrict access by configuring a list
+of access tokens under tokens.
+ - name: locate
+   engine: command
+   command: ['locate', '{{QUERY}}']
+   shortcut: loc
+   tokens: []
+   disabled: true
+   delimiter:
+       chars: ' '
+       keys: ['line']
 
-# Be careful when enabling this engine if you are
-# running a public instance. Do not expose any sensitive
-# information. You can restrict access by configuring a list
-# of access tokens under tokens.
-#  - name: locate
-#    engine: command
-#    command: ['locate', '{{QUERY}}']
-#    shortcut: loc
-#    tokens: []
-#    disabled: true
-#    delimiter:
-#        chars: ' '
-#        keys: ['line']
+Be careful when enabling this engine if you are
+running a public instance. Do not expose any sensitive
+information. You can restrict access by configuring a list
+of access tokens under tokens.
+ - name: find
+   engine: command
+   command: ['find', '.', '-name', '{{QUERY}}']
+   query_type: path
+   shortcut: fnd
+   tokens: []
+   disabled: true
+   delimiter:
+       chars: ' '
+       keys: ['line']
 
-# Be careful when enabling this engine if you are
-# running a public instance. Do not expose any sensitive
-# information. You can restrict access by configuring a list
-# of access tokens under tokens.
-#  - name: find
-#    engine: command
-#    command: ['find', '.', '-name', '{{QUERY}}']
-#    query_type: path
-#    shortcut: fnd
-#    tokens: []
-#    disabled: true
-#    delimiter:
-#        chars: ' '
-#        keys: ['line']
+Be careful when enabling this engine if you are
+running a public instance. Do not expose any sensitive
+information. You can restrict access by configuring a list
+of access tokens under tokens.
+ - name: pattern search in files
+   engine: command
+   command: ['fgrep', '{{QUERY}}']
+   shortcut: fgr
+   tokens: []
+   disabled: true
+   delimiter:
+       chars: ' '
+       keys: ['line']
 
-# Be careful when enabling this engine if you are
-# running a public instance. Do not expose any sensitive
-# information. You can restrict access by configuring a list
-# of access tokens under tokens.
-#  - name: pattern search in files
-#    engine: command
-#    command: ['fgrep', '{{QUERY}}']
-#    shortcut: fgr
-#    tokens: []
-#    disabled: true
-#    delimiter:
-#        chars: ' '
-#        keys: ['line']
-
-# Be careful when enabling this engine if you are
-# running a public instance. Do not expose any sensitive
-# information. You can restrict access by configuring a list
-# of access tokens under tokens.
-#  - name: regex search in files
-#    engine: command
-#    command: ['grep', '{{QUERY}}']
-#    shortcut: gr
-#    tokens: []
-#    disabled: true
-#    delimiter:
-#        chars: ' '
-#        keys: ['line']
+Be careful when enabling this engine if you are
+running a public instance. Do not expose any sensitive
+information. You can restrict access by configuring a list
+of access tokens under tokens.
+ - name: regex search in files
+   engine: command
+   command: ['grep', '{{QUERY}}']
+   shortcut: gr
+   tokens: []
+   disabled: true
+   delimiter:
+       chars: ' '
+       keys: ['line'] #}
 
 doi_resolvers:
   oadoi.org: 'https://oadoi.org/'
