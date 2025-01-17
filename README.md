@@ -101,6 +101,7 @@
 | readarr | lscr.io/linuxserver/readarr:develop |
 | redis | redis:alpine |
 | redlib | quay.io/redlib/redlib:latest |
+| rundeck | rundeck/rundeck:5.8.0 |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | scraperr | jpyles0524/scraperr:latest |
 | scraperr-api | jpyles0524/scraperr_api:latest |
