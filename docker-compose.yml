@@ -3954,6 +3954,24 @@ services:
     security_opt:
       - no-new-privileges=true
     user: nobody
+  rundeck:
+    container_name: rundeck
+    image: rundeck/rundeck:5.8.0
+    labels:
+      homepage.group: Code/DevOps
+      homepage.name: Rundeck
+      homepage.icon: rundeck.svg
+      homepage.description: Open-source automation service with a web console, command line tools, and web API
+      swag: enable
+      swag_proto: http
+      swag_port: 4440
+      swag_url: rundeck.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://rundeck.${MY_TLD}
+    ports:
+      - 4440:4440
+    volumes:
+      - rundeck-data:/home/rundeck/server/data
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -7110,6 +7128,8 @@ volumes:
     name: plausible-event-logs
   reactive-resume-pg:
     name: reactive-resume-pg
+  rundeck-data:
+    name: rundeck-data
   semaphore_config:
     name: semaphore_config
   semaphore_data:
