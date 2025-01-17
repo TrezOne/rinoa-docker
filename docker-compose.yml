@@ -3960,6 +3960,15 @@ services:
     environment:
       RUNDECK_SERVER_ADDRESS: 0.0.0.0
       RUNDECK_GRAILS_URL: https://rundeck.trez.wtf
+      RUNDECK_SERVER_FORWARDED: true
+      RUNDECK_DATABASE_DRIVER: jdbc:postgresql://rundeck-pg-db/rundeck?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      RUNDECK_DATABASE_USERNAME: rundeck
+      RUNDECK_DATABASE_PASSWORD: ${RUNDECK_POSTGRES_DB_PASSWD}
+      RUNDECK_MAIL_SMTP_HOST: postal-smtp
+      RUNDECK_MAIL_SMTP_PORT: 25
+      RUNDECK_MAIL_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      RUNDECK_MAIL_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      RUNDECK_MAIL_FROM: noreply@trez.wtf
     labels:
       homepage.group: Code/DevOps
       homepage.name: Rundeck
@@ -3976,6 +3985,16 @@ services:
     restart: unless-stopped
     volumes:
       - rundeck-data:/home/rundeck/server/data
+  rundeck-pg-db:
+    image: postgres:16-alpine
+    expose:
+      - 5432
+    environment:
+      POSTGRES_DB: rundeck
+      POSTGRES_USER: rundeck
+      POSTGRES_PASSWORD: ${RUNDECK_POSTGRES_DB_PASSWD}
+    volumes:
+      - rundeck-db-data:/var/lib/postgresql/data
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -7134,6 +7153,8 @@ volumes:
     name: reactive-resume-pg
   rundeck-data:
     name: rundeck-data
+  rundeck-db-data:
+    name: rundeck-db-data
   semaphore_config:
     name: semaphore_config
   semaphore_data:
