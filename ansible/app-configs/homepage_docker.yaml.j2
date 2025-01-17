@@ -1,0 +1,15 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/docker/
+
+# my-docker:
+#   host: 127.0.0.1
+#   port: 2375
+
+ my-docker:
+   host: dockerproxy
+   port: 2375

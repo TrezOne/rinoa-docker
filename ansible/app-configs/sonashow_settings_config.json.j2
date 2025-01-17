@@ -1,0 +1,21 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+{
+    "sonarr_address": "http://192.168.1.2:8989",
+    "sonarr_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SONARR_API_KEY'] }}",
+    "root_folder_path": "/data/media/shows",
+    "tvdb_api_key": "",
+    "tmdb_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['TMDB_API_KEY'] }}",
+    "fallback_to_top_result": false,
+    "sonarr_api_timeout": 120.0,
+    "quality_profile_id": 1,
+    "metadata_profile_id": 1,
+    "search_for_missing_episodes": true,
+    "dry_run_adding_to_sonarr": false,
+    "minimum_rating": 4.5,
+    "minimum_votes": 50,
+    "language_choice": "all",
+    "auto_start": true,
+    "auto_start_delay": 60.0
+}

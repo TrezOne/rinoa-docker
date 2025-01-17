@@ -1,0 +1,712 @@
+{
+ "files": [
+  {
+   "name": ".",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "CHANGELOG.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5b0b7df14ab0283e385c3d115dc4315b9c7f9af0d506a219fb6b995b14130d27",
+   "format": 1
+  },
+  {
+   "name": ".darglint",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "954a7045c6fa17fddfe80995f7f8251efb6df1a2b05eaf479afca6bbc6dfd4f2",
+   "format": 1
+  },
+  {
+   "name": "LICENSE",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+   "format": 1
+  },
+  {
+   "name": "tox-ansible.ini",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "da802bfc2dc2671ca7caba028e8a635b459b131874041d119b698717333a7a49",
+   "format": 1
+  },
+  {
+   "name": ".ansible-lint",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b47f72e159f93a5ff07ea2534752e0fa977b214e9ac05c667fa83ac13be4e50c",
+   "format": 1
+  },
+  {
+   "name": ".prettierignore",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9fc3b84c10846d1658d3cd68243fd545ada1df3decb4c25cec503e10513df793",
+   "format": 1
+  },
+  {
+   "name": "changelogs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "changelogs/fragments/.keep",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "changelogs/changelog.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "dd2592001bd4bfc32624dfa16ecdc3b142b6e635766cd00b3b1c2b7aff9f3e24",
+   "format": 1
+  },
+  {
+   "name": "changelogs/config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8ed95f6891811f24990fa205fd650c2cb1597fb0e7de009e79da234c5f211556",
+   "format": 1
+  },
+  {
+   "name": "meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "meta/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "meta/runtime.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2af7f216ad53afd39bb0c11d4db64e18bc31056b50827d6791e9631978ac9048",
+   "format": 1
+  },
+  {
+   "name": ".flake8",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "91e3131fb4b2abcbf258390207732f0da41ebabaa4a9b59048b80d239065beeb",
+   "format": 1
+  },
+  {
+   "name": "plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/action",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/action/git_retrieve.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "03aff4f32e61e719654d49e82fc468bf3df772925c97005715a571ef8553b526",
+   "format": 1
+  },
+  {
+   "name": "plugins/action/git_publish.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1f717f9fb0f06e0ca6fc2ac7a756a20f5f53cbda4163a7cbbbb56f2a43bcf1e7",
+   "format": 1
+  },
+  {
+   "name": "plugins/action/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/git_retrieve.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f497054bc2120c42646db457fbf5651a35541f6de360abb62c3fc5c3730765f4",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/git_publish.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "080dfd1ba7efbbed04ad1805e3a8277af9209e014243a7f472a0e2448d560802",
+   "format": 1
+  },
+  {
+   "name": "plugins/modules/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/test",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/test/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/inventory",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/inventory/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/cache",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/cache/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/filter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/filter/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/common",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/module_utils/common/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/plugin_utils",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/plugin_utils/command.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "921782a7526e9bb5475d15e2b7bcdc916c18ae920900c81e75ad01f1d6f348fd",
+   "format": 1
+  },
+  {
+   "name": "plugins/plugin_utils/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "plugins/plugin_utils/git_base.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0fa168162f9c2399d5467ab744d60fbd908c73ffdf78c3c44181f574eec5b804",
+   "format": 1
+  },
+  {
+   "name": "plugins/lookup",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/lookup/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "cspell.config.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9f53557bfd78de57b42327bfdfc8036835ce0eee01336106ee4044563de45f8a",
+   "format": 1
+  },
+  {
+   "name": "extensions",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/default",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/default/create.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "654e824d3eb68681bd816948cffd349b04b65e2945e2af5898bf420d849f86bb",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/default/molecule.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8df3b7d2cf67281c1e295df7cb108197b148c7b335d765af624fec83f2bc9181",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_success",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_success/molecule.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2f6ff598d83a1dd460195de21e150f84905965e79fb01a3cc1957288d2b6d4dd",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_user_dir",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_user_dir/molecule.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4633d0321758a0d093608130cbde9dc5b99423cbf7f2e28e9b14a87be8c222bc",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_failure",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_failure/molecule.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2f6ff598d83a1dd460195de21e150f84905965e79fb01a3cc1957288d2b6d4dd",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_key_checking",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/integration_key_checking/molecule.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2f6ff598d83a1dd460195de21e150f84905965e79fb01a3cc1957288d2b6d4dd",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources/vars",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources/vars/vars.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f60dc37ff949f3eb76b56459f6ac0073f5db28a1d35baaadac6c56e23e22ea84",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources/templates/molecule.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2f6ff598d83a1dd460195de21e150f84905965e79fb01a3cc1957288d2b6d4dd",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources/playbooks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources/playbooks/converge.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "22ad87e28d8bbdc920c6c91ee3fd06a69bcba732c67296f73a6d0576e62c64c0",
+   "format": 1
+  },
+  {
+   "name": "extensions/molecule/resources/playbooks/noop.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e31c672d9c15935ea55b0ad54180c86afe29c9abfa14fcb85ef4b23bc0c17170",
+   "format": 1
+  },
+  {
+   "name": ".config",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": ".config/dictionary.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9f02d159a5040696bada5c52a53d96ccccfb6f65d5a7c795f7cb6e188288e8cd",
+   "format": 1
+  },
+  {
+   "name": "README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a90b670efa7954d8f438e45b152c6efffff35215b0fd6e50dcc94b29ac618ba7",
+   "format": 1
+  },
+  {
+   "name": "test-requirements.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "91a5c04f9eb2800458c0d90ba08d1d4963be88fa389c92379d5234b440eacc9b",
+   "format": 1
+  },
+  {
+   "name": ".yamllint",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "016ce9b32a343eb98cf542ed44148f7724ff4e3e38380f4cec9ddbd6e4da0fa4",
+   "format": 1
+  },
+  {
+   "name": "tests",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/unit/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/conftest.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "900b1bf1c4188f3ddeb3165a80920927d937c14a8f935aa6b5622684be581391",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/test_smoke.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a798f776657c0e116d2f71b50c0971b03e707b597843af25d9ebd48044d28431",
+   "format": 1
+  },
+  {
+   "name": "tests/unit/definitions.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a605490669ae0a26a62ce411c224b79b91fda5591c44e2375da343cd4645f2cc",
+   "format": 1
+  },
+  {
+   "name": "tests/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/integration",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/test_integration.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "703df3a55a6a3f103560cc68e8e6abc1ede126dd2a29ac52f6f2ab1bea13b50f",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/failure",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/failure/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/failure/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ed9a00de241ecb80543e08a8363b4a79dd60670e296d197fc988bcc94fedda7b",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/key_checking",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/key_checking/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/key_checking/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2ae719a59c1a9bf8088ad3a033d21ca8cfaee49024738c03cc7fd7391fd6401d",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/success",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/success/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/success/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "407e27d1eba390cbee00b00c1559b401cb923a7d1c2db4e28d045aea7d4bde86",
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/user_dir",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/user_dir/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "tests/integration/targets/user_dir/tasks/main.yaml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b08f7f98725f26d2a5ea0527f931be56865fc879771ba01b1cc2fbc6f107fb2c",
+   "format": 1
+  },
+  {
+   "name": "bindep.txt",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "64fdb2f0fc06b7e067aa52f349cb67e1e992e3fee23a02c92104fa0a3d8e163a",
+   "format": 1
+  },
+  {
+   "name": "docs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs/ansible.scm.git_publish_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6e3337a34dd80e075f79c0118f9c13ef84b17dd5fecdad1b25cab2d329a8066c",
+   "format": 1
+  },
+  {
+   "name": "docs/ansible.scm.git_retrieve_module.rst",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7a95cd2e80eb940a3096edf182ffe51ef07bfded57c64e47f3073d48565a986f",
+   "format": 1
+  },
+  {
+   "name": "docs/__init__.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "format": 1
+  }
+ ],
+ "format": 1
+}

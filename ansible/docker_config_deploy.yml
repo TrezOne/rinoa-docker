@@ -1,0 +1,20 @@
+---
+- name: Deploy config templates and trigger GitHub workflow
+  hosts: all
+  vars:
+    appdata_base_path: "~/.docker/config/appdata"
+
+  tasks:
+    - name: Ensure target directories exist
+      ansible.builtin.file:
+        path: "{{ appdata_base_path }}/{{ (item | basename | regex_replace('\\.j2$', '') | regex_replace('_', '/') | regex_replace('/[^/]+$', '')) }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ query('fileglob', 'app-configs/*.j2') }}"
+
+    - name: Deploy configuration templates
+      ansible.builtin.template:
+        src: "{{ item }}"
+        dest: "{{ appdata_base_path }}/{{ item | basename | regex_replace('\\.j2$', '') | regex_replace('_', '/') }}"
+        mode: '0644'
+      loop: "{{ query('fileglob', 'app-configs/*.j2') }}"
