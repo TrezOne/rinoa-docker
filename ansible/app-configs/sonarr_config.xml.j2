@@ -1,0 +1,22 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = rinoa-docker/env %}
+
+<Config>
+  <LogLevel>info</LogLevel>
+  <EnableSsl>False</EnableSsl>
+  <Port>8989</Port>
+  <SslPort>9898</SslPort>
+  <UrlBase></UrlBase>
+  <BindAddress>*</BindAddress>
+  <ApiKey>386baee1c0e741bea4a91f1f39c57f68</ApiKey>
+  <AuthenticationMethod>Forms</AuthenticationMethod>
+  <UpdateMechanism>Docker</UpdateMechanism>
+  <LaunchBrowser>True</LaunchBrowser>
+  <Branch>main</Branch>
+  <InstanceName>Sonarr</InstanceName>
+  <SyslogPort>514</SyslogPort>
+  <AuthenticationRequired>Enabled</AuthenticationRequired>
+  <SslCertPath></SslCertPath>
+  <SslCertPassword></SslCertPassword>
+  <Theme>auto</Theme>
+</Config>

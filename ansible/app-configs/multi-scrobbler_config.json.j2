@@ -1,0 +1,63 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+{
+    "sourceDefaults": {
+      "maxPollRetries": 0,          // optional, default # of automatic polling restarts on error. can be overridden by property in individual config
+      "maxRequestRetries": 1,       // optional, default # of http request retries a source can make before error is thrown. can be overridden by property in individual config
+      "retryMultiplier": 1.5       // optional, default retry delay multiplier (retry attempt * multiplier = # of seconds to wait before retrying). can be overridden by property in individual config
+    },
+    "clientDefaults": {
+      "maxRequestRetries": 1,       // optional, default # of http request retries a client can make before error is thrown. can be overridden by property in individual config
+      "retryMultiplier": 1.5       // optional, default retry delay multiplier (retry attempt * multiplier = # of seconds to wait before retrying). can be overridden by property in individual config
+    },
+    "clients": [
+        {
+            "name": "Last.fm Client",
+            "enable": true,
+            "configureAs": "client",
+            "data": {
+            "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_KEY'] }}",
+            "secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_SECRET'] }}",
+            "redirectUri": "http://localhost:9078/lastfm/callback"
+            }
+        },
+        {
+            "name": "Last.fm Source",
+            "enable": true,
+            "configureAs": "source",
+            "data": {
+            "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_KEY'] }}",
+            "secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_SECRET'] }}",
+            "redirectUri": "http://localhost:9078/lastfm/callback"
+            }
+        },
+        {
+            "name": "Maloja",
+            "enable": true,
+            "data": {
+            "url": "http://maloja:42010",
+            "apiKey": "myMalojaKey"
+            }
+        },
+        {
+          "name": "ListenBrainz Client",
+          "enable": true,
+          "configureAs": "client",
+          "data": {
+            "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
+            "username": "Trez.One"
+          }
+        },
+        {
+          "name": "ListenBrainz Source",
+          "enable": true,
+          "configureAs": "source",
+          "data": {
+            "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
+            "username": "Trez.One"
+          }
+        }
+      ]
+  }
+}

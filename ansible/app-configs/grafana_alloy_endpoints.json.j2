@@ -1,0 +1,34 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+{
+    "metrics": {
+        "url": "http://grafana-mimir:9009/api/v1/push",
+        "basicAuth": {
+            "username": "",
+            "password": ""
+        }
+    },
+    "logs": {
+        "url": "http://grafana-loki:3100/loki/api/v1/push",
+        "basicAuth": {
+            "username": "",
+            "password": ""
+        }
+    },
+    "traces": {
+        "url": "http://grafana-tempo:4317",
+        "basicAuthToken": "",
+        "tls": {
+            "insecure": true,
+            "insecureSkipVerify": true
+        }
+    },
+    "profiles": {
+        "url": "http://grafana-pyroscope:4040",
+        "basicAuth": {
+            "username": "",
+            "password": ""
+        }
+    }
+}
