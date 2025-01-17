@@ -1,3 +1,0 @@
----
-- import_tasks: module_vault_database_connection_delete_setup.yml
-- import_tasks: module_vault_database_connection_delete_test.yml
