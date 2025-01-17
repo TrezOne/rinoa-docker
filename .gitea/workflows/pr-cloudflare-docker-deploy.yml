@@ -51,7 +51,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Install jq
         uses: dcarbone/install-jq-action@v3.0.1
 
@@ -88,7 +88,7 @@ jobs:
 
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
-      
+
       - name: Install flarectl
         uses: supplypike/setup-bin@v4
         with:
@@ -106,7 +106,7 @@ jobs:
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
           echo "Grabbing subdomains from Cloudflare..."
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
-          
+
       - name: Compare Subdomains
         id: compare-subdomains
         uses: LouisBrunner/diff-action@v2.2.0
@@ -141,7 +141,7 @@ jobs:
 
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
-      
+
       - name: Generate service list
         run: |
           yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
@@ -172,7 +172,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
@@ -186,6 +186,7 @@ jobs:
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ gitea.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
+          echo "${pr_index}"
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ gitea.ref_name }}" --message "Merged by ${{ gitea.actor }}" --output table ${pr_index}
 
   docker-compose-deploy:
@@ -211,7 +212,7 @@ jobs:
 
       - name: Docker Compose Deployment
         uses: keatonLiu/docker-compose-remote-action@v1.2
-        with: 
+        with:
           ssh_user: gitea-deploy
           ssh_host: 192.168.1.254
           ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
