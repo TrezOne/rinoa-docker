@@ -3990,6 +3990,7 @@ services:
     volumes:
       - rundeck-data:/home/rundeck/server/data
   rundeck-pg-db:
+    container_name: rundeck-pg-db
     image: postgres:16-alpine
     expose:
       - 5432
