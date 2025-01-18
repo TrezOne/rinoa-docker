@@ -54,10 +54,6 @@ jobs:
         uses: cpanato/vault-installer@main
         with:
           vault-release: '1.18.3'
-      - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "2.18.1"
       - name: Install hvac (Python library for HashiCorp Vault)
         uses: insightsengineering/pip-action@v2
         with:
