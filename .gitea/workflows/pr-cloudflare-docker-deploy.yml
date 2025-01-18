@@ -62,15 +62,6 @@ jobs:
             ${{ runner.os }}-ansible-
       - name: Install Ansible Galaxy Collections
         run: ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
-      - name: Cache Python Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Install Python Dependencies
-        run: pip install -r requirements.txt
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
