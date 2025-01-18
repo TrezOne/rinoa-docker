@@ -1,10 +1,11 @@
-name: Gitea Branch PR, Cloudflare DNS, README generation, & Docker Deployment
+name: Gitea Branch PR, Cloudflare DNS, README generation, & Ansible/Docker Deployment
 on:
   push:
     branches-ignore:
       - main
     paths:
       - '**.yml'
+
 jobs:
   check-and-create-pr:
     name: Check and Create PR
@@ -12,6 +13,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Cache tea CLI
+        uses: actions/cache@v3
+        with:
+          path: ~/.tea
+          key: tea-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
@@ -22,21 +30,16 @@ jobs:
         id: check-opened-pr-step
         continue-on-error: true
         run: |
-          echo "Logging into Gitea..."
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          echo "Setting default login to gitea-rinoa..."
           tea login default gitea-rinoa
-          echo "Checking for existing PRs..."
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep ${{ github.ref_name }} | tail -1 | wc -l)
           echo ${pr_exists}
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
-          echo "Creating PR for branch: ${{ github.ref_name }}"
           pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | head -2 | tail -1 | awk -F, '{print $1}' | sed -e 's|"||g')'
           pr_index_new=$(expr ${pr_index_old} + 1)
-          echo "New PR index: ${pr_index_new}"
           tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - ${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
   docker-compose-ansible-lints:
     name: Docker Compose & Ansible Lints
@@ -48,30 +51,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install jq
-        uses: dcarbone/install-jq-action@v3.0.1
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
         with:
-          vault-release: '1.18.3'
-      - name: Install hvac (Python library for HashiCorp Vault)
-        uses: insightsengineering/pip-action@v2
+          fetch-depth: 1
+      - name: Cache Ansible Galaxy Collections
+        uses: actions/cache@v3
         with:
-          packages: hvac
-      - name: Ansible Playbook Dry Run
-        uses: arillso/action.playbook@0.0.8
+          path: ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('ansible/collections/requirements.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-ansible-
+      - name: Install Ansible Galaxy Collections
+        run: ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
+      - name: Cache Python Dependencies
+        uses: actions/cache@v3
         with:
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/ansible-inventory
-          playbook: ansible/docker_config_deploy.yml
-          check: true
-          diff: true
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 1
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+      - name: Cache .env Files
+        uses: actions/cache@v3
+        with:
+          path: .env
+          key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
       - name: Docker Compose Dry Run
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
@@ -89,25 +96,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install jq
-        uses: dcarbone/install-jq-action@v3.0.1
-      - name: Install yq
-        uses: dcarbone/install-yq-action@v1
+        with:
+          fetch-depth: 1
+      - name: Cache flarectl CLI
+        uses: actions/cache@v3
+        with:
+          path: ~/.flarectl
+          key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
       - name: Install flarectl
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://github.com/cloudflare/cloudflare-go/releases/download/v0.113.0/flarectl_0.113.0_linux_amd64.tar.gz'
           name: 'flarectl'
           version: '0.113.0'
+      - name: Cache Subdomain Files
+        uses: actions/cache@v3
+        with:
+          path: |
+            compose_subdomains.txt
+            cloudflare_subdomains.txt
+          key: ${{ runner.os }}-subdomains-${{ hashFiles('docker-compose.yml') }}
       - name: Grab Subdomains from Docker Compose & Cloudflare
         id: grab-subdomains
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          echo "Grabbing subdomains from docker-compose.yml..."
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
-          echo "Grabbing subdomains from Cloudflare..."
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
       - name: Compare Subdomains
         id: compare-subdomains
