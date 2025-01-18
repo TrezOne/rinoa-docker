@@ -81,13 +81,14 @@ jobs:
         id: docker-config-deploy
         uses: arillso/action.playbook@0.0.8
         with:
+          check: true
+          diff: true
           galaxy_collections_path: ansible/collections
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/ansible-inventory
           playbook: ansible/docker_config_deploy.yml
+          private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          check: true
-          diff: true
           verbose: 1
       # Generate .env File
       - name: Generate .env file for Docker Compose Dry Run
@@ -241,6 +242,7 @@ jobs:
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/ansible-inventory
           playbook: ansible/docker_config_deploy.yml
+          private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           verbose: 1
       - name: Generate .env file for deployment
