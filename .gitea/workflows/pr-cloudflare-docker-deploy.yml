@@ -65,7 +65,7 @@ jobs:
       - name: Install Ansible & Dependencies
         uses: https://github.com/mattjamesaus/setup-ansible@v1.0.1
         with:
-          version: "2.18.1"
+          version: "11.1.0"
       # Install Galaxy Collections
       - name: Install Galaxy Collections
         if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
