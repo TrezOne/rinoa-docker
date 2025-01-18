@@ -66,11 +66,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
       - name: Install Ansible
         run: |
           python3 -m pip install --upgrade pip
           pip3 install ansible
+      - name: Install Vault
+        uses: cpanato/vault-installer@main
       # Install Galaxy Collections
       - name: Install Galaxy Collections
         if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
@@ -87,7 +88,7 @@ jobs:
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/ansible-inventory.yml
           playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY  }}
+          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           verbose: 1
       # Generate .env File
@@ -241,7 +242,7 @@ jobs:
           gotify_app_token: '${{ secrets.gotify_app_token }}'
           notification_title: 'Ansible Config Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
-      - name: Docker Config Deployment
+      - name: Docker Config Deployment via Ansible
         id: docker-config-deploy
         uses: arillso/action.playbook@0.0.8
         with:
@@ -249,7 +250,7 @@ jobs:
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/ansible-inventory
           playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           verbose: 1
       - name: Generate .env file for deployment
