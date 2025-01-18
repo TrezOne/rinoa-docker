@@ -67,7 +67,6 @@
 | jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
-| librespeed | lscr.io/linuxserver/librespeed:latest |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
 | lldap | lldap/lldap:stable |
@@ -119,6 +118,7 @@
 | sonashow | thewicklowwolf/sonashow:latest |
 | soularr | mrusse08/soularr:latest |
 | soulseek | slskd/slskd |
+| speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | spotisub | blastbeng/spotisub:latest |
 | swag | lscr.io/linuxserver/swag:latest |
 | synapse | docker.io/matrixdotorg/synapse:latest |
