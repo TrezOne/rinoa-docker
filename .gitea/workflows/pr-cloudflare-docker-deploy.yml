@@ -63,7 +63,7 @@ jobs:
             ${{ runner.os }}-ansible-
       # Install Ansible
       - name: Install Ansible & Dependencies
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        uses: https://github.com/mattjamesaus/setup-ansible@v1.0.1
         with:
           version: "2.18.1"
       # Install Galaxy Collections
