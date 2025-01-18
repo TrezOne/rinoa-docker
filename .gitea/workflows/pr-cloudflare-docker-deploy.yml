@@ -53,10 +53,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - name: Install Ansible & Dependencies
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "2.18.1"
+      # Cache Ansible Galaxy Collections
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
@@ -64,16 +61,40 @@ jobs:
           key: ${{ runner.os }}-ansible-${{ hashFiles('ansible/collections/requirements.yml') }}
           restore-keys: |
             ${{ runner.os }}-ansible-
-      - name: Install Ansible Galaxy Collections
-        run: ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
+      # Install Ansible
+      - name: Install Ansible & Dependencies
+        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        with:
+          version: "2.18.1"
+      # Install Galaxy Collections
+      - name: Install Galaxy Collections
+        if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
+        run: |
+          ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
+      # Run Docker Config Deployment
+      - name: Docker Config Deployment
+        id: docker-config-deploy
+        uses: arillso/action.playbook@0.0.8
+        with:
+          galaxy_collections_path: ansible/collections
+          galaxy_requirements_file: ansible/collections/requirements.yml
+          inventory: ansible/ansible-inventory
+          playbook: ansible/docker_config_deploy.yml
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          check: true
+          diff: true
+          verbose: 1
+      # Generate .env File
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+      # Cache .env File
       - name: Cache .env Files
         uses: actions/cache@v3
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
+      # Docker Compose Dry Run
       - name: Docker Compose Dry Run
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
