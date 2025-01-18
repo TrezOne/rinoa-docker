@@ -234,6 +234,13 @@ jobs:
           ref: main
       - name: Install Vault
         uses: cpanato/vault-installer@main
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.gotify_api_base }}'
+          gotify_app_token: '${{ secrets.gotify_app_token }}'
+          notification_title: 'Ansible Config Deployment @ Rinoa'
+          notification_message: 'Deployment completed successfully.'
       - name: Docker Config Deployment
         id: docker-config-deploy
         uses: arillso/action.playbook@0.0.8
@@ -261,5 +268,5 @@ jobs:
         with:
           gotify_api_base: '${{ secrets.gotify_api_base }}'
           gotify_app_token: '${{ secrets.gotify_app_token }}'
-          notification_title: 'Docker Deployment @ Rinoa'
+          notification_title: 'Docker ComposeDeployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
