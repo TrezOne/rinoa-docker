@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.tea
-          key: tea-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
+          key: tea-${{ runner.os }}-${{ hashFiles('/opt/hostedtoolcache/tea/0.9.2/x64') }}
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
@@ -87,7 +87,7 @@ jobs:
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/ansible-inventory
           playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+          private_key: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           verbose: 1
       # Generate .env File
@@ -256,3 +256,10 @@ jobs:
           ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
           ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           docker_compose_file: docker-compose.yml
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.gotify_api_base }}'
+          gotify_app_token: '${{ secrets.gotify_app_token }}'
+          notification_title: 'Docker Deployment @ Rinoa'
+          notification_message: 'Deployment completed successfully.'
