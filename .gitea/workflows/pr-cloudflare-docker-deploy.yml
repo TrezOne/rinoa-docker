@@ -79,8 +79,6 @@ jobs:
         if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
         run: |
           ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
-      - name: Generate private key file
-        run: echo "${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}" > private_key_file
       - name: Ansible Dry Run
         id: docker-config-deploy
         uses: arillso/action.playbook@0.0.8
@@ -90,9 +88,9 @@ jobs:
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/inventory/hosts.yml
           playbook: ansible/docker_config_deploy.yml
-          private_key: private_key_file
+          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 1
+          verbose: 2
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
