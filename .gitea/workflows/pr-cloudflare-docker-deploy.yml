@@ -1,5 +1,4 @@
-name: Gitea Branch PR, Cloudflare DNS, README generation, & Docker Deployment
-
+name: Gitea Branch PR, Cloudflare DNS, README generation, & Ansible/Docker Deployment
 on:
   push:
     branches-ignore:
@@ -14,35 +13,36 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 1
+      - name: Cache tea CLI
+        uses: actions/cache@v3
+        with:
+          path: /opt/hostedtoolcache/tea/0.9.2/x64
+          key: tea-${{ runner.os }}-0.9.2
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
           name: 'tea'
           version: '0.9.2'
-
       - name: Check if open PR exists
         id: check-opened-pr-step
         continue-on-error: true
         run: |
-          echo "Logging into Gitea..."
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          echo "Setting default login to gitea-rinoa..."
           tea login default gitea-rinoa
-          echo "Checking for existing PRs..."
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep ${{ github.ref_name }} | tail -1 | wc -l)
           echo ${pr_exists}
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
-
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
-          echo "Creating PR for branch: ${{ github.ref_name }}"
-          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
-
-  docker-compose-test:
-    name: Docker Compose Test
+          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | head -2 | tail -1 | awk -F, '{print $1}' | sed -e 's|"||g')'
+          pr_index_new=$(expr ${pr_index_old} + 1)
+          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - ${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
+  docker-compose-ansible-lints:
+    name: Docker Compose & Ansible Lints
     needs: [check-and-create-pr]
     runs-on: ubuntu-latest
     env:
@@ -51,20 +51,58 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Install jq
-        uses: dcarbone/install-jq-action@v3.0.1
-
+        with:
+          fetch-depth: 1
+      # Cache Ansible Galaxy Collections
+      - name: Cache Ansible Galaxy Collections
+        uses: actions/cache@v3
+        with:
+          path: ansible/collections
+          key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-ansible-
+      # Install Ansible
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
       - name: Install Vault
         uses: cpanato/vault-installer@main
+      # Install Galaxy Collections
+      - name: Install Galaxy Collections
+        if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
+        run: |
+          ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
+      # Run Docker Config Deployment
+      - name: Docker Config Deployment
+        id: docker-config-deploy
+        uses: arillso/action.playbook@0.0.8
         with:
-          vault-release: '1.18.3'
-
-      - name: Generate .env file for linting
+          check: true
+          diff: true
+          galaxy_collections_path: ansible/collections
+          galaxy_requirements_file: ansible/collections/requirements.yml
+          inventory: ansible/ansible-inventory.yml
+          playbook: ansible/docker_config_deploy.yml
+          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          verbose: 1
+      # Generate .env File
+      - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-
-      - name: Docker Compose Lint
+      # Cache .env File
+      - name: Cache .env Files
+        uses: actions/cache@v3
+        with:
+          path: .env
+          key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
+      # Docker Compose Dry Run
+      - name: Docker Compose Dry Run
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
           file: docker-compose.yml
@@ -74,39 +112,41 @@ jobs:
           up-opts: --dry-run -d --remove-orphans
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
-
   cloudflare-dns-setup:
     name: Cloudflare DNS Setup
-    needs: [docker-compose-test]
+    needs: [docker-compose-ansible-lints]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Install jq
-        uses: dcarbone/install-jq-action@v3.0.1
-
-      - name: Install yq
-        uses: dcarbone/install-yq-action@v1
-
+        with:
+          fetch-depth: 1
+      - name: Cache flarectl CLI
+        uses: actions/cache@v3
+        with:
+          path: ~/.flarectl
+          key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
       - name: Install flarectl
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://github.com/cloudflare/cloudflare-go/releases/download/v0.113.0/flarectl_0.113.0_linux_amd64.tar.gz'
           name: 'flarectl'
           version: '0.113.0'
-
+      - name: Cache Subdomain Files
+        uses: actions/cache@v3
+        with:
+          path: |
+            compose_subdomains.txt
+            cloudflare_subdomains.txt
+          key: ${{ runner.os }}-subdomains-${{ hashFiles('docker-compose.yml') }}
       - name: Grab Subdomains from Docker Compose & Cloudflare
         id: grab-subdomains
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          echo "Grabbing subdomains from docker-compose.yml..."
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
-          echo "Grabbing subdomains from Cloudflare..."
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
-
       - name: Compare Subdomains
         id: compare-subdomains
         uses: LouisBrunner/diff-action@v2.2.0
@@ -116,7 +156,6 @@ jobs:
           mode: addition
           tolerance: mixed-better
           output: domain_compare.txt
-
       - name: Create Subdomains
         if: steps.compare-subdomains.outputs.output != ''
         continue-on-error: true
@@ -128,7 +167,6 @@ jobs:
             echo "Creating $subdomain.trez.wtf..."
             flarectl dns create --zone "trez.wtf" --name "${subdomain}" --type=CNAME --content "trez.wtf" --proxy true
           done
-
   regenerate-readme:
     name: Update README
     runs-on: ubuntu-latest
@@ -138,33 +176,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
-
       - name: Generate service list
         run: |
           yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
-
       - name: Generate Markdown Table
         uses: gazab/create-markdown-table@v1
         id: service-table
         with:
           file: ./services.yml
-
       - name: Regenerate README
         run: |
           echo "# List of Services" > README.md
           echo -e "\n\n" >> README.md
           echo "${{ steps.service-table.outputs.table }}" >> README.md
-
       - name: Add/Commit README.md
         id: commit-readme
         uses: EndBug/add-and-commit@v9
         with:
           message: "chore: Update README"
           add: "README.md"
-
   pr-merge:
     name: PR Merge
     needs: [regenerate-readme]
@@ -172,14 +204,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
           name: 'tea'
           version: '0.9.2'
-
       - name: PR Merge
         id: pr_merge
         run: |
@@ -189,11 +219,11 @@ jobs:
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
           echo "${pr_index}"
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" --output table ${pr_index}
-
-  docker-compose-deploy:
-    name: Deploy via Docker Compose
+  ansible-config-docker-compose-deploy:
+    name: Deploy via Ansible & Docker Compose
     runs-on: ubuntu-latest
     needs: [pr-merge]
+    if: ${{ github.event.pull_request.merged == true }
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
@@ -203,14 +233,29 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-
       - name: Install Vault
         uses: cpanato/vault-installer@main
-
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.gotify_api_base }}'
+          gotify_app_token: '${{ secrets.gotify_app_token }}'
+          notification_title: 'Ansible Config Deployment @ Rinoa'
+          notification_message: 'Deployment completed successfully.'
+      - name: Docker Config Deployment via Ansible
+        id: docker-config-deploy
+        uses: arillso/action.playbook@0.0.8
+        with:
+          galaxy_collections_path: ansible/collections
+          galaxy_requirements_file: ansible/collections/requirements.yml
+          inventory: ansible/ansible-inventory
+          playbook: ansible/docker_config_deploy.yml
+          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          verbose: 1
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-
       - name: Docker Compose Deployment
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
@@ -219,3 +264,10 @@ jobs:
           ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
           ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           docker_compose_file: docker-compose.yml
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.gotify_api_base }}'
+          gotify_app_token: '${{ secrets.gotify_app_token }}'
+          notification_title: 'Docker ComposeDeployment @ Rinoa'
+          notification_message: 'Deployment completed successfully.'

@@ -1,0 +1,25 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+{
+    "lidarr_address": "http://lidarr:8686",
+    "lidarr_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LIDARR_API_KEY'] }}",
+    "spotify_client_secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['YOUR_SPOTIFY_SECRET'] }}",
+    "root_folder_path": "/data/media/music",
+    "spotify_client_id": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['YOUR_SPOTIFY_ID'] }}",
+    "spotify_client_secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['YOUR_SPOTIFY_SECRET'] }}",
+    "fallback_to_top_result": false,
+    "lidarr_api_timeout": 120.0,
+    "quality_profile_id": 1,
+    "metadata_profile_id": 1,
+    "search_for_missing_albums": false,
+    "dry_run_adding_to_lidarr": true,
+    "app_name": "lidify",
+    "app_rev": "0.09",
+    "app_url": "lidify.trez.wtf",
+    "last_fm_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_KEY'] }}",
+    "last_fm_api_secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_SECRET'] }}",
+    "mode": "LastFM",
+    "auto_start": false,
+    "auto_start_delay": 60
+}

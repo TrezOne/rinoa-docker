@@ -1,6 +1,6 @@
 ---
 - name: Deploy config templates and trigger GitHub workflow
-  hosts: all
+  hosts: rinoa
   vars:
     appdata_base_path: "~/.docker/config/appdata"
 

@@ -1,0 +1,60 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/settings
+
+providers:
+  openweathermap: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['HOMEPAGE_OPENWEATHERMAP_API_KEY'] }}
+  # weatherapi: weatherapiapikey
+title: Rinoa Dashboard (trez.WTF)
+headerStyle: underlined
+color: slate
+showStats: true
+statusStyle: "dot"
+favicon: /icons/favicon.ico
+useEqualHeights: false
+hideErrors: false
+searchDescriptions: true
+showSearchSuggestions: true
+provider: duckduckgo
+
+layout:
+  System Administration:
+    style: row
+    columns: 4
+    # fiveColumns: true
+  Infrastructure/App Performance Monitoring:
+    style: row
+    columns: 4
+  Automation:
+    style: columns
+    row: 2
+  Code/DevOps:
+    style: columms
+    row: 2
+  Privacy/Security:
+    style: columns
+    row: 5
+  Social:
+    style: columns
+    row: 4
+  Lifestyle:
+    style: row
+    columns: 4
+  Personal Services:
+    style: row
+    columns: 4
+  Professional Services:
+    style: row
+    columns: 3
+  Servarr Stack:
+    style: row
+    columns: 3
+  Downloaders:
+    style: row
+    columns: 3
+  Media Library:
+    style: row
+    columns: 4

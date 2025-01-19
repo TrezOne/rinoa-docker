@@ -1,0 +1,21 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+<Config>
+  <LogLevel>info</LogLevel>
+  <BindAddress>*</BindAddress>
+  <EnableSsl>False</EnableSsl>
+  <SslCertPath></SslCertPath>
+  <Port>7878</Port>
+  <UrlBase></UrlBase>
+  <ApiKey>{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['RADARR_API_KEY'] }}</ApiKey>
+  <AuthenticationMethod>Forms</AuthenticationMethod>
+  <UpdateMechanism>Docker</UpdateMechanism>
+  <SslPort>9898</SslPort>
+  <LaunchBrowser>True</LaunchBrowser>
+  <Branch>master</Branch>
+  <SslCertPassword></SslCertPassword>
+  <InstanceName>Radarr</InstanceName>
+  <Theme>auto</Theme>
+  <AuthenticationRequired>Enabled</AuthenticationRequired>
+</Config>
