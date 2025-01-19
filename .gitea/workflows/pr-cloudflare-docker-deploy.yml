@@ -79,20 +79,18 @@ jobs:
         if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
         run: |
           ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
-      - name: Generate private key for Ansible
-        run: echo "${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}" > private-ssh-key
       - name: Ansible Dry Run
         id: docker-config-deploy
-        uses: SakulFlee/GitHub-Action-Ansible@v0.0.1
+        uses: euclid1990/actions-ansible@v2
         with:
-          check: true
-          extra_vars: 'ansible_ssh_private_key_file=private-ssh-key'
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
+          # check: true
+          # extra_vars: 'ansible_ssh_private_key_file=private-ssh-key'
+          # galaxy_collections_path: ansible/collections
+          # galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/inventory/hosts.yml
           playbook: ansible/docker_config_deploy.yml
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 2
+          # vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          # verbose: 2
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
