@@ -83,6 +83,7 @@ jobs:
         id: docker-config-deploy
         run: |
           cd ansible/
+          echo "${{ secrets.RINOA_ANSIBLE_KNOWN_HOSTS }}" > /root/.ssh/known_hosts
           echo "${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}" > private-ssh-key ; chmod 600 private-ssh-key
           echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > vault_pass
           ansible-playbook --check -i inventory/hosts.yml --vault-pass-file=vault_pass docker_config_deploy.yml
