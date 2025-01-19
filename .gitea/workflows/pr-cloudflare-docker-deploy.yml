@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Cache tea CLI
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/tea/0.9.2/x64
           key: tea-${{ runner.os }}-0.9.2
@@ -51,7 +51,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cache Ansible Galaxy Collections
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ansible/collections
           key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
@@ -61,6 +61,11 @@ jobs:
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
           version: "11.0.0"
+      - name: Cache Vault install
+        uses: actions/cache@v4
+        with:
+          path: /root/.vault/vault
+          key: ${{ runner.os }}-vault-${{ hashFiles('/root/.vault/vault') }}
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Install Galaxy Collections
@@ -84,7 +89,7 @@ jobs:
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Cache .env Files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
@@ -108,7 +113,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Cache flarectl CLI
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.flarectl
           key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
@@ -119,7 +124,7 @@ jobs:
           name: 'flarectl'
           version: '0.113.0'
       - name: Cache Subdomain Files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             compose_subdomains.txt
