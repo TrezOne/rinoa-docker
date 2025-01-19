@@ -118,6 +118,24 @@ services:
         type: bind
         bind:
           create_host_path: true
+  ansible0guy-webui:
+    container_name: ansible-webui
+    image: ansible0guy/webui:latest
+    labels:
+      homepage.group: Code/DevOps
+      homepage.name: Ansible WebUI
+      homepage.icon: ansible.svg
+      homepage.href: https://bitwarden.${MY_TLD}
+      homepage.description: WebUI for Ansible
+      swag: enable
+      swag_url: ansible.${MY_TLD}
+      swag_proto: http
+      swag_port: 8000
+      swag.uptime-kuma.monitor.url: https://ansible.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+    ports:
+        - 44448:8000
+    restart: unless-stopped
   apprise:
     container_name: apprise
     environment:

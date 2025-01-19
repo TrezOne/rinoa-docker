@@ -6,6 +6,7 @@
 | --- | --- |
 | actual_server | docker.io/actualbudget/actual-server:latest |
 | adguard | adguard/adguardhome:latest |
+| ansible0guy-webui | ansible0guy/webui:latest |
 | apprise | lscr.io/linuxserver/apprise-api:latest |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
