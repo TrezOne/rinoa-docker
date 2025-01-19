@@ -68,6 +68,12 @@ jobs:
           key: ${{ runner.os }}-vault-${{ hashFiles('/root/.vault/vault') }}
       - name: Install Vault
         uses: cpanato/vault-installer@main
+      - name: Install tea
+        uses: supplypike/setup-bin@v4
+        with:
+          uri: 'https://releases.hashicorp.com/vault/1.18.0/vault_1.18.0_linux_amd64.zip'
+          name: 'vault'
+          version: '1.18.0'
       - name: Install Galaxy Collections
         if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
         run: |
