@@ -21,13 +21,11 @@ jobs:
           path: /opt/hostedtoolcache/tea/0.9.2/x64
           key: tea-${{ runner.os }}-0.9.2
       - name: Install tea
-        if: steps.cache-tea.outputs.cache-hit != 'true'
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
           name: 'tea'
           version: '0.9.2'
-          command: cp ./tea /usr/local/bin/tea
       - name: Check if open PR exists
         id: check-opened-pr-step
         continue-on-error: true
