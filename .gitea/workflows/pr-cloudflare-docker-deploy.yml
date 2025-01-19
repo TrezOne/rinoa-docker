@@ -58,9 +58,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-ansible-
       - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible
+        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        with:
+          version: "9.13.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Install Galaxy Collections
