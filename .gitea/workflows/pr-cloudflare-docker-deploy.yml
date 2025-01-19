@@ -15,11 +15,13 @@ jobs:
         with:
           fetch-depth: 1
       - name: Cache tea CLI
+        id: cache-tea
         uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/tea/0.9.2/x64
           key: tea-${{ runner.os }}-0.9.2
       - name: Install tea
+        if: steps.cache-tea.outputs.cache-hit != 'true'
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
@@ -62,13 +64,13 @@ jobs:
         with:
           version: "11.0.0"
       - name: Cache Vault install
+        id: cache-vault
         uses: actions/cache@v4
         with:
-          path: /root/.vault/vault
-          key: ${{ runner.os }}-vault-${{ hashFiles('/root/.vault/vault') }}
-      # - name: Install Vault
-      #   uses: cpanato/vault-installer@main
+          path: /opt/hostedtoolcache/vault/1.18.0/x64
+          key: vault-${{ runner.os }}-1.18.0
       - name: Install Vault
+        if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://releases.hashicorp.com/vault/1.18.0/vault_1.18.0_linux_amd64.zip'
@@ -88,7 +90,7 @@ jobs:
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/inventory/hosts.yml
           playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+          private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           verbose: 1
       - name: Generate .env file for Docker Compose Dry Run
