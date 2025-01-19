@@ -120,6 +120,10 @@ services:
           create_host_path: true
   ansible0guy-webui:
     container_name: ansible-webui
+    environment:
+      AW_HOSTNAMES: ansible.trez.wtf
+      AW_PROXY: 1
+      AW_SECRET: ${ANSIBLE_WEBUI_SECRET}
     image: ansible0guy/webui:latest
     labels:
       homepage.group: Code/DevOps
