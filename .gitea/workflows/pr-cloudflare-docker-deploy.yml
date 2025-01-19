@@ -33,7 +33,7 @@ jobs:
           echo "Adding tea login"
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           tea login default gitea-rinoa
-          tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | head -2 | tail -1 | awk -F, '{print $1}' | sed -e 's|"||g'
+          tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv
           echo "Checking for existing PRs..."
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep ${{ github.ref_name }} | tail -1 | wc -l)
           echo ${pr_exists}
@@ -41,7 +41,7 @@ jobs:
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
-          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv
+          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | head -2 | tail -1 | awk -F, '{print $1}' | sed -e 's|"||g')
           echo "${pr_index_old}"
           pr_index_new=$(expr ${pr_index_old} + 1)
           tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - ${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
