@@ -84,7 +84,6 @@ jobs:
         run: |
           cd ansible/
           echo "${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}" > private-ssh-key ; chmod 600 private-ssh-key
-            6 private-ssh-key
           echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > vault_pass
           ansible-playbook --check -i inventory/hosts.yml --vault-pass-file=vault_pass docker_config_deploy.yml
       - name: Generate .env file for Docker Compose Dry Run
