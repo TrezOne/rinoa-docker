@@ -38,6 +38,7 @@ jobs:
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
+          tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | egrep -v 'index' | head -2 | awk -F, '{print $1}' | sed -e 's|"||g'
           pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | egrep -v 'index' | head | awk -F, '{print $1}' | sed -e 's|"||g')
           echo "${pr_index_old}"
           expr ${pr_index_old} + 1
