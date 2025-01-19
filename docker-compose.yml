@@ -125,7 +125,7 @@ services:
       homepage.group: Code/DevOps
       homepage.name: Ansible WebUI
       homepage.icon: ansible.svg
-      homepage.href: https://bitwarden.${MY_TLD}
+      homepage.href: https://ansible.${MY_TLD}
       homepage.description: WebUI for Ansible
       swag: enable
       swag_url: ansible.${MY_TLD}
