@@ -60,7 +60,7 @@ jobs:
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
-          version: "9.13.0"
+          version: "10.7.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Install Galaxy Collections
@@ -219,8 +219,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
+      # - name: Install Vault
+      #   uses: cpanato/vault-installer@main
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
