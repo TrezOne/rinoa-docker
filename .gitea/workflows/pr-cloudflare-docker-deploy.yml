@@ -82,9 +82,10 @@ jobs:
       - name: Ansible Dry Run
         id: docker-config-deploy
         uses: arillso/action.playbook@0.0.8
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
         with:
           check: true
-          diff: true
           galaxy_collections_path: ansible/collections
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/inventory/hosts.yml
