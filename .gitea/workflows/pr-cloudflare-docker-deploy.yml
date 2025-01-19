@@ -89,7 +89,6 @@ jobs:
           galaxy_requirements_file: ansible/collections/requirements.yml
           inventory: ansible/inventory/hosts.yml
           playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           verbose: 1
       - name: Generate .env file for Docker Compose Dry Run
