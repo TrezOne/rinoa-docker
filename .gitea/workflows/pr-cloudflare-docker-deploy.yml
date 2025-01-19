@@ -81,16 +81,11 @@ jobs:
           ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
       - name: Ansible Dry Run
         id: docker-config-deploy
-        uses: arillso/action.playbook@0.0.8
+        uses: SakulFlee/GitHub-Action-Ansible@v0.0.1
         with:
-          check: true
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/inventory/hosts.yml
-          playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 2
+          playbook_file: ansible/docker_config_deploy.yml
+          inventory_file: ansible/inventory/hosts.yml
+          requirements_file: ansible/collections/requirements.yml
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
