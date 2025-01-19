@@ -51,33 +51,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      # Cache Ansible Galaxy Collections
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
-          path: ansible/collections
+          path: ./ansible/collections
           key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
           restore-keys: |
             ${{ runner.os }}-ansible-
-      # Install Ansible
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
       - name: Install Ansible
         run: |
           python3 -m pip install --upgrade pip
           pip3 install ansible
       - name: Install Vault
         uses: cpanato/vault-installer@main
-      # Install Galaxy Collections
       - name: Install Galaxy Collections
         if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
         run: |
           ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
-      # Run Docker Config Deployment
       - name: Docker Config Deployment
         id: docker-config-deploy
         uses: arillso/action.playbook@0.0.8
@@ -86,22 +76,19 @@ jobs:
           diff: true
           galaxy_collections_path: ansible/collections
           galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/ansible-inventory.yml
+          inventory: ansible/inventory/hosts.yml
           playbook: ansible/docker_config_deploy.yml
           private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           verbose: 1
-      # Generate .env File
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-      # Cache .env File
       - name: Cache .env Files
         uses: actions/cache@v3
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
-      # Docker Compose Dry Run
       - name: Docker Compose Dry Run
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
