@@ -5,7 +5,6 @@ on:
       - main
     paths:
       - '**.yml'
-
 jobs:
   check-and-create-pr:
     name: Check and Create PR
@@ -51,9 +50,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      # Cache Ansible Galaxy Collections
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
@@ -61,47 +57,33 @@ jobs:
           key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
           restore-keys: |
             ${{ runner.os }}-ansible-
-      # Install Ansible
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
       - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible
+        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        with:
+          version: "11.0.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
-      # Install Galaxy Collections
-      - name: Install Galaxy Collections
-        if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
-        run: |
-          ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
-      # Run Docker Config Deployment
-      - name: Docker Config Deployment
-        id: docker-config-deploy
-        uses: arillso/action.playbook@0.0.8
+      - name: Install hvac
+        run: pip install hvac
+      - name: Ansible Playbook Dry Run
+        uses: dawidd6/action-ansible-playbook@v2
         with:
-          check: true
-          diff: true
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/ansible-inventory.yml
-          playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+          directory: ansible/
+          playbook: docker_config_deploy.yml
+          key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
+          options: |
+            --inventory inventory/hosts.yml
+            --check
+          requirements: collections/requirements.yml
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 1
-      # Generate .env File
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-      # Cache .env File
       - name: Cache .env Files
         uses: actions/cache@v3
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
-      # Docker Compose Dry Run
       - name: Docker Compose Dry Run
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
@@ -214,11 +196,10 @@ jobs:
         id: pr_merge
         run: |
           tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          echo "Setting default login for Gitea..."
           tea login default gitea-rinoa
-          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F, '{print $1}' | sed -e 's|"||g')
-          echo "${pr_index}"
-          tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR #${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" --output table ${pr_index}
+          echo "Merging PR..."
+          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
+          tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" ${pr_index}
   ansible-config-docker-compose-deploy:
     name: Deploy via Ansible & Docker Compose
     runs-on: ubuntu-latest
@@ -235,6 +216,18 @@ jobs:
           ref: main
       - name: Install Vault
         uses: cpanato/vault-installer@main
+      - name: Install hvac
+        run: pip install hvac
+      - name: Deploy Docker Configs via Ansible
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          directory: ansible/
+          playbook: docker_config_deploy.yml
+          key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
+          options: |
+            --inventory inventory/hosts.yml
+          requirements: collections/requirements.yml
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -242,17 +235,6 @@ jobs:
           gotify_app_token: '${{ secrets.gotify_app_token }}'
           notification_title: 'Ansible Config Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
-      - name: Docker Config Deployment via Ansible
-        id: docker-config-deploy
-        uses: arillso/action.playbook@0.0.8
-        with:
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/ansible-inventory
-          playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 1
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
@@ -269,5 +251,5 @@ jobs:
         with:
           gotify_api_base: '${{ secrets.gotify_api_base }}'
           gotify_app_token: '${{ secrets.gotify_app_token }}'
-          notification_title: 'Docker ComposeDeployment @ Rinoa'
+          notification_title: 'Docker Compose Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
