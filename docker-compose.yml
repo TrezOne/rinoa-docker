@@ -22,6 +22,16 @@ services:
       # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
       # !! If you are not using any of these options, remove the 'environment:' tag entirely.
     image: docker.io/actualbudget/actual-server:latest
+    labels:
+      swag: enable
+      swag_port: 5006
+      swag_proto: http
+      swag_url: fin.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: Actual Budget
+      homepage.icon: actual-budget.svg
+      homepage.href: https://fin.${MY_TLD}
+      homepage.description: Privacy-focused app for managing finances
     ports:
       - 5006:5006
     restart: unless-stopped
