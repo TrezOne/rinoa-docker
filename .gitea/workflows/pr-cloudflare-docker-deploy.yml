@@ -74,7 +74,7 @@ jobs:
           key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
           options: |
             --inventory inventory/hosts.yml
-            --verbose
+            --diff
             --check
           requirements: collections/requirements.yml
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
