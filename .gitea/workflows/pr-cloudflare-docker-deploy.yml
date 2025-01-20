@@ -214,13 +214,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-      # - name: Gotify Notification
-      #   uses: eikendev/gotify-action@master
-      #   with:
-      #     gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-      #     gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-      #     notification_title: 'Ansible Config Deployment @ Rinoa'
-      #     notification_message: 'Deployment completed successfully.'
       - name: Cache Vault install
         id: cache-vault
         uses: actions/cache@v4
