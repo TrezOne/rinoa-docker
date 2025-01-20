@@ -118,28 +118,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  ansible0guy-webui:
-    container_name: ansible-webui
-    environment:
-      AW_HOSTNAMES: ansible.trez.wtf
-      AW_PROXY: 1
-      AW_SECRET: ${ANSIBLE_WEBUI_SECRET}
-    image: ansible0guy/webui:latest
-    labels:
-      homepage.group: Code/DevOps
-      homepage.name: Ansible WebUI
-      homepage.icon: ansible.svg
-      homepage.href: https://ansible.${MY_TLD}
-      homepage.description: WebUI for Ansible
-      swag: enable
-      swag_url: ansible.${MY_TLD}
-      swag_proto: http
-      swag_port: 8000
-      swag.uptime-kuma.monitor.url: https://ansible.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-    ports:
-        - 44448:8000
-    restart: unless-stopped
   apprise:
     container_name: apprise
     environment:
@@ -3963,52 +3941,6 @@ services:
     security_opt:
       - no-new-privileges=true
     user: nobody
-  rundeck:
-    container_name: rundeck
-    depends_on:
-      rundeck-pg-db:
-        condition: service_started
-        required: true
-    image: rundeck/rundeck:5.8.0
-    environment:
-      RUNDECK_SERVER_ADDRESS: 0.0.0.0
-      RUNDECK_GRAILS_URL: https://rundeck.trez.wtf
-      RUNDECK_SERVER_FORWARDED: true
-      RUNDECK_DATABASE_DRIVER: jdbc:postgresql://rundeck-pg-db/rundeck?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-      RUNDECK_DATABASE_USERNAME: rundeck
-      RUNDECK_DATABASE_PASSWORD: ${RUNDECK_PG_DB_PASSWD}
-      RUNDECK_MAIL_SMTP_HOST: postal-smtp
-      RUNDECK_MAIL_SMTP_PORT: 25
-      RUNDECK_MAIL_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
-      RUNDECK_MAIL_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      RUNDECK_MAIL_FROM: noreply@trez.wtf
-    labels:
-      homepage.group: Code/DevOps
-      homepage.name: Rundeck
-      homepage.icon: rundeck.svg
-      homepage.description: Open-source automation service with a web console, command line tools, and web API
-      swag: enable
-      swag_proto: http
-      swag_port: 4440
-      swag_url: rundeck.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://rundeck.${MY_TLD}
-    ports:
-      - 4440:4440
-    restart: unless-stopped
-    volumes:
-      - rundeck-data:/home/rundeck/server/data
-  rundeck-pg-db:
-    container_name: rundeck-pg-db
-    image: postgres:16-alpine
-    expose:
-      - 5432
-    environment:
-      POSTGRES_DB: rundeck
-      POSTGRES_USER: rundeck
-      POSTGRES_PASSWORD: ${RUNDECK_PG_DB_PASSWD}
-    volumes:
-      - rundeck-db-data:/var/lib/postgresql/data
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -4224,43 +4156,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  semaphore:
-    container_name: semaphore
-    environment:
-      ANSIBLE_HOST_KEY_CHECKING: false
-      SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
-      SEMAPHORE_ADMIN_NAME: admin
-      SEMAPHORE_ADMIN_EMAIL: charish.patel@pm.me
-      SEMAPHORE_ADMIN: admin
-      SEMAPHORE_DB_DIALECT: bolt
-      SEMAPHORE_EMAIL_ALERT: true
-      SEMAPHORE_EMAIL_SENDER: noreply@trez.wtf
-      SEMAPHORE_EMAIL_HOST: postal-smtp
-      SEMAPHORE_EMAIL_PORT: 25
-      SEMAPHORE_EMAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}  
-      SEMAPHORE_EMAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      SEMAPHORE_EMAIL_SECURE: false
-      SEMAPHORE_USE_REMOTE_RUNNER: true
-    image: semaphoreui/semaphore:v2.10.32
-    labels:
-      homepage.group: Code/DevOps
-      homepage.name: Semaphore
-      homepage.href: https://devops.${MY_TLD}
-      homepage.icon: semaphore.svg
-      homepage.description: Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools
-      swag: enable
-      swag_port: 3000
-      swag_proto: http
-      swag_url: devops.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://devops.${MY_TLD}
-    ports:
-      - 3015:3000
-    restart: unless-stopped
-    volumes:
-      - semaphore_config:/etc/semaphore
-      - semaphore_data:/var/lib/semaphore
-      - semaphore_tmp:/tmp/semaphore
   slurpit-portal:
     container_name: slurpit-portal
     environment:
@@ -7192,16 +7087,6 @@ volumes:
     name: plausible-event-logs
   reactive-resume-pg:
     name: reactive-resume-pg
-  rundeck-data:
-    name: rundeck-data
-  rundeck-db-data:
-    name: rundeck-db-data
-  semaphore_config:
-    name: semaphore_config
-  semaphore_data:
-    name: semaphore_data
-  semaphore_tmp:
-    name: semaphore_tmp
   sonarqube-data:
     name: sonarqube-data
   sonarqube-db:
