@@ -70,7 +70,7 @@ jobs:
             --inventory inventory/hosts.yml
             --verbose
             --check
-          requirements: ansible/collections/requirements.yml
+          requirements: collections/requirements.yml
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
       - name: Generate .env file for Docker Compose Dry Run
         run: |
