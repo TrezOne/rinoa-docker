@@ -88,6 +88,7 @@
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
+| plantuml-server | plantuml/plantuml-server:jetty |
 | plausible | ghcr.io/plausible/community-edition:v2.1.0 |
 | plausible_db | postgres:16-alpine |
 | plausible_events_db | clickhouse/clickhouse-server:24.3.3.102-alpine |
