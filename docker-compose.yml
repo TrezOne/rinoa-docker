@@ -6249,7 +6249,7 @@ services:
       homepage.group: Privacy/Security
       homepage.name: Wazuh
       homepage.href: https://wsec.${MY_TLD}
-      homepage.icon: wazuh-opaque.png
+      homepage.icon: wazuh.svg
       homepage.description: OSS Security Platform for XDR/SIEM
     links:
       - wazuh.indexer:wazuh.indexer
