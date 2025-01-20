@@ -15,7 +15,8 @@ jobs:
         with:
           fetch-depth: 1
       - name: Cache tea CLI
-        uses: actions/cache@v3
+        id: cache-tea
+        uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/tea/0.9.2/x64
           key: tea-${{ runner.os }}-0.9.2
@@ -29,17 +30,17 @@ jobs:
         id: check-opened-pr-step
         continue-on-error: true
         run: |
-          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea login default gitea-rinoa
+          tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep ${{ github.ref_name }} | tail -1 | wc -l)
           echo ${pr_exists}
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
-          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | head -2 | tail -1 | awk -F, '{print $1}' | sed -e 's|"||g')'
+          tea login default gitea-rinoa
+          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | sed -e 's|"||g' | egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
           pr_index_new=$(expr ${pr_index_old} + 1)
-          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - ${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
+          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
   docker-compose-ansible-lints:
     name: Docker Compose & Ansible Lints
     needs: [check-and-create-pr]
@@ -80,7 +81,7 @@ jobs:
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Cache .env Files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
@@ -104,7 +105,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Cache flarectl CLI
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.flarectl
           key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
@@ -115,7 +116,7 @@ jobs:
           name: 'flarectl'
           version: '0.113.0'
       - name: Cache Subdomain Files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             compose_subdomains.txt
@@ -204,7 +205,6 @@ jobs:
     name: Deploy via Ansible & Docker Compose
     runs-on: ubuntu-latest
     needs: [pr-merge]
-    if: ${{ github.event.pull_request.merged == true }
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
@@ -214,6 +214,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+      # - name: Gotify Notification
+      #   uses: eikendev/gotify-action@master
+      #   with:
+      #     gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+      #     gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+      #     notification_title: 'Ansible Config Deployment @ Rinoa'
+      #     notification_message: 'Deployment completed successfully.'
+      - name: Cache Vault install
+        id: cache-vault
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/vault/1.18.0/x64
+          key: vault-${{ runner.os }}-1.18.0
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Install hvac
@@ -249,7 +262,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.gotify_api_base }}'
-          gotify_app_token: '${{ secrets.gotify_app_token }}'
+          gotify_api_base: '${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'Docker Compose Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
