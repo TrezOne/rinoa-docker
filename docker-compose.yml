@@ -553,7 +553,7 @@ services:
       homepage.group: Privacy/Security
       homepage.name: Bunkerweb
       homepage.href: https://bunker.${MY_TLD}
-      homepage.icon: bunker.svg
+      homepage.icon: bunkerweb.svg
       homepage.description: Next-gen WAF
       swag: enable
       swag_port: 7000
@@ -4471,7 +4471,7 @@ services:
         APP_KEY: ${SPEEDTEST_TRACKER_APP_KEY}
         DB_CONNECTION: sqlite
     labels:
-      homepage.name: Speedtest Traccker
+      homepage.name: Speedtest Tracker
       homepage.group: System Administration
       homepage.description: Self-hosted internet performance tracking
       homepage.href: https://speed.${MY_TLD}
@@ -6585,7 +6585,7 @@ services:
     labels:
       homepage.group: Downloaders
       homepage.name: YoutubeDL
-      homepage.icon: youtubedl.png
+      homepage.icon: youtube-dl.svg
       homepage.href: https://ytdl.${MY_TLD}
       homepage.description: YouTube Downloader
       swag: enable
