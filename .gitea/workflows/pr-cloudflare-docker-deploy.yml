@@ -5,7 +5,6 @@ on:
       - main
     paths:
       - '**.yml'
-
 jobs:
   check-and-create-pr:
     name: Check and Create PR
@@ -16,7 +15,8 @@ jobs:
         with:
           fetch-depth: 1
       - name: Cache tea CLI
-        uses: actions/cache@v3
+        id: cache-tea
+        uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/tea/0.9.2/x64
           key: tea-${{ runner.os }}-0.9.2
@@ -30,17 +30,17 @@ jobs:
         id: check-opened-pr-step
         continue-on-error: true
         run: |
-          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea login default gitea-rinoa
+          tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep ${{ github.ref_name }} | tail -1 | wc -l)
           echo ${pr_exists}
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
-          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | head -2 | tail -1 | awk -F, '{print $1}' | sed -e 's|"||g')'
+          tea login default gitea-rinoa
+          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | sed -e 's|"||g' | egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
           pr_index_new=$(expr ${pr_index_old} + 1)
-          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - ${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
+          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }}
   docker-compose-ansible-lints:
     name: Docker Compose & Ansible Lints
     needs: [check-and-create-pr]
@@ -51,57 +51,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Cache Vault install
+        id: cache-vault
+        uses: actions/cache@v4
         with:
-          fetch-depth: 1
-      # Cache Ansible Galaxy Collections
-      - name: Cache Ansible Galaxy Collections
-        uses: actions/cache@v3
-        with:
-          path: ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-ansible-
-      # Install Ansible
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Install Ansible
-        run: |
-          python3 -m pip install --upgrade pip
-          pip3 install ansible
+          path: /opt/hostedtoolcache/vault/1.18.0/x64
+          key: vault-${{ runner.os }}-1.18.0
       - name: Install Vault
-        uses: cpanato/vault-installer@main
-      # Install Galaxy Collections
-      - name: Install Galaxy Collections
-        if: steps.cache-ansible-galaxy-collections.outputs.cache-hit != 'true'
-        run: |
-          ansible-galaxy collection install -r ansible/collections/requirements.yml -p ansible/collections
-      # Run Docker Config Deployment
-      - name: Docker Config Deployment
-        id: docker-config-deploy
-        uses: arillso/action.playbook@0.0.8
+        if: steps.cache-vault.outputs.cache-hit != 'true'
+        uses: supplypike/setup-bin@v4
         with:
-          check: true
-          diff: true
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/ansible-inventory.yml
-          playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 1
-      # Generate .env File
+          uri: 'https://releases.hashicorp.com/vault/1.18.0/vault_1.18.0_linux_amd64.zip'
+          name: 'vault'
+          version: '1.18.0'
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-      # Cache .env File
       - name: Cache .env Files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
-      # Docker Compose Dry Run
       - name: Docker Compose Dry Run
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
@@ -122,7 +92,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: Cache flarectl CLI
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.flarectl
           key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
@@ -133,7 +103,7 @@ jobs:
           name: 'flarectl'
           version: '0.113.0'
       - name: Cache Subdomain Files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             compose_subdomains.txt
@@ -233,8 +203,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
+      # - name: Install Vault
+      #   uses: cpanato/vault-installer@main
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -242,17 +212,6 @@ jobs:
           gotify_app_token: '${{ secrets.gotify_app_token }}'
           notification_title: 'Ansible Config Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
-      - name: Docker Config Deployment via Ansible
-        id: docker-config-deploy
-        uses: arillso/action.playbook@0.0.8
-        with:
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/ansible-inventory
-          playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 1
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env

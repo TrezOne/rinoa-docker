@@ -3455,6 +3455,44 @@ services:
         type: bind
         bind:
           create_host_path: true
+  pgbackweb:
+    container_name: pgbackweb
+    depends_on:
+      pgbackweb-db:
+        condition: service_healthy
+    environment:
+      PBW_ENCRYPTION_KEY: ${PGBACKWEB_ENCRYPTION_KEY}
+      PBW_POSTGRES_CONN_STRING: "postgresql://pgbackweb:${PGBACKWEB_PG_DB_PASSWD}@pgbackweb-db:5432/pgbackweb?sslmode=disable"
+      TZ: ${TZ}
+    image: eduardolat/pgbackweb:latest
+    labels:
+      homepage.group: System Administration
+      homepage.name: PGBackweb
+      homepage.href: https://pg.${MY_TLD}
+      homepage.icon: sh-pg-back-web.svg
+      homepage.description: Backups for PostgreSQL
+      swag: enable
+      swag_proto: http
+      swag_port: 8085
+      swag_url: pg.${MY_TLD}
+    ports:
+      - "8085:8085" # Access the web interface at http://localhost:8085
+  pgbackweb-db:
+    container_name: pgbackweb-db
+    environment:
+      POSTGRES_USER: pgbackweb
+      POSTGRES_DB: pgbackweb
+      POSTGRES_PASSWORD: ${PGBACKWEB_PG_DB_PASSWD}
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    image: postgres:16-alpine
+    volumes:
+      - pgbackweb-data:/var/lib/postgresql/data
   plausible:
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     container_name: plausible
@@ -4693,7 +4731,7 @@ services:
       homepage.group: Lifestyle
       homepage.name: Tandoor Recipes
       homepage.href: https://recipes.${MY_TLD}
-      homepage.icon: tandoor.svg
+      homepage.icon: tandoor-recipes.svg
       homepage.description: Recipes, cookbooks, meal-planning, & grocery lists
       homepage.widget.type: tandoor
       homepage.widget.url: http://tandoor-recipes:8080
@@ -7144,6 +7182,8 @@ volumes:
     name: paperless-ngx-media
   paperless-ngx-pg:
     name: paperless-ngx-pg
+  pgbackweb-data:
+    name: pgbackweb-data
   plausible-db-data:
     name: plausible-db-data
   plausible-event-data:
