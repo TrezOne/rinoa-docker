@@ -248,8 +248,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.gotify_api_base }}'
-          gotify_app_token: '${{ secrets.gotify_app_token }}'
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'Ansible Config Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
       - name: Generate .env file for deployment
@@ -266,7 +266,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}'
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'Docker Compose Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
