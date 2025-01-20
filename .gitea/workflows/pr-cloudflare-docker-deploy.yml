@@ -201,13 +201,25 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
+      # - name: Gotify Notification
+      #   uses: eikendev/gotify-action@master
+      #   with:
+      #     gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+      #     gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+      #     notification_title: 'Ansible Config Deployment @ Rinoa'
+      #     notification_message: 'Deployment completed successfully.'
+      - name: Cache Vault install
+        id: cache-vault
+        uses: actions/cache@v4
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'Ansible Config Deployment @ Rinoa'
-          notification_message: 'Deployment completed successfully.'
+          path: /opt/hostedtoolcache/vault/1.18.0/x64
+          key: vault-${{ runner.os }}-1.18.0
+      - name: Install Vault
+        uses: supplypike/setup-bin@v4
+        with:
+          uri: 'https://releases.hashicorp.com/vault/1.18.0/vault_1.18.0_linux_amd64.zip'
+          name: 'vault'
+          version: '1.18.0'
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
@@ -222,7 +234,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.gotify_api_base }}'
-          gotify_app_token: '${{ secrets.gotify_app_token }}'
-          notification_title: 'Docker ComposeDeployment @ Rinoa'
+          gotify_api_base: '${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'Docker Compose Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
