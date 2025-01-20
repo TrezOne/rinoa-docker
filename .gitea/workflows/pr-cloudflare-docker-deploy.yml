@@ -64,10 +64,8 @@ jobs:
           version: "11.0.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
-      - uses: getsentry/action-setup-venv@v2.1.0
-        id: venv-setup
-        with:
-          install-cmd: pip install hvac
+      - name: Install hvac
+        run: pip install hvac
       - name: Ansible Playbook Dry Run
         uses: dawidd6/action-ansible-playbook@v2
         with:
