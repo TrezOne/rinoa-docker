@@ -1991,7 +1991,7 @@ services:
       homepage.group: Professional Services
       homepage.name: Invoice Ninja
       homepage.href: https://biz.${MY_TLD}
-      homepage.icon: invoiceninja.svg
+      homepage.icon: invoice-ninja.svg
       homepage.description: Simple invoicing, multiple payment options, expense and vendor management, and more!
     networks:
       default: null
