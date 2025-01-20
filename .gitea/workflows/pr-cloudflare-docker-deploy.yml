@@ -58,12 +58,16 @@ jobs:
           key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
           restore-keys: |
             ${{ runner.os }}-ansible-
-      - name: "Install Ansible"
+      - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
           version: "11.0.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
+      - uses: getsentry/action-setup-venv@v2.1.0
+        id: venv-setup
+        with:
+          install-cmd: pip install hvac
       - name: Ansible Playbook Dry Run
         uses: dawidd6/action-ansible-playbook@v2
         with:
