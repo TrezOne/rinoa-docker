@@ -3471,6 +3471,12 @@ services:
     image: postgres:16-alpine
     volumes:
       - pgbackweb-data:/var/lib/postgresql/data
+  plantuml-server:
+    container_name: plantuml-server
+    expose:
+      - 8080
+    image: 'plantuml/plantuml-server:jetty'
+    restart: unless-stopped
   plausible:
     command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     container_name: plausible
