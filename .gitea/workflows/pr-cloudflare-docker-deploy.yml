@@ -58,7 +58,6 @@ jobs:
           path: /opt/hostedtoolcache/vault/1.18.0/x64
           key: vault-${{ runner.os }}-1.18.0
       - name: Install Vault
-        if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: supplypike/setup-bin@v4
         with:
           uri: 'https://releases.hashicorp.com/vault/1.18.0/vault_1.18.0_linux_amd64.zip'
