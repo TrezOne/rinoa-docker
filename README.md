@@ -6,7 +6,6 @@
 | --- | --- |
 | actual_server | docker.io/actualbudget/actual-server:latest |
 | adguard | adguard/adguardhome:latest |
-| ansible0guy-webui | ansible0guy/webui:latest |
 | apprise | lscr.io/linuxserver/apprise-api:latest |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
@@ -103,14 +102,11 @@
 | readarr | lscr.io/linuxserver/readarr:develop |
 | redis | redis:alpine |
 | redlib | quay.io/redlib/redlib:latest |
-| rundeck | rundeck/rundeck:5.8.0 |
-| rundeck-pg-db | postgres:16-alpine |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | scraperr | jpyles0524/scraperr:latest |
 | scraperr-api | jpyles0524/scraperr_api:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
-| semaphore | semaphoreui/semaphore:v2.10.32 |
 | slurpit-portal | slurpit/portal:latest |
 | slurpit-scanner | slurpit/scanner:latest |
 | slurpit-scraper | slurpit/scraper:latest |
