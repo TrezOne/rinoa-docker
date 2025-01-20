@@ -219,6 +219,18 @@ jobs:
           ref: main
       - name: Install Vault
         uses: cpanato/vault-installer@main
+      - name: Install hvac
+        run: pip install hvac
+      - name: Deploy Docker Configs via Ansible
+        uses: dawidd6/action-ansible-playbook@v2
+        with:
+          directory: ansible/
+          playbook: docker_config_deploy.yml
+          key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
+          options: |
+            --inventory inventory/hosts.yml
+          requirements: collections/requirements.yml
+          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -226,17 +238,6 @@ jobs:
           gotify_app_token: '${{ secrets.gotify_app_token }}'
           notification_title: 'Ansible Config Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
-      - name: Docker Config Deployment via Ansible
-        id: docker-config-deploy
-        uses: arillso/action.playbook@0.0.8
-        with:
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/ansible-inventory
-          playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 1
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
