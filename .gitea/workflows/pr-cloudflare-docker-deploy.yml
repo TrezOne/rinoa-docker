@@ -5,7 +5,6 @@ on:
       - main
     paths:
       - '**.yml'
-
 jobs:
   check-and-create-pr:
     name: Check and Create PR
