@@ -29,5 +29,5 @@
         widget:
             type: homeassistant
             url: http://192.168.1.252:8123
-            key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI5MTFlMDZiMzNlODc0MWYyYjM3Mzg0NDhiMzMyNzMxYiIsImlhdCI6MTcxMzEzODc3MiwiZXhwIjoyMDI4NDk4NzcyfQ.CXFBjf0sJAGdMrRd_PTCkkzU3LsCgkckG8HvbdSYEhs
+            key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['HOMEPAGE_HOME_ASSISTANT_API_KEY'] }}
 
