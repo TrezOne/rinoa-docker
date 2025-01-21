@@ -80,6 +80,11 @@
 | multi-scrobbler | foxxmd/multi-scrobbler |
 | n8n | docker.n8n.io/n8nio/n8n |
 | navidrome | deluan/navidrome:latest |
+| netbird-dashboard | netbirdio/dashboard:latest |
+| netbird-signal | netbirdio/signal:latest |
+| netbird-relay | netbirdio/relay:latest |
+| netbird-management | netbirdio/management:latest |
+| netbird-coturn | coturn/coturn:latest |
 | netbox | lscr.io/linuxserver/netbox:latest |
 | netbox-db | postgres:17-alpine |
 | nextcloud | lscr.io/linuxserver/nextcloud:latest |
