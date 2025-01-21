@@ -3465,6 +3465,7 @@ services:
       swag_url: pg.${MY_TLD}
     ports:
       - "8085:8085" # Access the web interface at http://localhost:8085
+    restart: unless-stopped
   pgbackweb-db:
     container_name: pgbackweb-db
     environment:
@@ -3479,6 +3480,7 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:16-alpine
+    restart: unless-stopped
     volumes:
       - pgbackweb-data:/var/lib/postgresql/data
   plantuml-server:
