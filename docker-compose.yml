@@ -6999,6 +6999,7 @@ services:
       homepage.href: https://id.${MY_TLD}
       homepage.icon: zitadel.svg
       homepage.description: Centralized authentication management
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/zitadel/config.yaml:/config.yaml
       - ${DOCKER_VOLUME_CONFIG}/zitadel/init-steps.yaml:/init-steps.yaml
@@ -7017,7 +7018,7 @@ services:
       retries: 5
       start_period: '20s'
     image: postgres:16-alpine
-    restart: always
+    restart: unless-stopped
     volumes: 
       - zitadel-pg-db:/var/lib/postgresql/data
 volumes:
