@@ -3272,6 +3272,7 @@ services:
     volumes:
       - netbird-signal:/var/lib/netbird
   netbird-relay:
+    container_name: netbird-relay
     image: netbirdio/relay:latest
     restart: unless-stopped
     environment:
