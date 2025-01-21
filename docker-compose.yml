@@ -7202,6 +7202,12 @@ volumes:
     name: mongo1_data
   n8n-data:
     name: n8n-data
+  netbird-mgmt:
+    name: netbird-mgmt
+  netbird-signal:
+    name: netbird-signal
+  netbird-letsencrypt:
+    name: netbird-letsencrypt
   netbox-pg-db:
     name: netbox-pg-db
   ollama:
