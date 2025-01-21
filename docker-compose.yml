@@ -3237,7 +3237,7 @@ services:
       swag_url: netbird.${MY_TLD}
       swag_server_custom_directive: |
         location /signalexchange.SignalExchange/ {
-            grpc_pass grpc://netbird-signal;
+            grpc_pass grpc://netbird-signal:80;
             #grpc_ssl_verify off;
             grpc_read_timeout 1d;
             grpc_send_timeout 1d;
@@ -3245,11 +3245,11 @@ services:
         }
         # Proxy Management http endpoint
         location /api {
-            proxy_pass http://netbird-management;
+            proxy_pass http://netbird-management:443;
         }
         # Proxy Management grpc endpoint
         location /management.ManagementService/ {
-            grpc_pass grpc://netbird-management;
+            grpc_pass grpc://netbird-management:443;
             #grpc_ssl_verify off;
             grpc_read_timeout 1d;
             grpc_send_timeout 1d;
