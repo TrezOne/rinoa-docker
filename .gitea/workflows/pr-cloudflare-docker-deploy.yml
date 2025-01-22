@@ -251,6 +251,7 @@ jobs:
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Docker Compose Deployment
+        continue-on-error: true
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
           ssh_user: gitea-deploy
