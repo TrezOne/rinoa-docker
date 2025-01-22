@@ -526,6 +526,7 @@ services:
       SERVER_NAME: www.trez.wtf
       API_WHITELIST_IP: 172.18.0.0/16 192.168.1.0/24
       USE_REAL_IP: yes
+      USE_REVERSE_PROXY: no
       REAL_IP_FROM: 172.18.0.0/16
       REAL_IP_HEADER: X-Forwarded-For
     expose:
@@ -549,8 +550,13 @@ services:
   bunkerweb-ui:
     container_name: bunkerweb-ui
     depends_on:
-      - bunkerweb
-      - docker-socket-proxy
+      bunkerweb:
+        condition: service_started
+        required: true
+        restart: true
+      docker-socket-proxy:
+        condition: service_started
+        required: true
     environment:
       DOCKER_HOST: tcp://dockerproxy:2375
     expose:
