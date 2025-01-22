@@ -2874,6 +2874,16 @@ services:
       MISTRAL_API_KEY: ${LOBECHAT_MISTRAL_API_KEY}
       GROQ_API_KEY: ${LOBECHAT_GROQAI_API_KEY}
     image: lobehub/lobe-chat-database
+    labels:
+      homepage.group: Personal Services
+      homepage.name: LobeChat
+      homepage.href: https://ai.${MY_TLD}
+      homepage.icon: lobe-chat.png
+      homepage.description: An open-source, modern-design ChatGPT/LLMs UI/Framework
+      swag: enable
+      swag_proto: http
+      swag_port: 3210
+      swag_url: ai.${MY_TLD}
     ports:
       - 3210:3210
     restart: unless-stopped
