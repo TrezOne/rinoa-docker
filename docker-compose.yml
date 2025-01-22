@@ -523,12 +523,13 @@ services:
   bunkerweb:
     container_name: bunkerweb
     environment:
-      SERVER_NAME: www.trez.wtf
       API_WHITELIST_IP: 172.18.0.0/16 192.168.1.0/24
-      USE_REAL_IP: yes
-      USE_REVERSE_PROXY: no
       REAL_IP_FROM: 172.18.0.0/16
       REAL_IP_HEADER: X-Forwarded-For
+      REVERSE_PROXY_HOST: http://swag:80
+      SERVER_NAME: bunker.trez.wtf
+      USE_REAL_IP: yes
+      USE_REVERSE_PROXY: yes
     expose:
       - 8080
       - 8443
@@ -564,7 +565,7 @@ services:
     image: bunkerity/bunkerweb-ui:latest
     labels:
       homepage.group: Privacy/Security
-      homepage.name: Bunkerweb
+      homepage.name: Bunker Web
       homepage.href: https://bunker.${MY_TLD}
       homepage.icon: bunkerweb.svg
       homepage.description: Next-gen WAF
@@ -3607,7 +3608,7 @@ services:
     image: eduardolat/pgbackweb:latest
     labels:
       homepage.group: System Administration
-      homepage.name: PGBackweb
+      homepage.name: PG Back Web
       homepage.href: https://pg.${MY_TLD}
       homepage.icon: sh-pg-back-web.svg
       homepage.description: Backups for PostgreSQL
