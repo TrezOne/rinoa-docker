@@ -2843,7 +2843,7 @@ services:
     container_name: lobe-chat
     depends_on:
       lobe-chat-pg-db:
-        condition: service_healthy
+        condition: service_started
         required: true
       minio:
         condition: service_started
@@ -2854,7 +2854,7 @@ services:
     environment:
       APP_URL: https://ai.trez.wtf/
       KEY_VAULTS_SECRET: ${LOBECHAT_KEY_VAULT_SECRET}
-      DATABASE_URL: postgresql://lobe:${LOBECHAT_PG_DB_PASSWD}@postgresql:5432/lobe
+      DATABASE_URL: postgresql://lobe:${LOBECHAT_PG_DB_PASSWD}@lobe-chat-pg-db:5432/lobe
       NEXTAUTH_URL: https://lobe.example.com/api/auth
       NEXT_AUTH_SECRET: ${LOBECHAT_NEXT_AUTH_SECRET}
       NEXT_AUTH_SSO_PROVIDERS: zitadel
@@ -2891,14 +2891,10 @@ services:
     container_name: lobe-chat-pg-db
     environment:
       POSTGRES_DB: lobe
+      POSTGRES_USER: lobe
       POSTGRES_PASSWORD: ${LOBECHAT_PG_DB_PASSWD}
     expose:
       - 5432
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
-      interval: 5s
-      timeout: 5s
-      retries: 5
     image: pgvector/pgvector:pg16
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/lobechat/db:/var/lib/postgresql/data
