@@ -4,7 +4,9 @@ on:
     branches-ignore:
       - main
     paths:
+      - '**.yaml'
       - '**.yml'
+      - '**.j2'
 jobs:
   check-and-create-pr:
     name: Check and Create PR
