@@ -70,7 +70,8 @@
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
 | lldap | lldap/lldap:stable |
-| localai | localai/localai:latest-aio-cpu |
+| lobe-chat | lobehub/lobe-chat-database |
+| lobe-chat-pg-db | pgvector/pgvector:pg16 |
 | maloja | krateng/maloja:latest |
 | mariadb | linuxserver/mariadb |
 | mastodon | lscr.io/linuxserver/mastodon:latest |
