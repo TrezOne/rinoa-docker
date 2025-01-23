@@ -4786,6 +4786,7 @@ services:
       homepage.icon: /icons/sourcebot.png
       swag: enable
       swag_proto: http
+      swag_port: 3000
       swag_url: source.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://source.${MY_TLD}
