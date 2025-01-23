@@ -2094,22 +2094,22 @@ services:
         target: 8003
     restart: always
     volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/public
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/app/public
         target: /var/www/app/public
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/app/storage
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/app/storage
         target: /var/www/app/storage
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/php/php.ini
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/php/php.ini
         target: /usr/local/etc/php/php.ini
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice_ninja/php/php-cli.ini
+      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/php/php-cli.ini
         target: /usr/local/etc/php/php-cli.ini
         type: bind
         bind:
@@ -4770,6 +4770,27 @@ services:
         type: bind
         bind:
           create_host_path: true
+  sourcebot:
+    container_name: sourcebot
+    environment:
+      CONFIG_PATH: /data/config.json
+    image: ghcr.io/sourcebot-dev/sourcebot:latest
+    labels:
+      homepage.name: Sourcebot
+      homepage.group: Code/DevOps
+      homepage.description: Self-hosted internet performance tracking
+      homepage.href: https://source.${MY_TLD}
+      homepage.icon: /icons/sourcebot.png
+      swag: enable
+      swag_proto: http
+      swag_url: source.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://source.${MY_TLD}
+    ports:
+        - 45251:3000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/sourcebot:/data
   speedtest-tracker:
     container_name: speedtest-tracker
     image: lscr.io/linuxserver/speedtest-tracker:latest
