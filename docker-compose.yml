@@ -3885,7 +3885,7 @@ services:
     expose:
       - 8000
       - 9443
-    image: portainer/portainer-ce:sts-alpine
+    image: portainer/portainer-ce:alpine-sts
     labels:
       swag: enable
       swag_proto: http
