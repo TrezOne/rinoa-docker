@@ -853,6 +853,9 @@ services:
     environment:
       CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,lobe-chat-pg-db,mariadb,mastodon-pg-db,mongodb,netbox-db,pgbackweb,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,traccar-pg,whodb,zitadel-pg-db
 
+      LOGIN: TrezOne
+      PASSWORD: ${DBGATE_LOGIN_PASSWORD}
+
       LABEL_mariadb: mariadb
       SERVER_mariadb: mariadb
       USER_mariadb: root
