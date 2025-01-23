@@ -99,6 +99,7 @@
 | plausible | ghcr.io/plausible/community-edition:v2.1.0 |
 | plausible_db | postgres:16-alpine |
 | plausible_events_db | clickhouse/clickhouse-server:24.3.3.102-alpine |
+| portainer | portainer/portainer-ce:alpine-sts |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
