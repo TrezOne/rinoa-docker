@@ -3874,6 +3874,33 @@ services:
       - plausible-event-logs:/var/log/clickhouse-server
       - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
       - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
+  portainer:
+    container_name: portainer
+    depends_on:
+      docker-socket-proxy:
+        condition: service_started
+        required: true
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+    expose:
+      - 8000
+      - 9443
+    image: portainer/portainer-ce:sts-alpine
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 8000
+      swag_url: portainer.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://portainer.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: Portainer
+      homepage.href: https://portainer.${MY_TLD}
+      homepage.icon: portainer.svg
+      homepage.description: Service delivery platform for containerized applications
+    restart: unless-stopped
+    volumes:
+        - portainer-data:/data
   postal-smtp:
     cap_add:
       - NET_BIND_SERVICE
@@ -7418,6 +7445,8 @@ volumes:
     name: plausible-event-data
   plausible-event-logs:
     name: plausible-event-logs
+  portainer-data:
+    name: portainer-data
   reactive-resume-pg:
     name: reactive-resume-pg
   sonarqube-data:
