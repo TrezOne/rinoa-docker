@@ -27,6 +27,7 @@
 | czkawka | jlesage/czkawka |
 | dagu-scheduler | ghcr.io/dagu-org/dagu:latest |
 | dagu-server | ghcr.io/dagu-org/dagu:latest |
+| dbgate | dbgate/dbgate:alpine |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | docuseal | docuseal/docuseal:latest |
@@ -144,7 +145,6 @@
 | wazuh.indexer | wazuh/wazuh-indexer: |
 | wazuh.manager | wazuh/wazuh-manager: |
 | web-check | lissy93/web-check |
-| whodb | clidey/whodb |
 | yacht | selfhostedpro/yacht |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
