@@ -79,6 +79,13 @@ jobs:
             --check
           requirements: collections/requirements.yml
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
+          notification_message: 'Ansible dry run completed successfully.'
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
@@ -97,6 +104,13 @@ jobs:
           up-opts: --dry-run -d --remove-orphans
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
+          notification_message: 'Docker Compose dry run completed successfully.'
   cloudflare-dns-setup:
     name: Cloudflare DNS Setup
     needs: [docker-compose-ansible-lints]
@@ -132,6 +146,13 @@ jobs:
         run: |
           yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
           flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
+          notification_message: 'Starting Cloudflare setup'
       - name: Compare Subdomains
         id: compare-subdomains
         uses: LouisBrunner/diff-action@v2.2.0
@@ -152,6 +173,13 @@ jobs:
             echo "Creating $subdomain.trez.wtf..."
             flarectl dns create --zone "trez.wtf" --name "${subdomain}" --type=CNAME --content "trez.wtf" --proxy true
           done
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
+          notification_message: 'Cloudflare DNS setup completed successfully.'
   regenerate-readme:
     name: Update README
     runs-on: ubuntu-latest
@@ -203,6 +231,14 @@ jobs:
           echo "Merging PR..."
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" ${pr_index}
+          echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: PR Merge Successful'
+          notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
   ansible-config-docker-compose-deploy:
     name: Deploy via Ansible & Docker Compose
     runs-on: ubuntu-latest
@@ -245,7 +281,7 @@ jobs:
         with:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'Ansible Config Deployment @ Rinoa'
+          notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
       - name: Generate .env file for deployment
         run: |
@@ -264,5 +300,5 @@ jobs:
         with:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'Docker Compose Deployment @ Rinoa'
+          notification_title: 'GITEA: Docker Compose Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'

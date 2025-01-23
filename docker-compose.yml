@@ -40,7 +40,7 @@ services:
   adguard:
     container_name: adguard
     environment:
-      TZ: America/New_York
+      TZ: ${TZ}
     hostname: Rinoa
     image: adguard/adguardhome:latest
     labels:
@@ -289,10 +289,10 @@ services:
   bazarr:
     container_name: bazarr
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=America/New_York
-      - DOCKER_MODS=ghcr.io/gilbn/theme.park:bazarr
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+      DOCKER_MODS: ghcr.io/gilbn/theme.park:bazarr
     hostname: Rinoa
     image: lscr.io/linuxserver/bazarr:latest
     labels:
@@ -1624,7 +1624,7 @@ services:
     command: run --disable-reporting=true --stability.level=public-preview --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
     container_name: grafana-alloy
     environment:
-      - DOCKER_HOST=tcp://dockerproxy:2375
+      DOCKER_HOST: tcp://dockerproxy:2375
     image: grafana/alloy:latest
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
@@ -2868,8 +2868,8 @@ services:
   lidarr:
     container_name: lidarr
     environment:
-      PGID: 1000
-      PUID: 1000
+      PGID: ${PGID}
+      PUID: ${PUID}
       TZ: America/New_York
       DOCKER_MODS: ghcr.io/gilbn/theme.park:lidarr
     hostname: Rinoa
@@ -3582,9 +3582,9 @@ services:
         required: true
         restart: true
     environment:
-      PGID: 1000
-      PUID: 1000
-      TZ: America/New_York
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
       LOG_LEVEL: debug
     hostname: Rinoa
     image: lscr.io/linuxserver/nextcloud:latest
@@ -3650,8 +3650,8 @@ services:
   ombi:
     container_name: ombi
     environment:
-      PGID: "1000"
-      PUID: "1000"
+      PGID: ${PGID}
+      PUID: ${PUID}
       TZ: America/New_York
     hostname: Rinoa
     image: lscr.io/linuxserver/ombi:latest
@@ -3943,8 +3943,8 @@ services:
   prowlarr:
     container_name: prowlarr
     environment:
-      PGID: 1000
-      PUID: 1000
+      PGID: ${PGID}
+      PUID: ${PUID}
       TZ: America/New_York
       DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
       TP_DOMAIN: trez.wtf\/themepark
@@ -4045,9 +4045,9 @@ services:
   radarr:
     container_name: radarr
     environment:
-      PGID: "1000"
-      PUID: "1000"
-      TZ: America/New_York
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
     hostname: Rinoa
     image: lscr.io/linuxserver/radarr:latest
     labels:
@@ -4158,8 +4158,8 @@ services:
   readarr:
     container_name: readarr
     environment:
-      PGID: 1000
-      PUID: 1000
+      PGID: ${PGID}
+      PUID: ${PUID}
       TZ: America/New_York
       DOCKER_MODS: ghcr.io/gilbn/theme.park:readnarr
     hostname: Rinoa
@@ -4602,7 +4602,7 @@ services:
     read_only: true
     restart: unless-stopped
   sonarqube-pg-db:
-    container_name: sonarqube-pg-db    
+    container_name: sonarqube-pg-db
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: ${SONARQUBE_POSTGRES_PASSWORD}
@@ -4620,9 +4620,9 @@ services:
   sonarr:
     container_name: sonarr
     environment:
-      PGID: 1000
-      PUID: 1000
-      TZ: America/New_York
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
       DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
     hostname: Rinoa
     image: lscr.io/linuxserver/sonarr:latest
@@ -4752,7 +4752,7 @@ services:
       homepage.group: Downloaders
       homepage.description: Modern client-server application for the Soulseek file-sharing network.
       homepage.href: https://slsk.${MY_TLD}
-      homepage.icon: /icons/slskd.png
+      homepage.icon: slskd.svg
       swag: enable
       swag_proto: http
       swag_url: slsk.${MY_TLD}
@@ -4936,7 +4936,7 @@ services:
       swag_url: matrix.${MY_TLD}
       swag_port: 8008
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://matrix.${MY_TLD}  
+      swag.uptime-kuma.monitor.url: https://matrix.${MY_TLD}
     ports:
       - 19345:8008
       - 8448:8448/tcp
@@ -6326,8 +6326,8 @@ services:
   uptimekuma:
     container_name: uptimekuma
     environment:
-      PGID: 1000
-      PUID: 1000
+      PGID: ${PGID}
+      PUID: ${PUID}
       TZ: America/New_York
       UPTIME_KUMA_USERNAME: ${UPTIME_KUMA_USERNAME}
       UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
@@ -6633,7 +6633,7 @@ services:
   wazuh.indexer:
     container_name: wazuh.indexer
     environment:
-      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
     hostname: wazuh.indexer
     image: wazuh/wazuh-indexer:${WAZUH_VERSION}
     networks:
@@ -6849,8 +6849,8 @@ services:
   your_spotify:
     container_name: your_spotify
     environment:
-      PUID: 1000
-      PGID: 1000
+      PUID: ${PUID}
+      PGID: ${PGID}
       TZ: ${TZ}
       APP_URL: https://myspotify.${MY_TLD}
       SPOTIFY_PUBLIC: ${YOUR_SPOTIFY_ID}
@@ -6883,8 +6883,8 @@ services:
   youtubedl:
     container_name: youtubedl
     environment:
-      PGID: "1000"
-      PUID: "1000"
+      PGID: ${PGID}
+      PUID: ${PUID}
       TZ: America/New_York
       YDL_CONFIG_PATH: /youtube-dl/config.yml
       YDL_DEBUG: "false"
