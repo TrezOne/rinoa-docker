@@ -4625,6 +4625,7 @@ services:
         PGID: ${PGID}
         APP_KEY: ${SPEEDTEST_TRACKER_APP_KEY}
         DB_CONNECTION: sqlite
+        SPEEDTEST_SCHEDULE: 15 */3 * * *
     labels:
       homepage.name: Speedtest Tracker
       homepage.group: System Administration
