@@ -125,6 +125,7 @@
 | sonashow | thewicklowwolf/sonashow:latest |
 | soularr | mrusse08/soularr:latest |
 | soulseek | slskd/slskd |
+| sourcebot | ghcr.io/sourcebot-dev/sourcebot:latest |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | spotisub | blastbeng/spotisub:latest |
 | swag | lscr.io/linuxserver/swag:latest |
