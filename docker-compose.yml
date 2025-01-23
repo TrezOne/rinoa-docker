@@ -3875,6 +3875,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
       - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
   portainer:
+    command: -H tcp://dockerproxy:2375
     container_name: portainer
     depends_on:
       docker-socket-proxy:
