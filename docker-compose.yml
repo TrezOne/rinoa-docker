@@ -3883,13 +3883,13 @@ services:
     environment:
       DOCKER_HOST: tcp://dockerproxy:2375
     expose:
-      - 8000
+      - 9000
       - 9443
     image: portainer/portainer-ce:alpine-sts
     labels:
       swag: enable
       swag_proto: http
-      swag_port: 8000
+      swag_port: 9000
       swag_url: portainer.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://portainer.${MY_TLD}
