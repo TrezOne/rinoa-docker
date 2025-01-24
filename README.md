@@ -111,6 +111,7 @@
 | readarr | lscr.io/linuxserver/readarr:develop |
 | redis | redis:alpine |
 | redlib | quay.io/redlib/redlib:latest |
+| rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | scraperr | jpyles0524/scraperr:latest |
 | scraperr-api | jpyles0524/scraperr_api:latest |
@@ -130,8 +131,6 @@
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | spotisub | blastbeng/spotisub:latest |
 | swag | lscr.io/linuxserver/swag:latest |
-| synapse | docker.io/matrixdotorg/synapse:latest |
-| synapse-db | postgres:16-alpine |
 | tandoor | vabene1111/recipes |
 | tandoor-pg | postgres:16-alpine |
 | traccar | traccar/traccar:latest |
