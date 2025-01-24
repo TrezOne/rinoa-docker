@@ -4307,7 +4307,7 @@ services:
   rocketchat:
     container_name: rocketchat
     depends_on:
-      mongod:
+      mongodb:
         condition: service_started
         required: true
     environment:
