@@ -4304,6 +4304,40 @@ services:
     security_opt:
       - no-new-privileges=true
     user: nobody
+  rocketchat:
+    container_name: rocketchat
+    depends_on:
+      mongod:
+        condition: service_started
+        required: true
+    environment:
+      MONGO_URL: "${MONGO_URL:-\
+        mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/\
+        ${MONGODB_DATABASE:-rocketchat}?replicaSet=rinoa"
+      MONGO_OPLOG_URL: "${MONGO_OPLOG_URL:\
+        -mongodb://${MONGODB_ADVERTISED_HOSTNAME:-mongodb}:${MONGODB_INITIAL_PRIMARY_PORT_NUMBER:-27017}/\
+        local?replicaSet=rinoa"
+      ROOT_URL: https://chat.trez.wtf
+      PORT: 3000
+      DEPLOY_METHOD: docker
+      DEPLOY_PLATFORM: ${DEPLOY_PLATFORM:-}
+      REG_TOKEN: ${REG_TOKEN:-}
+    expose:
+      - 3000
+    image: ${IMAGE:-registry.rocket.chat/rocketchat/rocket.chat}:${RELEASE:-latest}
+    labels:
+      homepage.group: Social
+      homepage.name: Rocket.Chat
+      homepage.href: https://chat.${MY_TLD}
+      homepage.icon: rocket-chat.svg
+      homepage.description: Fully customizable communications platform with high standards of data protection
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: scrape.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
+    restart: always
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -4955,40 +4989,6 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
-  synapse:
-    container_name: synapse
-    depends_on:
-      - synapse-db
-    environment:
-      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
-      PUID: 1000
-      PGID: 1000
-    image: docker.io/matrixdotorg/synapse:latest
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_url: matrix.${MY_TLD}
-      swag_port: 8008
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://matrix.${MY_TLD}
-    ports:
-      - 19345:8008
-      - 8448:8448/tcp
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/synapse/:/data
-  synapse-db:
-    container_name: synapse-db
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: synapse
-      POSTGRES_PASSWORD: ${SYNAPSE_POSTGRES_PASSWORD}
-      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
-    expose:
-      - 5432
-    restart: unless-stopped
-    volumes:
-      - synapse-db:/var/lib/postgresql/data
   tandoor:
     container_name: tandoor-recipes
     depends_on:
@@ -7466,8 +7466,6 @@ volumes:
     name: sonarqube-logs
   sonarqube-temp:
     name: sonarqube-temp
-  synapse-db:
-    name: synapse-db
   tandoor-pg:
     name: tandoor-pg
   traccar-pg:
