@@ -3271,7 +3271,17 @@ services:
           create_host_path: true
   mongodb:
     container_name: mongodb
-    image: mongo:7.0
+    environment:
+      MONGODB_ADVERTISED_HOSTNAME: mongodb
+      MONGODB_ENABLE_DIRECTORY_PER_DB: true
+      MONGODB_SYSTEM_LOG_VERBOSITY: 1
+      MONGODB_ROOT_USER: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGODB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ALLOW_EMPTY_PASSWORD: yes
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_NAME: rinoa
+      MONGODB_REPLICA_SET_KEY: 
+    image: bitnami/mongodb:7.0
     ports:
       - 27017:27017
     restart: unless-stopped
@@ -3631,8 +3641,6 @@ services:
         type: bind
   ollama:
     container_name: ollama
-    extra_hosts:
-      - host.docker.internal:host-gateway
     image: ollama/ollama
     networks:
       default: null
@@ -4400,15 +4408,13 @@ services:
       LOG_LEVEL: DEBUG
       OLLAMA_URL: http://ollama:11434
       OLLAMA_MODEL: phi3
-      MONGODB_URI: mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/scrapper
+      MONGODB_URI: mongodb://mongodb:27017/scrapper
       SECRET_KEY: ${SCRAPERR_SECRET_KEY}
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: 600
       DOCKER_HOST: tcp://dockerproxy:2375
     expose:
       - 8000
-    extra_hosts:
-      - host.docker.internal:host-gateway
     image: jpyles0524/scraperr_api:latest
     labels:
       swag: enable
@@ -6884,12 +6890,10 @@ services:
       SPOTIFY_PUBLIC: ${YOUR_SPOTIFY_ID}
       SPOTIFY_SECRET: ${YOUR_SPOTIFY_SECRET}
       CORS: all
-      MONGO_ENDPOINT: mongodb://host.docker.internal:27017,host.docker.internal:27018,host.docker.internal:27019/your_spotify
+      MONGO_ENDPOINT: mongodb://mongodb:27017/your_spotify
       LOG_LEVEL: debug
     expose:
       - 8080
-    extra_hosts:
-      - host.docker.internal:host-gateway
     image: lscr.io/linuxserver/your_spotify:latest
     labels:
       homepage.group: Media Library
@@ -7417,9 +7421,9 @@ volumes:
   mastodon-pg-db:
     name: mastodon-pg-db
   mongodb_config:
-    name: mongo1_config
+    name: mongodb_config
   mongodb_data:
-    name: mongo1_data
+    name: mongodb_data
   n8n-data:
     name: n8n-data
   netbird-mgmt:
