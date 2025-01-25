@@ -4330,9 +4330,9 @@ services:
       swag: enable
       swag_proto: http
       swag_port: 3000
-      swag_url: scrape.${MY_TLD}
+      swag_url: chat.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://chat.${MY_TLD}
     restart: always
   sabnzbdvpn:
     cap_add:
