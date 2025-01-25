@@ -768,7 +768,7 @@ services:
       homepage.group: System Administration
       homepage.name: Czkawka
       homepage.href: https://czkawka.${MY_TLD}
-      homepage.icon: /icons/czkawka.png
+      homepage.icon: sh-czkawka.svg
       homepage.description: Smart file management
       swag: enable
       swag_port: 5800
