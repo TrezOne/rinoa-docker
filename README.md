@@ -57,6 +57,9 @@
 | invidious-db | docker.io/library/postgres:14 |
 | invoice_ninja | invoiceninja/invoiceninja:5 |
 | invoice_ninja_proxy | nginx |
+| immich-server | ghcr.io/immich-app/immich-server:release |
+| immich-machine-learning | ghcr.io/immich-app/immich-machine-learning:release |
+| immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1 |
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
 | jitsi-etherpad | etherpad/etherpad:1.8.6 |
