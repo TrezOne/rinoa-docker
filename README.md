@@ -53,13 +53,14 @@
 | homepage | ghcr.io/gethomepage/homepage:latest |
 | hortusfox | ghcr.io/danielbrendel/hortusfox-web:latest |
 | hugo | hugomods/hugo:exts |
+| immich-server | ghcr.io/immich-app/immich-server:release |
+| immich-machine-learning | ghcr.io/immich-app/immich-machine-learning:release |
+| immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1 |
+| influxdb2 | influxdb:2-alpine |
 | invidious | quay.io/invidious/invidious:latest |
 | invidious-db | docker.io/library/postgres:14 |
 | invoice_ninja | invoiceninja/invoiceninja:5 |
 | invoice_ninja_proxy | nginx |
-| immich-server | ghcr.io/immich-app/immich-server:release |
-| immich-machine-learning | ghcr.io/immich-app/immich-machine-learning:release |
-| immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1 |
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
 | jitsi-etherpad | etherpad/etherpad:1.8.6 |
@@ -149,7 +150,6 @@
 | wazuh.indexer | wazuh/wazuh-indexer: |
 | wazuh.manager | wazuh/wazuh-manager: |
 | web-check | lissy93/web-check |
-| yacht | selfhostedpro/yacht |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
 | zammad-backup | postgres: |
