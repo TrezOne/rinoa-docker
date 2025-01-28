@@ -1976,7 +1976,7 @@ services:
         bind:
           create_host_path: true
   immich-server:
-    container_name: immich_server
+    container_name: immich-server
     depends_on:
       redis:
         condition: service_started
@@ -2000,7 +2000,7 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/Pics:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
   immich-machine-learning:
-    container_name: immich_machine_learning
+    container_name: immich-machine-learning
     depends_on:
       immich-server:
         condition: service_started
