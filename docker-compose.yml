@@ -920,7 +920,7 @@ services:
       ENGINE_mastodon-pg-db: postgres@dbgate-plugin-postgres
 
       LABEL_mongodb: mongodb
-      URI_mongodb: mongodb://mongodb:27017
+      URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
       ENGINE_mongodb: mongo@dbgate-plugin-mongo
 
       LABEL_netbox-db: netbox-db
@@ -3375,7 +3375,7 @@ services:
       ALLOW_EMPTY_PASSWORD: yes
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_REPLICA_SET_NAME: rinoa
-      MONGODB_REPLICA_SET_KEY: 
+      MONGODB_REPLICA_SET_KEY: ${MONGODB_REPLICA_SET_KEY}
     image: bitnami/mongodb:7.0
     ports:
       - 27017:27017
