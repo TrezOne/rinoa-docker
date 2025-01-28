@@ -1986,6 +1986,8 @@ services:
         required: true
     environment:
       DB_DATABASE_NAME: immich
+      DB_HOSTNAME: immich-pg-db
+      DB_PORT: 5432
       DB_USERNAME: immich
       DB_PASSWORD: ${IMMICH_DB_PASSWORD}
       IMMICH_TELEMETRY_INCLUDE: all
