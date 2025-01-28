@@ -4443,6 +4443,10 @@ services:
         condition: service_started
         required: true
     environment:
+      ADMIN_USERNAME: Trez.One
+      ADMIN_NAME: Charish Patel
+      ADMIN_PASS: ${}
+      ADMIN_EMAIL: charish.patel@trez.wtf
       MONGO_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/rocketchat?replicaSet=rinoa
       MONGO_OPLOG_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/local?replicaSet=rinoa
       ROOT_URL: https://chat.trez.wtf
