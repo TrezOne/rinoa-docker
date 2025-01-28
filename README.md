@@ -56,6 +56,8 @@
 | immich-server | ghcr.io/immich-app/immich-server:release |
 | immich-machine-learning | ghcr.io/immich-app/immich-machine-learning:release |
 | immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1 |
+| immich-public-proxy | alangrainger/immich-public-proxy:latest |
+| immich-power-tools | ghcr.io/varun-raj/immich-power-tools:latest |
 | influxdb2 | influxdb:2-alpine |
 | invidious | quay.io/invidious/invidious:latest |
 | invidious-db | docker.io/library/postgres:14 |
