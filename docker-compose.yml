@@ -3724,12 +3724,16 @@ services:
         required: true
         restart: true
     environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TZ}
       LOG_LEVEL: debug
-    hostname: Rinoa
-    image: lscr.io/linuxserver/nextcloud:latest
+      SKIP_DOMAIN_VALIDATION: false
+      APACHE_ADDITIONAL_NETWORK: 
+      APACHE_IP_BINDING: 0.0.0.0
+      APACHE_PORT: 11000
+    image: nextcloud/all-in-one:latest
     labels:
       homepage.group: Personal Services
       homepage.name: NextCloud
@@ -3750,17 +3754,8 @@ services:
         target: 443
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/nextcloud
-        target: /config
-        type: bind
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/nextcloud:/config
       - bind:
           create_host_path: true
         source: /rinoa-storage
