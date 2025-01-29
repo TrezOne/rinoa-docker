@@ -4863,7 +4863,7 @@ services:
       homepage.group: Servarr Stack
       homepage.name: Sonashow
       homepage.href: https://sonashow.${MY_TLD}
-      homepage.icon: /icons/sonashow.png
+      homepage.icon: sh-sonashow.png
       homepage.description: TV show discovery based on library/tastes
       swag: enable
       swag_auth: authelia
