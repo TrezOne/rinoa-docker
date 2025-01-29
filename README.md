@@ -95,7 +95,7 @@
 | netbird-coturn | coturn/coturn:latest |
 | netbox | lscr.io/linuxserver/netbox:latest |
 | netbox-db | postgres:17-alpine |
-| nextcloud | lscr.io/linuxserver/nextcloud:latest |
+| nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
