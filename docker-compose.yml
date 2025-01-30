@@ -5059,7 +5059,7 @@ services:
       homepage.widget.type: swagdashboard
       homepage.widget.url: http://swag:81
     networks:
-      - compose_default
+      - default
       - nextcloud-aio
     ports:
       - mode: ingress
