@@ -6698,10 +6698,10 @@ services:
   wazuh-dashboard:
     container_name: wazuh-dashboard
     depends_on:
-      wazuh.indexer:
+      wazuh-indexer:
         condition: service_started
         required: true
-      wazuh.manager:
+      wazuh-manager:
         condition: service_started
         required: true
         restart: true
