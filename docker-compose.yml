@@ -10,6 +10,8 @@ networks:
     name: compose_bitmagnet
   default:
     name: compose_default
+  nextcloud-aio:
+    external: true
 services:
   actual_server:
     container_name: actualbudget
