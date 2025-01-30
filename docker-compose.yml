@@ -3742,10 +3742,8 @@ services:
       - 56713:8080
     restart: unless-stopped
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
-      - ${DOCKER_VOLUME_CONFIG}/nextcloud/data:/data
   ollama:
     container_name: ollama
     image: ollama/ollama
