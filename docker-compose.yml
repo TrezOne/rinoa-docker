@@ -6678,7 +6678,7 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
-  wazuh.agent:
+  wazuh-agent:
     container_name: wazuh.agent
     environment:
       JOIN_MANAGER_PROTOCOL: https
@@ -6695,8 +6695,8 @@ services:
     networks:
       default: null
     restart: unless-stopped
-  wazuh.dashboard:
-    container_name: wazuh.dashboard
+  wazuh-dashboard:
+    container_name: wazuh-dashboard
     depends_on:
       wazuh.indexer:
         condition: service_started
@@ -6713,7 +6713,7 @@ services:
       DASHBOARD_PASSWORD: ${WAZUH_KIBANA_PASSWORD}
       API_USERNAME: wazuh-wui
       API_PASSWORD: ${WAZUH_API_PASSWORD}
-    hostname: wazuh.dashboard
+    hostname: wazuh-dashboard
     image: wazuh/wazuh-dashboard:${WAZUH_VERSION}
     labels:
       swag: enable
@@ -6772,11 +6772,11 @@ services:
         target: /usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom
         type: volume
         volume: {}
-  wazuh.indexer:
-    container_name: wazuh.indexer
+  wazuh-indexer:
+    container_name: wazuh-indexer
     environment:
       OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
-    hostname: wazuh.indexer
+    hostname: wazuh-indexer
     image: wazuh/wazuh-indexer:${WAZUH_VERSION}
     networks:
       default: null
@@ -6833,8 +6833,8 @@ services:
         type: bind
         bind:
           create_host_path: true
-  wazuh.manager:
-    container_name: wazuh.manager
+  wazuh-manager:
+    container_name: wazuh-manager
     environment:
       INDEXER_URL: https://wazuh.indexer:9200
       INDEXER_USERNAME: admin
@@ -6845,7 +6845,7 @@ services:
       SSL_KEY: /etc/ssl/filebeat.key
       API_USERNAME: wazuh-wui
       API_PASSWORD: ${WAZUH_API_PASSWORD}
-    hostname: wazuh.manager
+    hostname: wazuh-manager
     image: wazuh/wazuh-manager:${WAZUH_VERSION}
     networks:
       default: null
