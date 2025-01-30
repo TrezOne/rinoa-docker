@@ -6739,27 +6739,27 @@ services:
         target: 5601
     restart: always
     volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/wazuh.dashboard.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.dashboard.pem
         target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/wazuh.dashboard-key.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.dashboard-key.pem
         target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/root-ca.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
         target: /usr/share/wazuh-dashboard/certs/root-ca.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/config/opensearch_dashboards.yml
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/opensearch_dashboards.yml
         target: /usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/config/wazuh.yml
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/wazuh.yml
         target: /usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
         type: bind
         bind:
@@ -6798,37 +6798,37 @@ services:
         target: /var/lib/wazuh-indexer
         type: volume
         volume: {}
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/root-ca.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
         target: /usr/share/wazuh-indexer/certs/root-ca.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/wazuh.indexer-key.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.indexer-key.pem
         target: /usr/share/wazuh-indexer/certs/wazuh.indexer.key
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/wazuh.indexer.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.indexer.pem
         target: /usr/share/wazuh-indexer/certs/wazuh.indexer.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/admin.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/admin.pem
         target: /usr/share/wazuh-indexer/certs/admin.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/admin-key.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/admin-key.pem
         target: /usr/share/wazuh-indexer/certs/admin-key.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/config/wazuh.indexer.yml
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/wazuh.indexer.yml
         target: /usr/share/wazuh-indexer/opensearch.yml
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/config/internal_users.yml
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/internal_users.yml
         target: /usr/share/wazuh-indexer/opensearch-security/internal_users.yml
         type: bind
         bind:
@@ -6919,22 +6919,22 @@ services:
         target: /var/lib/filebeat
         type: volume
         volume: {}
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/root-ca.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
         target: /etc/ssl/root-ca.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/wazuh.manager.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.manager.pem
         target: /etc/ssl/filebeat.pem
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/certs/wazuh.manager-key.pem
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.manager-key.pem
         target: /etc/ssl/filebeat.key
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/config/wazuh_manager.conf
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/wazuh_manager.conf
         target: /wazuh-config-mount/etc/ossec.conf
         type: bind
         bind:
