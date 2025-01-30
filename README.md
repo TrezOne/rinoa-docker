@@ -16,9 +16,6 @@
 | bitwarden | vaultwarden/server:latest |
 | bluesky-pds | ghcr.io/bluesky-social/pds:latest |
 | browserless | ghcr.io/browserless/chromium:latest |
-| bunkerweb | bunkerity/bunkerweb:latest |
-| bunkerweb-scheduler | bunkerity/bunkerweb-scheduler:latest |
-| bunkerweb-ui | bunkerity/bunkerweb-ui:latest |
 | castopod | castopod/castopod:latest |
 | cloudflared | cloudflare/cloudflared:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
@@ -147,10 +144,10 @@
 | wallabag | wallabag/wallabag |
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
-| wazuh.agent | opennix/wazuh-agent:latest |
-| wazuh.dashboard | wazuh/wazuh-dashboard: |
-| wazuh.indexer | wazuh/wazuh-indexer: |
-| wazuh.manager | wazuh/wazuh-manager: |
+| wazuh-agent | kennyopennix/wazuh-agent:latest |
+| wazuh-dashboard | wazuh/wazuh-dashboard: |
+| wazuh-indexer | wazuh/wazuh-indexer: |
+| wazuh-manager | wazuh/wazuh-manager: |
 | web-check | lissy93/web-check |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
