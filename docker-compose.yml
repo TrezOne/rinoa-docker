@@ -3717,7 +3717,7 @@ services:
         type: volume
         volume: {}
   nextcloud:
-    container_name: nextcloud
+    container_name: nextcloud-aio-mastercontainer
     environment:
       SKIP_DOMAIN_VALIDATION: false
       APACHE_ADDITIONAL_NETWORK: 
