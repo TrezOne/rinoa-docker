@@ -6772,6 +6772,15 @@ services:
         target: /usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom
         type: volume
         volume: {}
+  wazuh.generator:
+    container_name: wazuh.generator
+    image: wazuh/wazuh-certs-generator:0.0.2
+    hostname: wazuh-certs-generator
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/generator/certs/:/certificates/
+      - ./config/certs.yml:/config/certs.yml
+    environment:
+      HTTP_PROXY: swag
   wazuh.indexer:
     container_name: wazuh.indexer
     environment:
