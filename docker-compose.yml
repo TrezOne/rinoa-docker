@@ -522,63 +522,6 @@ services:
     networks:
       default: null
     restart: unless-stopped
-  bunkerweb:
-    container_name: bunkerweb
-    environment:
-      API_WHITELIST_IP: 172.18.0.0/16 192.168.1.0/24
-      REAL_IP_FROM: 172.18.0.0/16
-      REAL_IP_HEADER: X-Forwarded-For
-      REVERSE_PROXY_HOST: http://swag:80
-      SERVER_NAME: bunker.trez.wtf
-      USE_REAL_IP: yes
-      USE_REVERSE_PROXY: yes
-    expose:
-      - 8080
-      - 8443
-    image: bunkerity/bunkerweb:latest
-    labels:
-      bunkerweb.INSTANCE: yes
-    restart: unless-stopped
-  bunkerweb-scheduler:
-    container_name: bunkerweb-scheduler
-    depends_on:
-      - bunkerweb
-      - docker-socket-proxy
-    environment:
-      DOCKER_HOST: tcp://dockerproxy:2375
-    image: bunkerity/bunkerweb-scheduler:latest
-    restart: unless-stopped
-    volumes:
-      - bunkerweb-data:/data
-  bunkerweb-ui:
-    container_name: bunkerweb-ui
-    depends_on:
-      bunkerweb:
-        condition: service_started
-        required: true
-        restart: true
-      docker-socket-proxy:
-        condition: service_started
-        required: true
-    environment:
-      DOCKER_HOST: tcp://dockerproxy:2375
-    expose:
-      - 7000
-    image: bunkerity/bunkerweb-ui:latest
-    labels:
-      homepage.group: Privacy/Security
-      homepage.name: Bunker Web
-      homepage.href: https://bunker.${MY_TLD}
-      homepage.icon: bunkerweb.svg
-      homepage.description: Next-gen WAF
-      swag: enable
-      swag_port: 7000
-      swag_url: bunker.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://bunker.${MY_TLD}
-    restart: unless-stopped
-    volumes:
-      - bunkerweb-data:/data
   castopod:
     container_name: castopod
     depends_on:
