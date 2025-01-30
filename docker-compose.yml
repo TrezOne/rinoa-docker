@@ -6754,12 +6754,12 @@ services:
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/config/opensearch_dashboards.yml
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/config/opensearch_dashboards.yml
         target: /usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
         type: bind
         bind:
           create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/config/wazuh.yml
+      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/config/wazuh.yml
         target: /usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
         type: bind
         bind:
