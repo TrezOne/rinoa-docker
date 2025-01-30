@@ -6728,8 +6728,8 @@ services:
       homepage.icon: wazuh.svg
       homepage.description: OSS Security Platform for XDR/SIEM
     links:
-      - wazuh.indexer:wazuh.indexer
-      - wazuh.manager:wazuh.manager
+      - wazuh-indexer:wazuh-indexer
+      - wazuh-manager:wazuh-manager
     networks:
       default: null
     ports:
