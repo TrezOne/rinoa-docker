@@ -6778,7 +6778,7 @@ services:
     hostname: wazuh-certs-generator
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/generator/certs/:/certificates/
-      - ${DOCKER_VOLUME_CONFIG}/generator/certs/certs.yml:/config/certs.yml
+      - ${DOCKER_VOLUME_CONFIG}/generator/config/certs.yml:/config/certs.yml
     environment:
       HTTP_PROXY: swag
   wazuh.indexer:
