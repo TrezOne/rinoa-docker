@@ -3735,6 +3735,7 @@ services:
       swag: enable
       swag_port: 11000
       swag_proto: https
+      swag_address: nextcloud-aio-apache
       swag_url: cloud.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://cloud.${MY_TLD}
