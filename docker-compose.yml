@@ -6779,8 +6779,6 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/generator/certs/:/certificates/
       - ${DOCKER_VOLUME_CONFIG}/generator/config/certs.yml:/config/certs.yml
-    environment:
-      HTTP_PROXY: swag
   wazuh.indexer:
     container_name: wazuh.indexer
     environment:
