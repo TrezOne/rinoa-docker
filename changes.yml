@@ -1,0 +1,47 @@
+    ports:
+      - 2283:2283
+    restart: always
+    labels:
+      swag_port: 3000
+      swag_url: pics.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: Immich
+      homepage.href: https://pics.${MY_TLD}
+      homepage.icon: immich.svg
+      homepage.description: High performance self-hosted photo and video management solution
+    restart: always
+  immich-power-tools:
+    container_name: immich-power-tools
+    environment:
+      IMMICH_API_KEY: ${IMMICH_POWER_TOOLS_KEY}
+      IMMICH_URL: http://immich-server:2283
+      EXTERNAL_IMMICH_URL: https://pics.trez.wtf
+    image: ghcr.io/varun-raj/immich-power-tools:latest
+    ports:
+      - 54018:3000
+  influxdb2:
+    container_name: influxdb2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB2_ADMIN_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: /run/secrets/influxdb2-admin-token
+      DOCKER_INFLUXDB_INIT_ORG: rinoa
+      DOCKER_INFLUXDB_INIT_BUCKET: rinoa
+    image: influxdb:2-alpine
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 8086
+      swag_url: influxdb.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://influxdb.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: InfluxDBv2
+      homepage.href: https://influxdb.${MY_TLD}
+      homepage.icon: influxdb.svg
+      homepage.description: Scalable datastore for metrics, events, and real-time analytics
+    ports:
+      - 8086:8086
