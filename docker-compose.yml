@@ -741,58 +741,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  dagu-scheduler:
-    command: dagu scheduler
-    container_name: dagu-scheduler
-    image: ghcr.io/dagu-org/dagu:latest
-    networks:
-      default: null
-    restart: unless-stopped
-    volumes:
-      - source: dagu_config
-        target: /home/dagu/.config/dagu
-        type: volume
-        volume: {}
-      - source: dagu_data
-        target: /home/dagu/.local/share
-        type: volume
-        volume: {}
-  dagu-server:
-    container_name: dagu-server
-    environment:
-      DAGU_PORT: 8080
-    image: ghcr.io/dagu-org/dagu:latest
-    labels:
-      homepage.group: System Administration
-      homepage.name: Dagu
-      homepage.href: https://cron.${MY_TLD}
-      homepage.icon: sh-dagu.png
-      homepage.description: Cron alternative using DAGs (Directed Acyclic Graphs)
-      swag: enable
-      swag_port: 8080
-      swag_proto: http
-      swag_url: cron.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://cron.${MY_TLD}
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8108"
-        target: 8080
-    restart: unless-stopped
-    volumes:
-      - source: dagu_config
-        target: /home/dagu/.config/dagu
-        type: volume
-        bind:
-          create_host_path: true
-      - source: dagu_data
-        target: /home/dagu/.local/share
-        type: volume
-        bind:
-          create_host_path: true
   dbgate:
     container_name: dbgate
     environment:
