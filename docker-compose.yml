@@ -1892,7 +1892,7 @@ services:
       swag_proto: http
       swag_port: 2283
       swag_url: pics.${MY_TLD}
-      swag_server_custom_directive: >-
+      swag_server_custom_directive: |
         location /share {
           proxy_pass http://immich-public-proxy:3000;
           proxy_set_header Host $host;
