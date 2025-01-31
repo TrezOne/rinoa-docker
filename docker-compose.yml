@@ -2004,12 +2004,12 @@ services:
       timeout: 5s
     image: alangrainger/immich-public-proxy:latest
     labels:
-      homepage: enable
-      homepage_proto: http
-      homepage_port: 3000
-      homepage_url: pics.${MY_TLD}
-      homepage.uptime-kuma.enabled: true
-      homepage.uptime-kuma.monitor.url: https://pics.${MY_TLD}
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: pics.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
       homepage.group: Lifestyle
       homepage.name: Immich
       homepage.href: https://pics.${MY_TLD}

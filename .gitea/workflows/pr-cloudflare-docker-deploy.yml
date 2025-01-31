@@ -60,6 +60,18 @@ jobs:
           key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
           restore-keys: |
             ${{ runner.os }}-ansible-
+      - name: Detect modified services
+        id: detect-modified-services
+        run: |
+          git diff --name-only HEAD^ HEAD | grep docker-compose.yml > /dev/null
+          if [ $? -eq 0 ]; then
+            modified_services=$(git diff HEAD^ HEAD -- docker-compose.yml | grep -E '^\+[[:space:]]+[a-zA-Z0-9_-]+:' | sed -E 's/^\+[[:space:]]+([a-zA-Z0-9_-]+):.*/\1/')
+            echo "Modified services: $modified_services"
+            echo "modified_services=$modified_services" >> $GITHUB_OUTPUT
+          else
+            echo "No changes in docker-compose.yml"
+            echo "modified_services=" >> $GITHUB_OUTPUT
+          fi
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
@@ -111,208 +123,196 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
           notification_message: 'Docker Compose dry run completed successfully.'
-  cloudflare-dns-setup:
-    name: Cloudflare DNS Setup
-    needs: [docker-compose-ansible-lints]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-      - name: Cache flarectl CLI
-        uses: actions/cache@v4
-        with:
-          path: ~/.flarectl
-          key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
-      - name: Install flarectl
-        uses: supplypike/setup-bin@v4
-        with:
-          uri: 'https://github.com/cloudflare/cloudflare-go/releases/download/v0.113.0/flarectl_0.113.0_linux_amd64.tar.gz'
-          name: 'flarectl'
-          version: '0.113.0'
-      - name: Cache Subdomain Files
-        uses: actions/cache@v4
-        with:
-          path: |
-            compose_subdomains.txt
-            cloudflare_subdomains.txt
-          key: ${{ runner.os }}-subdomains-${{ hashFiles('docker-compose.yml') }}
-      - name: Grab Subdomains from Docker Compose & Cloudflare
-        id: grab-subdomains
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
-        run: |
-          yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
-          flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
-          notification_message: 'Starting Cloudflare setup'
-      - name: Compare Subdomains
-        id: compare-subdomains
-        uses: LouisBrunner/diff-action@v2.2.0
-        with:
-          old: compose_subdomains.txt
-          new: cloudflare_subdomains.txt
-          mode: addition
-          tolerance: mixed-better
-          output: domain_compare.txt
-      - name: Create Subdomains
-        if: steps.compare-subdomains.outputs.output != ''
-        continue-on-error: true
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
-        run: |
-          cat domain_compare.txt | egrep '^-[a-z]' | sed -e 's|-||g' | while read -r subdomain; do
-            echo "Creating $subdomain.trez.wtf..."
-            flarectl dns create --zone "trez.wtf" --name "${subdomain}" --type=CNAME --content "trez.wtf" --proxy true
-          done
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
-          notification_message: 'Cloudflare DNS setup completed successfully.'
-  regenerate-readme:
-    name: Update README
-    runs-on: ubuntu-latest
-    needs: [cloudflare-dns-setup]
-    outputs:
-      pr-pushed: ${{ steps.commit-readme.outputs.pushed }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install yq
-        uses: dcarbone/install-yq-action@v1
-      - name: Generate service list
-        run: |
-          yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
-      - name: Generate Markdown Table
-        uses: gazab/create-markdown-table@v1
-        id: service-table
-        with:
-          file: ./services.yml
-      - name: Regenerate README
-        run: |
-          echo "# List of Services" > README.md
-          echo -e "\n\n" >> README.md
-          echo "${{ steps.service-table.outputs.table }}" >> README.md
-      - name: Add/Commit README.md
-        id: commit-readme
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: "chore: Update README"
-          add: "README.md"
-  pr-merge:
-    name: PR Merge
-    needs: [regenerate-readme]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install tea
-        uses: supplypike/setup-bin@v4
-        with:
-          uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
-          name: 'tea'
-          version: '0.9.2'
-      - name: PR Merge
-        id: pr_merge
-        run: |
-          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          tea login default gitea-rinoa
-          echo "Merging PR..."
-          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
-          tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" ${pr_index}
-          echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: PR Merge Successful'
-          notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
-  ansible-config-docker-compose-deploy:
-    name: Deploy via Ansible & Docker Compose
-    runs-on: ubuntu-latest
-    needs: [pr-merge]
-    env:
-      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
-      VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
-      DOCKER_HOST: tcp://dockerproxy:2375
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: main
-      - name: Cache Vault install
-        id: cache-vault
-        uses: actions/cache@v4
-        with:
-          path: /opt/hostedtoolcache/vault/1.18.0/x64
-          key: vault-${{ runner.os }}-1.18.0
-      - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "11.0.0"
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
-      - name: Install hvac
-        run: pip install hvac
-      - name: Deploy Docker Configs via Ansible
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          directory: ansible/
-          playbook: docker_config_deploy.yml
-          key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
-          options: |
-            --inventory inventory/hosts.yml
-          requirements: collections/requirements.yml
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
-          notification_message: 'Deployment completed successfully.'
-      - name: Generate .env file for deployment
-        run: |
-           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-      - name: Detect modified services
-        id: detect-modified-services
-        run: |
-          git diff --name-only HEAD^ HEAD | grep docker-compose.yml > /dev/null
-          if [ $? -eq 0 ]; then
-            modified_services=$(git diff HEAD^ HEAD -- docker-compose.yml | grep -E '^\+[[:space:]]+[a-zA-Z0-9_-]+:' | sed -E 's/^\+[[:space:]]+([a-zA-Z0-9_-]+):.*/\1/')
-            echo "Modified services: $modified_services"
-            echo "modified_services=$modified_services" >> $GITHUB_OUTPUT
-          else
-            echo "No changes in docker-compose.yml"
-            echo "modified_services=" >> $GITHUB_OUTPUT
-          fi
-      - name: Docker Compose Deployment
-        if: ${{ steps.detect-modified-services.outputs.modified_services != '' }}
-        continue-on-error: true
-        uses: keatonLiu/docker-compose-remote-action@v1.2
-        with:
-          docker_compose_file: docker-compose.yml
-          docker_args: -d --remove-orphans --pull missing  --parallel -1
-          ssh_user: gitea-deploy
-          ssh_host: 192.168.1.254
-          ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
-          ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Docker Compose Deployment @ Rinoa'
-          notification_message: 'Deployment completed successfully.'
+  # cloudflare-dns-setup:
+  #   name: Cloudflare DNS Setup
+  #   needs: [docker-compose-ansible-lints]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 1
+  #     - name: Cache flarectl CLI
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.flarectl
+  #         key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
+  #     - name: Install flarectl
+  #       uses: supplypike/setup-bin@v4
+  #       with:
+  #         uri: 'https://github.com/cloudflare/cloudflare-go/releases/download/v0.113.0/flarectl_0.113.0_linux_amd64.tar.gz'
+  #         name: 'flarectl'
+  #         version: '0.113.0'
+  #     - name: Cache Subdomain Files
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: |
+  #           compose_subdomains.txt
+  #           cloudflare_subdomains.txt
+  #         key: ${{ runner.os }}-subdomains-${{ hashFiles('docker-compose.yml') }}
+  #     - name: Grab Subdomains from Docker Compose & Cloudflare
+  #       id: grab-subdomains
+  #       env:
+  #         CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  #         CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
+  #       run: |
+  #         yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
+  #         flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
+  #     - name: Gotify Notification
+  #       uses: eikendev/gotify-action@master
+  #       with:
+  #         gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+  #         gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+  #         notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
+  #         notification_message: 'Starting Cloudflare setup'
+  #     - name: Compare Subdomains
+  #       id: compare-subdomains
+  #       uses: LouisBrunner/diff-action@v2.2.0
+  #       with:
+  #         old: compose_subdomains.txt
+  #         new: cloudflare_subdomains.txt
+  #         mode: addition
+  #         tolerance: mixed-better
+  #         output: domain_compare.txt
+  #     - name: Create Subdomains
+  #       if: steps.compare-subdomains.outputs.output != ''
+  #       continue-on-error: true
+  #       env:
+  #         CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  #         CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
+  #       run: |
+  #         cat domain_compare.txt | egrep '^-[a-z]' | sed -e 's|-||g' | while read -r subdomain; do
+  #           echo "Creating $subdomain.trez.wtf..."
+  #           flarectl dns create --zone "trez.wtf" --name "${subdomain}" --type=CNAME --content "trez.wtf" --proxy true
+  #         done
+  #     - name: Gotify Notification
+  #       uses: eikendev/gotify-action@master
+  #       with:
+  #         gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+  #         gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+  #         notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
+  #         notification_message: 'Cloudflare DNS setup completed successfully.'
+  # regenerate-readme:
+  #   name: Update README
+  #   runs-on: ubuntu-latest
+  #   needs: [cloudflare-dns-setup]
+  #   outputs:
+  #     pr-pushed: ${{ steps.commit-readme.outputs.pushed }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Install yq
+  #       uses: dcarbone/install-yq-action@v1
+  #     - name: Generate service list
+  #       run: |
+  #         yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
+  #     - name: Generate Markdown Table
+  #       uses: gazab/create-markdown-table@v1
+  #       id: service-table
+  #       with:
+  #         file: ./services.yml
+  #     - name: Regenerate README
+  #       run: |
+  #         echo "# List of Services" > README.md
+  #         echo -e "\n\n" >> README.md
+  #         echo "${{ steps.service-table.outputs.table }}" >> README.md
+  #     - name: Add/Commit README.md
+  #       id: commit-readme
+  #       uses: EndBug/add-and-commit@v9
+  #       with:
+  #         message: "chore: Update README"
+  #         add: "README.md"
+  # pr-merge:
+  #   name: PR Merge
+  #   needs: [regenerate-readme]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Install tea
+  #       uses: supplypike/setup-bin@v4
+  #       with:
+  #         uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
+  #         name: 'tea'
+  #         version: '0.9.2'
+  #     - name: PR Merge
+  #       id: pr_merge
+  #       run: |
+  #         tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+  #         tea login default gitea-rinoa
+  #         echo "Merging PR..."
+  #         pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
+  #         tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" ${pr_index}
+  #         echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
+  #     - name: Gotify Notification
+  #       uses: eikendev/gotify-action@master
+  #       with:
+  #         gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+  #         gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+  #         notification_title: 'GITEA: PR Merge Successful'
+  #         notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
+  # ansible-config-docker-compose-deploy:
+  #   name: Deploy via Ansible & Docker Compose
+  #   runs-on: ubuntu-latest
+  #   needs: [pr-merge]
+  #   env:
+  #     VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+  #     VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
+  #     DOCKER_HOST: tcp://dockerproxy:2375
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         ref: main
+  #     - name: Cache Vault install
+  #       id: cache-vault
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: /opt/hostedtoolcache/vault/1.18.0/x64
+  #         key: vault-${{ runner.os }}-1.18.0
+  #     - name: Install Ansible
+  #       uses: alex-oleshkevich/setup-ansible@v1.0.1
+  #       with:
+  #         version: "11.0.0"
+  #     - name: Install Vault
+  #       uses: cpanato/vault-installer@main
+  #     - name: Install hvac
+  #       run: pip install hvac
+  #     - name: Deploy Docker Configs via Ansible
+  #       uses: dawidd6/action-ansible-playbook@v2
+  #       with:
+  #         directory: ansible/
+  #         playbook: docker_config_deploy.yml
+  #         key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
+  #         options: |
+  #           --inventory inventory/hosts.yml
+  #         requirements: collections/requirements.yml
+  #         vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+  #     - name: Gotify Notification
+  #       uses: eikendev/gotify-action@master
+  #       with:
+  #         gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+  #         gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+  #         notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
+  #         notification_message: 'Deployment completed successfully.'
+  #     - name: Generate .env file for deployment
+  #       run: |
+  #          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+  #     - name: Docker Compose Deployment
+  #       if: ${{ steps.detect-modified-services.outputs.modified_services != '' }}
+  #       continue-on-error: true
+  #       uses: keatonLiu/docker-compose-remote-action@v1.2
+  #       with:
+  #         docker_compose_file: docker-compose.yml
+  #         docker_args: -d --remove-orphans --pull missing  --parallel -1
+  #         ssh_user: gitea-deploy
+  #         ssh_host: 192.168.1.254
+  #         ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
+  #         ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+  #     - name: Gotify Notification
+  #       uses: eikendev/gotify-action@master
+  #       with:
+  #         gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+  #         gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+  #         notification_title: 'GITEA: Docker Compose Deployment @ Rinoa'
+  #         notification_message: 'Deployment completed successfully.'
