@@ -1846,11 +1846,11 @@ services:
       DB_USERNAME: hortusfox
     image: ghcr.io/danielbrendel/hortusfox-web:latest
     labels:
-      homepage: enable
-      homepage_proto: http
-      homepage_url: plants.${MY_TLD}
-      homepage.uptime-kuma.enabled: true
-      homepage.uptime-kuma.monitor.url: https://plants.${MY_TLD}
+      swag: enable
+      swag_proto: http
+      swag_url: plants.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://plants.${MY_TLD}
       homepage.group: Lifestyle
       homepage.name: HortusFox
       homepage.href: https://plants.${MY_TLD}
@@ -2036,12 +2036,12 @@ services:
       DOCKER_INFLUXDB_INIT_BUCKET: rinoa
     image: influxdb:2-alpine
     labels:
-      homepage: enable
-      homepage_proto: http
-      homepage_port: 8086
-      homepage_url: influxdb.${MY_TLD}
-      homepage.uptime-kuma.enabled: true
-      homepage.uptime-kuma.monitor.url: https://influxdb.${MY_TLD}
+      swag: enable
+      swag_proto: http
+      swag_port: 8086
+      swag_url: influxdb.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://influxdb.${MY_TLD}
       homepage.group: System Administration
       homepage.name: InfluxDBv2
       homepage.href: https://invid.${MY_TLD}
@@ -2079,12 +2079,12 @@ services:
       timeout: 5s
     image: quay.io/invidious/invidious:latest
     labels:
-      homepage: enable
-      homepage_proto: http
-      homepage_port: 3000
-      homepage_url: invid.${MY_TLD}
-      homepage.uptime-kuma.enabled: true
-      homepage.uptime-kuma.monitor.url: https://invid.${MY_TLD}
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: invid.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://invid.${MY_TLD}
       homepage.group: Social
       homepage.name: Invidious
       homepage.href: https://invid.${MY_TLD}
