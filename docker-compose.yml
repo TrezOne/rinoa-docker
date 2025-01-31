@@ -2044,7 +2044,7 @@ services:
       swag.uptime-kuma.monitor.url: https://influxdb.${MY_TLD}
       homepage.group: System Administration
       homepage.name: InfluxDBv2
-      homepage.href: https://invid.${MY_TLD}
+      homepage.href: https://influxdb.${MY_TLD}
       homepage.icon: influxdb.svg
       homepage.description: Scalable datastore for metrics, events, and real-time analytics
     ports:
