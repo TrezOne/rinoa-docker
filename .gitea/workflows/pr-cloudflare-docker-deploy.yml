@@ -286,7 +286,20 @@ jobs:
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+      - name: Detect modified services
+        id: detect-modified-services
+        run: |
+          git diff --name-only HEAD^ HEAD | grep docker-compose.yml > /dev/null
+          if [ $? -eq 0 ]; then
+            modified_services=$(git diff HEAD^ HEAD -- docker-compose.yml | grep -E '^\+[[:space:]]+[a-zA-Z0-9_-]+:' | sed -E 's/^\+[[:space:]]+([a-zA-Z0-9_-]+):.*/\1/')
+            echo "Modified services: $modified_services"
+            echo "modified_services=$modified_services" >> $GITHUB_OUTPUT
+          else
+            echo "No changes in docker-compose.yml"
+            echo "modified_services=" >> $GITHUB_OUTPUT
+          fi
       - name: Docker Compose Deployment
+        if: ${{ steps.detect-modified-services.outputs.modified_services != '' }}
         continue-on-error: true
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
