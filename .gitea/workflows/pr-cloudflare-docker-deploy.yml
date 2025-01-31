@@ -299,6 +299,7 @@ jobs:
             echo "modified_services=" >> $GITHUB_OUTPUT
           fi
       - name: Docker Compose Deployment
+        if: ${{ steps.detect-modified-services.outputs.modified_services != '' }}
         continue-on-error: true
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
