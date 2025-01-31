@@ -192,19 +192,19 @@ jobs:
         uses: actions/checkout@v4
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
-      - name: Fetch main branch for comparison
-        run: |
-          git fetch origin main:main
-      - name: Compare services using yq
-        id: compare-services
-        run: |
-          current_services=$(yq '.services | to_entries' docker-compose.yml)
-          git show main:docker-compose.yml > main_compose.yml
-          main_services=$(yq '.services | to_entries' main_compose.yml)
-          modified_services_file=$(comm -13 <(echo "$main_services") <(echo "$current_services") > changes_compose.yml)
-          modified_services=${egrep '^  [a-z]' changes.yml | sed -e 's|^  ||g' -e 's|:||g' | sed ':a;N;$!ba;s/\n/ /g'}
-          echo "Modified services: $modified_services"
-          echo "modified_services=$modified_services" >> $GITHUB_OUTPUT
+      # - name: Fetch main branch for comparison
+      #   run: |
+      #     git fetch origin main:main
+      # - name: Compare services using yq
+      #   id: compare-services
+      #   run: |
+      #     current_services=$(yq '.services | to_entries' docker-compose.yml)
+      #     git show main:docker-compose.yml > main_compose.yml
+      #     main_services=$(yq '.services | to_entries' main_compose.yml)
+      #     modified_services_file=$(comm -13 <(echo "$main_services") <(echo "$current_services") > changes_compose.yml)
+      #     modified_services=${egrep '^  [a-z]' changes.yml | sed -e 's|^  ||g' -e 's|:||g' | sed ':a;N;$!ba;s/\n/ /g'}
+      #     echo "Modified services: $modified_services"
+      #     echo "modified_services=$modified_services" >> $GITHUB_OUTPUT
       - name: Generate service list
         run: |
           yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
