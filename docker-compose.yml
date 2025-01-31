@@ -1939,6 +1939,26 @@ services:
     healthcheck:
       disable: false
     image: ghcr.io/immich-app/immich-server:release
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 2283
+      swag_url: pics.${MY_TLD}
+      swag_server_custom_directive: >-
+        location /share {
+          proxy_pass http://immich-public-proxy:3000;
+          proxy_set_header Host $$host;
+          proxy_set_header X-Real-IP $$remote_addr;
+          proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $$scheme;
+        }
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
+      homepage.group: Lifestyle
+      homepage.name: Immich
+      homepage.href: https://pics.${MY_TLD}
+      homepage.icon: immich.svg
+      homepage.description: High performance self-hosted photo and video management solution
     ports:
       - 2283:2283
     restart: always
@@ -2003,18 +2023,6 @@ services:
       start_period: 10s
       timeout: 5s
     image: alangrainger/immich-public-proxy:latest
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 3000
-      swag_url: pics.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
-      homepage.group: Lifestyle
-      homepage.name: Immich
-      homepage.href: https://pics.${MY_TLD}
-      homepage.icon: immich.svg
-      homepage.description: High performance self-hosted photo and video management solution
     restart: always
   immich-power-tools:
     container_name: immich-power-tools
