@@ -1896,6 +1896,9 @@ services:
         location /share {
               proxy_pass http://immich-public-proxy:3000;
         }
+        location /tools {
+              proxy_pass http://immich-public-proxy:3000;
+        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
       homepage.group: Lifestyle
@@ -1971,9 +1974,14 @@ services:
   immich-power-tools:
     container_name: immich-power-tools
     environment:
+      DB_DATABASE_NAME: immich
+      DB_HOSTNAME: immich-pg-db
+      DB_PORT: 5432
+      DB_USERNAME: immich
+      DB_PASSWORD: ${IMMICH_DB_PASSWORD}
+      EXTERNAL_IMMICH_URL: https://pics.trez.wtf
       IMMICH_API_KEY: ${IMMICH_POWER_TOOLS_KEY}
       IMMICH_URL: http://immich-server:2283
-      EXTERNAL_IMMICH_URL: https://pics.trez.wtf
     image: ghcr.io/varun-raj/immich-power-tools:latest
     ports:
       - 54018:3000
