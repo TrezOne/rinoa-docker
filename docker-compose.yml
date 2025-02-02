@@ -2022,6 +2022,7 @@ services:
       homepage.description: Scalable datastore for metrics, events, and real-time analytics
     ports:
       - 8086:8086
+    restart: unless-stopped
     volumes:
       - influxdb2-data:/var/lib/influxdb2
       - influxdb2-config:/etc/influxdb2
