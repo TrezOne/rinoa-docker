@@ -1901,7 +1901,7 @@ services:
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
-      homepage.group: Lifestyle
+      homepage.group: Media Library
       homepage.name: Immich
       homepage.href: https://pics.${MY_TLD}
       homepage.icon: immich.svg
@@ -1970,6 +1970,12 @@ services:
       start_period: 10s
       timeout: 5s
     image: alangrainger/immich-public-proxy:latest
+    labels:
+      homepage.group: Lifestyle
+      homepage.name: Immich Public Proxy
+      homepage.href: https://pics.${MY_TLD}/share
+      homepage.icon: sh-immich-public-proxy.svg
+      homepage.description: Immich Proxy for public sharing
     restart: always
   immich-power-tools:
     container_name: immich-power-tools
@@ -1983,6 +1989,12 @@ services:
       IMMICH_API_KEY: ${IMMICH_POWER_TOOLS_KEY}
       IMMICH_URL: http://immich-server:2283
     image: ghcr.io/varun-raj/immich-power-tools:latest
+    labels:
+      homepage.group: Lifestyle
+      homepage.name: Immich Public Proxy
+      homepage.href: https://pics.${MY_TLD}/share
+      homepage.icon: sh-immich-power-tools.svg
+      homepage.description: Immich Proxy for public sharing
     ports:
       - 54018:3000
   influxdb2:
