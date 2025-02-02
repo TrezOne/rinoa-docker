@@ -1897,7 +1897,7 @@ services:
               proxy_pass http://immich-public-proxy:3000;
         }
         location /tools {
-              proxy_pass http://immich-public-proxy:3000;
+              proxy_pass http://immich-power-tools:3000;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
