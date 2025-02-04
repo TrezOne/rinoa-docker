@@ -356,6 +356,8 @@ services:
       POSTGRES_HOST: bitmagnet-pg-db
       POSTGRES_PASSWORD: ${BITMAGNET_POSTGRESQL_PASSWORD}
       POSTGRES_USER: bitmagnet
+    extra_hosts:
+      - bitmagnet-pg-db:192.168.55.8
     image: ghcr.io/bitmagnet-io/bitmagnet:latest
     labels:
       homepage.group: Downloaders
