@@ -22,8 +22,6 @@
 | crowdsec | crowdsecurity/crowdsec:latest |
 | crowdsec-dashboard | metabase/metabase |
 | czkawka | jlesage/czkawka |
-| dagu-scheduler | ghcr.io/dagu-org/dagu:latest |
-| dagu-server | ghcr.io/dagu-org/dagu:latest |
 | dbgate | dbgate/dbgate:alpine |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
@@ -58,8 +56,8 @@
 | influxdb2 | influxdb:2-alpine |
 | invidious | quay.io/invidious/invidious:latest |
 | invidious-db | docker.io/library/postgres:14 |
-| invoice_ninja | invoiceninja/invoiceninja:5 |
-| invoice_ninja_proxy | nginx |
+| invoice-ninja | invoiceninja/invoiceninja-debian:5 |
+| invoice-ninja_proxy | nginx |
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
 | jitsi-etherpad | etherpad/etherpad:1.8.6 |
@@ -92,6 +90,7 @@
 | netbird-coturn | coturn/coturn:latest |
 | netbox | lscr.io/linuxserver/netbox:latest |
 | netbox-db | postgres:17-alpine |
+| netdata | netdata/netdata:stable |
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
@@ -144,10 +143,6 @@
 | wallabag | wallabag/wallabag |
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
-| wazuh-agent | kennyopennix/wazuh-agent:latest |
-| wazuh-dashboard | wazuh/wazuh-dashboard: |
-| wazuh-indexer | wazuh/wazuh-indexer: |
-| wazuh-manager | wazuh/wazuh-manager: |
 | web-check | lissy93/web-check |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
