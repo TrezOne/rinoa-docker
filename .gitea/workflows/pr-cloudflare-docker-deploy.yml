@@ -181,7 +181,7 @@ jobs:
           notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
           notification_message: 'Cloudflare DNS setup completed successfully.'
   regenerate-readme-modified-services:
-    name: Update README
+    name: Update README & Generate List of Modified Services
     runs-on: ubuntu-latest
     needs: [cloudflare-dns-setup]
     outputs:
