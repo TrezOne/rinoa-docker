@@ -400,7 +400,6 @@ services:
     networks:
       bitmagnet:
         ipv4_address: 192.168.55.8
-      default: null
     restart: unless-stopped
     shm_size: 1g
     volumes:
@@ -3046,66 +3045,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  lobe-chat:
-    container_name: lobe-chat
-    depends_on:
-      lobe-chat-pg-db:
-        condition: service_started
-        required: true
-      minio:
-        condition: service_started
-        required: true
-      zitadel:
-        condition: service_started
-        required: true
-    environment:
-      APP_URL: https://ai.trez.wtf/
-      KEY_VAULTS_SECRET: ${LOBECHAT_KEY_VAULT_SECRET}
-      DATABASE_URL: postgresql://lobe:${LOBECHAT_PG_DB_PASSWD}@lobe-chat-pg-db:5432/lobe
-      NEXTAUTH_URL: https://lobe.example.com/api/auth
-      NEXT_AUTH_SECRET: ${LOBECHAT_NEXT_AUTH_SECRET}
-      NEXT_AUTH_SSO_PROVIDERS: zitadel
-      AUTH_ZITADEL_ID: ${LOBECHAT_ZITADEL_CLIENT_ID}
-      AUTH_ZITADEL_SECRET: ${LOBECHAT_ZITADEL_CLIENT_SECRET}
-      AUTH_ZITADEL_ISSUER: https://id.trez.wtf
-      S3_ACCESS_KEY_ID: ${LOBECHAT_S3_ACCESS_KEY_ID}
-      S3_SECRET_ACCESS_KEY: ${LOBECHAT_S3_SECRET_ACCESS_KEY}
-      S3_ENDPOINT: http://minio:9000
-      S3_BUCKET: lobechat
-      S3_PUBLIC_DOMAIN: https://s3.trez.wtf
-      S3_ENABLE_PATH_STYLE: 1+
-      OPENAI_API_KEY: ${LOBECHAT_OPENAI_API_KEY}
-      ANTHROPIC_API_KEY: ${LOBECHAT_ANTHROPIC_API_KEY}
-      GITHUB_TOKEN: ${LOBECHAT_GITHUB_TOKEN}
-      OLLAMA_MODEL_LIST: +llama3.1:8b,+nomic-embed-text:latest,+starcoder2:3b,+llama3.1:latest,+llama2:7B
-      MISTRAL_API_KEY: ${LOBECHAT_MISTRAL_API_KEY}
-      GROQ_API_KEY: ${LOBECHAT_GROQAI_API_KEY}
-    image: lobehub/lobe-chat-database
-    labels:
-      homepage.group: Personal Services
-      homepage.name: LobeChat
-      homepage.href: https://ai.${MY_TLD}
-      homepage.icon: lobe-chat.png
-      homepage.description: An open-source, modern-design ChatGPT/LLMs UI/Framework
-      swag: enable
-      swag_proto: http
-      swag_port: 3210
-      swag_url: ai.${MY_TLD}
-    ports:
-      - 3210:3210
-    restart: unless-stopped
-  lobe-chat-pg-db:
-    container_name: lobe-chat-pg-db
-    environment:
-      POSTGRES_DB: lobe
-      POSTGRES_USER: lobe
-      POSTGRES_PASSWORD: ${LOBECHAT_PG_DB_PASSWD}
-    expose:
-      - 5432
-    image: pgvector/pgvector:pg16
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/lobechat/db:/var/lib/postgresql/data
-    restart: unless-stopped
   maloja:
     container_name: maloja
     environment:
@@ -3632,10 +3571,19 @@ services:
       - SYS_PTRACE
       - SYS_ADMIN
     container_name: netdata
+    depends_on:
+      docker-socket-proxy:
+        condition: service_started
+        required: true
     environment:
       DOCKER_HOST: tcp://dockerproxy:2375
     image: netdata/netdata:stable
     labels:
+      homepage.group: Infrastructure/App Monitoring
+      homepage.name: Netdata
+      homepage.href: https://netdata.${MY_TLD}
+      homepage.icon: netdata.svg
+      homepage.description: Real-time monitoring/observcability platform
       homepage.widget.type: netdata
       homepage.widget.url: http://netdata:19999
       swag: enable
@@ -3694,19 +3642,11 @@ services:
   ollama:
     container_name: ollama
     image: ollama/ollama
-    networks:
-      default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "11434"
-        target: 11434
-    restart: always
+      - 11434:11434
+    restart: unless-stopped
     volumes:
-      - source: ollama
-        target: /root/.ollama
-        type: volume
-        volume: {}
+      - ollama:/root/.ollama
   ombi:
     container_name: ombi
     environment:
@@ -3751,6 +3691,34 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  open-webui:
+    container_name: open-webui
+    depends_on:
+      ollama:
+        condition: service_started
+        required: true
+        restart: true
+    environment:
+      ENABLE_OLLAMA_API: true
+      OLLAMA_BASE_URLS: http://ollama:11434
+    image: ghcr.io/open-webui/open-webui:main
+    labels:
+      homepage.group: Personal Services
+      homepage.name: Open-WebUI
+      homepage.href: https://ai.${MY_TLD}
+      homepage.icon: open-webui.png
+      homepage.description: Local AI chat using Ollama-downloaded models
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: ai.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}
+    ports:
+      - 10863:8080
+    restart: unless-stopped
+    volumes:
+      - open-webui:/app/backend/data
   paperless-ngx:
     container_name: paperless-ngx
     depends_on:
@@ -7457,8 +7425,6 @@ volumes:
     name: joplin_data
   lldap_data:
     name: lldap_data
-  localai_data:
-    name: localai_data
   mastodon-pg-db:
     name: mastodon-pg-db
   mongodb_config:
@@ -7483,6 +7449,8 @@ volumes:
     name: nextcloud_aio_mastercontainer
   ollama:
     name: ollama
+  open-webui:
+    name: open-webui
   paperless-ngx-data:
     name: paperless-ngx-data
   paperless-ngx-media:
