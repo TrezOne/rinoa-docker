@@ -1906,6 +1906,10 @@ services:
       homepage.href: https://pics.${MY_TLD}
       homepage.icon: immich.svg
       homepage.description: High performance self-hosted photo and video management solution
+      homepage.widget.type: immich
+      homepage.widget.url: http://immich-server:2283
+      homepage.widget.key: ${IMMICH_POWER_TOOLS_KEY}
+      homepage.widget.version: 2
     ports:
       - 2283:2283
     restart: always
@@ -1976,6 +1980,10 @@ services:
       homepage.href: https://pics.${MY_TLD}/share
       homepage.icon: sh-immich-public-proxy.svg
       homepage.description: Immich Proxy for public sharing
+      homepage.widget.type: immich
+      homepage.widget.url: http://immich-server:2283
+      homepage.widget.key: ${IMMICH_POWER_TOOLS_KEY}
+      homepage.widget.version: 2
     restart: always
   immich-power-tools:
     container_name: immich-power-tools
@@ -2101,8 +2109,8 @@ services:
         type: bind
         bind:
           create_host_path: true
-  invoice_ninja:
-    container_name: invoice_ninja
+  invoice-ninja:
+    container_name: invoice-ninja
     depends_on:
       mariadb:
         condition: service_started
@@ -2138,7 +2146,7 @@ services:
       TRUSTED_PROXIES: 172.18.0.0/16
     expose:
       - 9000
-    image: invoiceninja/invoiceninja:5
+    image: invoiceninja/invoiceninja-debian:5
     networks:
       default: null
     ports:
@@ -2148,32 +2156,17 @@ services:
         target: 8003
     restart: always
     volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/app/public
-        target: /var/www/app/public
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/app/storage
-        target: /var/www/app/storage
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/php/php.ini
-        target: /usr/local/etc/php/php.ini
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/invoice-ninja/php/php-cli.ini
-        target: /usr/local/etc/php/php-cli.ini
-        type: bind
-        bind:
-          create_host_path: true
-  invoice_ninja_proxy:
-    container_name: invoice_ninja_proxy
+      - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/invoice-ninja.env:/var/www/html/.env
+      - invoice-ninja_cache:/var/www/html/bootstrap/cache
+      - invoice-ninja_public:/var/www/html/public
+      - invoice-ninja_storage:/var/www/html/storage
+  invoice-ninja_proxy:
+    container_name: invoice-ninja_proxy
     depends_on:
-      invoice_ninja:
+      invoice-ninja:
         condition: service_started
         required: true
+        restart: true
     environment:
       APP_DEBUG: true
       APP_KEY: ${IN_APP_KEY}
@@ -3634,6 +3627,41 @@ services:
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
+  netdata:
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    container_name: netdata
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+    image: netdata/netdata:stable
+    labels:
+      homepage.widget.type: netdata
+      homepage.widget.url: http://netdata:19999
+      swag: enable
+      swag_port: 19999
+      swag_proto: http
+      swag_url: netdata.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://netdata.${MY_TLD}
+    pid: host
+    ports:
+      - 19999:19999
+    restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/netdata:/etc/netdata
+      - netdata-lib:/var/lib/netdata
+      - netdata-cache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
   nextcloud:
     container_name: nextcloud-aio-mastercontainer
     environment:
@@ -3931,6 +3959,10 @@ services:
       homepage.href: https://portainer.${MY_TLD}
       homepage.icon: portainer.svg
       homepage.description: Service delivery platform for containerized applications
+      homepage.widget.type: portainer
+      homepage.widget.url: http://portainer:9000
+      homepage.widget.env: 20
+      homepage.widget.key: ${PORTAINER_HOMEPAGE_TOKEN}
     restart: unless-stopped
     volumes:
         - portainer-data:/data
@@ -6595,267 +6627,267 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
-  wazuh-agent:
-    container_name: wazuh.agent
-    environment:
-      JOIN_MANAGER_PROTOCOL: https
-      JOIN_MANAGER_MASTER_HOST: wazuh.manager
-      JOIN_MANAGER_WORKER_HOST: wazuh.manager
-      JOIN_MANAGER_USER: wazuh-wui
-      JOIN_MANAGER_PASSWORD: ${WAZUH_API_PASSWORD}
-      JOIN_MANAGER_API_PORT: 55000
-      JOIN_MANAGER_PORT: 1514
-      VIRUS_TOTAL_KEY: ${VIRUS_TOTAL_API_KEY}
-      DOCKER_HOST: tcp://dockerproxy:2375
-    hostname: wazuh.agent
-    image: kennyopennix/wazuh-agent:latest
-    networks:
-      default: null
-    restart: unless-stopped
-  wazuh-dashboard:
-    container_name: wazuh-dashboard
-    depends_on:
-      wazuh-indexer:
-        condition: service_started
-        required: true
-      wazuh-manager:
-        condition: service_started
-        required: true
-        restart: true
-    environment:
-      INDEXER_USERNAME: admin
-      INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
-      WAZUH_API_URL: https://wazuh.manager
-      DASHBOARD_USERNAME: kibanaserver
-      DASHBOARD_PASSWORD: ${WAZUH_KIBANA_PASSWORD}
-      API_USERNAME: wazuh-wui
-      API_PASSWORD: ${WAZUH_API_PASSWORD}
-    hostname: wazuh-dashboard
-    image: wazuh/wazuh-dashboard:${WAZUH_VERSION}
-    labels:
-      swag: enable
-      swag_proto: https
-      swag_port: 5601
-      swag_url: wsec.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://wsec.${MY_TLD}
-      homepage.group: Privacy/Security
-      homepage.name: Wazuh
-      homepage.href: https://wsec.${MY_TLD}
-      homepage.icon: wazuh.svg
-      homepage.description: OSS Security Platform for XDR/SIEM
-    links:
-      - wazuh-indexer:wazuh-indexer
-      - wazuh-manager:wazuh-manager
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "5601"
-        target: 5601
-    restart: always
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.dashboard.pem
-        target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.dashboard-key.pem
-        target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
-        target: /usr/share/wazuh-dashboard/certs/root-ca.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/opensearch_dashboards.yml
-        target: /usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/wazuh.yml
-        target: /usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
-        type: bind
-        bind:
-          create_host_path: true
-      - source: wazuh-dashboard-config
-        target: /usr/share/wazuh-dashboard/data/wazuh/config
-        type: volume
-        volume: {}
-      - source: wazuh-dashboard-custom
-        target: /usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom
-        type: volume
-        volume: {}
-  wazuh-indexer:
-    container_name: wazuh-indexer
-    environment:
-      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
-    hostname: wazuh-indexer
-    image: wazuh/wazuh-indexer:${WAZUH_VERSION}
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "9200"
-        target: 9200
-    restart: always
-    ulimits:
-      memlock:
-        hard: -1
-        soft: -1
-      nofile:
-        hard: 65536
-        soft: 65536
-    volumes:
-      - source: wazuh-indexer-data
-        target: /var/lib/wazuh-indexer
-        type: volume
-        volume: {}
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
-        target: /usr/share/wazuh-indexer/certs/root-ca.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.indexer-key.pem
-        target: /usr/share/wazuh-indexer/certs/wazuh.indexer.key
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.indexer.pem
-        target: /usr/share/wazuh-indexer/certs/wazuh.indexer.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/admin.pem
-        target: /usr/share/wazuh-indexer/certs/admin.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/admin-key.pem
-        target: /usr/share/wazuh-indexer/certs/admin-key.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/wazuh.indexer.yml
-        target: /usr/share/wazuh-indexer/opensearch.yml
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/internal_users.yml
-        target: /usr/share/wazuh-indexer/opensearch-security/internal_users.yml
-        type: bind
-        bind:
-          create_host_path: true
-  wazuh-manager:
-    container_name: wazuh-manager
-    environment:
-      INDEXER_URL: https://wazuh.indexer:9200
-      INDEXER_USERNAME: admin
-      INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
-      FILEBEAT_SSL_VERIFICATION_MODE: full
-      SSL_CERTIFICATE_AUTHORITIES: /etc/ssl/root-ca.pem
-      SSL_CERTIFICATE: /etc/ssl/filebeat.pem
-      SSL_KEY: /etc/ssl/filebeat.key
-      API_USERNAME: wazuh-wui
-      API_PASSWORD: ${WAZUH_API_PASSWORD}
-    hostname: wazuh-manager
-    image: wazuh/wazuh-manager:${WAZUH_VERSION}
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "1514"
-        target: 1514
-      - mode: ingress
-        protocol: tcp
-        published: "1515"
-        target: 1515
-      - mode: ingress
-        protocol: udp
-        published: "514"
-        target: 514
-      - mode: ingress
-        protocol: tcp
-        published: "55000"
-        target: 55000
-    restart: always
-    ulimits:
-      memlock:
-        hard: -1
-        soft: -1
-      nofile:
-        hard: 655360
-        soft: 655360
-    volumes:
-      - source: wazuh_api_configuration
-        target: /var/ossec/api/configuration
-        type: volume
-        volume: {}
-      - source: wazuh_etc
-        target: /var/ossec/etc
-        type: volume
-        volume: {}
-      - source: wazuh_logs
-        target: /var/ossec/logs
-        type: volume
-        volume: {}
-      - source: wazuh_queue
-        target: /var/ossec/queue
-        type: volume
-        volume: {}
-      - source: wazuh_var_multigroups
-        target: /var/ossec/var/multigroups
-        type: volume
-        volume: {}
-      - source: wazuh_integrations
-        target: /var/ossec/integrations
-        type: volume
-        volume: {}
-      - source: wazuh_active_response
-        target: /var/ossec/active-response/bin
-        type: volume
-        volume: {}
-      - source: wazuh_agentless
-        target: /var/ossec/agentless
-        type: volume
-        volume: {}
-      - source: wazuh_wodles
-        target: /var/ossec/wodles
-        type: volume
-        volume: {}
-      - source: filebeat_etc
-        target: /etc/filebeat
-        type: volume
-        volume: {}
-      - source: filebeat_var
-        target: /var/lib/filebeat
-        type: volume
-        volume: {}
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
-        target: /etc/ssl/root-ca.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.manager.pem
-        target: /etc/ssl/filebeat.pem
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.manager-key.pem
-        target: /etc/ssl/filebeat.key
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/wazuh_manager.conf
-        target: /wazuh-config-mount/etc/ossec.conf
-        type: bind
-        bind:
-          create_host_path: true
+  # wazuh-agent:
+  #   container_name: wazuh.agent
+  #   environment:
+  #     JOIN_MANAGER_PROTOCOL: https
+  #     JOIN_MANAGER_MASTER_HOST: wazuh.manager
+  #     JOIN_MANAGER_WORKER_HOST: wazuh.manager
+  #     JOIN_MANAGER_USER: wazuh-wui
+  #     JOIN_MANAGER_PASSWORD: ${WAZUH_API_PASSWORD}
+  #     JOIN_MANAGER_API_PORT: 55000
+  #     JOIN_MANAGER_PORT: 1514
+  #     VIRUS_TOTAL_KEY: ${VIRUS_TOTAL_API_KEY}
+  #     DOCKER_HOST: tcp://dockerproxy:2375
+  #   hostname: wazuh.agent
+  #   image: kennyopennix/wazuh-agent:latest
+  #   networks:
+  #     default: null
+  #   restart: unless-stopped
+  # wazuh-dashboard:
+  #   container_name: wazuh-dashboard
+  #   depends_on:
+  #     wazuh-indexer:
+  #       condition: service_started
+  #       required: true
+  #     wazuh-manager:
+  #       condition: service_started
+  #       required: true
+  #       restart: true
+  #   environment:
+  #     INDEXER_USERNAME: admin
+  #     INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
+  #     WAZUH_API_URL: https://wazuh.manager
+  #     DASHBOARD_USERNAME: kibanaserver
+  #     DASHBOARD_PASSWORD: ${WAZUH_KIBANA_PASSWORD}
+  #     API_USERNAME: wazuh-wui
+  #     API_PASSWORD: ${WAZUH_API_PASSWORD}
+  #   hostname: wazuh-dashboard
+  #   image: wazuh/wazuh-dashboard:${WAZUH_VERSION}
+  #   labels:
+  #     swag: enable
+  #     swag_proto: https
+  #     swag_port: 5601
+  #     swag_url: wsec.${MY_TLD}
+  #     swag.uptime-kuma.enabled: true
+  #     swag.uptime-kuma.monitor.url: https://wsec.${MY_TLD}
+  #     homepage.group: Privacy/Security
+  #     homepage.name: Wazuh
+  #     homepage.href: https://wsec.${MY_TLD}
+  #     homepage.icon: wazuh.svg
+  #     homepage.description: OSS Security Platform for XDR/SIEM
+  #   links:
+  #     - wazuh-indexer:wazuh-indexer
+  #     - wazuh-manager:wazuh-manager
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - mode: ingress
+  #       protocol: tcp
+  #       published: "5601"
+  #       target: 5601
+  #   restart: always
+  #   volumes:
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.dashboard.pem
+  #       target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.dashboard-key.pem
+  #       target: /usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
+  #       target: /usr/share/wazuh-dashboard/certs/root-ca.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/opensearch_dashboards.yml
+  #       target: /usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/dashboard/wazuh.yml
+  #       target: /usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: wazuh-dashboard-config
+  #       target: /usr/share/wazuh-dashboard/data/wazuh/config
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh-dashboard-custom
+  #       target: /usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom
+  #       type: volume
+  #       volume: {}
+  # wazuh-indexer:
+  #   container_name: wazuh-indexer
+  #   environment:
+  #     OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+  #   hostname: wazuh-indexer
+  #   image: wazuh/wazuh-indexer:${WAZUH_VERSION}
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - mode: ingress
+  #       protocol: tcp
+  #       published: "9200"
+  #       target: 9200
+  #   restart: always
+  #   ulimits:
+  #     memlock:
+  #       hard: -1
+  #       soft: -1
+  #     nofile:
+  #       hard: 65536
+  #       soft: 65536
+  #   volumes:
+  #     - source: wazuh-indexer-data
+  #       target: /var/lib/wazuh-indexer
+  #       type: volume
+  #       volume: {}
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
+  #       target: /usr/share/wazuh-indexer/certs/root-ca.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.indexer-key.pem
+  #       target: /usr/share/wazuh-indexer/certs/wazuh.indexer.key
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.indexer.pem
+  #       target: /usr/share/wazuh-indexer/certs/wazuh.indexer.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/admin.pem
+  #       target: /usr/share/wazuh-indexer/certs/admin.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/admin-key.pem
+  #       target: /usr/share/wazuh-indexer/certs/admin-key.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/wazuh.indexer.yml
+  #       target: /usr/share/wazuh-indexer/opensearch.yml
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/indexer/internal_users.yml
+  #       target: /usr/share/wazuh-indexer/opensearch-security/internal_users.yml
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  # wazuh-manager:
+  #   container_name: wazuh-manager
+  #   environment:
+  #     INDEXER_URL: https://wazuh.indexer:9200
+  #     INDEXER_USERNAME: admin
+  #     INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
+  #     FILEBEAT_SSL_VERIFICATION_MODE: full
+  #     SSL_CERTIFICATE_AUTHORITIES: /etc/ssl/root-ca.pem
+  #     SSL_CERTIFICATE: /etc/ssl/filebeat.pem
+  #     SSL_KEY: /etc/ssl/filebeat.key
+  #     API_USERNAME: wazuh-wui
+  #     API_PASSWORD: ${WAZUH_API_PASSWORD}
+  #   hostname: wazuh-manager
+  #   image: wazuh/wazuh-manager:${WAZUH_VERSION}
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - mode: ingress
+  #       protocol: tcp
+  #       published: "1514"
+  #       target: 1514
+  #     - mode: ingress
+  #       protocol: tcp
+  #       published: "1515"
+  #       target: 1515
+  #     - mode: ingress
+  #       protocol: udp
+  #       published: "514"
+  #       target: 514
+  #     - mode: ingress
+  #       protocol: tcp
+  #       published: "55000"
+  #       target: 55000
+  #   restart: always
+  #   ulimits:
+  #     memlock:
+  #       hard: -1
+  #       soft: -1
+  #     nofile:
+  #       hard: 655360
+  #       soft: 655360
+  #   volumes:
+  #     - source: wazuh_api_configuration
+  #       target: /var/ossec/api/configuration
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_etc
+  #       target: /var/ossec/etc
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_logs
+  #       target: /var/ossec/logs
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_queue
+  #       target: /var/ossec/queue
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_var_multigroups
+  #       target: /var/ossec/var/multigroups
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_integrations
+  #       target: /var/ossec/integrations
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_active_response
+  #       target: /var/ossec/active-response/bin
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_agentless
+  #       target: /var/ossec/agentless
+  #       type: volume
+  #       volume: {}
+  #     - source: wazuh_wodles
+  #       target: /var/ossec/wodles
+  #       type: volume
+  #       volume: {}
+  #     - source: filebeat_etc
+  #       target: /etc/filebeat
+  #       type: volume
+  #       volume: {}
+  #     - source: filebeat_var
+  #       target: /var/lib/filebeat
+  #       type: volume
+  #       volume: {}
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/root-ca.pem
+  #       target: /etc/ssl/root-ca.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.manager.pem
+  #       target: /etc/ssl/filebeat.pem
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/generator/wazuh.manager-key.pem
+  #       target: /etc/ssl/filebeat.key
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/wazuh/manager/wazuh_manager.conf
+  #       target: /wazuh-config-mount/etc/ossec.conf
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
   web-check:
     container_name: web-check
     image: lissy93/web-check
@@ -7411,8 +7443,12 @@ volumes:
     name: influxdb2-config
   invidious-postgres:
     name: invidious-postgres
-  invoice_ninja_public:
-    name: invoice_ninja_public
+  invoice-ninja_cache:
+    name: invoice-ninja_cache
+  invoice-ninja_public:
+    name: invoice-ninja_public
+  invoice-ninja_storage:
+    name: invoice-ninja_storage
   jitsi-web-admin-theme:
     name: jitsi-web-admin-theme
   jitsi-web-admin-upload:
@@ -7439,6 +7475,10 @@ volumes:
     name: netbird-letsencrypt
   netbox-pg-db:
     name: netbox-pg-db
+  netdata-cache:
+    name: netdata-cache
+  netdata-lib:
+    name: netdata-lib
   nextcloud_aio_mastercontainer:
     name: nextcloud_aio_mastercontainer
   ollama:
