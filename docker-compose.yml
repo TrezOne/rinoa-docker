@@ -3581,7 +3581,7 @@ services:
       DOCKER_HOST: tcp://dockerproxy:2375
     image: netdata/netdata:stable
     labels:
-      homepage.group: Infrastructure/App Monitoring
+      homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Netdata
       homepage.href: https://netdata.${MY_TLD}
       homepage.icon: netdata.svg
