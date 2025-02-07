@@ -1999,7 +1999,7 @@ services:
     image: ghcr.io/varun-raj/immich-power-tools:latest
     labels:
       homepage.group: Lifestyle
-      homepage.name: Immich Public Proxy
+      homepage.name: Immich Power Tools
       homepage.href: https://pics.${MY_TLD}/tools
       homepage.icon: sh-immich-power-tools.png
       homepage.description: Tools for Immich
