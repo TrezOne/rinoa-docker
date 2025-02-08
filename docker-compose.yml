@@ -4458,6 +4458,10 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: scrape.${MY_TLD}
+      swag_server_custom_directive: |
+        location /api {
+              proxy_pass http://scraperr-api:8000;
+        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
     networks:
@@ -4477,11 +4481,6 @@ services:
     expose:
       - 8000
     image: jpyles0524/scraperr_api:latest
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 3000
-      swag_server_custom_directive: "location /api/ {  rewrite ^/api(/.*)$ /$1 break ; proxy_pass http://scraperr:3000; }"
     networks:
       default: null
     restart: unless-stopped
