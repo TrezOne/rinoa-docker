@@ -1882,7 +1882,7 @@ services:
       DB_PORT: 5432
       DB_USERNAME: immich
       DB_PASSWORD: ${IMMICH_DB_PASSWORD}
-      IMMICH_LOG_LEVEL: debug
+      IMMICH_LOG_LEVEL: error
       IMMICH_TELEMETRY_INCLUDE: all
     healthcheck:
       disable: false
