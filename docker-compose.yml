@@ -3491,7 +3491,7 @@ services:
       - netbird-letsencrypt:/etc/letsencrypt:ro
       - ${DOCKER_VOLUME_CONFIG}/netbird/management.json:/etc/netbird/management.json
     ports:
-      - 33073:443 #API port
+      - 23833:443 #API port
   netbird-coturn:
     command:
       - -c /etc/turnserver.conf
