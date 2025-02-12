@@ -340,6 +340,23 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     image: henrygd/beszel:latest
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Beszel
+      homepage.href: https://beszel.${MY_TLD}
+      homepage.icon: beszel.svg
+      homepage.description: Lightweight server monitoring hub
+      homepage.widget.type: beszel
+      homepage.widget.url: http://beszel:8090
+      homepage.widget.username: ${SWAG_ENVIRONMENT_EMAIL}
+      homepage.widget.password: ${BESZEL_ADMIN_PASSWORD}
+      homepage.widget.systemId: Rinoa
+      swag: enable
+      swag_proto: http
+      swag_port: 8090
+      swag_url: btmag.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://beszel.${MY_TLD}
     ports:
       - 22220:8090
     restart: unless-stopped
@@ -4801,7 +4818,7 @@ services:
       VALIDATION: dns
       CROWDSEC_API_KEY: ${CROWDSEC_API_KEY}
       CROWDSEC_LAPI_URL: http://crowdsec:8080
-      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec #|linuxserver/mods:swag-auto-uptime-kuma
+      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec|linuxserver/mods:swag-auto-uptime-kuma
       PROPAGATION: 30
       UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
       UPTIME_KUMA_URL: http://uptimekuma:3001
