@@ -4816,7 +4816,7 @@ services:
       VALIDATION: dns
       CROWDSEC_API_KEY: ${CROWDSEC_API_KEY}
       CROWDSEC_LAPI_URL: http://crowdsec:8080
-      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec|linuxserver/mods:swag-auto-uptime-kuma
+      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|ghcr.io/linuxserver/mods:swag-crowdsec #|linuxserver/mods:swag-auto-uptime-kuma
       PROPAGATION: 30
       UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
       UPTIME_KUMA_URL: http://uptimekuma:3001
