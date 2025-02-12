@@ -353,7 +353,7 @@ services:
       DOCKER_HOST: tcp://dockerproxy:2375
       PORT: 45876
       # Do not remove quotes around the key
-      KEY: 'UPDATE WITH YOUR PUBLIC KEY (copy from "Add system" dialog)'
+      KEY: '${BESZEL_RINOA_AGENT_KEY}'
     image: henrygd/beszel-agent:latest
     network_mode: host
     restart: unless-stopped
