@@ -130,45 +130,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  apprise:
-    container_name: apprise
-    environment:
-      PGID: 1000
-      PUID: 1000
-      TZ: America/New_York
-    hostname: Rinoa
-    image: lscr.io/linuxserver/apprise-api:latest
-    labels:
-      homepage.group: Infrastructure/App Performance Monitoring
-      homepage.name: Apprise
-      homepage.icon: apprise.png
-      homepage.href: http://192.168.1.254:8000
-      homepage.description: Cemtralized, multi-channel notification API
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8000"
-        target: 8000
-    restart: unless-stopped
-    volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/apprise
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
   audiobookshelf:
     container_name: audiobookshelf
     environment:
@@ -842,14 +803,6 @@ services:
       PORT_joplin-db: 5432
       ENGINE_joplin-db: postgres@dbgate-plugin-postgres
 
-      LABEL_lobe-chat-pg-db: lobe-chat-pg-db
-      SERVER_lobe-chat-pg-db: lobe-chat-pg-db
-      USER_lobe-chat-pg-db: lobe
-      PASSWORD_lobe-chat-pg-db: ${GITEA_PG_DB_PASSWORD}
-      DATABASE_lobe-chat-pg-db: lobe
-      PORT_lobe-chat-pg-db: 5432
-      ENGINE_lobe-chat-pg-db: postgres@dbgate-plugin-postgres
-
       LABEL_mastodon-pg-db: mastodon-pg-db
       SERVER_mastodon-pg-db: mastodon-pg-db
       USER_mastodon-pg-db: mastodon
@@ -859,16 +812,8 @@ services:
       ENGINE_mastodon-pg-db: postgres@dbgate-plugin-postgres
 
       LABEL_mongodb: mongodb
-      URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
+      URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
       ENGINE_mongodb: mongo@dbgate-plugin-mongo-v2
-
-      LABEL_netbox-db: netbox-db
-      SERVER_netbox-db: netbox-db
-      USER_netbox-db: netbox
-      PASSWORD_netbox-db: ${NETBOX_PG_DB_PASSWORD}
-      PORT_netbox-db: 5432
-      DATABASE_netbox-db: netbox
-      ENGINE_netbox-db: postgres@dbgate-plugin-postgres
 
       LABEL_pgbackweb-db: pgbackweb-db
       SERVER_pgbackweb-db: pgbackweb-db
@@ -897,13 +842,6 @@ services:
       PASSWORD_sonarqube-pg-db: ${SONARQUBE_POSTGRES_PASSWORD}
       PORT_sonarqube-pg-db: 5432
       ENGINE_sonarqube-pg-db: postgres@dbgate-plugin-postgres
-
-      LABEL_synapse-db: synapse-db
-      SERVER_synapse-db: synapse-db
-      USER_synapse-db: synapse
-      PASSWORD_synapse-db: ${SYNAPSE_POSTGRES_PASSWORD}
-      PORT_synapse-db: 5432
-      ENGINE_synapse-db: postgres@dbgate-plugin-postgres
 
       LABEL_tandoor-pg: tandoor-pg
       SERVER_tandoor-pg: tandoor-pg
@@ -4678,7 +4616,7 @@ services:
     depends_on:
       - lidarr
       - soulseek
-    environment: 
+    environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
@@ -4767,11 +4705,13 @@ services:
       homepage.description: Self-hosted internet performance tracking
       homepage.href: https://speed.${MY_TLD}
       homepage.icon: speedtest-tracker.png
+      homepage.widget.type: speedtest
+      homepage.widget.url: http://speedtest-tracker
       swag: enable
       swag_proto: http
       swag_url: speed.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://slsk.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://speed.${MY_TLD}
     ports:
         - 47512:80
         - 62777:443
@@ -4909,7 +4849,7 @@ services:
       swag_proto: http
       swag_url: recipes.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://trac.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://recipes.${MY_TLD}
     networks:
       default: null
     ports:
@@ -6396,7 +6336,7 @@ services:
       swag_proto: http
       swag_url: subs.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://trac.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://subs.${MY_TLD}
     networks:
       default: null
     ports:
