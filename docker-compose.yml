@@ -335,6 +335,36 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  beszel:
+    container_name: beszel
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    image: henrygd/beszel:latest
+    ports:
+      - 22220:8090
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/beszel:/beszel_data
+  beszel-agent:
+    container_name: beszel-agent
+    depends_on:
+      - beszel
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+      PORT: 45876
+      # Do not remove quotes around the key
+      KEY: 'UPDATE WITH YOUR PUBLIC KEY (copy from "Add system" dialog)'
+    image: henrygd/beszel-agent:latest
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /dev/sda:/extra-filesystems/sda:ro
+      - /dev/sdb:/extra-filesystems/sdb:ro
+      - /dev/sdc:/extra-filesystems/sdc:ro
+      - /dev/sdd:/extra-filesystems/sdd:ro
+      - /dev/sde:/extra-filesystems/sde:ro
+      - /dev/sdf:/extra-filesystems/sdf:ro
+      - /dev/nvme0n1:/extra-filesystems/nvme0n1:ro
   bitmagnet:
     command:
       - worker
