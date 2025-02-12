@@ -703,7 +703,7 @@ services:
     restart: always
     volumes:
       - source: crowdsec-db
-        target: /metabase-data
+        target: /data/
         type: volume
         volume: {}
   czkawka:
