@@ -421,8 +421,6 @@ services:
       swag_auth_bypass: /v1
       swag_port: 3333
       swag_url: btmag.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://btmag.${MY_TLD}
     network_mode: service:gluetun
     restart: always
     volumes:
