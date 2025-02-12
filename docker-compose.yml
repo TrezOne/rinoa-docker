@@ -315,7 +315,7 @@ services:
       swag: enable
       swag_proto: http
       swag_port: 8090
-      swag_url: btmag.${MY_TLD}
+      swag_url: beszel.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://beszel.${MY_TLD}
     ports:
