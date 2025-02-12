@@ -354,6 +354,8 @@ services:
       PORT: 45876
       # Do not remove quotes around the key
       KEY: '${BESZEL_RINOA_AGENT_KEY}'
+    expose:
+      - 45876
     image: henrygd/beszel-agent:latest
     network_mode: host
     restart: unless-stopped
