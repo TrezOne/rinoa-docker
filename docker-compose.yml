@@ -3716,6 +3716,7 @@ services:
         bind:
           create_host_path: true
   parseable:
+    container_name: parseable
     command: [ "parseable", "s3-store" ]
     depends_on:
       - minio
