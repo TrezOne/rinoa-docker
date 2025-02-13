@@ -617,6 +617,35 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  cronicle:
+    container_name: cronicle
+    entrypoint: manager
+    environment:
+      CRONICLE_manager: 1
+      CRONICLE_secret_key: "${CRONICLE_SECRET_KEY}"
+      DOCKER_HOST: tcp://dockerproxy:2375
+    hostname: cronicle
+    image: elestio/cronicle:${SOFTWARE_VERSION_TAG}
+    labels:
+      homepage.group: Automation
+      homepage.name: Cronicle
+      homepage.href: https://cron.${MY_TLD}
+      homepage.icon: sh-cronicle.png
+      homepage.description: Multi-server task schedule with a web interface
+      swag: enable
+      swag_port: 3012
+      swag_proto: http
+      swag_url: cron.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://cron.${MY_TLD}
+    ports:
+        - 31037:3012
+    restart: always
+    volumes:
+        - ${DOCKER_VOLUME_CONFIG}/cronicle/data:/opt/cronicle/data
+        - ${DOCKER_VOLUME_CONFIG}/cronicle/logs:/opt/cronicle/logs
+        - ${DOCKER_VOLUME_CONFIG}/cronicle/plugins:/opt/cronicle/plugins
+        - ${DOCKER_VOLUME_CONFIG}/cronicle/workloads/app:/app
   crowdsec:
     container_name: crowdsec
     environment:
