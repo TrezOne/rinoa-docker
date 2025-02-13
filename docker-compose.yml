@@ -3815,6 +3815,28 @@ services:
     restart: unless-stopped
     volumes:
         - portainer-data:/data
+  portall:
+    container_name: portall
+    image: need4swede/portall:latest
+    environment:
+      SECRET_KEY: ${PORTALL_SECRET_KEY}
+    labels:
+      swag: enable
+      swag_auth: authelia
+      swag_proto: http
+      swag_port: 9000
+      swag_url: portall.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://portall.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: Portall
+      homepage.href: https://portainer.${MY_TLD}
+      homepage.icon: sh-portall.png
+      homepage.description: Management for container ports
+    ports:
+      - 8000:8080
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/portall:/app/instance
   postal-smtp:
     cap_add:
       - NET_BIND_SERVICE
