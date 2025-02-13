@@ -2288,6 +2288,7 @@ services:
       swag_port: 8096
       swag_proto: http
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://jf.${MY_TLD}
     ports:
       - 8487:8096
       - 7359:7359
