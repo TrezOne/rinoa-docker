@@ -6,11 +6,12 @@
 | --- | --- |
 | actual_server | docker.io/actualbudget/actual-server:latest |
 | adguard | adguard/adguardhome:latest |
-| apprise | lscr.io/linuxserver/apprise-api:latest |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
 | authelia-pg | postgres:16-alpine |
 | bazarr | lscr.io/linuxserver/bazarr:latest |
+| beszel | henrygd/beszel:latest |
+| beszel-agent | henrygd/beszel-agent:latest |
 | bitmagnet | ghcr.io/bitmagnet-io/bitmagnet:latest |
 | bitmagnet-pg-db | postgres:17-alpine |
 | bitwarden | vaultwarden/server:latest |
@@ -22,8 +23,6 @@
 | crowdsec | crowdsecurity/crowdsec:latest |
 | crowdsec-dashboard | metabase/metabase |
 | czkawka | jlesage/czkawka |
-| dagu-scheduler | ghcr.io/dagu-org/dagu:latest |
-| dagu-server | ghcr.io/dagu-org/dagu:latest |
 | dbgate | dbgate/dbgate:alpine |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
@@ -58,8 +57,8 @@
 | influxdb2 | influxdb:2-alpine |
 | invidious | quay.io/invidious/invidious:latest |
 | invidious-db | docker.io/library/postgres:14 |
-| invoice_ninja | invoiceninja/invoiceninja:5 |
-| invoice_ninja_proxy | nginx |
+| invoice-ninja | invoiceninja/invoiceninja-debian:5 |
+| invoice-ninja_proxy | nginx |
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
 | jitsi-etherpad | etherpad/etherpad:1.8.6 |
@@ -74,8 +73,6 @@
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
 | lldap | lldap/lldap:stable |
-| lobe-chat | lobehub/lobe-chat-database |
-| lobe-chat-pg-db | pgvector/pgvector:pg16 |
 | maloja | krateng/maloja:latest |
 | mariadb | linuxserver/mariadb |
 | mastodon | lscr.io/linuxserver/mastodon:latest |
@@ -90,11 +87,10 @@
 | netbird-relay | netbirdio/relay:latest |
 | netbird-management | netbirdio/management:latest |
 | netbird-coturn | coturn/coturn:latest |
-| netbox | lscr.io/linuxserver/netbox:latest |
-| netbox-db | postgres:17-alpine |
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
+| open-webui | ghcr.io/open-webui/open-webui:main |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
@@ -103,6 +99,7 @@
 | plausible_db | postgres:16-alpine |
 | plausible_events_db | clickhouse/clickhouse-server:24.3.3.102-alpine |
 | portainer | portainer/portainer-ce:alpine-sts |
+| portall | need4swede/portall:latest |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
@@ -120,10 +117,6 @@
 | scraperr-api | jpyles0524/scraperr_api:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
-| slurpit-portal | slurpit/portal:latest |
-| slurpit-scanner | slurpit/scanner:latest |
-| slurpit-scraper | slurpit/scraper:latest |
-| slurpit-warehouse | slurpit/warehouse:latest |
 | sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts |
 | sonarqube-pg-db | postgres:17-alpine |
 | sonarr | lscr.io/linuxserver/sonarr:latest |
@@ -144,10 +137,6 @@
 | wallabag | wallabag/wallabag |
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
-| wazuh-agent | kennyopennix/wazuh-agent:latest |
-| wazuh-dashboard | wazuh/wazuh-dashboard: |
-| wazuh-indexer | wazuh/wazuh-indexer: |
-| wazuh-manager | wazuh/wazuh-manager: |
 | web-check | lissy93/web-check |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
