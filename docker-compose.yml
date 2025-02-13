@@ -3731,7 +3731,7 @@ services:
       P_S3_SECRET_KEY: ${PARSEABLE_S3_SECRET_KEY}
       P_S3_REGION: us-east-fh-pln
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/v1/liveness" ]
+      test: [ "CMD", "curl", "-f", "http://parseable:8000/api/v1/liveness" ]
       interval: 15s
       timeout: 20s
       retries: 5
@@ -3741,13 +3741,13 @@ services:
       homepage.name: Parseable
       homepage.href: https://logs.${MY_TLD}
       homepage.icon: parseable.svg
-      homepage.description: Backups for PostgreSQL
+      homepage.description: Log analytics system for high throughput log ingestion
       swag: enable
       swag_proto: http
       swag_port: 8000
       swag_url: logs.${MY_TLD}
     volumes:
-      - /parseable/staging:/staging
+      - ${DOCKER_VOLUME_CONFIG}/parseable/staging:/staging
     ports:
       - 14453:8000
   pgbackweb:
