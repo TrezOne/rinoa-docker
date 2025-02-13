@@ -20,6 +20,7 @@
 | castopod | castopod/castopod:latest |
 | cloudflared | cloudflare/cloudflared:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
+| cronicle | elestio/cronicle:latest |
 | crowdsec | crowdsecurity/crowdsec:latest |
 | crowdsec-dashboard | metabase/metabase |
 | czkawka | jlesage/czkawka |
