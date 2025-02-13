@@ -3372,6 +3372,30 @@ services:
         type: bind
         bind:
           create_host_path: true
+  netalertx:
+    container_name: netalertx
+    environment:
+      TZ: ${TZ}
+      PORT: 20211
+    image: jokobsk/netalertx:latest
+    network_mode: host
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: NetAlertX
+      homepage.href: http://192.168.1.254:20211
+      homepage.icon: netalertx.svg
+      homepage.description: Network Monitoring
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/netalertx/config:/app/config
+      - ${DOCKER_VOLUME_CONFIG}/netalertx/db:/app/db
+      # (optional) useful for debugging if you have issues setting up the container
+      # - ${DOCKER_VOLUME_CONFIG}/netalertx/logs:/app/log
+      # (API: OPTION 1) use for performance
+      - type: tmpfs
+        target: /app/api
+      # (API: OPTION 2) use when debugging issues
+      # - ${DOCKER_VOLUME_CONFIG}/netalertx/api:/app/api
   netbird-dashboard:
     container_name: netbird-dashboard
     environment:
@@ -3661,6 +3685,40 @@ services:
         type: bind
         bind:
           create_host_path: true
+  parseable:
+    command: [ "parseable", "s3-store" ]
+    depends_on:
+      - minio
+    environment:
+      P_STAGING_DIR: /staging
+      P_ADDR: 0.0.0.0:8000
+      P_USERNAME: admin
+      P_PASSWORD: ${PARSEABLE_PASSWORD}
+      P_S3_URL: http://minio:9000
+      P_S3_BUCKET: parseable
+      P_S3_ACCESS_KEY: ${PARSEABLE_S3_ACCESS_KEY}
+      P_S3_SECRET_KEY: ${PARSEABLE_S3_SECRET_KEY}
+      P_S3_REGION: us-east-fh-pln
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/v1/liveness" ]
+      interval: 15s
+      timeout: 20s
+      retries: 5
+    image: containers.parseable.com/parseable/parseable:latest
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Parseable
+      homepage.href: https://logs.${MY_TLD}
+      homepage.icon: parseable.svg
+      homepage.description: Backups for PostgreSQL
+      swag: enable
+      swag_proto: http
+      swag_port: 8000
+      swag_url: logs.${MY_TLD}
+    volumes:
+      - /parseable/staging:/staging
+    ports:
+      - 14453:8000
   pgbackweb:
     container_name: pgbackweb
     depends_on:
@@ -3824,17 +3882,18 @@ services:
       swag: enable
       swag_auth: authelia
       swag_proto: http
-      swag_port: 9000
+      swag_port: 8080
       swag_url: portall.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://portall.${MY_TLD}
       homepage.group: System Administration
       homepage.name: Portall
-      homepage.href: https://portainer.${MY_TLD}
+      homepage.href: https://portall.${MY_TLD}
       homepage.icon: sh-portall.png
       homepage.description: Management for container ports
     ports:
       - 8000:8080
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/portall:/app/instance
   postal-smtp:
@@ -6284,6 +6343,16 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/config/:/vault/config
       - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/logs/:/vault/logs
+  vector:
+    image: timberio/vector:0.44.0-alpine
+    container_name: vector
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+    ports:
+      - 60157:8686
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/vector/vector.yaml:/etc/vector/vector.yaml:ro
   wallabag:
     container_name: wallabag
     depends_on:

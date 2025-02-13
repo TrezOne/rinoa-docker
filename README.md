@@ -82,6 +82,7 @@
 | multi-scrobbler | foxxmd/multi-scrobbler |
 | n8n | docker.n8n.io/n8nio/n8n |
 | navidrome | deluan/navidrome:latest |
+| netalertx | jokobsk/netalertx:latest |
 | netbird-dashboard | netbirdio/dashboard:latest |
 | netbird-signal | netbirdio/signal:latest |
 | netbird-relay | netbirdio/relay:latest |
@@ -92,6 +93,7 @@
 | ombi | lscr.io/linuxserver/ombi:latest |
 | open-webui | ghcr.io/open-webui/open-webui:main |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
+| parseable | containers.parseable.com/parseable/parseable:latest |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
 | plantuml-server | plantuml/plantuml-server:jetty |
@@ -134,6 +136,7 @@
 | unmanic | josh5/unmanic:latest |
 | uptimekuma | louislam/uptime-kuma:latest |
 | vault | hashicorp/vault:latest |
+| vector | timberio/vector:0.44.0-alpine |
 | wallabag | wallabag/wallabag |
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
