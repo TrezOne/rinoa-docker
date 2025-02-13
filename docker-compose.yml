@@ -625,7 +625,7 @@ services:
       CRONICLE_secret_key: "${CRONICLE_SECRET_KEY}"
       DOCKER_HOST: tcp://dockerproxy:2375
     hostname: cronicle
-    image: elestio/cronicle:${SOFTWARE_VERSION_TAG}
+    image: elestio/cronicle:latest
     labels:
       homepage.group: Automation
       homepage.name: Cronicle
