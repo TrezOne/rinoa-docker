@@ -74,7 +74,7 @@ jobs:
         with:
           directory: ansible/
           playbook: docker_config_deploy.yml
-          key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
+          key: ${{secrets.RINOA_GITEA_PRIVATE_SSH_KEY}}
           options: |
             --inventory inventory/hosts.yml
             --check
