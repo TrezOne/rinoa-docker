@@ -257,6 +257,7 @@ jobs:
           notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
   ansible-config-docker-compose-deploy:
     name: Deploy via Ansible & Docker Compose
+    timeout-minutes: 360
     runs-on: ubuntu-latest
     needs: [pr-merge]
     env:
