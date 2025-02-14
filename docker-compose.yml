@@ -1469,266 +1469,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-#  grafana:
-#    container_name: grafana
-#    depends_on:
-#      grafana-alloy:
-#        condition: service_started
-#        required: true
-#    environment:
-#      GF_INSTALL_PLUGINS: grafana-piechart-panel
-#      TZ: America/New_York
-#    hostname: Rinoa
-#    image: grafana/grafana-enterprise:latest
-#    labels:
-#      homepage.group: Infrastructure/App Performance Monitoring
-#      homepage.name: Grafana (LGTM)
-#      homepage.href: https://mon.${MY_TLD}
-#      homepage.description: Monitoring Dashboard for metrics, logs, traces, & profiles
-#      homepage.icon: grafana.png
-#      homepage.widget.type: grafana
-#      homepage.widget.url: http://grafana:3000
-#      homepage.widget.username: admin
-#      homepage.widget.password: ${GRAFANA_ADMIN_PASSWORD}
-#      swag: enable
-#      swag_proto: http
-#      swag_url: mon.${MY_TLD}
-#      swag.uptime-kuma.enabled: true
-#      swag.uptime-kuma.monitor.url: https://mon.${MY_TLD}
-#    networks:
-#      default: null
-#    ports:
-#      - mode: ingress
-#        protocol: tcp
-#        published: "3006"
-#        target: 3000
-#    restart: unless-stopped
-#    user: 1000:1000
-#    volumes:
-#      - bind:
-#          create_host_path: true
-#        read_only: true
-#        source: /etc/localtime
-#        target: /etc/localtime
-#        type: bind
-#      - source: ${DOCKER_VOLUME_CONFIG}/grafana/data
-#        target: /var/lib/grafana
-#        type: bind
-#        bind:
-#          create_host_path: true
-#      - bind:
-#          create_host_path: true
-#        source: /rinoa-storage
-#        target: /storage
-#        type: bind
-#  grafana-alloy:
-#    cap_add:
-#      - SYS_ADMIN
-#      - SYS_TIME
-#      - BPF
-#      - SYSLOG
-#    command: run --disable-reporting=true --stability.level=public-preview --server.http.listen-addr=0.0.0.0:12345 /etc/alloy/config.alloy
-#    container_name: grafana-alloy
-#    environment:
-#      DOCKER_HOST: tcp://dockerproxy:2375
-#    image: grafana/alloy:latest
-#    labels:
-#      homepage.group: Infrastructure/App Performance Monitoring
-#      homepage.name: Grafana Alloy
-#      homepage.description: Agent for metric/log/trace/profile collection and writing
-#      homepage.href: http://192.168.1.254:12345
-#      homepage.icon: sh-grafana-alloy.svg
-#    networks:
-#      default: null
-#    ports:
-#      - mode: ingress
-#        protocol: tcp
-#        published: "12345"
-#        target: 12345
-#    privileged: true
-#    restart: always
-#    volumes:
-#      - source: ${DOCKER_VOLUME_CONFIG}/grafana/alloy/config.alloy
-#        target: /etc/alloy/config.alloy
-#        type: bind
-#        bind:
-#          create_host_path: true
-#      - source: ${DOCKER_VOLUME_CONFIG}/grafana/alloy/endpoints.json
-#        target: /etc/alloy/endpoints.json
-#        type: bind
-#        bind:
-#          create_host_path: true
-#      - bind:
-#          create_host_path: true
-#        read_only: true
-#        source: /proc
-#        target: /host/proc
-#        type: bind
-#      - bind:
-#          create_host_path: true
-#        read_only: true
-#        source: /sys
-#        target: /host/sys
-#        type: bind
-#      - bind:
-#          create_host_path: true
-#        read_only: true
-#        source: /
-#        target: /rootfs
-#        type: bind
-#  grafana-loki:
-#    command: -config.file=/etc/loki/loki-config.yaml
-#    container_name: grafana-loki
-#    depends_on:
-#      grafana-alloy:
-#        condition: service_started
-#        required: true
-#    image: grafana/loki:latest
-#    networks:
-#      default: null
-#    ports:
-#      - mode: ingress
-#        protocol: tcp
-#        published: "3100"
-#        target: 3100
-#    restart: unless-stopped
-#    volumes:
-#      - source: ${DOCKER_VOLUME_CONFIG}/grafana/loki/loki-config.yaml
-#        target: /etc/loki/loki-config.yaml
-#        type: bind
-#        bind:
-#          create_host_path: true
-#  grafana-mimir:
-#    command:
-#      - -ingester.native-histograms-ingestion-enabled=true
-#      - -config.file=/etc/mimir.yaml
-#    container_name: grafana-mimir
-#    depends_on:
-#      grafana-alloy:
-#        condition: service_started
-#        required: true
-#    image: grafana/mimir:latest
-#    labels:
-#      homepage.group: Infrastructure/App Performance Monitoring
-#      homepage.name: Grafana Mimir
-#      homepage.href: http://192.168.1.254:9009
-#      homepage.description: Long-term metrics storage
-#      homepage.icon: /icons/grafana-mimir.png
-#    networks:
-#      default: null
-#    ports:
-#      - mode: ingress
-#        protocol: tcp
-#        published: "9009"
-#        target: 9009
-#    restart: unless-stopped
-#    volumes:
-#      - source: grafana-mimir-data
-#        target: /data
-#        type: volume
-#        volume: {}
-#      - source: ${DOCKER_VOLUME_CONFIG}/grafana/mimir/mimir.yaml
-#        target: /etc/mimir.yaml
-#        type: bind
-#        bind:
-#          create_host_path: true
-#  grafana-mimir-memcached:
-#    container_name: grafana-mimir-memcached
-#    depends_on:
-#      grafana-alloy:
-#        condition: service_started
-#        required: true
-#    environment:
-#      MEMCACHED_MEMORY_LIMIT: 1g
-#      MEMCACHED_THREADS: 4
-#      MEMCACHED_MAX_CONNECTIONS: 2048
-#      MEMCACHED_TCP_PORT: 11211
-#      MEMCACHED_UDP_PORT: 11211
-#    image: memcached
-#    networks:
-#      default: null
-#    ports:
-#      - mode: ingress
-#        protocol: tcp
-#        published: "11211"
-#        target: 11211
-#    restart: unless-stopped
-#  grafana-pyroscope:
-#    command:
-#      - -config.file=/etc/pyroscope.yml
-#    container_name: grafana-pyroscope
-#    depends_on:
-#      grafana-alloy:
-#        condition: service_started
-#        required: true
-#    image: grafana/pyroscope:latest
-#    labels:
-#      homepage.group: Infrastructure/App Performance Monitoring
-#      homepage.name: Grafana Pyroscope
-#      homepage.description: Profiling for applications
-#      homepage.href: http://192.168.1.254:4040
-#      homepage.icon: /icons/grafana-pyroscope.svg
-#    networks:
-#      default: null
-#    ports:
-#      - mode: ingress
-#        protocol: tcp
-#        published: "4040"
-#        target: 4040
-#    restart: unless-stopped
-#    volumes:
-#      - source: ${DOCKER_VOLUME_CONFIG}/grafana/pyroscope/config.yaml
-#        target: /etc/pyroscope.yml
-#        type: bind
-#        bind:
-#          create_host_path: true
-#  grafana-tempo:
-#    command:
-#      - -config.file=/etc/tempo.yaml
-#    container_name: grafana-tempo
-#    depends_on:
-#      grafana-alloy:
-#        condition: service_started
-#        required: true
-#    image: grafana/tempo:latest
-#    networks:
-#      default: null
-#    ports:
-#      - mode: ingress
-#        protocol: tcp
-#        published: "14268"
-#        target: 14268
-#      - mode: ingress
-#        protocol: tcp
-#        published: "3200"
-#        target: 3200
-#      - mode: ingress
-#        protocol: tcp
-#        published: "9095"
-#        target: 9095
-#      - mode: ingress
-#        protocol: tcp
-#        published: "4317"
-#        target: 4317
-#      - mode: ingress
-#        protocol: tcp
-#        published: "4318"
-#        target: 4318
-#      - mode: ingress
-#        protocol: tcp
-#        published: "9411"
-#        target: 9411
-#    restart: unless-stopped
-#    volumes:
-#      - source: grafana-tempo-data
-#        target: /var/tempo
-#        type: volume
-#        volume: {}
-#      - source: ${DOCKER_VOLUME_CONFIG}/grafana/tempo/tempo.yaml
-#        target: /etc/tempo.yaml
-#        type: bind
-#        bind:
-#          create_host_path: true
   guacamole:
     container_name: guacamole
     environment:
@@ -3745,6 +3485,44 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/parseable/staging:/staging
     ports:
       - 14453:8000
+  peppermint:
+    container_name: peppermint
+    depends_on:
+      - peppermint-pg-db
+    environment:
+      DB_USERNAME: peppermint
+      DB_PASSWORD: ${PEPPERMINT_PG_PASSWORD}
+      DB_HOST: peppermint-pg-db
+      SECRET: ${PEPPERMINT_SECRET_KEY}
+    image: pepperlabs/peppermint:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: support.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
+      homepage.group: Professional Services
+      homepage.name: Peppermint
+      homepage.href: https://support.${MY_TLD}
+      homepage.icon: peppermint.svg
+      homepage.description: Open-source ticket management and help desk solution
+    ports:
+      - 3000:3000
+      - 5003:5003
+    restart: always
+  peppermint-pg-db:
+    container_name: peppermint-pg-db
+    environment:
+      POSTGRES_USER: peppermint
+      POSTGRES_PASSWORD: ${PEPPERMINT_PG_PASSWORD}
+      POSTGRES_DB: peppermint
+    expose:
+      - 5432
+    image: postgres:17-alpine
+    restart: always
+    volumes:
+      - peppermint-pg-data:/var/lib/postgresql/data
   pgbackweb:
     container_name: pgbackweb
     depends_on:
@@ -7118,6 +6896,8 @@ volumes:
     name: paperless-ngx-media
   paperless-ngx-pg:
     name: paperless-ngx-pg
+  peppermint-pg-data:
+    name: peppermint-pg-data
   pgbackweb-data:
     name: pgbackweb-data
   plausible-db-data:
@@ -7193,40 +6973,3 @@ volumes:
     name: zammad-storage
   zitadel-pg-db:
     name: zitadel-pg-db
-x-shared:
-  zammad-service:
-    depends_on:
-      - zammad-memcached
-      - zammad-postgresql
-      - zammad-redis
-    environment:
-      AUTOWIZARD_JSON: null
-      AUTOWIZARD_RELATIVE_PATH: null
-      ELASTICSEARCH_ENABLED: true
-      ELASTICSEARCH_HOST: zammad-elasticsearch
-      ELASTICSEARCH_NAMESPACE: trez_it
-      ELASTICSEARCH_PORT: 9200
-      ELASTICSEARCH_REINDEX: true
-      ELASTICSEARCH_SCHEMA: http
-      ELASTICSEARCH_SSL_VERIFY: false
-      MEMCACHE_SERVERS: ${ZAMMAD_MEMCACHE_SERVERS}
-      POSTGRESQL_DB: ${ZAMMAD_POSTGRES_DB}
-      POSTGRESQL_DB_CREATE: true
-      POSTGRESQL_HOST: ${ZAMMAD_POSTGRES_HOST}
-      POSTGRESQL_OPTIONS: ${ZAMMAD_POSTGRESQL_OPTIONS}
-      POSTGRESQL_PASS: ${ZAMMAD_POSTGRES_PASS}
-      POSTGRESQL_PORT: ${ZAMMAD_POSTGRES_PORT}
-      POSTGRESQL_USER: ${ZAMMAD_POSTGRES_USER}
-      RAILS_LOG_TO_STDOUT: true
-      RAILS_TRUSTED_PROXIES: 172.18.0.0/16
-      REDIS_URL: ${ZAMMAD_REDIS_URL}
-      S3_URL: http://${ZAMMAD_S3_ACCESS_KEY}:${ZAMMAD_S3_SECRET_KEY}@minio:9000/zammad?region=us-east-fh-pln&force_path_style=true
-      ZAMMAD_BIND_IP: 0.0.0.0
-      ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS: null
-      ZAMMAD_PROCESS_SCHEDULED: null
-      ZAMMAD_SESSION_JOBS: null
-      ZAMMAD_WEB_CONCURRENCY: null
-    image: ${ZAMMAD_IMAGE_REPO}:${ZAMMAD_VERSION}
-    restart: ${ZAMMAD_RESTART}
-    volumes:
-      - zammad-storage:/opt/zammad/storage
