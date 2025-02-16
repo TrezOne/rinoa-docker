@@ -6468,6 +6468,8 @@ volumes:
     name: filebeat_var
   gitea-pg-db:
     name: gitea-pg-db
+  hortusfox_app_backup:
+    name: hortusfox_app_backup
   hortusfox_app_images:
     name: hortusfox_app_images
   hortusfox_app_logs:
