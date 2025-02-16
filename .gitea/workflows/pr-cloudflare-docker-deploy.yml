@@ -69,9 +69,6 @@ jobs:
         uses: cpanato/vault-installer@main
       - name: Install hvac
         run: pip install hvac
-      - name: Install Ansible Collections
-        run: ansible-galaxy collection install -r ansible/collections/requirements.yml
-
       - name: Ansible Playbook Dry Run
         uses: dawidd6/action-ansible-playbook@v2
         with:
