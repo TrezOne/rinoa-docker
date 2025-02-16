@@ -3299,6 +3299,9 @@ services:
       homepage.href: https://cloud.${MY_TLD}
       homepage.icon: nextcloud.svg
       homepage.description: Private Cloud
+      homepage.widget.type: nextcloud
+      homepage.widget.url: https://cloud.trez.wtf
+      homepage.widget.token: ${NEXTCLOUD_HOMEPAGE_TOKEN}
       swag: enable
       swag_port: 11000
       swag_proto: http
