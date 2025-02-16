@@ -78,7 +78,6 @@ jobs:
           options: |
             --inventory inventory/hosts.yml
             --check
-            -v
           requirements: collections/requirements.yml
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
       - name: Gotify Notification
