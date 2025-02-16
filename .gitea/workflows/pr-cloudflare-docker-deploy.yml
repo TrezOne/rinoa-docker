@@ -51,6 +51,7 @@ jobs:
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
+      VAULT_NAMESPACE: ""
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,7 +75,7 @@ jobs:
         with:
           directory: ansible/
           playbook: docker_config_deploy.yml
-          key: ${{secrets.RINOA_GITEA_PRIVATE_SSH_KEY}}
+          key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           options: |
             --inventory inventory/hosts.yml
             --check
