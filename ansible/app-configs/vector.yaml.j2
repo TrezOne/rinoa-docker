@@ -1,0 +1,32 @@
+  sources:
+    rinoa_docker_logs:
+      type: docker_logs
+      exclude_containers:
+        - zammad-init
+        - vector
+
+  sinks:
+    parseable:
+      type: http
+      method: post
+      batch:
+        max_bytes: 10485760
+        max_events: 1000
+        timeout_secs: 10
+      compression: gzip
+      inputs:
+        - rinoa_docker_logs
+      encoding:
+        codec: json
+      uri: http://parseable:8000/api/v1/ingest'
+      auth:
+        strategy: basic
+        user: admin
+        password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['PARSEABLE_PASSWORD'] }}
+      request:
+        headers:
+          X-P-Stream: vectordemo
+      healthcheck:
+        enabled: true
+        path: 'http://parseable:8000/api/v1/liveness'
+        port: 80
