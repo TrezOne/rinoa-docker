@@ -36,7 +36,7 @@ DB_TYPE = postgres
 HOST = gitea-db:5432
 NAME = gitea
 USER = gitea
-PASSWD = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_PG_DB_PASSWORD'] }}
+PASSWD = {{ lookup('community.hashi_vault.vault_kv2_get', 'rinoa-docker/data/env', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_PG_DB_PASSWORD'] }}
 LOG_SQL = false
 SCHEMA =
 SSL_MODE = disable
