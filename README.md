@@ -39,13 +39,6 @@
 | gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |
 | gluetun | qmcgaw/gluetun:latest |
 | gotify | gotify/server |
-| grafana | grafana/grafana-enterprise:latest |
-| grafana-alloy | grafana/alloy:latest |
-| grafana-loki | grafana/loki:latest |
-| grafana-mimir | grafana/mimir:latest |
-| grafana-mimir-memcached | memcached |
-| grafana-pyroscope | grafana/pyroscope:latest |
-| grafana-tempo | grafana/tempo:latest |
 | guacamole | flcontainers/guacamole:latest |
 | homepage | ghcr.io/gethomepage/homepage:latest |
 | hortusfox | ghcr.io/danielbrendel/hortusfox-web:latest |
@@ -95,6 +88,8 @@
 | open-webui | ghcr.io/open-webui/open-webui:main |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | parseable | containers.parseable.com/parseable/parseable:latest |
+| peppermint | pepperlabs/peppermint:latest |
+| peppermint-pg-db | postgres:17-alpine |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
 | plantuml-server | plantuml/plantuml-server:jetty |
@@ -144,16 +139,6 @@
 | web-check | lissy93/web-check |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
-| zammad-backup | postgres: |
-| zammad-elasticsearch | bitnami/elasticsearch: |
-| zammad-init | : |
-| zammad-memcached | memcached: |
-| zammad-nginx | : |
-| zammad-postgresql | postgres: |
-| zammad-railsserver | : |
-| zammad-redis | redis: |
-| zammad-scheduler | : |
-| zammad-websocket | : |
 | zitadel | ghcr.io/zitadel/zitadel:latest |
 | zitadel-pg-db | postgres:16-alpine |
 
