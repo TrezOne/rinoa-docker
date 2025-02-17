@@ -3492,6 +3492,7 @@ services:
         condition: service_started
         required: true
     environment:
+      BASE_URL: https://support.trez.wtf
       DB_USERNAME: peppermint
       DB_PASSWORD: ${PEPPERMINT_PG_PASSWORD}
       DB_HOST: peppermint-pg-db
@@ -3500,8 +3501,12 @@ services:
     labels:
       swag: enable
       swag_proto: http
-      swag_port: 8080
+      swag_port: 3000
       swag_url: support.${MY_TLD}
+      swag_server_custom_directive: |
+        location /api {
+              proxy_pass http://peppermint:5003;
+        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
       homepage.group: Professional Services
@@ -4633,7 +4638,7 @@ services:
     environment:
       DNSPLUGIN: cloudflare
       EMAIL: charish.patel@trez.wtf
-      EXTRA_DOMAINS: 
+      EXTRA_DOMAINS:
       ONLY_SUBDOMAINS: false
       PGID: 1000
       PUID: 1000
