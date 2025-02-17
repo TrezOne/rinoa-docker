@@ -20,6 +20,7 @@
 | castopod | castopod/castopod:latest |
 | cloudflared | cloudflare/cloudflared:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
+| convertx | ghcr.io/c4illin/convertx |
 | cronicle | elestio/cronicle:latest |
 | crowdsec | crowdsecurity/crowdsec:latest |
 | crowdsec-dashboard | metabase/metabase |
@@ -64,6 +65,7 @@
 | jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
+| libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
 | lldap | lldap/lldap:stable |
