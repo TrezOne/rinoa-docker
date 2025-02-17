@@ -4638,7 +4638,7 @@ services:
     environment:
       DNSPLUGIN: cloudflare
       EMAIL: charish.patel@trez.wtf
-      EXTRA_DOMAINS:
+      EXTRA_DOMAINS: 
       ONLY_SUBDOMAINS: false
       PGID: 1000
       PUID: 1000
