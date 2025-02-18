@@ -1817,11 +1817,11 @@ services:
         condition: service_started
         required: true
     environment:
-      INVIDIOUS_CONFIG: |
+      INVIDIOUS_CONFIG: >-
         db:
           dbname: invidious
           user: kemal
-          password: $${INVID_PG_DB_PASSWORD}
+          password: ${INVID_PG_DB_PASSWORD}
           host: invidious-db
           port: 5432
         check_tables: true
@@ -1830,7 +1830,7 @@ services:
         # domain:
         # https_only: false
         # statistics_enabled: false
-        hmac_key: "$${INVID_HMAC_KEY}"
+        hmac_key: "${INVID_HMAC_KEY}"
     healthcheck:
       interval: 30s
       retries: 2
