@@ -1826,6 +1826,8 @@ services:
           port: 5432
         check_tables: true
         signature_server: invidious-sig-helper:12999
+        visitor_data: ${INVID_VISITOR_DATA}
+        po_token: ${INVID_PO_TOKEN}
         # external_port:
         # domain:
         # https_only: false
