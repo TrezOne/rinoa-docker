@@ -1821,15 +1821,16 @@ services:
         db:
           dbname: invidious
           user: kemal
-          password: ${INVID_PG_DB_PASSWORD}
+          password: $${INVID_PG_DB_PASSWORD}
           host: invidious-db
           port: 5432
         check_tables: true
+        signature_server: invidious-sig-helper:12999
         # external_port:
         # domain:
         # https_only: false
         # statistics_enabled: false
-        hmac_key: "8Qyuvl9TWYdkvVo8BJ14qM4HBshKieR3KvDc3vsECx1L4OR51i-EtW2K74MmAVHeNPmJetM67T0M-9FIm7b-MA"
+        hmac_key: "$${INVID_HMAC_KEY}"
     healthcheck:
       interval: 30s
       retries: 2
@@ -1856,6 +1857,21 @@ services:
         published: "3007"
         target: 3000
     restart: unless-stopped
+  invidious-sig-helper:
+    cap_drop:
+      - ALL
+    command: ["--tcp", "0.0.0.0:12999"]
+    container_name: invidious-sig-helper
+    image: quay.io/invidious/inv-sig-helper:latest
+    init: true
+    environment:
+      RUST_LOG: info
+    expose:
+      - 12999
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
   invidious-db:
     container_name: invidious-db
     environment:
