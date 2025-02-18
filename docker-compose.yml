@@ -311,7 +311,7 @@ services:
       homepage.widget.url: http://beszel:8090
       homepage.widget.username: ${SWAG_ENVIRONMENT_EMAIL}
       homepage.widget.password: ${BESZEL_ADMIN_PASSWORD}
-      homepage.widget.systemId: Rinoa
+      homepage.widget.version: 2
       swag: enable
       swag_proto: http
       swag_port: 8090
