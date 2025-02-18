@@ -308,7 +308,7 @@ jobs:
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
           docker_compose_file: docker-compose.yml
-          docker_args: -d --remove-orphans --pull missing
+          docker_args: -d --remove-orphans --pull missing --no-recreate
           ssh_user: gitea-deploy
           ssh_host: 192.168.1.254
           ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
