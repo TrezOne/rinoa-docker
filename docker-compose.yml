@@ -1817,22 +1817,7 @@ services:
         condition: service_started
         required: true
     environment:
-      INVIDIOUS_CONFIG: >-
-        db:
-          dbname: invidious
-          user: kemal
-          password: ${INVID_PG_DB_PASSWORD}
-          host: invidious-db
-          port: 5432
-        check_tables: true
-        signature_server: 'invidious-sig-helper:12999'
-        visitor_data: '${INVID_VISITOR_DATA}'
-        po_token: '${INVID_PO_TOKEN}'
-        # external_port:
-        # domain:
-        # https_only: false
-        # statistics_enabled: false
-        hmac_key: "${INVID_HMAC_KEY}"
+      INVIDIOUS_CONFIG_FILE: /config.yml
     healthcheck:
       interval: 30s
       retries: 2
@@ -1859,6 +1844,8 @@ services:
         published: "3007"
         target: 3000
     restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/invidious/config.yml:/config.yml
   invidious-sig-helper:
     cap_drop:
       - ALL
