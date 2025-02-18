@@ -51,6 +51,7 @@
 | immich-power-tools | ghcr.io/varun-raj/immich-power-tools:latest |
 | influxdb2 | influxdb:2-alpine |
 | invidious | quay.io/invidious/invidious:latest |
+| invidious-sig-helper | quay.io/invidious/inv-sig-helper:latest |
 | invidious-db | docker.io/library/postgres:14 |
 | invoice-ninja | invoiceninja/invoiceninja-debian:5 |
 | invoice-ninja_proxy | nginx |
