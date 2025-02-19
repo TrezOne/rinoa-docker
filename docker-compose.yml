@@ -2955,7 +2955,8 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-      LOCAL_DOMAIN: trez.wtf
+      LOCAL_DOMAIN: mastodon.${MY_TLD}
+      WEB_DOMAIN: mastodon.${MY_TLD}
       REDIS_HOST: redis
       REDIS_PORT: 6379
       DB_HOST: mastodon-pg-db
