@@ -1939,7 +1939,6 @@ services:
         target: 8003
     restart: always
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/invoice-ninja.env:/var/www/html/.env
       - invoice-ninja_cache:/var/www/html/bootstrap/cache
       - invoice-ninja_public:/var/www/html/public
       - invoice-ninja_storage:/var/www/html/storage
