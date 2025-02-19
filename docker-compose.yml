@@ -544,10 +544,10 @@ services:
       CP_DATABASE_NAME: castopod
       CP_DATABASE_USERNAME: castopod
       CP_DATABASE_PASSWORD: ${CASTOPOD_MYSQL_PASSWORD}
-      CP_BASEURL: pod.trez.wtf
+      CP_BASEURL: "https://pod.trez.wtf"
       CP_ANALYTICS_SALT: ${CASTOPOD_ANALYTICS_SALT}
       CP_CACHE_HANDLER: redis
-      CP_DISABLE_HTTPS: 1
+      CP_DISABLE_HTTPS: 0
       CP_REDIS_HOST: redis
       CP_EMAIL_SMTP_HOST: postal-smtp
       CP_EMAIL_FROM: noreply@trez.wtf
