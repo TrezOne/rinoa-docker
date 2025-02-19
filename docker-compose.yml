@@ -2988,7 +2988,7 @@ services:
     labels:
       swag: enable
       swag_proto: http
-      swag_port: 3000
+      swag_port: 80
       swag_url: mastodon.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
