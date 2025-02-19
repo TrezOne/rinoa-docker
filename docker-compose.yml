@@ -563,6 +563,7 @@ services:
       homepage.icon: castopod.png
       homepage.description: Podcast self-hosting
       swag: enable
+      swag_address: castopod
       swag_port: 8000
       swag_url: pod.${MY_TLD}
       swag.uptime-kuma.enabled: true
