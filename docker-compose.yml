@@ -2947,6 +2947,10 @@ services:
           create_host_path: true
   mastodon:
     container_name: mastodon
+    depends_on:
+      mastodon-pg-db:
+        condition: service_healthy
+        required: true
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -2976,11 +2980,13 @@ services:
       S3_BUCKET: mastodon
       AWS_ACCESS_KEY_ID: ${MASTODON_MINIO_ACCESS_KEY}
       AWS_SECRET_ACCESS_KEY: ${MASTODON_MINIO_SECRET_KEY}
+    expose:
+      - 3000
     image: lscr.io/linuxserver/mastodon:latest
     labels:
       swag: enable
       swag_proto: http
-      swag_port: 5678
+      swag_port: 3000
       swag_url: mastodon.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
