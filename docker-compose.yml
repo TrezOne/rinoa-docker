@@ -3354,7 +3354,7 @@ services:
       homepage.icon: nextcloud.svg
       homepage.description: Private Cloud
       homepage.widget.type: nextcloud
-      homepage.widget.url: https://cloud.trez.wtf
+      homepage.widget.url: https://cloud.trez.wtf/ocs/v2.php/apps/serverinfo/api/v1/info
       homepage.widget.key: ${NEXTCLOUD_HOMEPAGE_TOKEN}
       swag: enable
       swag_port: 11000
