@@ -803,7 +803,7 @@ services:
   dbgate:
     container_name: dbgate
     environment:
-      CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,lobe-chat-pg-db,mariadb,mastodon-pg-db,mongodb,netbox-db,pgbackweb,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,traccar-pg,whodb,zitadel-pg-db
+      CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,mariadb,mastodon-pg-db,mongodb,pgbackweb,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,traccar-pg,zitadel-pg-db
 
       LOGIN: TrezOne
       PASSWORD: ${DBGATE_LOGIN_PASSWORD}
@@ -864,7 +864,12 @@ services:
       ENGINE_mastodon-pg-db: postgres@dbgate-plugin-postgres
 
       LABEL_mongodb: mongodb
-      URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
+      SERVER_mongodb: mongodb
+      USER_mongodb: root
+      PASSWORD_mongodb: ${MONGO_INITDB_ROOT_PASSWORD}
+      PORT_mongodb: 27017
+      DATABSE_mongodb: admin
+      # URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
       ENGINE_mongodb: mongo@dbgate-plugin-mongo-v2
 
       LABEL_pgbackweb-db: pgbackweb-db
