@@ -323,6 +323,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/beszel:/beszel_data
+      - /rinoa-storage:/extra-filesystems/rinoa-storage
   beszel-agent:
     container_name: beszel-agent
     depends_on:
