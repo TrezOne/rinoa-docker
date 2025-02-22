@@ -814,7 +814,7 @@ services:
     environment:
       RAILS_ENV: development
       REDIS_URL: redis://redis:6379/
-      DATABASE_HOST: dawarich-db
+      DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
       DATABASE_NAME: dawarich
