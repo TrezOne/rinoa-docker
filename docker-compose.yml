@@ -804,7 +804,7 @@ services:
     command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
     container_name: dawarich-app
     depends_on:
-      dawarich-db:
+      dawarich-pg-db:
         condition: service_healthy
         restart: true
       redis:
@@ -902,7 +902,7 @@ services:
       dawarich-app:
         condition: service_healthy
         restart: true
-      dawarich-db:
+      dawarich-pg-db:
         condition: service_healthy
         restart: true
       redis:
