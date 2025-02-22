@@ -921,7 +921,7 @@ services:
     volumes:
       - dawarich_public:/var/app/public
       - dawarich_watched:/var/app/tmp/imports/watched
-      - ${DOCKER_VOLUME_CONFIG}/dawarich/sideqik-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
+      - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
   dbgate:
     container_name: dbgate
     environment:
