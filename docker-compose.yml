@@ -906,7 +906,7 @@ services:
         condition: service_healthy
         restart: true
       redis:
-        condition: service_healthy
+        condition: service_started
         restart: true
     deploy:
       resources:
@@ -4233,12 +4233,12 @@ services:
     container_name: redis
     expose:
       - 6379
-    healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
+    # healthcheck:
+    #   test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    #   interval: 10s
+    #   retries: 5
+    #   start_period: 30s
+    #   timeout: 10s
     image: redis:alpine
     networks:
       default: null
