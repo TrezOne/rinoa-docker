@@ -338,12 +338,7 @@ services:
     network_mode: host
     restart: unless-stopped
     volumes:
-      - /dev/sda:/extra-filesystems/sda:ro
-      - /dev/sdb:/extra-filesystems/sdb:ro
-      - /dev/sdc:/extra-filesystems/sdc:ro
-      - /dev/sdd:/extra-filesystems/sdd:ro
-      - /dev/sde:/extra-filesystems/sde:ro
-      - /dev/sdf:/extra-filesystems/sdf:ro
+      - /rinoa-storage:/extra-filesystems/rinoa-storage:ro
       - /dev/nvme0n1:/extra-filesystems/nvme0n1:ro
   bitmagnet:
     command:
