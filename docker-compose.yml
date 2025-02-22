@@ -3481,7 +3481,7 @@ services:
       homepage.icon: nextcloud.svg
       homepage.description: Private Cloud
       homepage.widget.type: nextcloud
-      homepage.widget.url: https://cloud.trez.wtf/
+      homepage.widget.url: http://nextcloud-aio-mastercontainer:8080
       homepage.widget.key: ${NEXTCLOUD_HOMEPAGE_TOKEN}
       swag: enable
       swag_port: 11000
