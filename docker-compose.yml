@@ -61,47 +61,12 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3001"
-        target: 3000
-      - mode: ingress
-        protocol: tcp
-        published: "446"
-        target: 443
-      - mode: ingress
-        protocol: tcp
-        published: "8008"
-        target: 80
-      - mode: ingress
-        protocol: tcp
-        published: "853"
-        target: 853
-      - host_ip: 0.0.0.0
-        mode: ingress
-        protocol: tcp
-        published: "53"
-        target: 53
-      - host_ip: 0.0.0.0
-        mode: ingress
-        protocol: udp
-        published: "53"
-        target: 53
-      - host_ip: 0.0.0.0
-        mode: ingress
-        protocol: udp
-        published: "67"
-        target: 67
-      - host_ip: 0.0.0.0
-        mode: ingress
-        protocol: tcp
-        published: "688"
-        target: 68
-      - host_ip: 0.0.0.0
-        mode: ingress
-        protocol: udp
-        published: "688"
-        target: 68
+      - 3001:3000
+      - 446:443
+      - 8008:80
+      - 853:853
+      - 67:67
+      - 688:68
     restart: unless-stopped
     volumes:
       - bind:
@@ -158,10 +123,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "13378"
-        target: 80
+      - 13378:80
     restart: unless-stopped
     user: 1000:1000
     volumes:
@@ -274,10 +236,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "6767"
-        target: 6767
+      - 6767:6767
     restart: unless-stopped
     volumes:
       - bind:
@@ -440,14 +399,8 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3012"
-        target: 3012
-      - mode: ingress
-        protocol: tcp
-        published: "8013"
-        target: 80
+      - 3012:3012
+      - 8013:80
     restart: unless-stopped
     volumes:
       - bind:
@@ -675,10 +628,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8101"
-        target: 8080
+      - 8101:8080
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -743,10 +693,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8908"
-        target: 3000
+      - 8908:3000
     restart: always
     volumes:
       - source: crowdsec-db
@@ -778,10 +725,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "5800"
-        target: 5800
+      - 5800:5800
     privileged: true
     restart: unless-stopped
     volumes:
@@ -1100,26 +1044,11 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "58846"
-        target: 58846
-      - mode: ingress
-        protocol: tcp
-        published: "58946"
-        target: 58946
-      - mode: ingress
-        protocol: tcp
-        published: "6881"
-        target: 6881
-      - mode: ingress
-        protocol: tcp
-        published: "8112"
-        target: 8112
-      - mode: ingress
-        protocol: tcp
-        published: "8118"
-        target: 8118
+      - 58846:58846
+      - 58946:58946
+      - 6881:6881
+      - 8112:8112
+      - 8118:8118
     privileged: true
     restart: unless-stopped
     sysctls:
@@ -1171,10 +1100,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "2375"
-        target: 2375
+      - 2375:2375
     privileged: true
     restart: unless-stopped
     volumes:
@@ -1201,10 +1127,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3002"
-        target: 3000
+      - 3002:3000
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/docuseal
@@ -1233,10 +1156,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8282"
-        target: 8200
+      - 8282:8200
       - ${DUPLICATI_PORT_8200}:8200
     restart: unless-stopped
     volumes:
@@ -1284,10 +1204,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8105"
-        target: 8080
+      - 8105:8080
     restart: unless-stopped
     volumes:
       - source: fastenhealth-cache
@@ -1313,10 +1230,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8191"
-        target: 8191
+      - 8191:8191
     restart: unless-stopped
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
@@ -1410,14 +1324,8 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3013"
-        target: 3000
-      - mode: ingress
-        protocol: tcp
-        published: "222"
-        target: 22
+      - 3013:3000
+      - 222:22
     restart: always
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gitea
@@ -1543,30 +1451,11 @@ services:
         ipv4_address: 192.168.55.7
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3333"
-        target: 3333
-      - mode: ingress
-        protocol: tcp
-        published: "3334"
-        target: 3334
-      - mode: ingress
-        protocol: udp
-        published: "3334"
-        target: 3334
-      - mode: ingress
-        protocol: tcp
-        published: "5030"
-        target: 5030
-      - mode: ingress
-        protocol: tcp
-        published: "5031"
-        target: 5031
-      - mode: ingress
-        protocol: tcp
-        published: "50300"
-        target: 50300
+      - 3333:3333
+      - 3334:3334
+      - 5030:5030
+      - 5031:5031
+      - 50300:50300
     restart: always
   gotify:
     container_name: gotify
@@ -1608,10 +1497,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8097"
-        target: 80
+      - 8097:80
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gotify
@@ -1652,10 +1538,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3004"
-        target: 3000
+      - 3004:3000
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/homepage
@@ -1710,10 +1593,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8006"
-        target: 80
+      - 8006:80
     restart: unless-stopped
     volumes:
       - source: hortusfox_app_images
@@ -1755,10 +1635,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "1313"
-        target: 1313
+      - 1313:1313
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/hugo/
@@ -1967,10 +1844,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3007"
-        target: 3000
+      - 3007:3000
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/invidious/config.yml:/config.yml
@@ -2060,10 +1934,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8003"
-        target: 8003
+      - 8003:8003
     restart: always
     volumes:
       - invoice-ninja_cache:/var/www/html/bootstrap/cache
@@ -2119,10 +1990,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8005"
-        target: 80
+      - 8005:80
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/nginx:/etc/nginx/conf.d:ro
@@ -2145,10 +2013,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8104"
-        target: 80
+      - 8104:80
     restart: unless-stopped
   jellyfin:
     container_name: jellyfin
@@ -2805,10 +2670,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "22300"
-        target: 22300
+      - 22300:22300
     restart: unless-stopped
   libretranslate:
     container_name: libretranslate
@@ -2858,10 +2720,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8686"
-        target: 8686
+      - 8686:8686
     restart: unless-stopped
     volumes:
       - bind:
@@ -2961,10 +2820,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "17170"
-        target: 17170
+      - 17170:17170
     restart: always
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/lldap
@@ -3003,10 +2859,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "42010"
-        target: 42010
+      - 42010:42010
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/maloja/config
@@ -3036,10 +2889,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3306"
-        target: 3306
+      - 3306:3306
     restart: unless-stopped
     volumes:
       - bind:
@@ -3165,14 +3015,8 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "9001"
-        target: 9000
-      - mode: ingress
-        protocol: tcp
-        published: "9092"
-        target: 9090
+      - 9001:9000
+      - 9092:9090
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/minio/data
@@ -3228,10 +3072,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "9078"
-        target: 9078
+      - 9078:9078
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/multi-scrobbler
@@ -3303,10 +3144,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "4533"
-        target: 4533
+      - 4533:4533
     restart: unless-stopped
     user: 1000:1000
     volumes:
@@ -3526,10 +3364,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3579"
-        target: 3579
+      - 3579:3579
     restart: unless-stopped
     volumes:
       - bind:
@@ -3615,10 +3450,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8004"
-        target: 8000
+      - 8004:8000
     restart: unless-stopped
     volumes:
       - source: paperless-ngx-data
@@ -3800,10 +3632,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8107"
-        target: 8000
+      - 8107:8000
     restart: always
   plausible_db:
     container_name: plausible-db
@@ -3900,10 +3729,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "25"
-        target: 25
+      - 25:25
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/postal
@@ -3931,10 +3757,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "5001"
-        target: 5000
+      - 5001:5000
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/postal
@@ -3983,10 +3806,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "9696"
-        target: 9696
+      - 9696:9696
     restart: unless-stopped
     volumes:
       - bind:
@@ -4081,10 +3901,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "7878"
-        target: 7878
+      - 7878:7878
     restart: unless-stopped
     volumes:
       - bind:
@@ -4152,10 +3969,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3011"
-        target: 3000
+      - 3011:3000
     restart: unless-stopped
   reactive-resume-pg:
     container_name: reactive-resume-pg
@@ -4195,10 +4009,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8787"
-        target: 8787
+      - 8787:8787
     restart: unless-stopped
     volumes:
       - bind:
@@ -4282,10 +4093,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8103"
-        target: 8080
+      - 8103:8080
     read_only: true
     restart: always
     security_opt:
@@ -4366,18 +4174,9 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8080"
-        target: 8080
-      - mode: ingress
-        protocol: tcp
-        published: "8090"
-        target: 8090
-      - mode: ingress
-        protocol: tcp
-        published: "8119"
-        target: 8118
+      - 8080:8080
+      - 8090:8090
+      - 8119:8118
     privileged: true
     restart: unless-stopped
     sysctls:
@@ -4468,14 +4267,8 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8909"
-        target: 8080
-      - mode: ingress
-        protocol: tcp
-        published: "8910"
-        target: 8086
+      - 8909:8080
+      - 8910:8086
     restart: unless-stopped
     volumes:
       - bind:
@@ -4525,10 +4318,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8095"
-        target: 8080
+      - 8095:8080
     privileged: true
     restart: unless-stopped
     volumes:
@@ -4617,10 +4407,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8989"
-        target: 8989
+      - 8989:8989
     restart: unless-stopped
     volumes:
       - bind:
@@ -4865,18 +4652,9 @@ services:
       - default
       - nextcloud-aio
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "443"
-        target: 443
-      - mode: ingress
-        protocol: tcp
-        published: "80"
-        target: 80
-      - mode: ingress
-        protocol: tcp
-        published: "81"
-        target: 81
+      - 443:443
+      - 80:80
+      - 81:81
     restart: unless-stopped
     volumes:
       - bind:
@@ -4935,10 +4713,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8106"
-        target: 8080
+      - 8106:8080
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/tandoor/static
@@ -4992,10 +4767,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8911"
-        target: 8888
+      - 8911:8888
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/unmanic
@@ -5038,10 +4810,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3003"
-        target: 3001
+      - 3003:3001
     restart: unless-stopped
     volumes:
       - bind:
@@ -5148,9 +4917,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        target: 80
+      - 32768:80
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/wallabag/images
@@ -5177,10 +4944,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8283"
-        target: 80
+      - 8283:80
     restart: unless-stopped
     volumes:
       - wallos-db:/var/www/html/db
@@ -5255,10 +5019,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "3010"
-        target: 3000
+      - 3010:3000
     restart: unless-stopped
   your_spotify:
     container_name: your_spotify
@@ -5317,10 +5078,7 @@ services:
     networks:
       default: null
     ports:
-      - mode: ingress
-        protocol: tcp
-        published: "8089"
-        target: 8080
+      - 8089:8080
     restart: unless-stopped
     volumes:
       - bind:
@@ -5381,7 +5139,7 @@ services:
       start_period: '20s'
     image: postgres:16-alpine
     restart: unless-stopped
-    volumes: 
+    volumes:
       - zitadel-pg-db:/var/lib/postgresql/data
 volumes:
   authelia-pg-db:
