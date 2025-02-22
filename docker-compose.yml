@@ -795,6 +795,133 @@ services:
         type: bind
         bind:
           create_host_path: true
+  dawarich-app:
+    command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
+    container_name: dawarich-app
+    depends_on:
+      dawarich-pg-db:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_started
+        restart: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'    # Limit CPU usage to 50% of one core
+          memory: '4G'    # Limit memory usage to 4GB
+    entrypoint: web-entrypoint.sh
+    environment:
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/
+      DATABASE_HOST: dawarich-db
+      DATABASE_USERNAME: dawarich
+      DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
+      DATABASE_NAME: dawarich
+      MIN_MINUTES_SPENT_IN_CITY: 60
+      APPLICATION_HOSTS: localhost,loc.trez.wtf,192.168.1.254
+      TIME_ZONE: ${TZ}
+      APPLICATION_PROTOCOL: http
+      DISTANCE_UNIT: km
+      PROMETHEUS_EXPORTER_ENABLED: false
+      PROMETHEUS_EXPORTER_HOST: 0.0.0.0
+      PROMETHEUS_EXPORTER_PORT: 9394
+      ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    image: freikin/dawarich:latest
+    labels:
+      homepage.group: Personal Services
+      homepage.name: Dawarich
+      homepage.href: https://loc.${MY_TLD}
+      homepage.icon: dawarich.svg
+      homepage.description: Self-hosted alternative to Google Location History
+      swag: enable
+      swag_port: 3000
+      swag_proto: http
+      swag_url: loc.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://loc.${MY_TLD}
+    ports:
+      - 63561:3000
+      # - 9394:9394 # Prometheus exporter, uncomment if needed
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    volumes:
+      - dawarich_public:/var/app/public
+      - dawarich_watched:/var/app/tmp/imports/watched
+      - ${DOCKER_VOLUME_CONFIG}/dawarich/web-entrypoint.sh:/usr/local/bin/web-entrypoint.sh
+  dawarich-pg-db:
+    container_name: dawarich-pg-db
+    environment:
+      POSTGRES_DB: dawarich
+      POSTGRES_USER: dawarich
+      POSTGRES_PASSWORD: ${DAWARICH_PG_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d dawarich_development" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    image: postgis/postgis:17-3.5-alpine
+    restart: always
+    shm_size: 1G
+    volumes:
+      - dawarich_db_data:/var/lib/postgresql/data
+      - dawarich_shared:/var/shared
+  dawarich-sidekiq:
+    command: ['sidekiq']
+    container_name: dawarich-sidekiq
+    entrypoint: sidekiq-entrypoint.sh
+    environment:
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/
+      DATABASE_HOST: dawarich-db
+      DATABASE_USERNAME: dawarich
+      DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
+      DATABASE_NAME: dawarich
+      APPLICATION_HOSTS: localhost,loc.trez.wtf
+      BACKGROUND_PROCESSING_CONCURRENCY: 10
+      APPLICATION_PROTOCOL: http
+      DISTANCE_UNIT: km
+      PROMETHEUS_EXPORTER_ENABLED: false
+      PROMETHEUS_EXPORTER_HOST: dawarich-app
+      PROMETHEUS_EXPORTER_PORT: 9394
+      ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+    depends_on:
+      dawarich-app:
+        condition: service_healthy
+        restart: true
+      dawarich-pg-db:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_started
+        restart: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'    # Limit CPU usage to 50% of one core
+          memory: '4G'    # Limit memory usage to 4GB
+    healthcheck:
+      test: [ "CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}" ]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    image: freikin/dawarich:latest
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    volumes:
+      - dawarich_public:/var/app/public
+      - dawarich_watched:/var/app/tmp/imports/watched
+      - ${DOCKER_VOLUME_CONFIG}/dawarich/sideqik-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
   dbgate:
     container_name: dbgate
     environment:
@@ -4101,6 +4228,12 @@ services:
     container_name: redis
     expose:
       - 6379
+    # healthcheck:
+    #   test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    #   interval: 10s
+    #   retries: 5
+    #   start_period: 30s
+    #   timeout: 10s
     image: redis:alpine
     networks:
       default: null
@@ -4835,1263 +4968,6 @@ services:
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
-  traccar:
-    container_name: traccar
-    image: traccar/traccar:latest
-    labels:
-      homepage.group: Personal Services
-      homepage.name: Traccar
-      homepage.href: https://trac.${MY_TLD}
-      homepage.icon: traccar.svg
-      homepage.description: Open-source GPS tracking system
-      swag: enable
-      swag_proto: http
-      swag_port: 8082
-      swag_url: trac.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://trac.${MY_TLD}
-    networks:
-      default: null
-    ports:
-      - mode: ingress
-        protocol: udp
-        published: "6000"
-        target: 5000
-      - mode: ingress
-        protocol: udp
-        published: "6001"
-        target: 5001
-      - mode: ingress
-        protocol: udp
-        published: "6002"
-        target: 5002
-      - mode: ingress
-        protocol: udp
-        published: "6003"
-        target: 5003
-      - mode: ingress
-        protocol: udp
-        published: "6004"
-        target: 5004
-      - mode: ingress
-        protocol: udp
-        published: "6005"
-        target: 5005
-      - mode: ingress
-        protocol: udp
-        published: "6006"
-        target: 5006
-      - mode: ingress
-        protocol: udp
-        published: "6007"
-        target: 5007
-      - mode: ingress
-        protocol: udp
-        published: "6008"
-        target: 5008
-      - mode: ingress
-        protocol: udp
-        published: "6009"
-        target: 5009
-      - mode: ingress
-        protocol: udp
-        published: "6010"
-        target: 5010
-      - mode: ingress
-        protocol: udp
-        published: "6011"
-        target: 5011
-      - mode: ingress
-        protocol: udp
-        published: "6012"
-        target: 5012
-      - mode: ingress
-        protocol: udp
-        published: "6013"
-        target: 5013
-      - mode: ingress
-        protocol: udp
-        published: "6014"
-        target: 5014
-      - mode: ingress
-        protocol: udp
-        published: "6015"
-        target: 5015
-      - mode: ingress
-        protocol: udp
-        published: "6016"
-        target: 5016
-      - mode: ingress
-        protocol: udp
-        published: "6017"
-        target: 5017
-      - mode: ingress
-        protocol: udp
-        published: "6018"
-        target: 5018
-      - mode: ingress
-        protocol: udp
-        published: "6019"
-        target: 5019
-      - mode: ingress
-        protocol: udp
-        published: "6020"
-        target: 5020
-      - mode: ingress
-        protocol: udp
-        published: "6021"
-        target: 5021
-      - mode: ingress
-        protocol: udp
-        published: "6022"
-        target: 5022
-      - mode: ingress
-        protocol: udp
-        published: "6023"
-        target: 5023
-      - mode: ingress
-        protocol: udp
-        published: "6024"
-        target: 5024
-      - mode: ingress
-        protocol: udp
-        published: "6025"
-        target: 5025
-      - mode: ingress
-        protocol: udp
-        published: "6026"
-        target: 5026
-      - mode: ingress
-        protocol: udp
-        published: "6027"
-        target: 5027
-      - mode: ingress
-        protocol: udp
-        published: "6028"
-        target: 5028
-      - mode: ingress
-        protocol: udp
-        published: "6029"
-        target: 5029
-      - mode: ingress
-        protocol: udp
-        published: "6030"
-        target: 5030
-      - mode: ingress
-        protocol: udp
-        published: "6031"
-        target: 5031
-      - mode: ingress
-        protocol: udp
-        published: "6032"
-        target: 5032
-      - mode: ingress
-        protocol: udp
-        published: "6033"
-        target: 5033
-      - mode: ingress
-        protocol: udp
-        published: "6034"
-        target: 5034
-      - mode: ingress
-        protocol: udp
-        published: "6035"
-        target: 5035
-      - mode: ingress
-        protocol: udp
-        published: "6036"
-        target: 5036
-      - mode: ingress
-        protocol: udp
-        published: "6037"
-        target: 5037
-      - mode: ingress
-        protocol: udp
-        published: "6038"
-        target: 5038
-      - mode: ingress
-        protocol: udp
-        published: "6039"
-        target: 5039
-      - mode: ingress
-        protocol: udp
-        published: "6040"
-        target: 5040
-      - mode: ingress
-        protocol: udp
-        published: "6041"
-        target: 5041
-      - mode: ingress
-        protocol: udp
-        published: "6042"
-        target: 5042
-      - mode: ingress
-        protocol: udp
-        published: "6043"
-        target: 5043
-      - mode: ingress
-        protocol: udp
-        published: "6044"
-        target: 5044
-      - mode: ingress
-        protocol: udp
-        published: "6045"
-        target: 5045
-      - mode: ingress
-        protocol: udp
-        published: "6046"
-        target: 5046
-      - mode: ingress
-        protocol: udp
-        published: "6047"
-        target: 5047
-      - mode: ingress
-        protocol: udp
-        published: "6048"
-        target: 5048
-      - mode: ingress
-        protocol: udp
-        published: "6049"
-        target: 5049
-      - mode: ingress
-        protocol: udp
-        published: "6050"
-        target: 5050
-      - mode: ingress
-        protocol: udp
-        published: "6051"
-        target: 5051
-      - mode: ingress
-        protocol: udp
-        published: "6052"
-        target: 5052
-      - mode: ingress
-        protocol: udp
-        published: "6053"
-        target: 5053
-      - mode: ingress
-        protocol: udp
-        published: "6054"
-        target: 5054
-      - mode: ingress
-        protocol: udp
-        published: "6055"
-        target: 5055
-      - mode: ingress
-        protocol: udp
-        published: "6056"
-        target: 5056
-      - mode: ingress
-        protocol: udp
-        published: "6057"
-        target: 5057
-      - mode: ingress
-        protocol: udp
-        published: "6058"
-        target: 5058
-      - mode: ingress
-        protocol: udp
-        published: "6059"
-        target: 5059
-      - mode: ingress
-        protocol: udp
-        published: "6060"
-        target: 5060
-      - mode: ingress
-        protocol: udp
-        published: "6061"
-        target: 5061
-      - mode: ingress
-        protocol: udp
-        published: "6062"
-        target: 5062
-      - mode: ingress
-        protocol: udp
-        published: "6063"
-        target: 5063
-      - mode: ingress
-        protocol: udp
-        published: "6064"
-        target: 5064
-      - mode: ingress
-        protocol: udp
-        published: "6065"
-        target: 5065
-      - mode: ingress
-        protocol: udp
-        published: "6066"
-        target: 5066
-      - mode: ingress
-        protocol: udp
-        published: "6067"
-        target: 5067
-      - mode: ingress
-        protocol: udp
-        published: "6068"
-        target: 5068
-      - mode: ingress
-        protocol: udp
-        published: "6069"
-        target: 5069
-      - mode: ingress
-        protocol: udp
-        published: "6070"
-        target: 5070
-      - mode: ingress
-        protocol: udp
-        published: "6071"
-        target: 5071
-      - mode: ingress
-        protocol: udp
-        published: "6072"
-        target: 5072
-      - mode: ingress
-        protocol: udp
-        published: "6073"
-        target: 5073
-      - mode: ingress
-        protocol: udp
-        published: "6074"
-        target: 5074
-      - mode: ingress
-        protocol: udp
-        published: "6075"
-        target: 5075
-      - mode: ingress
-        protocol: udp
-        published: "6076"
-        target: 5076
-      - mode: ingress
-        protocol: udp
-        published: "6077"
-        target: 5077
-      - mode: ingress
-        protocol: udp
-        published: "6078"
-        target: 5078
-      - mode: ingress
-        protocol: udp
-        published: "6079"
-        target: 5079
-      - mode: ingress
-        protocol: udp
-        published: "6080"
-        target: 5080
-      - mode: ingress
-        protocol: udp
-        published: "6081"
-        target: 5081
-      - mode: ingress
-        protocol: udp
-        published: "6082"
-        target: 5082
-      - mode: ingress
-        protocol: udp
-        published: "6083"
-        target: 5083
-      - mode: ingress
-        protocol: udp
-        published: "6084"
-        target: 5084
-      - mode: ingress
-        protocol: udp
-        published: "6085"
-        target: 5085
-      - mode: ingress
-        protocol: udp
-        published: "6086"
-        target: 5086
-      - mode: ingress
-        protocol: udp
-        published: "6087"
-        target: 5087
-      - mode: ingress
-        protocol: udp
-        published: "6088"
-        target: 5088
-      - mode: ingress
-        protocol: udp
-        published: "6089"
-        target: 5089
-      - mode: ingress
-        protocol: udp
-        published: "6090"
-        target: 5090
-      - mode: ingress
-        protocol: udp
-        published: "6091"
-        target: 5091
-      - mode: ingress
-        protocol: udp
-        published: "6092"
-        target: 5092
-      - mode: ingress
-        protocol: udp
-        published: "6093"
-        target: 5093
-      - mode: ingress
-        protocol: udp
-        published: "6094"
-        target: 5094
-      - mode: ingress
-        protocol: udp
-        published: "6095"
-        target: 5095
-      - mode: ingress
-        protocol: udp
-        published: "6096"
-        target: 5096
-      - mode: ingress
-        protocol: udp
-        published: "6097"
-        target: 5097
-      - mode: ingress
-        protocol: udp
-        published: "6098"
-        target: 5098
-      - mode: ingress
-        protocol: udp
-        published: "6099"
-        target: 5099
-      - mode: ingress
-        protocol: udp
-        published: "6100"
-        target: 5100
-      - mode: ingress
-        protocol: udp
-        published: "6101"
-        target: 5101
-      - mode: ingress
-        protocol: udp
-        published: "6102"
-        target: 5102
-      - mode: ingress
-        protocol: udp
-        published: "6103"
-        target: 5103
-      - mode: ingress
-        protocol: udp
-        published: "6104"
-        target: 5104
-      - mode: ingress
-        protocol: udp
-        published: "6105"
-        target: 5105
-      - mode: ingress
-        protocol: udp
-        published: "6106"
-        target: 5106
-      - mode: ingress
-        protocol: udp
-        published: "6107"
-        target: 5107
-      - mode: ingress
-        protocol: udp
-        published: "6108"
-        target: 5108
-      - mode: ingress
-        protocol: udp
-        published: "6109"
-        target: 5109
-      - mode: ingress
-        protocol: udp
-        published: "6110"
-        target: 5110
-      - mode: ingress
-        protocol: udp
-        published: "6111"
-        target: 5111
-      - mode: ingress
-        protocol: udp
-        published: "6112"
-        target: 5112
-      - mode: ingress
-        protocol: udp
-        published: "6113"
-        target: 5113
-      - mode: ingress
-        protocol: udp
-        published: "6114"
-        target: 5114
-      - mode: ingress
-        protocol: udp
-        published: "6115"
-        target: 5115
-      - mode: ingress
-        protocol: udp
-        published: "6116"
-        target: 5116
-      - mode: ingress
-        protocol: udp
-        published: "6117"
-        target: 5117
-      - mode: ingress
-        protocol: udp
-        published: "6118"
-        target: 5118
-      - mode: ingress
-        protocol: udp
-        published: "6119"
-        target: 5119
-      - mode: ingress
-        protocol: udp
-        published: "6120"
-        target: 5120
-      - mode: ingress
-        protocol: udp
-        published: "6121"
-        target: 5121
-      - mode: ingress
-        protocol: udp
-        published: "6122"
-        target: 5122
-      - mode: ingress
-        protocol: udp
-        published: "6123"
-        target: 5123
-      - mode: ingress
-        protocol: udp
-        published: "6124"
-        target: 5124
-      - mode: ingress
-        protocol: udp
-        published: "6125"
-        target: 5125
-      - mode: ingress
-        protocol: udp
-        published: "6126"
-        target: 5126
-      - mode: ingress
-        protocol: udp
-        published: "6127"
-        target: 5127
-      - mode: ingress
-        protocol: udp
-        published: "6128"
-        target: 5128
-      - mode: ingress
-        protocol: udp
-        published: "6129"
-        target: 5129
-      - mode: ingress
-        protocol: udp
-        published: "6130"
-        target: 5130
-      - mode: ingress
-        protocol: udp
-        published: "6131"
-        target: 5131
-      - mode: ingress
-        protocol: udp
-        published: "6132"
-        target: 5132
-      - mode: ingress
-        protocol: udp
-        published: "6133"
-        target: 5133
-      - mode: ingress
-        protocol: udp
-        published: "6134"
-        target: 5134
-      - mode: ingress
-        protocol: udp
-        published: "6135"
-        target: 5135
-      - mode: ingress
-        protocol: udp
-        published: "6136"
-        target: 5136
-      - mode: ingress
-        protocol: udp
-        published: "6137"
-        target: 5137
-      - mode: ingress
-        protocol: udp
-        published: "6138"
-        target: 5138
-      - mode: ingress
-        protocol: udp
-        published: "6139"
-        target: 5139
-      - mode: ingress
-        protocol: udp
-        published: "6140"
-        target: 5140
-      - mode: ingress
-        protocol: udp
-        published: "6141"
-        target: 5141
-      - mode: ingress
-        protocol: udp
-        published: "6142"
-        target: 5142
-      - mode: ingress
-        protocol: udp
-        published: "6143"
-        target: 5143
-      - mode: ingress
-        protocol: udp
-        published: "6144"
-        target: 5144
-      - mode: ingress
-        protocol: udp
-        published: "6145"
-        target: 5145
-      - mode: ingress
-        protocol: udp
-        published: "6146"
-        target: 5146
-      - mode: ingress
-        protocol: udp
-        published: "6147"
-        target: 5147
-      - mode: ingress
-        protocol: udp
-        published: "6148"
-        target: 5148
-      - mode: ingress
-        protocol: udp
-        published: "6149"
-        target: 5149
-      - mode: ingress
-        protocol: udp
-        published: "6150"
-        target: 5150
-      - mode: ingress
-        protocol: tcp
-        published: "6000"
-        target: 5000
-      - mode: ingress
-        protocol: tcp
-        published: "6001"
-        target: 5001
-      - mode: ingress
-        protocol: tcp
-        published: "6002"
-        target: 5002
-      - mode: ingress
-        protocol: tcp
-        published: "6003"
-        target: 5003
-      - mode: ingress
-        protocol: tcp
-        published: "6004"
-        target: 5004
-      - mode: ingress
-        protocol: tcp
-        published: "6005"
-        target: 5005
-      - mode: ingress
-        protocol: tcp
-        published: "6006"
-        target: 5006
-      - mode: ingress
-        protocol: tcp
-        published: "6007"
-        target: 5007
-      - mode: ingress
-        protocol: tcp
-        published: "6008"
-        target: 5008
-      - mode: ingress
-        protocol: tcp
-        published: "6009"
-        target: 5009
-      - mode: ingress
-        protocol: tcp
-        published: "6010"
-        target: 5010
-      - mode: ingress
-        protocol: tcp
-        published: "6011"
-        target: 5011
-      - mode: ingress
-        protocol: tcp
-        published: "6012"
-        target: 5012
-      - mode: ingress
-        protocol: tcp
-        published: "6013"
-        target: 5013
-      - mode: ingress
-        protocol: tcp
-        published: "6014"
-        target: 5014
-      - mode: ingress
-        protocol: tcp
-        published: "6015"
-        target: 5015
-      - mode: ingress
-        protocol: tcp
-        published: "6016"
-        target: 5016
-      - mode: ingress
-        protocol: tcp
-        published: "6017"
-        target: 5017
-      - mode: ingress
-        protocol: tcp
-        published: "6018"
-        target: 5018
-      - mode: ingress
-        protocol: tcp
-        published: "6019"
-        target: 5019
-      - mode: ingress
-        protocol: tcp
-        published: "6020"
-        target: 5020
-      - mode: ingress
-        protocol: tcp
-        published: "6021"
-        target: 5021
-      - mode: ingress
-        protocol: tcp
-        published: "6022"
-        target: 5022
-      - mode: ingress
-        protocol: tcp
-        published: "6023"
-        target: 5023
-      - mode: ingress
-        protocol: tcp
-        published: "6024"
-        target: 5024
-      - mode: ingress
-        protocol: tcp
-        published: "6025"
-        target: 5025
-      - mode: ingress
-        protocol: tcp
-        published: "6026"
-        target: 5026
-      - mode: ingress
-        protocol: tcp
-        published: "6027"
-        target: 5027
-      - mode: ingress
-        protocol: tcp
-        published: "6028"
-        target: 5028
-      - mode: ingress
-        protocol: tcp
-        published: "6029"
-        target: 5029
-      - mode: ingress
-        protocol: tcp
-        published: "6030"
-        target: 5030
-      - mode: ingress
-        protocol: tcp
-        published: "6031"
-        target: 5031
-      - mode: ingress
-        protocol: tcp
-        published: "6032"
-        target: 5032
-      - mode: ingress
-        protocol: tcp
-        published: "6033"
-        target: 5033
-      - mode: ingress
-        protocol: tcp
-        published: "6034"
-        target: 5034
-      - mode: ingress
-        protocol: tcp
-        published: "6035"
-        target: 5035
-      - mode: ingress
-        protocol: tcp
-        published: "6036"
-        target: 5036
-      - mode: ingress
-        protocol: tcp
-        published: "6037"
-        target: 5037
-      - mode: ingress
-        protocol: tcp
-        published: "6038"
-        target: 5038
-      - mode: ingress
-        protocol: tcp
-        published: "6039"
-        target: 5039
-      - mode: ingress
-        protocol: tcp
-        published: "6040"
-        target: 5040
-      - mode: ingress
-        protocol: tcp
-        published: "6041"
-        target: 5041
-      - mode: ingress
-        protocol: tcp
-        published: "6042"
-        target: 5042
-      - mode: ingress
-        protocol: tcp
-        published: "6043"
-        target: 5043
-      - mode: ingress
-        protocol: tcp
-        published: "6044"
-        target: 5044
-      - mode: ingress
-        protocol: tcp
-        published: "6045"
-        target: 5045
-      - mode: ingress
-        protocol: tcp
-        published: "6046"
-        target: 5046
-      - mode: ingress
-        protocol: tcp
-        published: "6047"
-        target: 5047
-      - mode: ingress
-        protocol: tcp
-        published: "6048"
-        target: 5048
-      - mode: ingress
-        protocol: tcp
-        published: "6049"
-        target: 5049
-      - mode: ingress
-        protocol: tcp
-        published: "6050"
-        target: 5050
-      - mode: ingress
-        protocol: tcp
-        published: "6051"
-        target: 5051
-      - mode: ingress
-        protocol: tcp
-        published: "6052"
-        target: 5052
-      - mode: ingress
-        protocol: tcp
-        published: "6053"
-        target: 5053
-      - mode: ingress
-        protocol: tcp
-        published: "6054"
-        target: 5054
-      - mode: ingress
-        protocol: tcp
-        published: "6055"
-        target: 5055
-      - mode: ingress
-        protocol: tcp
-        published: "6056"
-        target: 5056
-      - mode: ingress
-        protocol: tcp
-        published: "6057"
-        target: 5057
-      - mode: ingress
-        protocol: tcp
-        published: "6058"
-        target: 5058
-      - mode: ingress
-        protocol: tcp
-        published: "6059"
-        target: 5059
-      - mode: ingress
-        protocol: tcp
-        published: "6060"
-        target: 5060
-      - mode: ingress
-        protocol: tcp
-        published: "6061"
-        target: 5061
-      - mode: ingress
-        protocol: tcp
-        published: "6062"
-        target: 5062
-      - mode: ingress
-        protocol: tcp
-        published: "6063"
-        target: 5063
-      - mode: ingress
-        protocol: tcp
-        published: "6064"
-        target: 5064
-      - mode: ingress
-        protocol: tcp
-        published: "6065"
-        target: 5065
-      - mode: ingress
-        protocol: tcp
-        published: "6066"
-        target: 5066
-      - mode: ingress
-        protocol: tcp
-        published: "6067"
-        target: 5067
-      - mode: ingress
-        protocol: tcp
-        published: "6068"
-        target: 5068
-      - mode: ingress
-        protocol: tcp
-        published: "6069"
-        target: 5069
-      - mode: ingress
-        protocol: tcp
-        published: "6070"
-        target: 5070
-      - mode: ingress
-        protocol: tcp
-        published: "6071"
-        target: 5071
-      - mode: ingress
-        protocol: tcp
-        published: "6072"
-        target: 5072
-      - mode: ingress
-        protocol: tcp
-        published: "6073"
-        target: 5073
-      - mode: ingress
-        protocol: tcp
-        published: "6074"
-        target: 5074
-      - mode: ingress
-        protocol: tcp
-        published: "6075"
-        target: 5075
-      - mode: ingress
-        protocol: tcp
-        published: "6076"
-        target: 5076
-      - mode: ingress
-        protocol: tcp
-        published: "6077"
-        target: 5077
-      - mode: ingress
-        protocol: tcp
-        published: "6078"
-        target: 5078
-      - mode: ingress
-        protocol: tcp
-        published: "6079"
-        target: 5079
-      - mode: ingress
-        protocol: tcp
-        published: "6080"
-        target: 5080
-      - mode: ingress
-        protocol: tcp
-        published: "6081"
-        target: 5081
-      - mode: ingress
-        protocol: tcp
-        published: "6082"
-        target: 5082
-      - mode: ingress
-        protocol: tcp
-        published: "6083"
-        target: 5083
-      - mode: ingress
-        protocol: tcp
-        published: "6084"
-        target: 5084
-      - mode: ingress
-        protocol: tcp
-        published: "6085"
-        target: 5085
-      - mode: ingress
-        protocol: tcp
-        published: "6086"
-        target: 5086
-      - mode: ingress
-        protocol: tcp
-        published: "6087"
-        target: 5087
-      - mode: ingress
-        protocol: tcp
-        published: "6088"
-        target: 5088
-      - mode: ingress
-        protocol: tcp
-        published: "6089"
-        target: 5089
-      - mode: ingress
-        protocol: tcp
-        published: "6090"
-        target: 5090
-      - mode: ingress
-        protocol: tcp
-        published: "6091"
-        target: 5091
-      - mode: ingress
-        protocol: tcp
-        published: "6092"
-        target: 5092
-      - mode: ingress
-        protocol: tcp
-        published: "6093"
-        target: 5093
-      - mode: ingress
-        protocol: tcp
-        published: "6094"
-        target: 5094
-      - mode: ingress
-        protocol: tcp
-        published: "6095"
-        target: 5095
-      - mode: ingress
-        protocol: tcp
-        published: "6096"
-        target: 5096
-      - mode: ingress
-        protocol: tcp
-        published: "6097"
-        target: 5097
-      - mode: ingress
-        protocol: tcp
-        published: "6098"
-        target: 5098
-      - mode: ingress
-        protocol: tcp
-        published: "6099"
-        target: 5099
-      - mode: ingress
-        protocol: tcp
-        published: "6100"
-        target: 5100
-      - mode: ingress
-        protocol: tcp
-        published: "6101"
-        target: 5101
-      - mode: ingress
-        protocol: tcp
-        published: "6102"
-        target: 5102
-      - mode: ingress
-        protocol: tcp
-        published: "6103"
-        target: 5103
-      - mode: ingress
-        protocol: tcp
-        published: "6104"
-        target: 5104
-      - mode: ingress
-        protocol: tcp
-        published: "6105"
-        target: 5105
-      - mode: ingress
-        protocol: tcp
-        published: "6106"
-        target: 5106
-      - mode: ingress
-        protocol: tcp
-        published: "6107"
-        target: 5107
-      - mode: ingress
-        protocol: tcp
-        published: "6108"
-        target: 5108
-      - mode: ingress
-        protocol: tcp
-        published: "6109"
-        target: 5109
-      - mode: ingress
-        protocol: tcp
-        published: "6110"
-        target: 5110
-      - mode: ingress
-        protocol: tcp
-        published: "6111"
-        target: 5111
-      - mode: ingress
-        protocol: tcp
-        published: "6112"
-        target: 5112
-      - mode: ingress
-        protocol: tcp
-        published: "6113"
-        target: 5113
-      - mode: ingress
-        protocol: tcp
-        published: "6114"
-        target: 5114
-      - mode: ingress
-        protocol: tcp
-        published: "6115"
-        target: 5115
-      - mode: ingress
-        protocol: tcp
-        published: "6116"
-        target: 5116
-      - mode: ingress
-        protocol: tcp
-        published: "6117"
-        target: 5117
-      - mode: ingress
-        protocol: tcp
-        published: "6118"
-        target: 5118
-      - mode: ingress
-        protocol: tcp
-        published: "6119"
-        target: 5119
-      - mode: ingress
-        protocol: tcp
-        published: "6120"
-        target: 5120
-      - mode: ingress
-        protocol: tcp
-        published: "6121"
-        target: 5121
-      - mode: ingress
-        protocol: tcp
-        published: "6122"
-        target: 5122
-      - mode: ingress
-        protocol: tcp
-        published: "6123"
-        target: 5123
-      - mode: ingress
-        protocol: tcp
-        published: "6124"
-        target: 5124
-      - mode: ingress
-        protocol: tcp
-        published: "6125"
-        target: 5125
-      - mode: ingress
-        protocol: tcp
-        published: "6126"
-        target: 5126
-      - mode: ingress
-        protocol: tcp
-        published: "6127"
-        target: 5127
-      - mode: ingress
-        protocol: tcp
-        published: "6128"
-        target: 5128
-      - mode: ingress
-        protocol: tcp
-        published: "6129"
-        target: 5129
-      - mode: ingress
-        protocol: tcp
-        published: "6130"
-        target: 5130
-      - mode: ingress
-        protocol: tcp
-        published: "6131"
-        target: 5131
-      - mode: ingress
-        protocol: tcp
-        published: "6132"
-        target: 5132
-      - mode: ingress
-        protocol: tcp
-        published: "6133"
-        target: 5133
-      - mode: ingress
-        protocol: tcp
-        published: "6134"
-        target: 5134
-      - mode: ingress
-        protocol: tcp
-        published: "6135"
-        target: 5135
-      - mode: ingress
-        protocol: tcp
-        published: "6136"
-        target: 5136
-      - mode: ingress
-        protocol: tcp
-        published: "6137"
-        target: 5137
-      - mode: ingress
-        protocol: tcp
-        published: "6138"
-        target: 5138
-      - mode: ingress
-        protocol: tcp
-        published: "6139"
-        target: 5139
-      - mode: ingress
-        protocol: tcp
-        published: "6140"
-        target: 5140
-      - mode: ingress
-        protocol: tcp
-        published: "6141"
-        target: 5141
-      - mode: ingress
-        protocol: tcp
-        published: "6142"
-        target: 5142
-      - mode: ingress
-        protocol: tcp
-        published: "6143"
-        target: 5143
-      - mode: ingress
-        protocol: tcp
-        published: "6144"
-        target: 5144
-      - mode: ingress
-        protocol: tcp
-        published: "6145"
-        target: 5145
-      - mode: ingress
-        protocol: tcp
-        published: "6146"
-        target: 5146
-      - mode: ingress
-        protocol: tcp
-        published: "6147"
-        target: 5147
-      - mode: ingress
-        protocol: tcp
-        published: "6148"
-        target: 5148
-      - mode: ingress
-        protocol: tcp
-        published: "6149"
-        target: 5149
-      - mode: ingress
-        protocol: tcp
-        published: "6150"
-        target: 5150
-      - mode: ingress
-        protocol: tcp
-        published: "8082"
-        target: 8082
-    restart: unless-stopped
-    volumes:
-      - read_only: true
-        source: ${DOCKER_VOLUME_CONFIG}/traccar/traccar.xml
-        target: /opt/traccar/conf/traccar.xml
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/traccar/logs
-        target: /opt/traccar/logs
-        type: bind
-        bind:
-          create_host_path: true
-  traccar-pg:
-    container_name: traccar-pg
-    environment:
-      POSTGRES_PASSWORD: ${TRACCAR_POSTGRES_PASSWORD}
-      POSTGRES_USER: ${TRACCAR_POSTGRES_USER}
-      POSTGRES_DB: ${TRACCAR_POSTGRES_DATABASE}
-    expose:
-      - 5432
-    image: postgres:16-alpine
-    networks:
-      default: null
-    restart: unless-stopped
-    volumes:
-      - traccar-pg:/var/lib/postgresql/data
   unmanic:
     container_name: unmanic
     environment:
@@ -6520,6 +5396,14 @@ volumes:
     name: crowdsec-config
   crowdsec-db:
     name: crowdsec-db
+  dawarich_db_data:
+    name: dawarich_db_data
+  dawarich_shared:
+    name: dawarich_shared
+  dawarich_public:
+    name: dawarich_public
+  dawarich_watched:
+    name: dawarich_watched
   dbgate-data:
     name: dbgate-data
   fastenhealth-cache:
@@ -6622,8 +5506,6 @@ volumes:
     name: sonarqube-temp
   tandoor-pg:
     name: tandoor-pg
-  traccar-pg:
-    name: traccar-pg
   unmanic-cache:
     name: unmanic-cache
   wallos-db:

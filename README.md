@@ -25,6 +25,9 @@
 | crowdsec | crowdsecurity/crowdsec:latest |
 | crowdsec-dashboard | metabase/metabase |
 | czkawka | jlesage/czkawka |
+| dawarich-app | freikin/dawarich:latest |
+| dawarich-pg-db | postgis/postgis:17-3.5-alpine |
+| dawarich-sidekiq | freikin/dawarich:latest |
 | dbgate | dbgate/dbgate:alpine |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
@@ -130,8 +133,6 @@
 | swag | lscr.io/linuxserver/swag:latest |
 | tandoor | vabene1111/recipes |
 | tandoor-pg | postgres:16-alpine |
-| traccar | traccar/traccar:latest |
-| traccar-pg | postgres:16-alpine |
 | unmanic | josh5/unmanic:latest |
 | uptimekuma | louislam/uptime-kuma:latest |
 | vault | hashicorp/vault:latest |
