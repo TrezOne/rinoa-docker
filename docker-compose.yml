@@ -808,7 +808,7 @@ services:
         condition: service_healthy
         restart: true
       redis:
-        condition: service_healthy
+        condition: service_started
         restart: true
     deploy:
       resources:
