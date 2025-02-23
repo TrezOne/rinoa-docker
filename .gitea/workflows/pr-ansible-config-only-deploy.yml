@@ -115,7 +115,7 @@ jobs:
           notification_title: 'GITEA: PR Merge Successful'
           notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
   ansible-config-deploy:
-    name: Deploy via Ansible & Docker Compose
+    name: Ansible Config Deployment
     runs-on: ubuntu-latest
     needs: [pr-merge]
     env:
