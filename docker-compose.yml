@@ -2193,7 +2193,7 @@ services:
     networks:
       default: null
     ports:
-      - 127.0.0.1:8889:8888
+      - 8889:8888
     restart: unless-stopped
     volumes:
       - bind:
@@ -2313,8 +2313,8 @@ services:
     networks:
       default: null
     ports:
-      - 10000:10000}/udp
-      - 127.0.0.1:8091:8080
+      - 10000:10000/udp
+      - 8091:8080
     restart: unless-stopped
     volumes:
       - bind:
