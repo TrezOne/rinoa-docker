@@ -362,6 +362,7 @@ services:
     networks:
       bitmagnet:
         ipv4_address: 192.168.55.8
+      default: null
     restart: unless-stopped
     shm_size: 1g
     volumes:
@@ -4500,7 +4501,9 @@ services:
   soularr-dashboard:
     container_name: soularr-dashboard
     depends_on:
-      - soularr
+      soularr:
+        condition: service_started
+        required: true
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
