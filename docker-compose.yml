@@ -1157,7 +1157,6 @@ services:
       default: null
     ports:
       - 8282:8200
-      - ${DUPLICATI_PORT_8200}:8200
     restart: unless-stopped
     volumes:
       - bind:
@@ -2194,7 +2193,7 @@ services:
     networks:
       default: null
     ports:
-      - 127.0.0.1:${JICOFO_REST_PORT:-8889}:8888
+      - 127.0.0.1:8889:8888
     restart: unless-stopped
     volumes:
       - bind:
@@ -2255,7 +2254,7 @@ services:
     networks:
       default: null
     ports:
-      - ${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}:${JIGASI_PORT_MIN:-20000}-${JIGASI_PORT_MAX:-20050}/udp
+      - 20000-20050:20000-20050/udp
     restart: unless-stopped
     volumes:
       - bind:
@@ -2314,8 +2313,8 @@ services:
     networks:
       default: null
     ports:
-      - ${JVB_PORT:-10000}:${JVB_PORT:-10000}/udp
-      - 127.0.0.1:${JVB_COLIBRI_PORT:-8091}:8080
+      - 10000:10000}/udp
+      - 127.0.0.1:8091:8080
     restart: unless-stopped
     volumes:
       - bind:
@@ -2414,7 +2413,7 @@ services:
       XMPP_RECORDER_DOMAIN:
       XMPP_PORT:
     expose:
-      - ${XMPP_PORT:-5222}
+      - 5222
       - "5347"
       - "5280"
     image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable}
@@ -2595,8 +2594,8 @@ services:
     networks:
       default: null
     ports:
-      - ${JITSI__HTTP_PORT}:80
-      - ${JITSI__HTTPS_PORT}:443
+      - 8001:80
+      - 8002:443
     restart: unless-stopped
     volumes:
       - bind:
@@ -5050,8 +5049,8 @@ services:
     networks:
       default: null
     ports:
-      - ${YOUR_SPOTIFY_PORT_80}:80
-      - ${YOUR_SPOTIFY_PORT_443}:443
+      - 8088:80
+      - 8098:443
     restart: always
   youtubedl:
     container_name: youtubedl
