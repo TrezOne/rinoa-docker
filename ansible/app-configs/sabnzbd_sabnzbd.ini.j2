@@ -342,7 +342,7 @@ host = news.newshosting.com
 port = 563
 timeout = 60
 username = thetrezuredone
-password = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_PASSWORD'] }}
+password = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSK_USER_PASSWORD'] }}
 connections = 8
 ssl = 1
 ssl_verify = 3
