@@ -17,6 +17,7 @@
 | bitwarden | vaultwarden/server:latest |
 | bluesky-pds | ghcr.io/bluesky-social/pds:latest |
 | browserless | ghcr.io/browserless/chromium:latest |
+| bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
 | cloudflared | cloudflare/cloudflared:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
@@ -24,6 +25,7 @@
 | cronicle | elestio/cronicle:latest |
 | crowdsec | crowdsecurity/crowdsec:latest |
 | crowdsec-dashboard | metabase/metabase |
+| cyber-chef | mpepping/cyberchef:latest |
 | czkawka | jlesage/czkawka |
 | dawarich-app | freikin/dawarich:latest |
 | dawarich-pg-db | postgis/postgis:17-3.5-alpine |
@@ -38,7 +40,6 @@
 | ghost | ghost:latest |
 | gitea | gitea/gitea:1.23.1 |
 | gitea-db | postgres:14 |
-| gitea-opengist | ghcr.io/thomiceli/opengist:latest |
 | gitea-runner | gitea/act_runner:latest |
 | gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |
 | gluetun | qmcgaw/gluetun:latest |
