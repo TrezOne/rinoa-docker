@@ -362,6 +362,7 @@ services:
     networks:
       bitmagnet:
         ipv4_address: 192.168.55.8
+      default: null
     restart: unless-stopped
     shm_size: 1g
     volumes:
@@ -696,6 +697,7 @@ services:
       - 8908:3000
     restart: always
     volumes:
+      - ${DOCKER_VOLUME_CONFIG}/crowdsec/local-api-credentials.yaml:/etc/crowdsec/local_api_credentials.yaml
       - source: crowdsec-db
         target: /data/
         type: volume
@@ -4500,7 +4502,9 @@ services:
   soularr-dashboard:
     container_name: soularr-dashboard
     depends_on:
-      - soularr
+      soularr:
+        condition: service_started
+        required: true
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -4627,7 +4631,7 @@ services:
     environment:
       DNSPLUGIN: cloudflare
       EMAIL: charish.patel@trez.wtf
-      EXTRA_DOMAINS: 
+      EXTRA_DOMAINS:
       ONLY_SUBDOMAINS: false
       PGID: 1000
       PUID: 1000
