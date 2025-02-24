@@ -478,6 +478,34 @@ services:
     networks:
       default: null
     restart: unless-stopped
+  bytestash:
+    container_name: bytestash
+    environment:
+      BASE_PATH:
+      JWT_SECRET: ${BYTESTASH_JWT_SECRET}
+      TOKEN_EXPIRY: 24h
+      ALLOW_NEW_ACCOUNTS: true
+      DEBUG: true
+      DISABLE_ACCOUNTS: false
+      DISABLE_INTERNAL_ACCOUNTS: false
+    image: ghcr.io/jordan-dalby/bytestash:latest
+    labels:
+      homepage.description: Code Gists/Snippets
+      homepage.group: Code/DevOps
+      homepage.href: https://gist.trez.wtf
+      homepage.icon: bytestash.svg
+      homepage.name: Bytestash
+      swag: enable
+      swag_port: 5000
+      swag_proto: http
+      swag_url: gist.trez.wtf
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
+    ports:
+      - 62139:5000
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/bytestash:/data/snippets
   castopod:
     container_name: castopod
     depends_on:
@@ -702,6 +730,24 @@ services:
         target: /data/
         type: volume
         volume: {}
+  cyber-chef:
+    container_name: cyber-chef
+    image: mpepping/cyberchef:latest
+    labels:
+      homepage.description: Web app for encryption, encoding, compression, and data analysis
+      homepage.group: Code/DevOps
+      homepage.href: https://cchef.trez.wtf
+      homepage.icon: cyberchef.svg
+      homepage.name: CyberChef
+      swag: enable
+      swag_port: 8000
+      swag_proto: http
+      swag_url: cchef.trez.wtf
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
+    ports:
+      - 20992:8000
+    restart: unless-stopped
   czkawka:
     container_name: czkawka
     environment:
@@ -1369,36 +1415,6 @@ services:
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
-  gitea-opengist:
-    container_name: gitea-opengist
-    environment:
-      OG_LOG_LEVEL: warn
-      OG_EXTERNAL_URL: https://gist.trez.wtf
-      OG_GIT_DEFAULT_BRANCH: "main"
-      OG_GITEA_CLIENT_KEY: ${OPENGIST_GITEA_CLIENT_KEY}
-      OG_GITEA_SECRET: ${OPENGIST_GITEA_SECRET}
-      OG_GITEA_URL: https://git.trez.wtf
-      OG_GITEA_NAME: "Gitea @ Rinoa"
-      OG_SSH_EXTERNAL_DOMAIN: gist-ssh.trez.wtf
-    image: ghcr.io/thomiceli/opengist:latest
-    labels:
-      homepage.description: Private Code Gists
-      homepage.group: Code/DevOps
-      homepage.href: https://gist.trez.wtf
-      homepage.icon: sh-opengist.svg
-      homepage.name: Opengist
-      swag: enable
-      swag.uptime-kuma.enabled: "true"
-      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
-      swag_port: "6157"
-      swag_proto: http
-      swag_url: gist.trez.wtf
-    ports:
-      - "6157:6157" # HTTP port
-      - "2222:2222" # SSH port, can be removed if you don't use SSH
-    restart: always
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/gitea/opengist:/opengist
   gitea-runner:
     container_name: gitea-runner
     depends_on:
