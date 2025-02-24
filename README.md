@@ -126,6 +126,7 @@
 | sonarr | lscr.io/linuxserver/sonarr:latest |
 | sonashow | thewicklowwolf/sonashow:latest |
 | soularr | mrusse08/soularr:latest |
+| soularr-dashboard | git.trez.wtf/trez.one/soularr-dashboard:v0.1 |
 | soulseek | slskd/slskd |
 | sourcebot | ghcr.io/sourcebot-dev/sourcebot:latest |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
