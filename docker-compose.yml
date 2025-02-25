@@ -1,4 +1,11 @@
 name: compose
+x-bw-ui-env: &bw-ui-env
+  # We anchor the environment variables to avoid duplication
+  AUTOCONF_MODE: "yes"
+  DATABASE_URI: "mariadb+pymysql://bunkerweb:${BUNKERWEB_DB_PASSWORD}@mariadb:3306/bunkerweb" # Remember to set a stronger password for the database
+  USE_REAL_IP: yes
+  REAL_IP_FROM: 172.18.0.0/16
+  REAL_IP_HEADER: 'X-Forwarded-For'
 networks:
   bitmagnet:
     driver: bridge
@@ -5387,10 +5394,3 @@ volumes:
     name: wallos-logos
   zitadel-pg-db:
     name: zitadel-pg-db
-x-bw-ui-env: &bw-ui-env
-  # We anchor the environment variables to avoid duplication
-  AUTOCONF_MODE: "yes"
-  DATABASE_URI: "mariadb+pymysql://bunkerweb:${BUNKERWEB_DB_PASSWORD}@mariadb:3306/bunkerweb" # Remember to set a stronger password for the database
-  USE_REAL_IP: yes
-  REAL_IP_FROM: 172.18.0.0/16
-  REAL_IP_HEADER: 'X-Forwarded-For'
