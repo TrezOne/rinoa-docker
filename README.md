@@ -17,6 +17,10 @@
 | bitwarden | vaultwarden/server:latest |
 | bluesky-pds | ghcr.io/bluesky-social/pds:latest |
 | browserless | ghcr.io/browserless/chromium:latest |
+| bunkerweb | bunkerity/bunkerweb:1.6.0 |
+| bunkerweb-scheduler | bunkerity/bunkerweb-scheduler:1.6.0 |
+| bunkerweb-autoconf | bunkerity/bunkerweb-autoconf:1.6.0 |
+| bunkerweb-ui | bunkerity/bunkerweb-ui:1.6.0 |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
 | cloudflared | cloudflare/cloudflared:latest |
@@ -75,6 +79,7 @@
 | lidify | thewicklowwolf/lidify:latest |
 | lldap | lldap/lldap:stable |
 | maloja | krateng/maloja:latest |
+| manyfold | lscr.io/linuxserver/manyfold:latest |
 | mariadb | linuxserver/mariadb |
 | mastodon | lscr.io/linuxserver/mastodon:latest |
 | mastodon-pg-db | postgres:17-alpine |
@@ -103,7 +108,7 @@
 | plausible | ghcr.io/plausible/community-edition:v2.1.0 |
 | plausible_db | postgres:16-alpine |
 | plausible_events_db | clickhouse/clickhouse-server:24.3.3.102-alpine |
-| portainer | portainer/portainer-ce:alpine-sts |
+| portainer | portainer/portainer-ce:2.27.0-alpine |
 | portall | need4swede/portall:latest |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
@@ -122,6 +127,7 @@
 | scraperr-api | jpyles0524/scraperr_api:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
+| semaphore | semaphoreui/semaphore:v2.12.14 |
 | sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts |
 | sonarqube-pg-db | postgres:17-alpine |
 | sonarr | lscr.io/linuxserver/sonarr:latest |
@@ -145,6 +151,4 @@
 | web-check | lissy93/web-check |
 | your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
-| zitadel | ghcr.io/zitadel/zitadel:latest |
-| zitadel-pg-db | postgres:16-alpine |
 

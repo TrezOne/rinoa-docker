@@ -1,4 +1,11 @@
 name: compose
+x-bw-ui-env: &bw-ui-env
+  # We anchor the environment variables to avoid duplication
+  AUTOCONF_MODE: "yes"
+  DATABASE_URI: "mariadb+pymysql://bunkerweb:${BUNKERWEB_DB_PASSWORD}@mariadb:3306/bunkerweb" # Remember to set a stronger password for the database
+  USE_REAL_IP: yes
+  REAL_IP_FROM: 172.18.0.0/16
+  REAL_IP_HEADER: 'X-Forwarded-For'
 networks:
   bitmagnet:
     driver: bridge
@@ -477,6 +484,60 @@ services:
       swag_url: browse.${MY_TLD}
     networks:
       default: null
+    restart: unless-stopped
+  bunkerweb:
+    container_name: bunkerweb
+    image: bunkerity/bunkerweb:1.6.0
+    environment:
+      AUTOCONF_MODE: yes
+      API_WHITELIST_IP: 127.0.0.0/8 172.18.0.0/16
+    labels:
+      bunkerweb.INSTANCE: yes
+    ports:
+      - 27002:8080
+      - 63824:8443
+    restart: unless-stopped
+  bunkerweb-scheduler:
+    container_name: bunkerweb-scheduler
+    environment:
+      <<: *bw-ui-env
+      BUNKERWEB_INSTANCES: bunkerweb
+      SERVER_NAME: bunker.trez.wtf
+      API_WHITELIST_IP: 127.0.0.0/8 172.18.0.0/16
+      MULTISITE: yes
+      UI_HOST: http://bunkerweb-ui:7000 # Change it if needed
+    image: bunkerity/bunkerweb-scheduler:1.6.0
+    restart: unless-stopped
+    volumes:
+      - bunkerweb-storage:/data # This is used to persist the cache and other data like the backups
+  bunkerweb-autoconf:
+    container_name: bunkerweb-autoconf
+    depends_on:
+      - docker-socket-proxy
+    environment:
+      <<: *bw-ui-env
+      DOCKER_HOST: tcp://dockerproxy:2375
+    image: bunkerity/bunkerweb-autoconf:1.6.0
+    restart: unless-stopped
+  bunkerweb-ui:
+    container_name: bunkerweb-ui
+    environment:
+      <<: *bw-ui-env
+      TOTP_SECRETS: ${BUNKERWEB_TOTP_SECRETS}
+    expose:
+      - 7000
+    image: bunkerity/bunkerweb-ui:1.6.0
+    labels:
+      homepage.group: Privacy/Security
+      homepage.name: Bunker Web
+      homepage.href: https://bunker.${MY_TLD}
+      homepage.icon: bunkerweb.svg
+      homepage.description: Next-gen WAF
+      swag: enable
+      swag_port: 7000
+      swag_url: bunker.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://bunker.${MY_TLD}
     restart: unless-stopped
   bytestash:
     container_name: bytestash
@@ -3724,7 +3785,7 @@ services:
     expose:
       - 9000
       - 9443
-    image: portainer/portainer-ce:alpine-sts
+    image: portainer/portainer-ce:2.27.0-alpine
     labels:
       swag: enable
       swag_proto: http
@@ -4374,6 +4435,43 @@ services:
         type: bind
         bind:
           create_host_path: true
+  semaphore:
+    container_name: semaphore
+    environment:
+      ANSIBLE_HOST_KEY_CHECKING: false
+      SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
+      SEMAPHORE_ADMIN_NAME: admin
+      SEMAPHORE_ADMIN_EMAIL: charish.patel@trez.wtf
+      SEMAPHORE_ADMIN: admin
+      SEMAPHORE_DB_DIALECT: bolt
+      SEMAPHORE_EMAIL_ALERT: true
+      SEMAPHORE_EMAIL_SENDER: noreply@trez.wtf
+      SEMAPHORE_EMAIL_HOST: postal-smtp
+      SEMAPHORE_EMAIL_PORT: 25
+      SEMAPHORE_EMAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      SEMAPHORE_EMAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SEMAPHORE_EMAIL_SECURE: false
+      SEMAPHORE_USE_REMOTE_RUNNER: true
+    image: semaphoreui/semaphore:v2.12.14
+    labels:
+      homepage.group: Code/DevOps
+      homepage.name: Semaphore
+      homepage.href: https://devops.${MY_TLD}
+      homepage.icon: semaphore.svg
+      homepage.description: Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools
+      swag: enable
+      swag_port: 3000
+      swag_proto: http
+      swag_url: devops.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://devops.${MY_TLD}
+    ports:
+      - 3015:3000
+    restart: unless-stopped
+    volumes:
+      - semaphore_config:/etc/semaphore
+      - semaphore_data:/var/lib/semaphore
+      - semaphore_tmp:/tmp/semaphore
   sonarqube:
     container_name: sonarqube
     depends_on:
@@ -5159,57 +5257,13 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
-  zitadel:
-    container_name: zitadel
-    image: ghcr.io/zitadel/zitadel:latest
-    command: 'start-from-init --masterkeyFromEnv --config /config.yaml --config /secrets.yaml --config /init-steps.yaml --tlsMode external'
-    depends_on:
-      zitadel-pg-db:
-        condition: 'service_started'
-    environment:
-      ZITADEL_MASTERKEY: ${ZITADEL_MASTER_KEY}
-    expose:
-      - 8080
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 8080
-      swag_url: id.${MY_TLD}
-      swag_server_custom_directive: http2 on;
-      homepage.group: System Administration
-      homepage.name: Zitadel
-      homepage.href: https://id.${MY_TLD}
-      homepage.icon: zitadel.svg
-      homepage.description: Centralized authentication management
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/zitadel/config.yaml:/config.yaml
-      - ${DOCKER_VOLUME_CONFIG}/zitadel/init-steps.yaml:/init-steps.yaml
-      - ${DOCKER_VOLUME_CONFIG}/zitadel/secrets.yaml:/secrets.yaml
-  zitadel-pg-db:
-    container_name: zitadel-pg-db
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: ${ZITADEL_DB_ADMIN_PASSWORD}
-    expose:
-      - 5432
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "zitadel", "-U", "root" ]
-      interval: '10s'
-      timeout: '30s'
-      retries: 5
-      start_period: '20s'
-    image: postgres:16-alpine
-    restart: unless-stopped
-    volumes:
-      - zitadel-pg-db:/var/lib/postgresql/data
 volumes:
   authelia-pg-db:
     name: authelia-pg-db
   bitmagnet-pg-db:
     name: bitmagnet-pg-db
-  bunkerweb-data:
-    name: bunkerweb-data
+  bunkerweb-storage:
+    name: bunkerweb-storage
   castopod-media:
     name: castopod-media
   crowdsec-config:
@@ -5312,6 +5366,12 @@ volumes:
     name: portainer-data
   reactive-resume-pg:
     name: reactive-resume-pg
+  semaphore_config:
+    name: semaphore_config
+  semaphore_data:
+    name: semaphore_data
+  semaphore_tmp:
+    name: semaphore_tmp
   sonarqube-data:
     name: sonarqube-data
   sonarqube-db:
