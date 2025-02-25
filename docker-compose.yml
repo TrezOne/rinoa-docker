@@ -498,7 +498,7 @@ services:
       - 63824:8443
     restart: unless-stopped
   bunkerweb-scheduler:
-    container_name: bunkerweb-ui
+    container_name: bunkerweb-scheduler
     environment:
       <<: *bw-ui-env
       BUNKERWEB_INSTANCES: bunkerweb
