@@ -2873,6 +2873,8 @@ services:
       swag_proto: http
       swag_port: 42010
       swag_url: scrobble.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://scrobble.${MY_TLD}
     networks:
       default: null
     ports:
@@ -2894,6 +2896,34 @@ services:
         type: bind
         bind:
           create_host_path: true
+  manyfold:
+    container_name: manyfold
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DATABASE_URL: sqlite3:/config/manyfold.sqlite3
+      REDIS_URL: redis://redis:6379/2
+      SECRET_KEY_BASE: ${MANYFOLD_SECRET_KEY_BASE}
+    image: lscr.io/linuxserver/manyfold:latest
+    labels:
+      homepage.group: Lifestyle
+      homepage.name: Manyfold
+      homepage.href: https://scrobble.${MY_TLD}
+      homepage.icon: manyfold.svg
+      homepage.description: Self-hosted digital asset manager for 3D print files
+      swag: enable
+      swag_proto: http
+      swag_port: 3214
+      swag_url: 3dprint.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://3dprint.${MY_TLD}
+    ports:
+      - 3214:3214
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/manyfold/config:/config
+      - ${DOCKER_VOLUME_CONFIG}/manyfold/library:/libraries #optional
   mariadb:
     container_name: mariadb
     environment:
