@@ -2909,7 +2909,7 @@ services:
     labels:
       homepage.group: Lifestyle
       homepage.name: Manyfold
-      homepage.href: https://scrobble.${MY_TLD}
+      homepage.href: https://3dprint.${MY_TLD}
       homepage.icon: manyfold.svg
       homepage.description: Self-hosted digital asset manager for 3D print files
       swag: enable
