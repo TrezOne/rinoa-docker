@@ -5387,7 +5387,7 @@ volumes:
     name: wallos-logos
   zitadel-pg-db:
     name: zitadel-pg-db
-x-ui-env: &bw-ui-env
+x-bw-ui-env: &bw-ui-env
   # We anchor the environment variables to avoid duplication
   AUTOCONF_MODE: "yes"
   DATABASE_URI: "mariadb+pymysql://bunkerweb:${BUNKERWEB_DB_PASSWORD}@mariadb:3306/bunkerweb" # Remember to set a stronger password for the database
