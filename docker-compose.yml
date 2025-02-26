@@ -1,7 +1,7 @@
 name: compose
 x-bw-ui-env: &bw-ui-env
   # We anchor the environment variables to avoid duplication
-  AUTOCONF_MODE: "yes"
+  AUTOCONF_MODE: yes
   DATABASE_URI: "mariadb+pymysql://bunkerweb:${BUNKERWEB_DB_PASSWORD}@mariadb:3306/bunkerweb" # Remember to set a stronger password for the database
   USE_REAL_IP: yes
   REAL_IP_FROM: 172.18.0.0/16
@@ -506,6 +506,13 @@ services:
       API_WHITELIST_IP: 127.0.0.0/8 172.18.0.0/16
       MULTISITE: yes
       UI_HOST: http://bunkerweb-ui:7000 # Change it if needed
+      SERVE_FILES: no
+      DISABLE_DEFAULT_SERVER: yes
+      USE_CLIENT_CACHE: yes
+      USE_GZIP: yes
+      USE_REVERSE_PROXY: yes
+      REVERSE_PROXY_URL: /
+      REVERSE_PROXY_HOST: http://swag:80
     image: bunkerity/bunkerweb-scheduler:1.6.0
     restart: unless-stopped
     volumes:
