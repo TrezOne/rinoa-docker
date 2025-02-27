@@ -2798,8 +2798,8 @@ services:
       RAG_PORT: 8000
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     restart: always
-    env_file:
-      - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env
+    # env_file:
+    #   - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
