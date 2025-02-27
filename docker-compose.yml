@@ -2779,17 +2779,6 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/librechat/images:/app/client/public/images
       - ${DOCKER_VOLUME_CONFIG}/librechat/uploads:/app/uploads
       - ${DOCKER_VOLUME_CONFIG}/librechat/logs:/app/api/logs
-  meilisearch:
-    container_name: meilisearch
-    environment:
-      MEILI_HOST: http://meilisearch:7700
-      MEILI_NO_ANALYTICS: true
-      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY}
-    image: getmeili/meilisearch:v1.12.3
-    restart: always
-    user: ${PUID}:${PGID}
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/meilisearch:/meili_data
   librechat-vectordb:
     container_name: librechat-vectordb
     environment:
@@ -3159,6 +3148,17 @@ services:
     restart: always
     volumes:
       - mastodon-pg-db:/var/lib/postgresql/data    
+  meilisearch:
+    container_name: meilisearch
+    environment:
+      MEILI_HOST: http://meilisearch:7700
+      MEILI_NO_ANALYTICS: true
+      MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
+    image: getmeili/meilisearch:v1.12.3
+    restart: always
+    user: ${PUID}:${PGID}
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/meilisearch:/meili_data
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
