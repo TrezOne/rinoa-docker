@@ -3552,36 +3552,6 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
-  # open-webui:
-  #   container_name: open-webui
-  #   depends_on:
-  #     ollama:
-  #       condition: service_started
-  #       required: true
-  #       restart: true
-  #   environment:
-  #     ENABLE_SIGNUP: true
-  #     ENABLE_LOGIN_FORM: true
-  #     ENABLE_OLLAMA_API: true
-  #     OLLAMA_BASE_URLS: http://ollama:11434
-  #   image: ghcr.io/open-webui/open-webui:main
-  #   labels:
-  #     homepage.group: Personal Services
-  #     homepage.name: Open-WebUI
-  #     homepage.href: https://ai.${MY_TLD}
-  #     homepage.icon: open-webui.png
-  #     homepage.description: Local AI chat using Ollama-downloaded models
-  #     swag: enable
-  #     swag_port: 8080
-  #     swag_proto: http
-  #     swag_url: ai.${MY_TLD}
-  #     swag.uptime-kuma.enabled: true
-  #     swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}
-  #   ports:
-  #     - 10863:8080
-  #   restart: unless-stopped
-  #   volumes:
-  #     - open-webui:/app/backend/data
   paperless-ngx:
     container_name: paperless-ngx
     depends_on:
