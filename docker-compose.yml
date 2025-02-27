@@ -2757,6 +2757,49 @@ services:
     ports:
       - 22300:22300
     restart: unless-stopped
+  librechat-api:
+    container_name: LibreChat
+    depends_on:
+      - mongodb
+      - librechat-rag-api
+    environment:
+      HOST: 0.0.0.0
+      MONGO_URI: mongodb://mongodb:27017/LibreChat
+      MEILI_HOST: http://meilisearch:7700
+      RAG_PORT: 8000
+      RAG_API_URL: http://librechat-rag-api:8000
+    image: ghcr.io/danny-avila/librechat-dev:latest
+    ports:
+      - 3080:3080
+    restart: always
+    user: ${PUID}:${PGID}
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env:/app/.env
+      - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.yaml:/app/librechat.yaml
+      - ${DOCKER_VOLUME_CONFIG}/librechat/images:/app/client/public/images
+      - ${DOCKER_VOLUME_CONFIG}/librechat/uploads:/app/uploads
+      - ${DOCKER_VOLUME_CONFIG}/librechat/logs:/app/api/logs
+  librechat-vectordb:
+    container_name: librechat-vectordb
+    environment:
+      POSTGRES_DB: librechat
+      POSTGRES_USER: librechat
+      POSTGRES_PASSWORD: ${LIBRECHAT_PG_DB_PASSWD}
+    image: ankane/pgvector:latest
+    restart: always
+    volumes:
+      - librechat-pg-data:/var/lib/postgresql/data
+  librechat-rag-api:
+    container_name: librechat-rag-api
+    depends_on:
+      - librechat-vectordb
+    environment:
+      DB_HOST: librechat-vectordb
+      RAG_PORT: 8000
+    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
+    restart: always
+    # env_file:
+    #   - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
@@ -3105,6 +3148,17 @@ services:
     restart: always
     volumes:
       - mastodon-pg-db:/var/lib/postgresql/data    
+  meilisearch:
+    container_name: meilisearch
+    environment:
+      MEILI_HOST: http://meilisearch:7700
+      MEILI_NO_ANALYTICS: true
+      MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
+    image: getmeili/meilisearch:v1.12.3
+    restart: always
+    user: ${PUID}:${PGID}
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/meilisearch:/meili_data
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
@@ -3498,36 +3552,6 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
-  open-webui:
-    container_name: open-webui
-    depends_on:
-      ollama:
-        condition: service_started
-        required: true
-        restart: true
-    environment:
-      ENABLE_SIGNUP: true
-      ENABLE_LOGIN_FORM: true
-      ENABLE_OLLAMA_API: true
-      OLLAMA_BASE_URLS: http://ollama:11434
-    image: ghcr.io/open-webui/open-webui:main
-    labels:
-      homepage.group: Personal Services
-      homepage.name: Open-WebUI
-      homepage.href: https://ai.${MY_TLD}
-      homepage.icon: open-webui.png
-      homepage.description: Local AI chat using Ollama-downloaded models
-      swag: enable
-      swag_port: 8080
-      swag_proto: http
-      swag_url: ai.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}
-    ports:
-      - 10863:8080
-    restart: unless-stopped
-    volumes:
-      - open-webui:/app/backend/data
   paperless-ngx:
     container_name: paperless-ngx
     depends_on:
@@ -5329,6 +5353,8 @@ volumes:
     name: jitsi-web-admin-upload
   joplin_data:
     name: joplin_data
+  librechat-pg-data:
+    name: librechat-pg-data
   libretranslate_models:
     name: libretranslate_models
   lldap_data:
