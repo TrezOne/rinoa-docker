@@ -74,6 +74,9 @@
 | jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
+| librechat-api | ghcr.io/danny-avila/librechat-dev:latest |
+| librechat-vectordb | ankane/pgvector:latest |
+| librechat-rag-api | ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest |
 | libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
@@ -83,6 +86,7 @@
 | mariadb | linuxserver/mariadb |
 | mastodon | lscr.io/linuxserver/mastodon:latest |
 | mastodon-pg-db | postgres:17-alpine |
+| meilisearch | getmeili/meilisearch:v1.12.3 |
 | minio | minio/minio |
 | mongodb | bitnami/mongodb:7.0 |
 | multi-scrobbler | foxxmd/multi-scrobbler |
@@ -97,7 +101,6 @@
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
-| open-webui | ghcr.io/open-webui/open-webui:main |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | parseable | containers.parseable.com/parseable/parseable:latest |
 | peppermint | pepperlabs/peppermint:latest |
