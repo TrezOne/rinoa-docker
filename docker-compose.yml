@@ -104,8 +104,6 @@ services:
           create_host_path: true
   archivebox:
     container_name: archivebox
-    dns:
-      - adguard
     environment:
       ADMIN_USERNAME: admin            # creates an admin user on first run with the given user/pass combo
       ADMIN_PASSWORD: ${ARCHIVEBOX_ADMIN_PASSWORD}
@@ -121,7 +119,7 @@ services:
       homepage.name: ArchiveBox
       homepage.href: https://archive.${MY_TLD}
       homepage.icon: archivebox.png
-      homepage.description: Podcasts, eBooks, & Audiobooks
+      homepage.description: Open-source and self-hosted web archiving
       swag: enable
       swag_port: 8000
       swag_proto: http
