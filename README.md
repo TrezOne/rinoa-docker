@@ -6,6 +6,7 @@
 | --- | --- |
 | actual_server | docker.io/actualbudget/actual-server:latest |
 | adguard | adguard/adguardhome:latest |
+| archivebox | archivebox/archivebox:latest |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
 | authelia-pg | postgres:16-alpine |
@@ -37,6 +38,7 @@
 | dbgate | dbgate/dbgate:alpine |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
+| docker-volume-backup | offen/docker-volume-backup:v2 |
 | docuseal | docuseal/docuseal:latest |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
