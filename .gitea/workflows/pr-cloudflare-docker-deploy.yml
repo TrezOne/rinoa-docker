@@ -1,10 +1,8 @@
 name: Gitea Branch PR, Cloudflare DNS, README generation, & Ansible/Docker Deployment
 on:
   push:
-    branches:
-      - '**'
-    paths:
-      - 'docker-compose.yml'
+    branches-ignore:
+      - 'main'
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
