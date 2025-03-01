@@ -4860,6 +4860,36 @@ services:
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/spotisub:/home/user/spotisub/cache
+  stable-diffusion-download:
+    container_name: stable-diffusion-download
+    image: git.trez.wtf/trez.one/stable-diffusion-download:v9.0.0
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/data:/data
+  stable-diffusion-webui:
+    container_name: stable-diffusion-webui
+    image: git.trez.wtf/trez.one/stable-diffusion-ui:v9.0.0
+    environment:
+      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
+    labels:
+      homepage.name: Stable-Diffusion WebUI
+      homepage.group: Personal Services
+      homepage.description: Deep learning, text-to-image model
+      homepage.href: https://sd.${MY_TLD}
+      homepage.icon: /icons/stable-diffusion.png
+      swag: enable
+      swag_port: 7860
+      swag_proto: http
+      swag_url: sd.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://sd.${MY_TLD}
+    ports:
+      - 7860:7860
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/data:/data
+      - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/output:/output
   swag:
     cap_add:
       - NET_ADMIN
