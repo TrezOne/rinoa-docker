@@ -2770,6 +2770,18 @@ services:
       RAG_PORT: 8000
       RAG_API_URL: http://librechat-rag-api:8000
     image: ghcr.io/danny-avila/librechat-dev:latest
+    labels:
+      homepage.group: Personal Services
+      homepage.name: LibreChat
+      homepage.href: https://ai.${MY_TLD}
+      homepage.icon: sh-librechat.svg
+      homepage.description: Local AI chat
+      swag: enable
+      swag_port: 3080
+      swag_proto: http
+      swag_url: ai.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}
     ports:
       - 3080:3080
     restart: always
