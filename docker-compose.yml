@@ -1270,7 +1270,7 @@ services:
       NOTIFICATION_URLS: gotify://gotify/${DV_BKUP_GOTIFY_TOKEN}
     restart: always
     volumes:
-      - dv-bkup-data:/backup/my-app-backup:ro
+      - docker-volume-bkup-data:/backup/my-app-backup:ro
       - ${DOCKER_VOLUME_STORAGE}/backups/docker_volume_bkups:/archive
   docuseal:
     container_name: docuseal
@@ -5378,7 +5378,7 @@ volumes:
   dbgate-data:
     name: dbgate-data
   docker-volume-bkup-data:
-    name: dv-bkup-data
+    name: docker-volume-bkup-data
   fastenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:
