@@ -2765,7 +2765,7 @@ services:
     environment:
       CONFIG_PATH: /app/librechat.yaml
       HOST: 0.0.0.0
-      MONGO_URI: mongodb://librechat:${LIBRECHAT_MONGODB_PASSWORD}:27017/librechat?replicaSet=rinoa
+      MONGO_URI: mongodb://librechat:${LIBRECHAT_MONGODB_PASSWORD}@mongodb:27017/librechat?replicaSet=rinoa
       MEILI_HOST: http://meilisearch:7700
       RAG_PORT: 8000
       RAG_API_URL: http://librechat-rag-api:8000
