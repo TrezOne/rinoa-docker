@@ -3937,11 +3937,8 @@ services:
       - 25:25
     restart: unless-stopped
     volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/postal
-        target: /config
-        type: bind
-        bind:
-          create_host_path: true
+      - ${DOCKER_VOLUME_CONFIG}/postal:/config
+      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/live/trez.wtf:/config/certs
   postal-web:
     command: postal web-server
     container_name: postal-web

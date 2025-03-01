@@ -30,6 +30,9 @@ message_db:
 smtp_server:
   default_port: 25
   default_bind_address: "::"
+  tls_enabled: true
+  tls_certificate_path: /config/certs/fullchain.pem
+  tls_private_key_path: /config/certs/privkey.pem
 
 dns:
   # Specify the DNS records that you have configured. Refer to the documentation at
