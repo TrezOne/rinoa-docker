@@ -102,6 +102,37 @@ services:
         type: bind
         bind:
           create_host_path: true
+  archivebox:
+    container_name: archivebox
+    dns:
+      - adguard
+    environment:
+      ADMIN_USERNAME: admin            # creates an admin user on first run with the given user/pass combo
+      ADMIN_PASSWORD: ${ARCHIVEBOX_ADMIN_PASSWORD}
+      ALLOWED_HOSTS: '*'                   # set this to the hostname(s) you're going to serve the site from!
+      CSRF_TRUSTED_ORIGINS: http://localhost:8000  # you MUST set this to the server's URL for admin login and the REST API to work
+      PUBLIC_INDEX: false                 # set to False to prevent anonymous users from viewing snapshot list
+      PUBLIC_SNAPSHOTS: false             # set to False to prevent anonymous users from viewing snapshot content
+      PUBLIC_ADD_VIEW: false             # set to True to allow anonymous users to submit new URLs to archive
+      SEARCH_BACKEND_ENGINE: ripgrep       # tells ArchiveBox to use sonic container below for fast full-text search
+    image: archivebox/archivebox:latest
+    labels:
+      homepage.group: Personal Services
+      homepage.name: ArchiveBox
+      homepage.href: https://archive.${MY_TLD}
+      homepage.icon: archivebox.png
+      homepage.description: Podcasts, eBooks, & Audiobooks
+      swag: enable
+      swag_port: 8000
+      swag_proto: http
+      swag_url: archive.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://archive.${MY_TLD}
+    ports:
+      - 21324:8000
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/archivebox:/data
+      # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
   audiobookshelf:
     container_name: audiobookshelf
     environment:
@@ -1225,6 +1256,22 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
+  docker-volume-backup:
+    container_name: docker-volume-backup
+    image: offen/docker-volume-backup:v2
+    environment:
+      BACKUP_ARCHIVE: /archive
+      BACKUP_CRON_EXPRESSION: '@weekly'
+      BACKUP_COMPRESSION: zst
+      BACKUP_FILENAME: rinoa-docker-backup-%Y-%m-%dT%H-%M-%S.{{ .Extension }}
+      BACKUP_FILENAME_EXPAND: true
+      BACKUP_RETENTION_DAYS: 14
+      DOCKER_HOST: tcp://dockerproxy:2375
+      NOTIFICATION_URLS: gotify://gotify/${DV_BKUP_GOTIFY_TOKEN}
+    restart: always
+    volumes:
+      - docker-volume-bkup-data:/backup/my-app-backup:ro
+      - ${DOCKER_VOLUME_STORAGE}/backups/docker_volume_bkups:/archive
   docuseal:
     container_name: docuseal
     image: docuseal/docuseal:latest
@@ -2816,8 +2863,8 @@ services:
       RAG_PORT: 8000
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     restart: always
-    env_file:
-      - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env
+    # env_file:
+    #   - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
@@ -5330,6 +5377,8 @@ volumes:
     name: dawarich_watched
   dbgate-data:
     name: dbgate-data
+  docker-volume-bkup-data:
+    name: docker-volume-bkup-data
   fastenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:
