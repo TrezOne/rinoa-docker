@@ -1015,8 +1015,7 @@ services:
   dbgate:
     container_name: dbgate
     environment:
-      CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,mariadb,mastodon-pg-db,mongodb,pgbackweb,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,traccar-pg,zitadel-pg-db
-
+      CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,mariadb,mastodon-pg-db,mongodb,peppermint-db,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,redis
       LOGIN: TrezOne
       PASSWORD: ${DBGATE_LOGIN_PASSWORD}
 
@@ -1084,6 +1083,13 @@ services:
       # URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
       ENGINE_mongodb: mongo@dbgate-plugin-mongo-v2
 
+      LABEL_peppermint-db: peppermint-pg-db
+      SERVER_peppermint-db: peppermint-pg-db
+      USER_peppermint-db: peppermint
+      PASSWORD_peppermint-db: ${PEPPERMINT_PG_PASSWORD}
+      PORT_peppermint-db: 5432
+      ENGINE_peppermint-db: postgres@dbgate-plugin-postgres
+
       LABEL_pgbackweb-db: pgbackweb-db
       SERVER_pgbackweb-db: pgbackweb-db
       USER_pgbackweb-db: pgbackweb
@@ -1119,19 +1125,10 @@ services:
       PORT_tandoor-pg: 5432
       ENGINE_tandoor-pg: postgres@dbgate-plugin-postgres
 
-      LABEL_traccar-pg: traccar-pg
-      SERVER_traccar-pg: traccar-pg
-      USER_traccar-pg: ${TRACCAR_POSTGRES_USER}
-      PASSWORD_traccar-pg: ${TRACCAR_POSTGRES_PASSWORD}
-      PORT_traccar-pg: 5432
-      ENGINE_traccar-pg: postgres@dbgate-plugin-postgres
-
-      LABEL_zitadel-pg-db: zitadel-pg-db
-      SERVER_zitadel-pg-db: zitadel-pg-db
-      USER_zitadel-pg-db: root
-      PASSWORD_zitadel-pg-db: ${ZITADEL_DB_ADMIN_PASSWORD}
-      PORT_zitadel-pg-db: 5432
-      ENGINE_zitadel-pg-db: postgres@dbgate-plugin-postgres
+      LABEL_redis: redis
+      SERVER_redis: redis
+      PORT_redis: 6379
+      ENGINE_redis: redis@dbgate-plugin-redis
     image: dbgate/dbgate:alpine
     labels:
       homepage.group: System Administration
