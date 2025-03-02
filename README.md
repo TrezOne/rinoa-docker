@@ -90,6 +90,7 @@
 | mastodon-pg-db | postgres:17-alpine |
 | meilisearch | getmeili/meilisearch:v1.12.3 |
 | minio | minio/minio |
+| mixpost | inovector/mixpost:latest |
 | mongodb | bitnami/mongodb:7.0 |
 | multi-scrobbler | foxxmd/multi-scrobbler |
 | n8n | docker.n8n.io/n8nio/n8n |
