@@ -128,6 +128,7 @@ services:
       swag.uptime-kuma.monitor.url: https://archive.${MY_TLD}
     ports:
       - 21324:8000
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/archivebox:/data
       # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
