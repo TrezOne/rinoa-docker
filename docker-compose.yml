@@ -841,7 +841,7 @@ services:
       swag_proto: http
       swag_url: cchef.trez.wtf
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
+      swag.uptime-kuma.monitor.url: https://cchef.trez.wtf
     ports:
       - 20992:8000
     restart: unless-stopped
