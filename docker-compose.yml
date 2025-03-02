@@ -3284,6 +3284,7 @@ services:
       DB_PASSWORD: ${MIXPOST_DB_PASSWORD}
     labels:
       swag: enable
+      swag_port: 80
       swag_proto: http
       swag_url: social.${MY_TLD}
       swag.uptime-kuma.enabled: true
