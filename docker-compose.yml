@@ -3262,6 +3262,39 @@ services:
         type: bind
         bind:
           create_host_path: true
+  mixpost:
+    container_name: mixpost
+    image: inovector/mixpost:latest
+    depends_on:
+      - mariadb
+      - redis
+    environment:
+      APP_NAME: Mixpost
+      APP_KEY: ${MIXPOST_APP_KEY}
+      APP_DEBUG: false
+      APP_DOMAIN: social.trez.wtf
+      APP_URL: https://${APP_DOMAIN}
+      DB_HOST: mariadb
+      DB_DATABASE: mixpost
+      DB_USERNAME: mixpost
+      DB_PASSWORD: ${MIXPOST_DB_PASSWORD}
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_url: social.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://social.${MY_TLD}
+      homepage.group: Social
+      homepage.name: Mixpost
+      homepage.href: https://social.${MY_TLD}
+      homepage.icon: mixpost.svg
+      homepage.description: Multi-channel social media manager
+    ports:
+      - 61757:80
+    restart: unless-stopped
+    volumes:
+        - mixpost-storage:/var/www/html/storage/app
+        - mixpost-logs:/var/www/html/storage/logs
   mongodb:
     container_name: mongodb
     environment:
@@ -5455,6 +5488,10 @@ volumes:
     name: lldap_data
   mastodon-pg-db:
     name: mastodon-pg-db
+  mixpost-storage:
+    name: mixpost-storage
+  mixpost-logs:
+    name: mixpost-logs
   mongodb_config:
     name: mongodb_config
   mongodb_data:
