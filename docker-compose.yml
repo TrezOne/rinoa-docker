@@ -3272,13 +3272,15 @@ services:
     environment:
       APP_NAME: Mixpost
       APP_KEY: ${MIXPOST_APP_KEY}
-      APP_DEBUG: false
+      APP_DEBUG: true
       APP_DOMAIN: social.trez.wtf
       APP_URL: https://${APP_DOMAIN}
       DB_HOST: mariadb
       DB_DATABASE: mixpost
       DB_USERNAME: mixpost
       DB_PASSWORD: ${MIXPOST_DB_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     labels:
       swag: enable
       swag_port: 80
