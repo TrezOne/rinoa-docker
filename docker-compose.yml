@@ -4860,7 +4860,7 @@ services:
         SPEEDTEST_SCHEDULE: 15 */3 * * *
     labels:
       homepage.name: Speedtest Tracker
-      homepage.group: System Administration
+      homepage.group: Infrastructure/App Performance Monitoring
       homepage.description: Self-hosted internet performance tracking
       homepage.href: https://speed.${MY_TLD}
       homepage.icon: speedtest-tracker.png
