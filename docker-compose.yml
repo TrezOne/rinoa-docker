@@ -1266,8 +1266,78 @@ services:
       NOTIFICATION_URLS: gotify://gotify/${DV_BKUP_GOTIFY_TOKEN}
     restart: always
     volumes:
-      - docker-volume-bkup-data:/backup/my-app-backup:ro
       - ${DOCKER_VOLUME_STORAGE}/backups/docker_volume_bkups:/archive
+      - authelia-pg-db:/data/authelia-pg-db:ro
+      - bitmagnet-pg-db:/data/bitmagnet-pg-db:ro
+      - bunkerweb-storage:/data/bunkerweb-storage:ro
+      - castopod-media:/data/castopod-media:ro
+      - crowdsec-config:/data/crowdsec-config:ro
+      - crowdsec-db:/data/crowdsec-db:ro
+      - dawarich_db_data:/data/dawarich_db_data:ro
+      - dawarich_shared:/data/dawarich_shared:ro
+      - dawarich_public:/data/dawarich_public:ro
+      - dawarich_watched:/data/dawarich_watched:ro
+      - dbgate-data:/data/dbgate-data:ro
+      - docker-volume-bkup-data:/data/docker-volume-bkup-data:ro
+      - fastenhealth-cache:/data/fastenhealth-cache:ro
+      - fastenhealth-db:/data/fastenhealth-db:ro
+      - filebeat_etc:/data/filebeat_etc:ro
+      - filebeat_var:/data/filebeat_var:ro
+      - gitea-pg-db:/data/gitea-pg-db:ro
+      - hortusfox_app_backup:/data/hortusfox_app_backup:ro
+      - hortusfox_app_images:/data/hortusfox_app_images:ro
+      - hortusfox_app_logs:/data/hortusfox_app_logs:ro
+      - hortusfox_app_migrate:/data/hortusfox_app_migrate:ro
+      - hortusfox_app_themes:/data/hortusfox_app_themes:ro
+      - hortusfox_db_data:/data/hortusfox_db_data:ro
+      - immich-model-cache:/data/immich-model-cache:ro
+      - influxdb2-data:/data/influxdb2-data:ro
+      - influxdb2-config:/data/influxdb2-config:ro
+      - invidious-postgres:/data/invidious-postgres:ro
+      - invoice-ninja_cache:/data/invoice-ninja_cache:ro
+      - invoice-ninja_public:/data/invoice-ninja_public:ro
+      - invoice-ninja_storage:/data/invoice-ninja_storage:ro
+      - jitsi-web-admin-theme:/data/jitsi-web-admin-theme:ro
+      - jitsi-web-admin-upload:/data/jitsi-web-admin-upload:ro
+      - joplin_data:/data/joplin_data:ro
+      - librechat-pg-data:/data/librechat-pg-data:ro
+      - libretranslate_models:/data/libretranslate_models:ro
+      - lldap_data:/data/lldap_data:ro
+      - mastodon-pg-db:/data/mastodon-pg-db:ro
+      - mixpost-storage:/data/mixpost-storage:ro
+      - mixpost-logs:/data/mixpost-logs:ro
+      - mongodb_config:/data/mongodb_config:ro
+      - mongodb_data:/data/mongodb_data:ro
+      - n8n-data:/data/n8n-data:ro
+      - netbird-mgmt:/data/netbird-mgmt:ro
+      - netbird-signal:/data/netbird-signal:ro
+      - netbird-letsencrypt:/data/netbird-letsencrypt:ro
+      - nextcloud_aio_mastercontainer:/data/nextcloud_aio_mastercontainer:ro
+      - ollama:/data/ollama:ro
+      - open-webui:/data/open-webui:ro
+      - paperless-ngx-data:/data/paperless-ngx-data:ro
+      - paperless-ngx-media:/data/paperless-ngx-media:ro
+      - paperless-ngx-pg:/data/paperless-ngx-pg:ro
+      - peppermint-pg-data:/data/peppermint-pg-data:ro
+      - pgbackweb-data:/data/pgbackweb-data:ro
+      - plausible-db-data:/data/plausible-db-data:ro
+      - plausible-event-data:/data/plausible-event-data:ro
+      - plausible-event-logs:/data/plausible-event-logs:ro
+      - portainer-data:/data/portainer-data:ro
+      - reactive-resume-pg:/data/reactive-resume-pg:ro
+      - semaphore_config:/data/semaphore_config:ro
+      - semaphore_data:/data/semaphore_data:ro
+      - semaphore_tmp:/data/semaphore_tmp:ro
+      - sonarqube-data:/data/sonarqube-data:ro
+      - sonarqube-db:/data/sonarqube-db:ro
+      - sonarqube-db-data:/data/sonarqube-db-data:ro
+      - sonarqube-extensions:/data/sonarqube-extensions:ro
+      - sonarqube-logs:/data/sonarqube-logs:ro
+      - sonarqube-temp:/data/sonarqube-temp:ro
+      - tandoor-pg:/data/tandoor-pg:ro
+      - unmanic-cache:/data/unmanic-cache:ro
+      - wallos-db:/data/wallos-db:ro
+      - wallos-logos:/data/wallos-logos:ro
   docuseal:
     container_name: docuseal
     image: docuseal/docuseal:latest
@@ -1690,92 +1760,92 @@ services:
         type: bind
         bind:
           create_host_path: true
-  hortusfox:
-    container_name: hortusfox
-    depends_on:
-      mariadb:
-        condition: service_started
-        required: true
-        restart: true
-    environment:
-      APP_ADMIN_EMAIL: charish.patel@trez.wtf
-      APP_ADMIN_PASSWORD: ${HORTUSFOX_ADMIN_PASSWORD}
-      DB_CHARSET: utf8mb4
-      DB_DATABASE: hortusfox
-      DB_HOST: mariadb
-      DB_PASSWORD: ${HORTUSFOX_DB_PASSWORD}
-      DB_PORT: 3306
-      DB_USERNAME: hortusfox
-    image: ghcr.io/danielbrendel/hortusfox-web:latest
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_url: plants.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://plants.${MY_TLD}
-      homepage.group: Lifestyle
-      homepage.name: HortusFox
-      homepage.href: https://plants.${MY_TLD}
-      homepage.icon: hortusfox.png
-      homepage.description: Plant management system
-    networks:
-      default: null
-    ports:
-      - 8006:80
-    restart: unless-stopped
-    volumes:
-      - source: hortusfox_app_images
-        target: /var/www/html/public/img
-        type: volume
-        volume: {}
-      - source: hortusfox_app_logs
-        target: /var/www/html/app/logs
-        type: volume
-        volume: {}
-      - source: hortusfox_app_backup
-        target: /var/www/html/public/backup
-        type: volume
-        volume: {}
-      - source: hortusfox_app_themes
-        target: /var/www/html/public/themes
-        type: volume
-        volume: {}
-      - source: hortusfox_app_migrate
-        target: /var/www/html/app/migrations
-        type: volume
-        volume: {}
-  hugo:
-    command: hugo server --baseURL "it-services.trez.wtf" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
-    container_name: hugo
-    image: hugomods/hugo:exts
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 1313
-      swag_url: it-services.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
-      homepage.group: Professional Services
-      homepage.name: Hugo
-      homepage.href: https://it-services.${MY_TLD}
-      homepage.icon: hugo.svg
-      homepage.description: Static site
-    networks:
-      default: null
-    ports:
-      - 1313:1313
-    restart: unless-stopped
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/hugo/
-        target: /src
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/hugo/cache
-        target: /tmp/hugo_cache
-        type: bind
-        bind:
-          create_host_path: true
+  # hortusfox:
+  #   container_name: hortusfox
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_started
+  #       required: true
+  #       restart: true
+  #   environment:
+  #     APP_ADMIN_EMAIL: charish.patel@trez.wtf
+  #     APP_ADMIN_PASSWORD: ${HORTUSFOX_ADMIN_PASSWORD}
+  #     DB_CHARSET: utf8mb4
+  #     DB_DATABASE: hortusfox
+  #     DB_HOST: mariadb
+  #     DB_PASSWORD: ${HORTUSFOX_DB_PASSWORD}
+  #     DB_PORT: 3306
+  #     DB_USERNAME: hortusfox
+  #   image: ghcr.io/danielbrendel/hortusfox-web:latest
+  #   labels:
+  #     swag: enable
+  #     swag_proto: http
+  #     swag_url: plants.${MY_TLD}
+  #     swag.uptime-kuma.enabled: true
+  #     swag.uptime-kuma.monitor.url: https://plants.${MY_TLD}
+  #     homepage.group: Lifestyle
+  #     homepage.name: HortusFox
+  #     homepage.href: https://plants.${MY_TLD}
+  #     homepage.icon: hortusfox.png
+  #     homepage.description: Plant management system
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - 8006:80
+  #   restart: unless-stopped
+  #   volumes:
+  #     - source: hortusfox_app_images
+  #       target: /var/www/html/public/img
+  #       type: volume
+  #       volume: {}
+  #     - source: hortusfox_app_logs
+  #       target: /var/www/html/app/logs
+  #       type: volume
+  #       volume: {}
+  #     - source: hortusfox_app_backup
+  #       target: /var/www/html/public/backup
+  #       type: volume
+  #       volume: {}
+  #     - source: hortusfox_app_themes
+  #       target: /var/www/html/public/themes
+  #       type: volume
+  #       volume: {}
+  #     - source: hortusfox_app_migrate
+  #       target: /var/www/html/app/migrations
+  #       type: volume
+  #       volume: {}
+  # hugo:
+  #   command: hugo server --baseURL "it-services.trez.wtf" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
+  #   container_name: hugo
+  #   image: hugomods/hugo:exts
+  #   labels:
+  #     swag: enable
+  #     swag_proto: http
+  #     swag_port: 1313
+  #     swag_url: it-services.${MY_TLD}
+  #     swag.uptime-kuma.enabled: true
+  #     swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
+  #     homepage.group: Professional Services
+  #     homepage.name: Hugo
+  #     homepage.href: https://it-services.${MY_TLD}
+  #     homepage.icon: hugo.svg
+  #     homepage.description: Static site
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - 1313:1313
+  #   restart: unless-stopped
+  #   volumes:
+  #     - source: ${DOCKER_VOLUME_CONFIG}/hugo/
+  #       target: /src
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
+  #     - source: ${DOCKER_VOLUME_CONFIG}/hugo/cache
+  #       target: /tmp/hugo_cache
+  #       type: bind
+  #       bind:
+  #         create_host_path: true
   immich-server:
     container_name: immich-server
     depends_on:
@@ -2020,110 +2090,110 @@ services:
         type: bind
         bind:
           create_host_path: true
-  invoice-ninja:
-    container_name: invoice-ninja
-    depends_on:
-      mariadb:
-        condition: service_started
-        required: true
-        restart: true
-    environment:
-      APP_DEBUG: true
-      APP_KEY: ${IN_APP_KEY}
-      APP_URL: http://invoice_ninja:8003
-      APP_ENV: /var/www/html/.env
-      DB_DATABASE: invoice_ninja
-      DB_HOST: mariadb
-      DB_PASSWORD: ${IN_MYSQL_PASSWORD}
-      DB_PORT: 3306
-      DB_USERNAME: ininja
-      IN_PASSWORD: ${IN_PASSWORD}
-      IN_USER_EMAIL: charish.patel@trez.wtf
-      MAIL_ENCRYPTION: null
-      MAIL_FROM_ADDRESS: noreply@trez.wtf
-      MAIL_FROM_NAME: null
-      MAIL_HOST: postal-smtp
-      MAIL_MAILER: log
-      MAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      MAIL_PORT: 25
-      MAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
-      MYSQL_DATABASE: invoice_ninja
-      MYSQL_PASSWORD: ${IN_MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ininja
-      PDF_GENERATOR: snappdf
-      PHANTOMJS_PDF_GENERATION: false
-      QUEUE_CONNECTION: database
-      REQUIRE_HTTPS: false
-      TRUSTED_PROXIES: 172.18.0.0/16
-    expose:
-      - 9000
-    image: invoiceninja/invoiceninja-debian:5
-    networks:
-      default: null
-    ports:
-      - 8003:8003
-    restart: always
-    volumes:
-      - invoice-ninja_cache:/var/www/html/bootstrap/cache
-      - invoice-ninja_public:/var/www/html/public
-      - invoice-ninja_storage:/var/www/html/storage
-  invoice-ninja_proxy:
-    container_name: invoice-ninja_proxy
-    depends_on:
-      invoice-ninja:
-        condition: service_started
-        required: true
-        restart: true
-    environment:
-      APP_DEBUG: true
-      APP_KEY: ${IN_APP_KEY}
-      APP_URL: http://invoice_ninja:9000
-      DB_DATABASE: invoice_ninja
-      DB_HOST: mariadb
-      DB_PASSWORD: ${IN_MYSQL_PASSWORD}
-      DB_PORT: 3306
-      DB_USERNAME: ininja
-      IN_PASSWORD: ${IN_PASSWORD}
-      IN_USER_EMAIL: charish.patel@trez.wtf
-      MAIL_ENCRYPTION: null
-      MAIL_FROM_ADDRESS: noreply@trez.wtf
-      MAIL_FROM_NAME: null
-      MAIL_HOST: postal-smtp
-      MAIL_MAILER: log
-      MAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      MAIL_PORT: 25
-      MAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
-      MYSQL_DATABASE: invoice_ninja
-      MYSQL_PASSWORD: ${IN_MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ininja
-      PDF_GENERATOR: snappdf
-      PHANTOMJS_PDF_GENERATION: false
-      QUEUE_CONNECTION: database
-      REQUIRE_HTTPS: false
-      TRUSTED_PROXIES: 172.18.0.0/16
-    image: nginx
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_url: biz.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://biz.${MY_TLD}
-      homepage.group: Professional Services
-      homepage.name: Invoice Ninja
-      homepage.href: https://biz.${MY_TLD}
-      homepage.icon: invoice-ninja.svg
-      homepage.description: Simple invoicing, multiple payment options, expense and vendor management, and more!
-    networks:
-      default: null
-    ports:
-      - 8005:80
-    restart: always
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/nginx:/etc/nginx/conf.d:ro
-      - invoice-ninja_public:/var/www/html/public
-      - invoice-ninja_storage:/var/www/html/storage
+  # invoice-ninja:
+  #   container_name: invoice-ninja
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_started
+  #       required: true
+  #       restart: true
+  #   environment:
+  #     APP_DEBUG: true
+  #     APP_KEY: ${IN_APP_KEY}
+  #     APP_URL: http://invoice_ninja:8003
+  #     APP_ENV: /var/www/html/.env
+  #     DB_DATABASE: invoice_ninja
+  #     DB_HOST: mariadb
+  #     DB_PASSWORD: ${IN_MYSQL_PASSWORD}
+  #     DB_PORT: 3306
+  #     DB_USERNAME: ininja
+  #     IN_PASSWORD: ${IN_PASSWORD}
+  #     IN_USER_EMAIL: charish.patel@trez.wtf
+  #     MAIL_ENCRYPTION: null
+  #     MAIL_FROM_ADDRESS: noreply@trez.wtf
+  #     MAIL_FROM_NAME: null
+  #     MAIL_HOST: postal-smtp
+  #     MAIL_MAILER: log
+  #     MAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+  #     MAIL_PORT: 25
+  #     MAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+  #     MYSQL_DATABASE: invoice_ninja
+  #     MYSQL_PASSWORD: ${IN_MYSQL_PASSWORD}
+  #     MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
+  #     MYSQL_USER: ininja
+  #     PDF_GENERATOR: snappdf
+  #     PHANTOMJS_PDF_GENERATION: false
+  #     QUEUE_CONNECTION: database
+  #     REQUIRE_HTTPS: false
+  #     TRUSTED_PROXIES: 172.18.0.0/16
+  #   expose:
+  #     - 9000
+  #   image: invoiceninja/invoiceninja-debian:5
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - 8003:8003
+  #   restart: always
+  #   volumes:
+  #     - invoice-ninja_cache:/var/www/html/bootstrap/cache
+  #     - invoice-ninja_public:/var/www/html/public
+  #     - invoice-ninja_storage:/var/www/html/storage
+  # invoice-ninja_proxy:
+  #   container_name: invoice-ninja_proxy
+  #   depends_on:
+  #     invoice-ninja:
+  #       condition: service_started
+  #       required: true
+  #       restart: true
+  #   environment:
+  #     APP_DEBUG: true
+  #     APP_KEY: ${IN_APP_KEY}
+  #     APP_URL: http://invoice_ninja:9000
+  #     DB_DATABASE: invoice_ninja
+  #     DB_HOST: mariadb
+  #     DB_PASSWORD: ${IN_MYSQL_PASSWORD}
+  #     DB_PORT: 3306
+  #     DB_USERNAME: ininja
+  #     IN_PASSWORD: ${IN_PASSWORD}
+  #     IN_USER_EMAIL: charish.patel@trez.wtf
+  #     MAIL_ENCRYPTION: null
+  #     MAIL_FROM_ADDRESS: noreply@trez.wtf
+  #     MAIL_FROM_NAME: null
+  #     MAIL_HOST: postal-smtp
+  #     MAIL_MAILER: log
+  #     MAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+  #     MAIL_PORT: 25
+  #     MAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+  #     MYSQL_DATABASE: invoice_ninja
+  #     MYSQL_PASSWORD: ${IN_MYSQL_PASSWORD}
+  #     MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
+  #     MYSQL_USER: ininja
+  #     PDF_GENERATOR: snappdf
+  #     PHANTOMJS_PDF_GENERATION: false
+  #     QUEUE_CONNECTION: database
+  #     REQUIRE_HTTPS: false
+  #     TRUSTED_PROXIES: 172.18.0.0/16
+  #   image: nginx
+  #   labels:
+  #     swag: enable
+  #     swag_proto: http
+  #     swag_url: biz.${MY_TLD}
+  #     swag.uptime-kuma.enabled: true
+  #     swag.uptime-kuma.monitor.url: https://biz.${MY_TLD}
+  #     homepage.group: Professional Services
+  #     homepage.name: Invoice Ninja
+  #     homepage.href: https://biz.${MY_TLD}
+  #     homepage.icon: invoice-ninja.svg
+  #     homepage.description: Simple invoicing, multiple payment options, expense and vendor management, and more!
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - 8005:80
+  #   restart: always
+  #   volumes:
+  #     - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/nginx:/etc/nginx/conf.d:ro
+  #     - invoice-ninja_public:/var/www/html/public
+  #     - invoice-ninja_storage:/var/www/html/storage
   it-tools:
     container_name: it-tools
     image: ghcr.io/corentinth/it-tools:latest
@@ -3455,123 +3525,123 @@ services:
         target: /app/api
       # (API: OPTION 2) use when debugging issues
       # - ${DOCKER_VOLUME_CONFIG}/netalertx/api:/app/api
-  netbird-dashboard:
-    container_name: netbird-dashboard
-    environment:
-      # Endpoints
-      NETBIRD_MGMT_API_ENDPOINT: https://netbird.${MY_TLD}:33073
-      NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.${MY_TLD}:33073
-      # OIDC
-      AUTH_AUDIENCE: ${NETBIRD_ZITADEL_CLIENT_ID}
-      AUTH_CLIENT_ID: ${NETBIRD_ZITADEL_CLIENT_ID}
-      AUTH_CLIENT_SECRET: ${NETBIRD_ZITADEL_CLIENT_SECRET}
-      AUTH_AUTHORITY: https://id.${MY_TLD}
-      USE_AUTH0: false
-      AUTH_SUPPORTED_SCOPES: openid profile email offline_access api
-      AUTH_REDIRECT_URI: /auth
-      AUTH_SILENT_REDIRECT_URI: /silent-auth
-      NETBIRD_TOKEN_SOURCE: accessToken
-      # SSL
-      NGINX_SSL_PORT: 443
-      # Letsencrypt
-      LETSENCRYPT_DOMAIN:
-      LETSENCRYPT_EMAIL:
-    image: netbirdio/dashboard:latest
-    labels:
-      homepage.group: Privacy/Security
-      homepage.name: Netbird
-      homepage.href: https://netbird.${MY_TLD}
-      homepage.icon: netbird.svg
-      homepage.description: Peer-to-peer private network and centralized access control system
-      swag: enable
-      swag_proto: http
-      swag_port: 80
-      swag_auth: authelia
-      swag_url: netbird.${MY_TLD}
-      swag_server_custom_directive: |
-        location /signalexchange.SignalExchange/ {
-            grpc_pass grpc://netbird-signal:80;
-            #grpc_ssl_verify off;
-            grpc_read_timeout 1d;
-            grpc_send_timeout 1d;
-            grpc_socket_keepalive on;
-        }
-        # Proxy Management http endpoint
-        location /api {
-            proxy_pass http://netbird-management:443;
-        }
-        # Proxy Management grpc endpoint
-        location /management.ManagementService/ {
-            grpc_pass grpc://netbird-management:443;
-            #grpc_ssl_verify off;
-            grpc_read_timeout 1d;
-            grpc_send_timeout 1d;
-            grpc_socket_keepalive on;
-        }
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://netbird.${MY_TLD}
-    ports:
-      - 32908:80
-      - 36610:443
-    restart: unless-stopped
-    volumes:
-      - netbird-letsencrypt:/etc/letsencrypt/
-  netbird-signal:
-    container_name: netbird-signal
-    image: netbirdio/signal:latest
-    ports:
-      - 10001:80
-    restart: unless-stopped
-    volumes:
-      - netbird-signal:/var/lib/netbird
-  netbird-relay:
-    container_name: netbird-relay
-    image: netbirdio/relay:latest
-    restart: unless-stopped
-    environment:
-      NB_LOG_LEVEL: info
-      NB_LISTEN_ADDRESS: :33080
-      NB_EXPOSED_ADDRESS: netbird.${MY_TLD}:33080
-      # todo: change to a secure secret
-      NB_AUTH_SECRET: ${NETBIRD_RELAY_AUTH_SECRET}
-    ports:
-      - 33080:33080
-  netbird-management:
-    command: [
-      "--port", "443",
-      "--log-file", "console",
-      "--log-level", "info",
-      "--disable-anonymous-metrics=false",
-      "--single-account-mode-domain=netbird.${MY_TLD}",
-      "--dns-domain=netbird.selfhosted"
-      ]
-    container_name: netbird-management
-    depends_on:
-      netbird-dashboard:
-        condition: service_started
-    environment:
-      NETBIRD_STORE_ENGINE_POSTGRES_DSN:
-      NETBIRD_STORE_ENGINE_MYSQL_DSN:
-    image: netbirdio/management:latest
-    restart: unless-stopped
-    volumes:
-      - netbird-mgmt:/var/lib/netbird
-      - netbird-letsencrypt:/etc/letsencrypt:ro
-      - ${DOCKER_VOLUME_CONFIG}/netbird/management.json:/etc/netbird/management.json
-    ports:
-      - 23833:443 #API port
-  netbird-coturn:
-    command:
-      - -c /etc/turnserver.conf
-    container_name: netbird-coturn
-    image: coturn/coturn:latest
-    restart: unless-stopped
-    #domainname: netbird.${MY_TLD} # only needed when TLS is enabled
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/netbird/turnserver.conf:/etc/turnserver.conf:ro
-    #      - ${DOCKER_VOLUME_CONFIG}/netbird/privkey.pem:/etc/coturn/private/privkey.pem:ro
-    #      - ${DOCKER_VOLUME_CONFIG}/netbird/cert.pem:/etc/coturn/certs/cert.pem:ro
-    network_mode: host
+  # netbird-dashboard:
+  #   container_name: netbird-dashboard
+  #   environment:
+  #     # Endpoints
+  #     NETBIRD_MGMT_API_ENDPOINT: https://netbird.${MY_TLD}:33073
+  #     NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.${MY_TLD}:33073
+  #     # OIDC
+  #     AUTH_AUDIENCE: ${NETBIRD_ZITADEL_CLIENT_ID}
+  #     AUTH_CLIENT_ID: ${NETBIRD_ZITADEL_CLIENT_ID}
+  #     AUTH_CLIENT_SECRET: ${NETBIRD_ZITADEL_CLIENT_SECRET}
+  #     AUTH_AUTHORITY: https://id.${MY_TLD}
+  #     USE_AUTH0: false
+  #     AUTH_SUPPORTED_SCOPES: openid profile email offline_access api
+  #     AUTH_REDIRECT_URI: /auth
+  #     AUTH_SILENT_REDIRECT_URI: /silent-auth
+  #     NETBIRD_TOKEN_SOURCE: accessToken
+  #     # SSL
+  #     NGINX_SSL_PORT: 443
+  #     # Letsencrypt
+  #     LETSENCRYPT_DOMAIN:
+  #     LETSENCRYPT_EMAIL:
+  #   image: netbirdio/dashboard:latest
+  #   labels:
+  #     homepage.group: Privacy/Security
+  #     homepage.name: Netbird
+  #     homepage.href: https://netbird.${MY_TLD}
+  #     homepage.icon: netbird.svg
+  #     homepage.description: Peer-to-peer private network and centralized access control system
+  #     swag: enable
+  #     swag_proto: http
+  #     swag_port: 80
+  #     swag_auth: authelia
+  #     swag_url: netbird.${MY_TLD}
+  #     swag_server_custom_directive: |
+  #       location /signalexchange.SignalExchange/ {
+  #           grpc_pass grpc://netbird-signal:80;
+  #           #grpc_ssl_verify off;
+  #           grpc_read_timeout 1d;
+  #           grpc_send_timeout 1d;
+  #           grpc_socket_keepalive on;
+  #       }
+  #       # Proxy Management http endpoint
+  #       location /api {
+  #           proxy_pass http://netbird-management:443;
+  #       }
+  #       # Proxy Management grpc endpoint
+  #       location /management.ManagementService/ {
+  #           grpc_pass grpc://netbird-management:443;
+  #           #grpc_ssl_verify off;
+  #           grpc_read_timeout 1d;
+  #           grpc_send_timeout 1d;
+  #           grpc_socket_keepalive on;
+  #       }
+  #     swag.uptime-kuma.enabled: true
+  #     swag.uptime-kuma.monitor.url: https://netbird.${MY_TLD}
+  #   ports:
+  #     - 32908:80
+  #     - 36610:443
+  #   restart: unless-stopped
+  #   volumes:
+  #     - netbird-letsencrypt:/etc/letsencrypt/
+  # netbird-signal:
+  #   container_name: netbird-signal
+  #   image: netbirdio/signal:latest
+  #   ports:
+  #     - 10001:80
+  #   restart: unless-stopped
+  #   volumes:
+  #     - netbird-signal:/var/lib/netbird
+  # netbird-relay:
+  #   container_name: netbird-relay
+  #   image: netbirdio/relay:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     NB_LOG_LEVEL: info
+  #     NB_LISTEN_ADDRESS: :33080
+  #     NB_EXPOSED_ADDRESS: netbird.${MY_TLD}:33080
+  #     # todo: change to a secure secret
+  #     NB_AUTH_SECRET: ${NETBIRD_RELAY_AUTH_SECRET}
+  #   ports:
+  #     - 33080:33080
+  # netbird-management:
+  #   command: [
+  #     "--port", "443",
+  #     "--log-file", "console",
+  #     "--log-level", "info",
+  #     "--disable-anonymous-metrics=false",
+  #     "--single-account-mode-domain=netbird.${MY_TLD}",
+  #     "--dns-domain=netbird.selfhosted"
+  #     ]
+  #   container_name: netbird-management
+  #   depends_on:
+  #     netbird-dashboard:
+  #       condition: service_started
+  #   environment:
+  #     NETBIRD_STORE_ENGINE_POSTGRES_DSN:
+  #     NETBIRD_STORE_ENGINE_MYSQL_DSN:
+  #   image: netbirdio/management:latest
+  #   restart: unless-stopped
+  #   volumes:
+  #     - netbird-mgmt:/var/lib/netbird
+  #     - netbird-letsencrypt:/etc/letsencrypt:ro
+  #     - ${DOCKER_VOLUME_CONFIG}/netbird/management.json:/etc/netbird/management.json
+  #   ports:
+  #     - 23833:443 #API port
+  # netbird-coturn:
+  #   command:
+  #     - -c /etc/turnserver.conf
+  #   container_name: netbird-coturn
+  #   image: coturn/coturn:latest
+  #   restart: unless-stopped
+  #   #domainname: netbird.${MY_TLD} # only needed when TLS is enabled
+  #   volumes:
+  #     - ${DOCKER_VOLUME_CONFIG}/netbird/turnserver.conf:/etc/turnserver.conf:ro
+  #        - ${DOCKER_VOLUME_CONFIG}/netbird/privkey.pem:/etc/coturn/private/privkey.pem:ro
+  #        - ${DOCKER_VOLUME_CONFIG}/netbird/cert.pem:/etc/coturn/certs/cert.pem:ro
+  #   network_mode: host
   nextcloud:
     container_name: nextcloud-aio-mastercontainer
     environment:
@@ -3742,51 +3812,51 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/parseable/staging:/staging
-  peppermint:
-    container_name: peppermint
-    depends_on:
-      peppermint-pg-db:
-        condition: service_started
-        required: true
-    environment:
-      BASE_URL: https://support.trez.wtf
-      DB_USERNAME: peppermint
-      DB_PASSWORD: ${PEPPERMINT_PG_PASSWORD}
-      DB_HOST: peppermint-pg-db
-      SECRET: ${PEPPERMINT_SECRET_KEY}
-    image: pepperlabs/peppermint:latest
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 3000
-      swag_url: support.${MY_TLD}
-      swag_server_custom_directive: |
-        location /api {
-              proxy_pass http://peppermint:5003;
-        }
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
-      homepage.group: Professional Services
-      homepage.name: Peppermint
-      homepage.href: https://support.${MY_TLD}
-      homepage.icon: peppermint.svg
-      homepage.description: Open-source ticket management and help desk solution
-    ports:
-      - 3000:3000
-      - 5003:5003
-    restart: always
-  peppermint-pg-db:
-    container_name: peppermint-pg-db
-    environment:
-      POSTGRES_USER: peppermint
-      POSTGRES_PASSWORD: ${PEPPERMINT_PG_PASSWORD}
-      POSTGRES_DB: peppermint
-    expose:
-      - 5432
-    image: postgres:17-alpine
-    restart: always
-    volumes:
-      - peppermint-pg-data:/var/lib/postgresql/data
+  # peppermint:
+  #   container_name: peppermint
+  #   depends_on:
+  #     peppermint-pg-db:
+  #       condition: service_started
+  #       required: true
+  #   environment:
+  #     BASE_URL: https://support.trez.wtf
+  #     DB_USERNAME: peppermint
+  #     DB_PASSWORD: ${PEPPERMINT_PG_PASSWORD}
+  #     DB_HOST: peppermint-pg-db
+  #     SECRET: ${PEPPERMINT_SECRET_KEY}
+  #   image: pepperlabs/peppermint:latest
+  #   labels:
+  #     swag: enable
+  #     swag_proto: http
+  #     swag_port: 3000
+  #     swag_url: support.${MY_TLD}
+  #     swag_server_custom_directive: |
+  #       location /api {
+  #             proxy_pass http://peppermint:5003;
+  #       }
+  #     swag.uptime-kuma.enabled: true
+  #     swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
+  #     homepage.group: Professional Services
+  #     homepage.name: Peppermint
+  #     homepage.href: https://support.${MY_TLD}
+  #     homepage.icon: peppermint.svg
+  #     homepage.description: Open-source ticket management and help desk solution
+  #   ports:
+  #     - 3000:3000
+  #     - 5003:5003
+  #   restart: always
+  # peppermint-pg-db:
+  #   container_name: peppermint-pg-db
+  #   environment:
+  #     POSTGRES_USER: peppermint
+  #     POSTGRES_PASSWORD: ${PEPPERMINT_PG_PASSWORD}
+  #     POSTGRES_DB: peppermint
+  #   expose:
+  #     - 5432
+  #   image: postgres:17-alpine
+  #   restart: always
+  #   volumes:
+  #     - peppermint-pg-data:/var/lib/postgresql/data
   pgbackweb:
     container_name: pgbackweb
     depends_on:
@@ -3833,79 +3903,79 @@ services:
       - 8080
     image: 'plantuml/plantuml-server:jetty'
     restart: unless-stopped
-  plausible:
-    command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
-    container_name: plausible
-    depends_on:
-      plausible_db:
-        condition: service_started
-        required: true
-      plausible_events_db:
-        condition: service_started
-        required: true
-    environment:
-      BASE_URL: https://analytics.${MY_TLD}
-      CLICKHOUSE_DATABASE_URL: http://plausible-events-db:8123/plausible_events_db
-      DATABASE_URL: postgres://plausible:${PLAUSIBLE_PG_PASSWORD}@plausible-db:5432/plausible_db
-      DISABLE_REGISTRATION: invite_only
-      ENABLE_EMAIL_VERIFICATION: true
-      MAILER_ADAPTER: Bamboo.Mua
-      MAILER_EMAIL: noreply@trez.wtf
-      MAILER_NAME: Plausible
-      MAXMINDDB_LICENSE_KEY: ${SWAG_MAXMINDDB_LICENSE_KEY}
-      SECRET_KEY_BASE: ${PLAUSIBLE_SECRET_KEY_BASE}
-      SMTP_HOST_ADDR: postal-smtp
-      SMTP_HOST_PORT: 25
-      SMTP_USER_NAME: ${POSTAL_SMTP_AUTH_USER}
-      SMTP_USER_PWD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      TOTP_VAULT_KEY: ${PLAUSIBLE_TOTP_VAULT_KEY}
-    image: ghcr.io/plausible/community-edition:v2.1.0
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 8000
-      swag_url: analytics.${MY_TLD}
-      homepage.group: Professional Services
-      homepage.name: Plausible
-      homepage.href: https://analytics.${MY_TLD}
-      homepage.icon: plausible.svg
-      homepage.description: Open-source web analytics
-    networks:
-      default: null
-    ports:
-      - 8107:8000
-    restart: always
-  plausible_db:
-    container_name: plausible-db
-    environment:
-      POSTGRES_DB: plausible_db
-      POSTGRES_PASSWORD: ${PLAUSIBLE_PG_PASSWORD}
-      POSTGRES_USER: plausible
-    expose:
-      - 5432
-    image: postgres:16-alpine
-    networks:
-      default: null
-    restart: always
-    volumes:
-      - plausible-db-data:/var/lib/postgresql/data
-  plausible_events_db:
-    container_name: plausible-events-db
-    expose:
-      - 8123
-    image: clickhouse/clickhouse-server:24.3.3.102-alpine
-    networks:
-      default: null
-    restart: always
-    ulimits:
-      nofile:
-        hard: 262144
-        soft: 262144
-    volumes:
-      - plausible-event-data:/var/lib/clickhouse
-      - plausible-event-logs:/var/log/clickhouse-server
-      - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
-      - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
+  # plausible:
+  #   command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
+  #   container_name: plausible
+  #   depends_on:
+  #     plausible_db:
+  #       condition: service_started
+  #       required: true
+  #     plausible_events_db:
+  #       condition: service_started
+  #       required: true
+  #   environment:
+  #     BASE_URL: https://analytics.${MY_TLD}
+  #     CLICKHOUSE_DATABASE_URL: http://plausible-events-db:8123/plausible_events_db
+  #     DATABASE_URL: postgres://plausible:${PLAUSIBLE_PG_PASSWORD}@plausible-db:5432/plausible_db
+  #     DISABLE_REGISTRATION: invite_only
+  #     ENABLE_EMAIL_VERIFICATION: true
+  #     MAILER_ADAPTER: Bamboo.Mua
+  #     MAILER_EMAIL: noreply@trez.wtf
+  #     MAILER_NAME: Plausible
+  #     MAXMINDDB_LICENSE_KEY: ${SWAG_MAXMINDDB_LICENSE_KEY}
+  #     SECRET_KEY_BASE: ${PLAUSIBLE_SECRET_KEY_BASE}
+  #     SMTP_HOST_ADDR: postal-smtp
+  #     SMTP_HOST_PORT: 25
+  #     SMTP_USER_NAME: ${POSTAL_SMTP_AUTH_USER}
+  #     SMTP_USER_PWD: ${POSTAL_SMTP_AUTH_PASSWORD}
+  #     TOTP_VAULT_KEY: ${PLAUSIBLE_TOTP_VAULT_KEY}
+  #   image: ghcr.io/plausible/community-edition:v2.1.0
+  #   labels:
+  #     swag: enable
+  #     swag_proto: http
+  #     swag_port: 8000
+  #     swag_url: analytics.${MY_TLD}
+  #     homepage.group: Professional Services
+  #     homepage.name: Plausible
+  #     homepage.href: https://analytics.${MY_TLD}
+  #     homepage.icon: plausible.svg
+  #     homepage.description: Open-source web analytics
+  #   networks:
+  #     default: null
+  #   ports:
+  #     - 8107:8000
+  #   restart: always
+  # plausible_db:
+  #   container_name: plausible-db
+  #   environment:
+  #     POSTGRES_DB: plausible_db
+  #     POSTGRES_PASSWORD: ${PLAUSIBLE_PG_PASSWORD}
+  #     POSTGRES_USER: plausible
+  #   expose:
+  #     - 5432
+  #   image: postgres:16-alpine
+  #   networks:
+  #     default: null
+  #   restart: always
+  #   volumes:
+  #     - plausible-db-data:/var/lib/postgresql/data
+  # plausible_events_db:
+  #   container_name: plausible-events-db
+  #   expose:
+  #     - 8123
+  #   image: clickhouse/clickhouse-server:24.3.3.102-alpine
+  #   networks:
+  #     default: null
+  #   restart: always
+  #   ulimits:
+  #     nofile:
+  #       hard: 262144
+  #       soft: 262144
+  #   volumes:
+  #     - plausible-event-data:/var/lib/clickhouse
+  #     - plausible-event-logs:/var/log/clickhouse-server
+  #     - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
+  #     - ${DOCKER_VOLUME_CONFIG}/plausible/clickhouse/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
   portainer:
     command: -H tcp://dockerproxy:2375
     container_name: portainer
@@ -4877,27 +4947,27 @@ services:
     restart: unless-stopped
     volumes:
         - ${DOCKER_VOLUME_CONFIG}/speedtest-tracker:/config
-  spotisub:
-    container_name: spotisub
-    environment:
-      SPOTIPY_CLIENT_ID: ${YOUR_SPOTIFY_ID}
-      SPOTIPY_CLIENT_SECRET: ${YOUR_SPOTIFY_SECRET}
-      SPOTIPY_REDIRECT_URI: http://127.0.0.1:8080/
-      SUBSONIC_API_HOST: http://navidrome
-      SUBSONIC_API_PORT: 4533
-      SUBSONIC_API_USER: ${NAVIDROME_USERNAME}
-      SUBSONIC_API_PASS: ${NAVIDROME_PASSWORD}
-    healthcheck:
-      test: curl -s http://127.0.0.1:5183/api/v1/utils/healthcheck | grep -q 'Ok!' || exit 1
-      interval: 30s
-      retries: 20
-      start_period: 30s
-    image: blastbeng/spotisub:latest
-    ports:
-      - 5183:5183
-    restart: always
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/spotisub:/home/user/spotisub/cache
+  # spotisub:
+  #   container_name: spotisub
+  #   environment:
+  #     SPOTIPY_CLIENT_ID: ${YOUR_SPOTIFY_ID}
+  #     SPOTIPY_CLIENT_SECRET: ${YOUR_SPOTIFY_SECRET}
+  #     SPOTIPY_REDIRECT_URI: http://127.0.0.1:8080/
+  #     SUBSONIC_API_HOST: http://navidrome
+  #     SUBSONIC_API_PORT: 4533
+  #     SUBSONIC_API_USER: ${NAVIDROME_USERNAME}
+  #     SUBSONIC_API_PASS: ${NAVIDROME_PASSWORD}
+  #   healthcheck:
+  #     test: curl -s http://127.0.0.1:5183/api/v1/utils/healthcheck | grep -q 'Ok!' || exit 1
+  #     interval: 30s
+  #     retries: 20
+  #     start_period: 30s
+  #   image: blastbeng/spotisub:latest
+  #   ports:
+  #     - 5183:5183
+  #   restart: always
+  #   volumes:
+  #     - ${DOCKER_VOLUME_CONFIG}/spotisub:/home/user/spotisub/cache
   stable-diffusion-download:
     container_name: stable-diffusion-download
     image: git.trez.wtf/trez.one/stable-diffusion-download:v9.0.0
@@ -5560,5 +5630,3 @@ volumes:
     name: wallos-db
   wallos-logos:
     name: wallos-logos
-  zitadel-pg-db:
-    name: zitadel-pg-db
