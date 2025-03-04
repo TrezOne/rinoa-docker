@@ -4263,7 +4263,7 @@ services:
       TZ: ${TZ}
     image: amruthpillai/reactive-resume:latest
     labels:
-      homepage.group: Professional Services
+      homepage.group: Personal Services
       homepage.name: Reactive Resume
       homepage.href: https://resume.${MY_TLD}
       homepage.icon: reactive-resume.svg
