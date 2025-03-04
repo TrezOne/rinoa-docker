@@ -3258,7 +3258,7 @@ services:
       homepage.icon: mastodon.svg
       homepage.description: Open-source social network
       homepage.widget.type: mastodon
-      homepage.widget.url: http://mastodon
+      homepage.widget.url: https://mastodon.${MY_TLD}
     ports:
       - 9044:80
       - 3444:443
