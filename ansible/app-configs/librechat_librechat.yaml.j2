@@ -6,21 +6,21 @@ endpoints:
       baseURL: "http://ollama:11434/v1/chat/completions"
       models:
         default: [
-          "deepseek-r1",
-          "deepseek-coder-v2",
-          "deepseek-v3",
-          "llama3.3",
-          "phi4",
+          "deepseek-r1:1.5b",
+          "deepseek-coder-v2:16b",
+          "deepseek-v3:671b",
+          "llama3.3:70b",
+          "phi4:14b",
           "qwen2.5",
-          "llama2",
-          "mistral",
-          "codellama",
-          "tinyllama",
-          "starcoder2",
-          "dolphin-mixtral",
-          "smollm2",
-          "orca-mini",
-          "mistral-openorca"
+          "llama2:7b",
+          "mistral:7b",
+          "codellama:7b",
+          "tinyllama:1.1b",
+          "starcoder2:3b",
+          "dolphin-mistral:7b",
+          "smollm2:1.7b",
+          "orca-mini:3b",
+          "mistral-openorca:7b"
         ]
 # fetching list of models is supported but the `name` field must start
 # with `ollama` (case-insensitive), as it does in this example.
