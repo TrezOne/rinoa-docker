@@ -1164,9 +1164,9 @@ services:
       VPN_INPUT_PORTS: ""
       VPN_OPTIONS: ""
       VPN_OUTPUT_PORTS: ""
-      VPN_PASS: QGXRAYAwzVv9X84MAK2gPYq2Mt6ztdoA
+      VPN_PASS: ${DELUGEVPN_ENVIRONMENT_VPN_PASS}
       VPN_PROV: pia
-      VPN_USER: p3120278
+      VPN_USER: ${DELUGEVPN_ENVIRONMENT_VPN_USER}
     hostname: Rinoa
     image: ghcr.io/binhex/arch-delugevpn:latest
     labels:
@@ -4455,12 +4455,12 @@ services:
       TZ: America/New_York
       VPN_CLIENT: openvpn
       VPN_ENABLED: yes
-      VPN_INPUT_PORTS: 
-      VPN_OPTIONS: 
-      VPN_OUTPUT_PORTS: 
-      VPN_PASS: QGXRAYAwzVv9X84MAK2gPYq2Mt6ztdoA
+      VPN_INPUT_PORTS:
+      VPN_OPTIONS:
+      VPN_OUTPUT_PORTS:
+      VPN_PASS: ${SABNZBDVPN_ENVIRONMENT_VPN_PASS}
       VPN_PROV: pia
-      VPN_USER: p3120278
+      VPN_USER: ${SABNZBDVPN_ENVIRONMENT_VPN_USER}
       DEBUG: true
     hostname: Rinoa
     image: ghcr.io/binhex/arch-sabnzbdvpn:latest
