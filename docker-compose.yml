@@ -4003,7 +4003,7 @@ services:
       homepage.description: Service delivery platform for containerized applications
       homepage.widget.type: portainer
       homepage.widget.url: http://portainer:9000
-      homepage.widget.env: 20
+      homepage.widget.env: 7
       homepage.widget.key: ${PORTAINER_HOMEPAGE_TOKEN}
     restart: unless-stopped
     volumes:
