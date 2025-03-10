@@ -478,7 +478,7 @@ services:
       LOG_ENABLED: true
     expose:
       - 3000
-    image: ghcr.io/bluesky-social/pds:latest
+    image: code.modernleft.org/gravityfargo/bluesky-pds:v0.4.98
     labels:
       swag: enable
       swag_port: 3000
@@ -3053,6 +3053,33 @@ services:
         source: /etc/localtime
         target: /etc/localtime
         type: bind
+  linkstack:
+    container_name: linkstack
+    image: linkstackorg/linkstack:latest
+    environment:
+      TZ: ${TZ}
+      SERVER_ADMIN: noreply@${MY_TLD}
+      HTTP_SERVER_NAME: profile.${MY_TLD}
+      HTTPS_SERVER_NAME: profile.${MY_TLD}
+      LOG_LEVEL: info
+      PHP_MEMORY_LIMIT: 256M
+      UPLOAD_MAX_FILESIZE: 64M
+    labels:
+      homepage.group: Social
+      homepage.name: LinkStack
+      homepage.href: https://profile.${MY_TLD}
+      homepage.icon: linkstack.svg
+      homepage.description: Personal profile
+      swag: enable
+      swag_proto: https
+      swag_url: profile.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://profile.${MY_TLD}
+    ports:
+      - 8190:443
+    restart: unless-stopped
+    volumes:
+      - linkstack_data:/htdocs
   lldap:
     container_name: lldap
     environment:
@@ -5553,6 +5580,8 @@ volumes:
     name: jitsi-web-admin-upload
   joplin_data:
     name: joplin_data
+  linkstack_data:
+    name: linkstack_data
   librechat-pg-data:
     name: librechat-pg-data
   libretranslate_models:
