@@ -16,7 +16,7 @@
 | bitmagnet | ghcr.io/bitmagnet-io/bitmagnet:latest |
 | bitmagnet-pg-db | postgres:17-alpine |
 | bitwarden | vaultwarden/server:latest |
-| bluesky-pds | ghcr.io/bluesky-social/pds:latest |
+| bluesky-pds | code.modernleft.org/gravityfargo/bluesky-pds:v0.4.98 |
 | browserless | ghcr.io/browserless/chromium:latest |
 | bunkerweb | bunkerity/bunkerweb:1.6.0 |
 | bunkerweb-scheduler | bunkerity/bunkerweb-scheduler:1.6.0 |
@@ -52,8 +52,6 @@
 | gotify | gotify/server |
 | guacamole | flcontainers/guacamole:latest |
 | homepage | ghcr.io/gethomepage/homepage:latest |
-| hortusfox | ghcr.io/danielbrendel/hortusfox-web:latest |
-| hugo | hugomods/hugo:exts |
 | immich-server | ghcr.io/immich-app/immich-server:release |
 | immich-machine-learning | ghcr.io/immich-app/immich-machine-learning:release |
 | immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1 |
@@ -63,8 +61,6 @@
 | invidious | quay.io/invidious/invidious:latest |
 | invidious-sig-helper | quay.io/invidious/inv-sig-helper:latest |
 | invidious-db | docker.io/library/postgres:14 |
-| invoice-ninja | invoiceninja/invoiceninja-debian:5 |
-| invoice-ninja_proxy | nginx |
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
 | jitsi-etherpad | etherpad/etherpad:1.8.6 |
@@ -82,6 +78,7 @@
 | libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
+| linkstack | linkstackorg/linkstack:latest |
 | lldap | lldap/lldap:stable |
 | maloja | krateng/maloja:latest |
 | manyfold | lscr.io/linuxserver/manyfold:latest |
@@ -96,24 +93,14 @@
 | n8n | docker.n8n.io/n8nio/n8n |
 | navidrome | deluan/navidrome:latest |
 | netalertx | jokobsk/netalertx:latest |
-| netbird-dashboard | netbirdio/dashboard:latest |
-| netbird-signal | netbirdio/signal:latest |
-| netbird-relay | netbirdio/relay:latest |
-| netbird-management | netbirdio/management:latest |
-| netbird-coturn | coturn/coturn:latest |
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | parseable | containers.parseable.com/parseable/parseable:latest |
-| peppermint | pepperlabs/peppermint:latest |
-| peppermint-pg-db | postgres:17-alpine |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
 | plantuml-server | plantuml/plantuml-server:jetty |
-| plausible | ghcr.io/plausible/community-edition:v2.1.0 |
-| plausible_db | postgres:16-alpine |
-| plausible_events_db | clickhouse/clickhouse-server:24.3.3.102-alpine |
 | portainer | portainer/portainer-ce:2.27.0-alpine |
 | portall | need4swede/portall:latest |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
@@ -143,7 +130,6 @@
 | soulseek | slskd/slskd |
 | sourcebot | ghcr.io/sourcebot-dev/sourcebot:latest |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
-| spotisub | blastbeng/spotisub:latest |
 | stable-diffusion-download | git.trez.wtf/trez.one/stable-diffusion-download:v9.0.0 |
 | stable-diffusion-webui | git.trez.wtf/trez.one/stable-diffusion-ui:v9.0.0 |
 | swag | lscr.io/linuxserver/swag:latest |
