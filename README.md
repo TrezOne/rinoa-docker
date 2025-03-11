@@ -52,6 +52,7 @@
 | gotify | gotify/server |
 | guacamole | flcontainers/guacamole:latest |
 | homepage | ghcr.io/gethomepage/homepage:latest |
+| hugo | hugomods/hugo:exts |
 | immich-server | ghcr.io/immich-app/immich-server:release |
 | immich-machine-learning | ghcr.io/immich-app/immich-machine-learning:release |
 | immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1 |
