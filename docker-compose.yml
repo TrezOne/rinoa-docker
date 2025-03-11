@@ -496,9 +496,9 @@ services:
       ALLOW_FILE_PROTOCOL: true
       CONCURRENT: 20
       HEALTH: false
-      PROXY_HOST: swag
-      PROXY_PORT: 443
-      PROXY_SSL: true
+      PROXY_HOST: browserless
+      PROXY_PORT: 3000
+      PROXY_SSL: false
       QUEUED: 20
       TIMEOUT: 300000
       TOKEN: ${CHROMIUM_TOKEN}
