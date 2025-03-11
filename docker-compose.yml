@@ -4270,7 +4270,7 @@ services:
       ACCESS_TOKEN_SECRET: ${REACTIVE_RESUME_ACCESS_TOKEN_SECRET}
       CHROME_PORT: 443
       CHROME_TOKEN: ${CHROMIUM_TOKEN}
-      CHROME_URL: wss://browse.${MY_TLD}
+      CHROME_URL: wss://browserless:3000
       DATABASE_URL: postgresql://reactiveresume:${REACTIVE_RESUME_PGSQL_PASSWORD}@reactive-resume-pg:5432/reactiveresume
       MAIL_FROM: noreply@trez.wtf
       NODE_ENV: production
