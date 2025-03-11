@@ -115,7 +115,7 @@ services:
       SEARCH_BACKEND_ENGINE: ripgrep       # tells ArchiveBox to use sonic container below for fast full-text search
     image: archivebox/archivebox:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: ArchiveBox
       homepage.href: https://archive.${MY_TLD}
       homepage.icon: archivebox.png
@@ -924,7 +924,7 @@ services:
       timeout: 10s
     image: freikin/dawarich:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: Dawarich
       homepage.href: https://loc.${MY_TLD}
       homepage.icon: dawarich.svg
@@ -1341,7 +1341,7 @@ services:
     container_name: docuseal
     image: docuseal/docuseal:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: Docuseal
       homepage.href: https://docs.${MY_TLD}
       homepage.description: OSS Document Signing & Verification
@@ -1813,38 +1813,28 @@ services:
   #       target: /var/www/html/app/migrations
   #       type: volume
   #       volume: {}
-  # hugo:
-  #   command: hugo server --baseURL "it-services.trez.wtf" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
-  #   container_name: hugo
-  #   image: hugomods/hugo:exts
-  #   labels:
-  #     swag: enable
-  #     swag_proto: http
-  #     swag_port: 1313
-  #     swag_url: it-services.${MY_TLD}
-  #     swag.uptime-kuma.enabled: true
-  #     swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
-  #     homepage.group: Professional Services
-  #     homepage.name: Hugo
-  #     homepage.href: https://it-services.${MY_TLD}
-  #     homepage.icon: hugo.svg
-  #     homepage.description: Static site
-  #   networks:
-  #     default: null
-  #   ports:
-  #     - 1313:1313
-  #   restart: unless-stopped
-  #   volumes:
-  #     - source: ${DOCKER_VOLUME_CONFIG}/hugo/
-  #       target: /src
-  #       type: bind
-  #       bind:
-  #         create_host_path: true
-  #     - source: ${DOCKER_VOLUME_CONFIG}/hugo/cache
-  #       target: /tmp/hugo_cache
-  #       type: bind
-  #       bind:
-  #         create_host_path: true
+  hugo:
+    command: hugo server --baseURL "it-services.trez.wtf" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
+    container_name: hugo
+    image: hugomods/hugo:exts
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 1313
+      swag_url: it-services.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
+      homepage.group: Personal/Professional Services
+      homepage.name: Hugo
+      homepage.href: https://it-services.${MY_TLD}
+      homepage.icon: hugo.svg
+      homepage.description: Static site
+    ports:
+      - 1313:1313
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/hugo/:/src
+      - ${DOCKER_VOLUME_CONFIG}/hugo/cache:/tmp/hugo_cache
   immich-server:
     container_name: immich-server
     depends_on:
@@ -2855,7 +2845,7 @@ services:
       POSTGRES_HOST: joplin-db
     image: joplin/server:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: Joplin
       homepage.href: https://notes.${MY_TLD}
       homepage.icon: joplin.svg
@@ -2883,7 +2873,7 @@ services:
       RAG_API_URL: http://librechat-rag-api:8000
     image: ghcr.io/danny-avila/librechat-dev:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: LibreChat
       homepage.href: https://ai.${MY_TLD}
       homepage.icon: sh-librechat.svg
@@ -2939,7 +2929,7 @@ services:
     environment:
       LT_UPDATE_MODELS: true
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: LibreTranslate
       homepage.href: https://translate.${MY_TLD}
       homepage.icon: sh-libretranslate.svg
@@ -3679,7 +3669,7 @@ services:
       - 11000
     image: nextcloud/all-in-one:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: NextCloud
       homepage.href: https://cloud.${MY_TLD}
       homepage.icon: nextcloud.svg
@@ -3778,7 +3768,7 @@ services:
       swag_url: docs.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://docs.${MY_TLD}
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: Paperless-ngx
       homepage.href: https://docs.${MY_TLD}
       homepage.icon: paperless-ngx.svg
@@ -4289,7 +4279,7 @@ services:
       TZ: ${TZ}
     image: amruthpillai/reactive-resume:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: Reactive Resume
       homepage.href: https://resume.${MY_TLD}
       homepage.icon: reactive-resume.svg
@@ -4542,7 +4532,7 @@ services:
       - 3000
     image: jpyles0524/scraperr:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: Scraperr
       homepage.href: https://scrape.${MY_TLD}
       homepage.icon: /icons/scraperr.png
@@ -4633,7 +4623,7 @@ services:
       SEARXNG_BASE_URL: https://${SEARXNG_BASE_URL:-localhost}/
     image: searxng/searxng:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: SearxNG
       homepage.href: https://search.${MY_TLD}
       homepage.icon: searxng.png
@@ -5007,7 +4997,7 @@ services:
       - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
     labels:
       homepage.name: Stable-Diffusion WebUI
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.description: Deep learning, text-to-image model
       homepage.href: https://sd.${MY_TLD}
       homepage.icon: /icons/stable-diffusion.png
