@@ -132,7 +132,7 @@
 | sourcebot | ghcr.io/sourcebot-dev/sourcebot:latest |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | stable-diffusion-download | git.trez.wtf/trez.one/stable-diffusion-download:v9.0.0 |
-| stable-diffusion-webui | git.trez.wtf/trez.one/stable-diffusion-ui:v9.0.0 |
+| stable-diffusion-webui | git.trez.wtf/trez.one/stable-diffusion-ui:v9.0.1 |
 | swag | lscr.io/linuxserver/swag:latest |
 | tandoor | vabene1111/recipes |
 | tandoor-pg | postgres:16-alpine |
