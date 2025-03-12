@@ -505,6 +505,8 @@ services:
       TZ: ${TZ}
     expose:
       - 3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     image: ghcr.io/browserless/chromium:latest
     labels:
       swag: enable
