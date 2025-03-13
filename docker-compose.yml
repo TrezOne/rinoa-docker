@@ -3312,6 +3312,9 @@ services:
     environment:
       ND_AUTOIMPORTPLAYLISTS: false
       ND_BASEURL: ""
+      ND_BACKUP_PATH: /backups
+      ND_BACKUP_SCHEDULE: '@every 6h'
+      ND_BACKUP_COUNT: 7
       ND_LASTFM_APIKEY: ${LASTFM_API_KEY}
       ND_LASTFM_ENABLED: true
       ND_LASTFM_SECRET: ${LASTFM_API_SECRET}
@@ -3348,16 +3351,10 @@ services:
     restart: unless-stopped
     user: 1000:1000
     volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/navidrome
-        target: /data
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_STORAGE}/Audio/Music
-        target: /music
-        type: bind
-        bind:
-          create_host_path: true
+      - ${DOCKER_VOLUME_CONFIG}/navidrome:/data
+      - ${DOCKER_VOLUME_STORAGE}/Audio/Music:/music
+      - ${DOCKER_VOLUME_STORAGE}/Audio/Playlists:/playlists
+      - ${DOCKER_VOLUME_STORAGE}/backups/navidrome:/backups
   netalertx:
     container_name: netalertx
     environment:
