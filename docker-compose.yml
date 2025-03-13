@@ -3315,6 +3315,7 @@ services:
       ND_BACKUP_PATH: /backups
       ND_BACKUP_SCHEDULE: '@every 6h'
       ND_BACKUP_COUNT: 7
+      ND_ENABLEGRAVATAR: true
       ND_LASTFM_APIKEY: ${LASTFM_API_KEY}
       ND_LASTFM_ENABLED: true
       ND_LASTFM_SECRET: ${LASTFM_API_SECRET}
