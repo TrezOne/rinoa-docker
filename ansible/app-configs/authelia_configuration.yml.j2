@@ -1,3 +1,6 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+# yaml-language-server: $schema=https://www.authelia.com/schemas/latest/json-schema/configuration.json
 ---
 theme: auto
 default_2fa_method: "totp"
@@ -135,3 +138,34 @@ notifier:
     disable_require_tls: true
     disable_starttls: true
     disable_html_emails: false
+identity_providers:
+  oidc:
+    hmac_secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_OIDC_HMAC_SECRET'] }}'
+    jwks:
+      key_id: 'netbird'
+      key: {{ secret "/config/secrets/oidc/jwks/netbird_private.pem" | mindent 10 "|" | msquote }}
+      certificate_chain: {{ secret "/config/secrets/oidc/jwks/netbird_chain.pem" | mindent 10 "|" | msquote }}
+    cors:
+      allowed_origins_from_client_redirect_uris: true
+      endpoints:
+        - 'userinfo'
+        - 'authorization'
+        - 'token'
+        - 'revocation'
+        - 'introspection'
+    clients:
+      - client_id: 'netbird'
+        client_name: 'NetBird'
+        client_secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_NETBIRD_CLIENT_SECRET'] }}'
+        public: false
+        authorization_policy: 'two_factor'
+        redirect_uris:
+          - 'https://vpn.trez.wtf/peers'
+          - 'https://vpn.trez.wtf/add-peers'
+          - 'http://localhost'
+        scopes:
+          - 'openid'
+          - 'email'
+          - 'profile'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_post'

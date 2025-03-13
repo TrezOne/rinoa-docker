@@ -202,9 +202,10 @@ services:
       AUTHELIA_SESSION_SECRET: ${AUTHELIA_SESSION_SECRET}
       AUTHELIA_STORAGE_ENCRYPTION_KEY: ${AUTHELIA_STORAGE_ENCRYPTION_KEY}
       AUTHELIA_STORAGE_POSTGRES_PASSWORD: ${AUTHELIA_STORAGE_POSTGRES_PASSWORD}
-      # PGID: ${PGID}
-      # PUID: ${PUID}
+      PGID: ${PGID}
+      PUID: ${PUID}
       TZ: ${TZ}
+      X_AUTHELIA_CONFIG_FILTERS: template
     expose:
       - 9091
     image: authelia/authelia:master
@@ -1268,77 +1269,77 @@ services:
     restart: always
     volumes:
       - ${DOCKER_VOLUME_STORAGE}/backups/docker_volume_bkups:/archive
-      - authelia-pg-db:/data/authelia-pg-db:ro
-      - bitmagnet-pg-db:/data/bitmagnet-pg-db:ro
-      - bunkerweb-storage:/data/bunkerweb-storage:ro
-      - castopod-media:/data/castopod-media:ro
-      - crowdsec-config:/data/crowdsec-config:ro
-      - crowdsec-db:/data/crowdsec-db:ro
-      - dawarich_db_data:/data/dawarich_db_data:ro
-      - dawarich_shared:/data/dawarich_shared:ro
-      - dawarich_public:/data/dawarich_public:ro
-      - dawarich_watched:/data/dawarich_watched:ro
-      - dbgate-data:/data/dbgate-data:ro
-      - docker-volume-bkup-data:/data/docker-volume-bkup-data:ro
-      - fastenhealth-cache:/data/fastenhealth-cache:ro
-      - fastenhealth-db:/data/fastenhealth-db:ro
-      - filebeat_etc:/data/filebeat_etc:ro
-      - filebeat_var:/data/filebeat_var:ro
-      - gitea-pg-db:/data/gitea-pg-db:ro
-      - hortusfox_app_backup:/data/hortusfox_app_backup:ro
-      - hortusfox_app_images:/data/hortusfox_app_images:ro
-      - hortusfox_app_logs:/data/hortusfox_app_logs:ro
-      - hortusfox_app_migrate:/data/hortusfox_app_migrate:ro
-      - hortusfox_app_themes:/data/hortusfox_app_themes:ro
-      - hortusfox_db_data:/data/hortusfox_db_data:ro
-      - immich-model-cache:/data/immich-model-cache:ro
-      - influxdb2-data:/data/influxdb2-data:ro
-      - influxdb2-config:/data/influxdb2-config:ro
-      - invidious-postgres:/data/invidious-postgres:ro
-      - invoice-ninja_cache:/data/invoice-ninja_cache:ro
-      - invoice-ninja_public:/data/invoice-ninja_public:ro
-      - invoice-ninja_storage:/data/invoice-ninja_storage:ro
-      - jitsi-web-admin-theme:/data/jitsi-web-admin-theme:ro
-      - jitsi-web-admin-upload:/data/jitsi-web-admin-upload:ro
-      - joplin_data:/data/joplin_data:ro
-      - librechat-pg-data:/data/librechat-pg-data:ro
-      - libretranslate_models:/data/libretranslate_models:ro
-      - lldap_data:/data/lldap_data:ro
-      - mastodon-pg-db:/data/mastodon-pg-db:ro
-      - mixpost-storage:/data/mixpost-storage:ro
-      - mixpost-logs:/data/mixpost-logs:ro
-      - mongodb_config:/data/mongodb_config:ro
-      - mongodb_data:/data/mongodb_data:ro
-      - n8n-data:/data/n8n-data:ro
-      - netbird-mgmt:/data/netbird-mgmt:ro
-      - netbird-signal:/data/netbird-signal:ro
-      - netbird-letsencrypt:/data/netbird-letsencrypt:ro
-      - nextcloud_aio_mastercontainer:/data/nextcloud_aio_mastercontainer:ro
-      - ollama:/data/ollama:ro
-      - open-webui:/data/open-webui:ro
-      - paperless-ngx-data:/data/paperless-ngx-data:ro
-      - paperless-ngx-media:/data/paperless-ngx-media:ro
-      - paperless-ngx-pg:/data/paperless-ngx-pg:ro
-      - peppermint-pg-data:/data/peppermint-pg-data:ro
-      - pgbackweb-data:/data/pgbackweb-data:ro
-      - plausible-db-data:/data/plausible-db-data:ro
-      - plausible-event-data:/data/plausible-event-data:ro
-      - plausible-event-logs:/data/plausible-event-logs:ro
-      - portainer-data:/data/portainer-data:ro
-      - reactive-resume-pg:/data/reactive-resume-pg:ro
-      - semaphore_config:/data/semaphore_config:ro
-      - semaphore_data:/data/semaphore_data:ro
-      - semaphore_tmp:/data/semaphore_tmp:ro
-      - sonarqube-data:/data/sonarqube-data:ro
-      - sonarqube-db:/data/sonarqube-db:ro
-      - sonarqube-db-data:/data/sonarqube-db-data:ro
-      - sonarqube-extensions:/data/sonarqube-extensions:ro
-      - sonarqube-logs:/data/sonarqube-logs:ro
-      - sonarqube-temp:/data/sonarqube-temp:ro
-      - tandoor-pg:/data/tandoor-pg:ro
-      - unmanic-cache:/data/unmanic-cache:ro
-      - wallos-db:/data/wallos-db:ro
-      - wallos-logos:/data/wallos-logos:ro
+      - authelia-pg-db:/backup/authelia-pg-db:ro
+      - bitmagnet-pg-db:/backup/bitmagnet-pg-db:ro
+      - bunkerweb-storage:/backup/bunkerweb-storage:ro
+      - castopod-media:/backup/castopod-media:ro
+      - crowdsec-config:/backup/crowdsec-config:ro
+      - crowdsec-db:/backup/crowdsec-db:ro
+      - dawarich_db_data:/backup/dawarich_db_data:ro
+      - dawarich_shared:/backup/dawarich_shared:ro
+      - dawarich_public:/backup/dawarich_public:ro
+      - dawarich_watched:/backup/dawarich_watched:ro
+      - dbgate-data:/backup/dbgate-data:ro
+      - docker-volume-bkup-data:/backup/docker-volume-bkup-data:ro
+      - fastenhealth-cache:/backup/fastenhealth-cache:ro
+      - fastenhealth-db:/backup/fastenhealth-db:ro
+      - filebeat_etc:/backup/filebeat_etc:ro
+      - filebeat_var:/backup/filebeat_var:ro
+      - gitea-pg-db:/backup/gitea-pg-db:ro
+      - hortusfox_app_backup:/backup/hortusfox_app_backup:ro
+      - hortusfox_app_images:/backup/hortusfox_app_images:ro
+      - hortusfox_app_logs:/backup/hortusfox_app_logs:ro
+      - hortusfox_app_migrate:/backup/hortusfox_app_migrate:ro
+      - hortusfox_app_themes:/backup/hortusfox_app_themes:ro
+      - hortusfox_db_data:/backup/hortusfox_db_data:ro
+      - immich-model-cache:/backup/immich-model-cache:ro
+      - influxdb2-data:/backup/influxdb2-data:ro
+      - influxdb2-config:/backup/influxdb2-config:ro
+      - invidious-postgres:/backup/invidious-postgres:ro
+      - invoice-ninja_cache:/backup/invoice-ninja_cache:ro
+      - invoice-ninja_public:/backup/invoice-ninja_public:ro
+      - invoice-ninja_storage:/backup/invoice-ninja_storage:ro
+      - jitsi-web-admin-theme:/backup/jitsi-web-admin-theme:ro
+      - jitsi-web-admin-upload:/backup/jitsi-web-admin-upload:ro
+      - joplin_data:/backup/joplin_data:ro
+      - librechat-pg-data:/backup/librechat-pg-data:ro
+      - libretranslate_models:/backup/libretranslate_models:ro
+      - lldap_data:/backup/lldap_data:ro
+      - mastodon-pg-db:/backup/mastodon-pg-db:ro
+      - mixpost-storage:/backup/mixpost-storage:ro
+      - mixpost-logs:/backup/mixpost-logs:ro
+      - mongodb_config:/backup/mongodb_config:ro
+      - mongodb_data:/backup/mongodb_data:ro
+      - n8n-data:/backup/n8n-data:ro
+      - netbird-mgmt:/backup/netbird-mgmt:ro
+      - netbird-signal:/backup/netbird-signal:ro
+      - netbird-letsencrypt:/backup/netbird-letsencrypt:ro
+      - nextcloud_aio_mastercontainer:/backup/nextcloud_aio_mastercontainer:ro
+      - ollama:/backup/ollama:ro
+      - open-webui:/backup/open-webui:ro
+      - paperless-ngx-data:/backup/paperless-ngx-data:ro
+      - paperless-ngx-media:/backup/paperless-ngx-media:ro
+      - paperless-ngx-pg:/backup/paperless-ngx-pg:ro
+      - peppermint-pg-data:/backup/peppermint-pg-data:ro
+      - pgbackweb-data:/backup/pgbackweb-data:ro
+      - plausible-db-data:/backup/plausible-db-data:ro
+      - plausible-event-data:/backup/plausible-event-data:ro
+      - plausible-event-logs:/backup/plausible-event-logs:ro
+      - portainer-data:/backup/portainer-data:ro
+      - reactive-resume-pg:/backup/reactive-resume-pg:ro
+      - semaphore_config:/backup/semaphore_config:ro
+      - semaphore_data:/backup/semaphore_data:ro
+      - semaphore_tmp:/backup/semaphore_tmp:ro
+      - sonarqube-data:/backup/sonarqube-data:ro
+      - sonarqube-db:/backup/sonarqube-db:ro
+      - sonarqube-db-data:/backup/sonarqube-db-data:ro
+      - sonarqube-extensions:/backup/sonarqube-extensions:ro
+      - sonarqube-logs:/backup/sonarqube-logs:ro
+      - sonarqube-temp:/backup/sonarqube-temp:ro
+      - tandoor-pg:/backup/tandoor-pg:ro
+      - unmanic-cache:/backup/unmanic-cache:ro
+      - wallos-db:/backup/wallos-db:ro
+      - wallos-logos:/backup/wallos-logos:ro
   docuseal:
     container_name: docuseal
     image: docuseal/docuseal:latest
@@ -1792,6 +1793,10 @@ services:
       immich-pg-db:
         condition: service_started
         required: true
+      immich-machine-learning:
+        condition: service_started
+        required: true
+        restart: true
     environment:
       DB_DATABASE_NAME: immich
       DB_HOSTNAME: immich-pg-db
@@ -3337,8 +3342,8 @@ services:
       homepage.widget.type: navidrome
       homepage.widget.url: http://navidrome:4533
       homepage.widget.user: admin
-      homepage.widget.token: e8a9e97b29aa963fa4729c633289d232
-      homepage.widget.salt: v5Z93Z
+      homepage.widget.token: ${NAVIDROME_HOMEPAGE_TOKEN}
+      homepage.widget.salt: ${NAVIDROME_HOMEPAGE_SALT}
       swag: enable
       swag_port: 4533
       swag_proto: http
@@ -3383,123 +3388,121 @@ services:
         target: /app/api
       # (API: OPTION 2) use when debugging issues
       # - ${DOCKER_VOLUME_CONFIG}/netalertx/api:/app/api
-  # netbird-dashboard:
-  #   container_name: netbird-dashboard
-  #   environment:
-  #     # Endpoints
-  #     NETBIRD_MGMT_API_ENDPOINT: https://netbird.${MY_TLD}:33073
-  #     NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.${MY_TLD}:33073
-  #     # OIDC
-  #     AUTH_AUDIENCE: ${NETBIRD_ZITADEL_CLIENT_ID}
-  #     AUTH_CLIENT_ID: ${NETBIRD_ZITADEL_CLIENT_ID}
-  #     AUTH_CLIENT_SECRET: ${NETBIRD_ZITADEL_CLIENT_SECRET}
-  #     AUTH_AUTHORITY: https://id.${MY_TLD}
-  #     USE_AUTH0: false
-  #     AUTH_SUPPORTED_SCOPES: openid profile email offline_access api
-  #     AUTH_REDIRECT_URI: /auth
-  #     AUTH_SILENT_REDIRECT_URI: /silent-auth
-  #     NETBIRD_TOKEN_SOURCE: accessToken
-  #     # SSL
-  #     NGINX_SSL_PORT: 443
-  #     # Letsencrypt
-  #     LETSENCRYPT_DOMAIN:
-  #     LETSENCRYPT_EMAIL:
-  #   image: netbirdio/dashboard:latest
-  #   labels:
-  #     homepage.group: Privacy/Security
-  #     homepage.name: Netbird
-  #     homepage.href: https://netbird.${MY_TLD}
-  #     homepage.icon: netbird.svg
-  #     homepage.description: Peer-to-peer private network and centralized access control system
-  #     swag: enable
-  #     swag_proto: http
-  #     swag_port: 80
-  #     swag_auth: authelia
-  #     swag_url: netbird.${MY_TLD}
-  #     swag_server_custom_directive: |
-  #       location /signalexchange.SignalExchange/ {
-  #           grpc_pass grpc://netbird-signal:80;
-  #           #grpc_ssl_verify off;
-  #           grpc_read_timeout 1d;
-  #           grpc_send_timeout 1d;
-  #           grpc_socket_keepalive on;
-  #       }
-  #       # Proxy Management http endpoint
-  #       location /api {
-  #           proxy_pass http://netbird-management:443;
-  #       }
-  #       # Proxy Management grpc endpoint
-  #       location /management.ManagementService/ {
-  #           grpc_pass grpc://netbird-management:443;
-  #           #grpc_ssl_verify off;
-  #           grpc_read_timeout 1d;
-  #           grpc_send_timeout 1d;
-  #           grpc_socket_keepalive on;
-  #       }
-  #     swag.uptime-kuma.enabled: true
-  #     swag.uptime-kuma.monitor.url: https://netbird.${MY_TLD}
-  #   ports:
-  #     - 32908:80
-  #     - 36610:443
-  #   restart: unless-stopped
-  #   volumes:
-  #     - netbird-letsencrypt:/etc/letsencrypt/
-  # netbird-signal:
-  #   container_name: netbird-signal
-  #   image: netbirdio/signal:latest
-  #   ports:
-  #     - 10001:80
-  #   restart: unless-stopped
-  #   volumes:
-  #     - netbird-signal:/var/lib/netbird
-  # netbird-relay:
-  #   container_name: netbird-relay
-  #   image: netbirdio/relay:latest
-  #   restart: unless-stopped
-  #   environment:
-  #     NB_LOG_LEVEL: info
-  #     NB_LISTEN_ADDRESS: :33080
-  #     NB_EXPOSED_ADDRESS: netbird.${MY_TLD}:33080
-  #     # todo: change to a secure secret
-  #     NB_AUTH_SECRET: ${NETBIRD_RELAY_AUTH_SECRET}
-  #   ports:
-  #     - 33080:33080
-  # netbird-management:
-  #   command: [
-  #     "--port", "443",
-  #     "--log-file", "console",
-  #     "--log-level", "info",
-  #     "--disable-anonymous-metrics=false",
-  #     "--single-account-mode-domain=netbird.${MY_TLD}",
-  #     "--dns-domain=netbird.selfhosted"
-  #     ]
-  #   container_name: netbird-management
-  #   depends_on:
-  #     netbird-dashboard:
-  #       condition: service_started
-  #   environment:
-  #     NETBIRD_STORE_ENGINE_POSTGRES_DSN:
-  #     NETBIRD_STORE_ENGINE_MYSQL_DSN:
-  #   image: netbirdio/management:latest
-  #   restart: unless-stopped
-  #   volumes:
-  #     - netbird-mgmt:/var/lib/netbird
-  #     - netbird-letsencrypt:/etc/letsencrypt:ro
-  #     - ${DOCKER_VOLUME_CONFIG}/netbird/management.json:/etc/netbird/management.json
-  #   ports:
-  #     - 23833:443 #API port
-  # netbird-coturn:
-  #   command:
-  #     - -c /etc/turnserver.conf
-  #   container_name: netbird-coturn
-  #   image: coturn/coturn:latest
-  #   restart: unless-stopped
-  #   #domainname: netbird.${MY_TLD} # only needed when TLS is enabled
-  #   volumes:
-  #     - ${DOCKER_VOLUME_CONFIG}/netbird/turnserver.conf:/etc/turnserver.conf:ro
-  #        - ${DOCKER_VOLUME_CONFIG}/netbird/privkey.pem:/etc/coturn/private/privkey.pem:ro
-  #        - ${DOCKER_VOLUME_CONFIG}/netbird/cert.pem:/etc/coturn/certs/cert.pem:ro
-  #   network_mode: host
+  netbird-dashboard:
+    container_name: netbird-dashboard
+    environment:
+      # Endpoints
+      NETBIRD_MGMT_API_ENDPOINT: https://vpn.${MY_TLD}
+      NETBIRD_MGMT_GRPC_API_ENDPOINT: https://vpn.${MY_TLD}
+      # OIDC
+      AUTH_AUDIENCE: none
+      AUTH_CLIENT_ID: netbird
+      AUTH_CLIENT_SECRET: ${AUTHELIA_NETBIRD_CLIENT_SECRET}
+      AUTH_AUTHORITY: https://auth.${MY_TLD}
+      USE_AUTH0: false
+      AUTH_SUPPORTED_SCOPES: openid profile email offline_access api
+      AUTH_REDIRECT_URI: /peers
+      AUTH_SILENT_REDIRECT_URI: /add-peers
+      NETBIRD_TOKEN_SOURCE: idToken
+      # SSL
+      NGINX_SSL_PORT: 443
+      # Letsencrypt
+      LETSENCRYPT_DOMAIN:
+      LETSENCRYPT_EMAIL:
+    image: netbirdio/dashboard:latest
+    labels:
+      homepage.group: Privacy/Security
+      homepage.name: Netbird
+      homepage.href: https://vpn.${MY_TLD}
+      homepage.icon: netbird.svg
+      homepage.description: Peer-to-peer private network and centralized access control system
+      swag: enable
+      swag_proto: http
+      swag_port: 80
+      swag_auth: authelia
+      swag_url: vpn.${MY_TLD}
+      swag_server_custom_directive: |
+        location /signalexchange.SignalExchange/ {
+            grpc_pass grpc://netbird-signal;
+            #grpc_ssl_verify off;
+            grpc_read_timeout 1d;
+            grpc_send_timeout 1d;
+            grpc_socket_keepalive on;
+        }
+        # Proxy Management http endpoint
+        location /api {
+            proxy_pass http://netbird-management;
+        }
+        # Proxy Management grpc endpoint
+        location /management.ManagementService/ {
+            grpc_pass grpc://netbird-management;
+            #grpc_ssl_verify off;
+            grpc_read_timeout 1d;
+            grpc_send_timeout 1d;
+            grpc_socket_keepalive on;
+        }
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://vpn.${MY_TLD}
+    ports:
+      - 32908:80
+      - 36610:443
+    restart: unless-stopped
+    volumes:
+      - netbird-letsencrypt:/etc/letsencrypt/
+  netbird-signal:
+    container_name: netbird-signal
+    image: netbirdio/signal:latest
+    ports:
+      - 10001:80
+    restart: unless-stopped
+    volumes:
+      - netbird-signal:/var/lib/netbird
+  netbird-relay:
+    image: netbirdio/relay:latest
+    restart: unless-stopped
+    environment:
+      NB_LOG_LEVEL: info
+      NB_LISTEN_ADDRESS: :33080
+      NB_EXPOSED_ADDRESS: vpn.${MY_TLD}:33080
+      # todo: change to a secure secret
+      NB_AUTH_SECRET: ${NETBIRD_RELAY_AUTH_SECRET}
+    ports:
+      - 33080:33080
+  netbird-management:
+    command: [
+      "--port", "443",
+      "--log-file", "console",
+      "--log-level", "info",
+      "--disable-anonymous-metrics=false",
+      "--single-account-mode-domain=vpn.${MY_TLD}",
+      "--dns-domain=vpn.trez.wtf"
+    ]
+    container_name: netbird-management
+    depends_on:
+      netbird-dashboard:
+        condition: service_started
+    environment:
+      NETBIRD_STORE_ENGINE_POSTGRES_DSN:
+      NETBIRD_STORE_ENGINE_MYSQL_DSN:
+    image: netbirdio/management:latest
+    restart: unless-stopped
+    volumes:
+      - netbird-mgmt:/var/lib/netbird
+      - netbird-letsencrypt:/etc/letsencrypt:ro
+      - ${DOCKER_VOLUME_CONFIG}/netbird/management.json:/etc/netbird/management.json
+    ports:
+      - 33073:443 #API port
+  netbird-coturn:
+    command:
+      - -c /etc/turnserver.conf
+    container_name: netbird-coturn
+    image: coturn/coturn:latest
+    restart: unless-stopped
+    #domainname: vpn.${MY_TLD} # only needed when TLS is enabled
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/netbird/turnserver.conf:/etc/turnserver.conf:ro
+    #      - ${DOCKER_VOLUME_CONFIG}/netbird/privkey.pem:/etc/coturn/private/privkey.pem:ro
+    #      - ${DOCKER_VOLUME_CONFIG}/netbird/cert.pem:/etc/coturn/certs/cert.pem:ro
   nextcloud:
     container_name: nextcloud-aio-mastercontainer
     environment:
@@ -4899,7 +4902,6 @@ services:
       swag:
         condition: service_started
         required: true
-        restart: true
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
