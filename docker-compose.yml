@@ -3422,7 +3422,7 @@ services:
       swag_url: vpn.${MY_TLD}
       swag_server_custom_directive: |
         location /signalexchange.SignalExchange/ {
-            grpc_pass grpc://netbird-signal;
+            grpc_pass grpc://netbird-signal:80;
             #grpc_ssl_verify off;
             grpc_read_timeout 1d;
             grpc_send_timeout 1d;
