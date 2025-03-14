@@ -1791,10 +1791,10 @@ services:
         condition: service_started
         required: true
       immich-pg-db:
-        condition: service_started
+        condition: service_healthy
         required: true
       immich-machine-learning:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -1840,10 +1840,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
   immich-machine-learning:
     container_name: immich-machine-learning
-    depends_on:
-      immich-server:
-        condition: service_started
-        required: true
     healthcheck:
       disable: false
     image: ghcr.io/immich-app/immich-machine-learning:release
