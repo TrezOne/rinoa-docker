@@ -94,6 +94,11 @@
 | n8n | docker.n8n.io/n8nio/n8n |
 | navidrome | deluan/navidrome:latest |
 | netalertx | jokobsk/netalertx:latest |
+| netbird-dashboard | netbirdio/dashboard:latest |
+| netbird-signal | netbirdio/signal:latest |
+| netbird-relay | netbirdio/relay:latest |
+| netbird-management | netbirdio/management:latest |
+| netbird-coturn | coturn/coturn:latest |
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |

@@ -25,6 +25,13 @@ jobs:
           uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
           name: 'tea'
           version: '0.9.2'
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: PR Check'
+          notification_message: 'Checking for existing PR... 🔍'
       - name: Check if open PR exists
         id: check-opened-pr-step
         continue-on-error: true
@@ -39,6 +46,13 @@ jobs:
           pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | sed -e 's|"||g' | egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
           pr_index_new=$(expr ${pr_index_old} + 1)
           tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }} -L "Docker Compose, Ansible Configs.j2"
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: PR Check'
+          notification_message: 'PR Created 🎟️'
   docker-compose-ansible-lints:
     name: Docker Compose & Ansible Lints
     needs: [check-and-create-pr]
@@ -65,6 +79,13 @@ jobs:
         uses: cpanato/vault-installer@main
       - name: Install hvac
         run: pip install hvac
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
+          notification_message: 'Starting Ansible dry run...'
       - name: Ansible Playbook Dry Run
         uses: dawidd6/action-ansible-playbook@v2
         with:
@@ -82,7 +103,7 @@ jobs:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
-          notification_message: 'Ansible dry run completed successfully.'
+          notification_message: 'Ansible dry run completed successfully; starting Docker Compose'
       - name: Generate .env file for Docker Compose Dry Run
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
@@ -149,7 +170,7 @@ jobs:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
-          notification_message: 'Starting Cloudflare setup'
+          notification_message: 'Starting Cloudflare DNS setup...'
       - name: Compare Subdomains
         id: compare-subdomains
         uses: LouisBrunner/diff-action@v2.2.0
@@ -203,6 +224,13 @@ jobs:
       #     modified_services=${egrep '^  [a-z]' changes.yml | sed -e 's|^  ||g' -e 's|:||g' | sed ':a;N;$!ba;s/\n/ /g'}
       #     echo "Modified services: $modified_services"
       #     echo "modified_services=$modified_services" >> $GITHUB_OUTPUT
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: README Update'
+          notification_message: 'Updating README...'
       - name: Generate service list
         run: |
           yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
@@ -222,6 +250,13 @@ jobs:
         with:
           message: "chore: Update README"
           add: "README.md"
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: README Update'
+          notification_message: 'README updated'
   pr-merge:
     name: PR Merge
     needs: [regenerate-readme-modified-services]
@@ -278,6 +313,13 @@ jobs:
         uses: cpanato/vault-installer@main
       - name: Install hvac
         run: pip install hvac
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
+          notification_message: 'Starting config deployment with Ansible.'
       - name: Deploy Docker Configs via Ansible
         uses: dawidd6/action-ansible-playbook@v2
         with:
@@ -295,6 +337,13 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: Docker Compose Deployment @ Rinoa'
+          notification_message: 'Starting Docker Compose run...'
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
