@@ -3311,17 +3311,20 @@ services:
   navidrome:
     container_name: navidrome
     environment:
-      ND_AUTOIMPORTPLAYLISTS: false
+      ND_AUTOIMPORTPLAYLISTS: true
       ND_BASEURL: ""
       ND_BACKUP_PATH: /backups
       ND_BACKUP_SCHEDULE: '@every 6h'
       ND_BACKUP_COUNT: 7
       ND_ENABLEGRAVATAR: true
+      ND_ENABLESHARING: true
       ND_LASTFM_APIKEY: ${LASTFM_API_KEY}
       ND_LASTFM_ENABLED: true
       ND_LASTFM_SECRET: ${LASTFM_API_SECRET}
+      ND_LISTENBRAINZ_ENABLED: true
       ND_LOGLEVEL: info
       ND_MUSICFOLDER: /music
+      ND_PLAYLISTPATH: /playlists
       ND_SCANNER_GROUPALBUMRELEASES: true
       ND_SCANSCHEDULE: '@every 6h'
       ND_SESSIONTIMEOUT: 24h
