@@ -3422,7 +3422,7 @@ services:
       swag_url: vpn.${MY_TLD}
       swag_server_custom_directive: |
         location /signalexchange.SignalExchange/ {
-            grpc_pass grpc://netbird-signal:80;
+            grpc_pass grpc://netbird-signal:10000;
             #grpc_ssl_verify off;
             grpc_read_timeout 1d;
             grpc_send_timeout 1d;
@@ -3450,6 +3450,8 @@ services:
       - netbird-letsencrypt:/etc/letsencrypt/
   netbird-signal:
     container_name: netbird-signal
+    expose:
+      - 10000
     image: netbirdio/signal:latest
     ports:
       - 10001:80
@@ -3457,6 +3459,7 @@ services:
     volumes:
       - netbird-signal:/var/lib/netbird
   netbird-relay:
+    container_name: netbird-relay
     image: netbirdio/relay:latest
     restart: unless-stopped
     environment:
