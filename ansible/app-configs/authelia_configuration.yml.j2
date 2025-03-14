@@ -144,8 +144,10 @@ identity_providers:
     hmac_secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_OIDC_HMAC_SECRET'] }}'
     jwks:
       key_id: 'netbird'
-      key: {{ secret "/config/secrets/oidc/jwks/netbird_private.pem" | mindent 10 "|" | msquote }}
-      certificate_chain: {{ secret "/config/secrets/oidc/jwks/netbird_chain.pem" | mindent 10 "|" | msquote }}
+      key: |
+        {{ lookup('file', '/config/secrets/oidc/jwks/netbird_private.pem') | indent(8) }}
+      certificate_chain: |
+        {{ lookup('file', '/config/secrets/oidc/jwks/netbird_chain.pem') | indent(8) }}
     cors:
       allowed_origins_from_client_redirect_uris: true
       endpoints:
