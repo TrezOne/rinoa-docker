@@ -1732,11 +1732,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
   homepage:
     container_name: homepage
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: ${MY_TLD}
     image: ghcr.io/gethomepage/homepage:latest
     labels:
       swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log ;
-    networks:
-      default: null
     ports:
       - 3004:3000
     restart: unless-stopped
