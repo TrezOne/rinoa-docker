@@ -50,6 +50,8 @@
 | gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |
 | gluetun | qmcgaw/gluetun:latest |
 | gotify | gotify/server |
+| graylog | graylog/graylog:6.1 |
+| graylog-datanode | graylog/graylog-datanode:6.1 |
 | guacamole | flcontainers/guacamole:latest |
 | homepage | ghcr.io/gethomepage/homepage:latest |
 | hugo | hugomods/hugo:exts |
@@ -103,7 +105,6 @@
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
-| parseable | containers.parseable.com/parseable/parseable:latest |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
 | plantuml-server | plantuml/plantuml-server:jetty |
@@ -144,7 +145,6 @@
 | unmanic | josh5/unmanic:latest |
 | uptimekuma | louislam/uptime-kuma:latest |
 | vault | hashicorp/vault:latest |
-| vector | timberio/vector:0.44.0-alpine |
 | wallabag | wallabag/wallabag |
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |

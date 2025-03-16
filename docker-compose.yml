@@ -1017,7 +1017,7 @@ services:
   dbgate:
     container_name: dbgate
     environment:
-      CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,mariadb,mastodon-pg-db,mongodb,peppermint-db,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,redis
+      CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,mariadb,mastodon-pg-db,mongodb,peppermint-db,navidrome-db,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,redis
       LOGIN: TrezOne
       PASSWORD: ${DBGATE_LOGIN_PASSWORD}
 
@@ -1085,6 +1085,10 @@ services:
       # URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
       ENGINE_mongodb: mongo@dbgate-plugin-mongo-v2
 
+      LABEL_navidrome-db: navidrome
+      ENGINE_navidrome-db: sqlite@dbgate-plugin-sqlite
+      FILE_navidrome-db: /root/dbs/navidrome.db
+
       LABEL_peppermint-db: peppermint-pg-db
       SERVER_peppermint-db: peppermint-pg-db
       USER_peppermint-db: peppermint
@@ -1149,6 +1153,7 @@ services:
     restart: unless-stopped
     volumes:
       - dbgate-data:/root/.dbgate
+      - ${DOCKER_VOLUME_CONFIG}/navidrome/navidrome.db:/root/sqlite/navidrome.db
   delugevpn:
     cap_add:
       - NET_ADMIN
@@ -1705,6 +1710,85 @@ services:
         type: bind
         bind:
           create_host_path: true
+  graylog:
+    container_name: graylog
+    image: ${GRAYLOG_IMAGE:-graylog/graylog:6.1}
+    depends_on:
+      graylog-datanode:
+        condition: service_started
+        required: true
+      mongodb:
+        condition: service_started
+        required: true
+    entrypoint: /usr/bin/tini --  /docker-entrypoint.sh
+    environment:
+      GRAYLOG_NODE_ID_FILE: /usr/share/graylog/data/data/node-id
+      GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
+      GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_ROOT_PASSWORD_SHA2}
+      GRAYLOG_HTTP_BIND_ADDRESS: 0.0.0.0:9000
+      GRAYLOG_HTTP_EXTERNAL_URI: http://localhost:9000/
+      GRAYLOG_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet=rinoa
+      GRAYLOG_ROOT_EMAIL: charish.patel@${MY_TLD}
+      GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      GRAYLOG_TRANSPORT_EMAIL_ENABLED: true
+      GRAYLOG_TRANSPORT_EMAIL_FROM_EMAIL: noreply@${MY_TLD}
+      GRAYLOG_TRANSPORT_EMAIL_HOSTNAME: postal-smtp
+      GRAYLOG_TRANSPORT_EMAIL_PORT: 25
+      GRAYLOG_TRANSPORT_EMAIL_USE_AUTH: true
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Graylog
+      homepage.href: https://logs.${MY_TLD}
+      homepage.icon: sh-graylog.svg
+      homepage.description: Log Management
+      swag: enable
+      swag_proto: http
+      swag.uptime-kuma.enabled: true
+    ports:
+    - 5044:5044/tcp   # Beats
+    - 5140:5140/udp   # Syslog
+    - 5140:5140/tcp   # Syslog
+    - 5555:5555/tcp   # RAW TCP
+    - 5555:5555/udp   # RAW UDP
+    - 13457:9000/tcp   # Server API
+    - 12201:12201/tcp # GELF TCP
+    - 12201:12201/udp # GELF UDP
+    #- 10000:10000/tcp # Custom TCP port
+    #- 10000:10000/udp # Custom UDP port
+    - 13301:13301/tcp # Forwarder data
+    - 13302:13302/tcp # Forwarder config
+    restart: on-failure
+    volumes:
+      - graylog-data:/usr/share/graylog/data/data
+  graylog-datanode:
+    container_name: graylog-datanode
+    image: ${DATANODE_IMAGE:-graylog/graylog-datanode:6.1}
+    environment:
+      GRAYLOG_DATANODE_NODE_ID_FILE: /var/lib/graylog-datanode/node-id
+      GRAYLOG_DATANODE_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
+      GRAYLOG_DATANODE_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet=rinoa
+      GRAYLOG_PATH_REPO: graylog
+      GRAYLOG_S3_CLIENT_DEFAULT_ACCESS_KEY: ${GRAYLOG_S3_ACCESS_KEY}
+      GRAYLOG_S3_CLIENT_DEFAULT_ENDPOINT: minio:9000
+      GRAYLOG_S3_CLIENT_DEFAULT_PATH_STYLE_ACCESS: 1
+      GRAYLOG_S3_CLIENT_DEFAULT_PROTOCOL: http
+      GRAYLOG_S3_CLIENT_DEFAULT_REGION: us-east-fh-pln
+      GRAYLOG_S3_CLIENT_DEFAULT_SECRET_KEY: ${GRAYLOG_S3_SECRET_KEY}
+    ports:
+      - 8999:8999
+      - 9200:9200
+      - 9300:9300
+    restart: on-failure
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - graylog-datanode:/var/lib/graylog-datanode
   guacamole:
     container_name: guacamole
     environment:
@@ -2969,13 +3053,13 @@ services:
     labels:
       homepage.group: Media Library
       homepage.name: Maloja
-      homepage.href: https://scrobble.${MY_TLD}
+      homepage.href: https://maloja.${MY_TLD}
       homepage.icon: maloja.png
       homepage.description: Simple self-hosted music scrobble database to create personal listening statistics
       swag: enable
       swag_proto: http
       swag_port: 42010
-      swag_url: scrobble.${MY_TLD}
+      swag_url: maloja.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scrobble.${MY_TLD}
     networks:
@@ -3267,9 +3351,15 @@ services:
     labels:
       homepage.group: Media Library
       homepage.name: Multi-Scrobbler
-      homepage.href: http://192.168.1.254:9078
+      homepage.href: https://scrobble.trez.wtf
       homepage.icon: sh-multi-scrobbler.svg
       homepage.description: JS App for scrobbling/recording play history from/to multiple sources
+      swag: enable
+      swag_proto: http
+      swag_port: 9078
+      swag_url: scrobble.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://scrobble.${MY_TLD}
     networks:
       default: null
     ports:
@@ -3644,37 +3734,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  parseable:
-    container_name: parseable
-    command: [ "parseable", "s3-store" ]
-    depends_on:
-      - minio
-    environment:
-      P_STAGING_DIR: /staging
-      P_ADDR: 0.0.0.0:8000
-      P_USERNAME: admin
-      P_PASSWORD: ${PARSEABLE_PASSWORD}
-      P_S3_URL: http://minio:9000
-      P_S3_BUCKET: parseable
-      P_S3_ACCESS_KEY: ${PARSEABLE_S3_ACCESS_KEY}
-      P_S3_SECRET_KEY: ${PARSEABLE_S3_SECRET_KEY}
-      P_S3_REGION: us-east-fh-pln
-    image: containers.parseable.com/parseable/parseable:latest
-    labels:
-      homepage.group: Infrastructure/App Performance Monitoring
-      homepage.name: Parseable
-      homepage.href: https://logs.${MY_TLD}
-      homepage.icon: parseable.svg
-      homepage.description: Log analytics system for high throughput log ingestion
-      swag: enable
-      swag_proto: http
-      swag_port: 8000
-      swag_url: logs.${MY_TLD}
-    ports:
-      - 14453:8000
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/parseable/staging:/staging
   pgbackweb:
     container_name: pgbackweb
     depends_on:
@@ -4976,16 +5035,6 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/config/:/vault/config
       - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/logs/:/vault/logs
-  vector:
-    image: timberio/vector:0.44.0-alpine
-    container_name: vector
-    environment:
-      DOCKER_HOST: tcp://dockerproxy:2375
-    ports:
-      - 60157:8686
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/vector/vector.yaml:/etc/vector/vector.yaml:ro
   wallabag:
     container_name: wallabag
     depends_on:
@@ -5250,6 +5299,10 @@ volumes:
     name: filebeat_var
   gitea-pg-db:
     name: gitea-pg-db
+  graylog-data:
+    name: graylog-data
+  graylog-datanode:
+    name: graylog-datanode
   hortusfox_app_backup:
     name: hortusfox_app_backup
   hortusfox_app_images:
