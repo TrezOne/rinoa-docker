@@ -578,6 +578,26 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://bunker.${MY_TLD}
     restart: unless-stopped
+  bytebase:
+    container_name: bytebase
+    image: bytebase/bytebase:3.5.0
+    labels:
+      homepage.group: System Administration
+      homepage.name: Bytebase
+      homepage.href: https://dbs.${MY_TLD}
+      homepage.icon: /icons/bytebase.png
+      homepage.description: Database-as-Code CI/CD
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: dbs.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
+    ports:
+      - 49054:8080
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/bytebase:/var/opt/bytebase
   bytestash:
     container_name: bytestash
     environment:
@@ -1014,146 +1034,6 @@ services:
       - dawarich_public:/var/app/public
       - dawarich_watched:/var/app/tmp/imports/watched
       - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
-  dbgate:
-    container_name: dbgate
-    environment:
-      CONNECTIONS: authelia-pg,bitmagnet-pg-db,gitea-db,invidious-db,joplin-db,mariadb,mastodon-pg-db,mongodb,peppermint-db,navidrome-db,pgbackweb-db,plausible-db,plausible-events-db,reactive-resume-pg,sonarqube-pg-db,synapse-db,tandoor-pg,redis
-      LOGIN: TrezOne
-      PASSWORD: ${DBGATE_LOGIN_PASSWORD}
-
-      LABEL_mariadb: mariadb
-      SERVER_mariadb: mariadb
-      USER_mariadb: root
-      PASSWORD_mariadb: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
-      PORT_mariadb: 3306
-      ENGINE_mariadb: mariadb@dbgate-plugin-mysql
-
-      LABEL_authelia-pg: authelia-pg
-      SERVER_authelia-pg: authelia-pg
-      USER_authelia-pg: authelia
-      DATABASE_authelia-pg: authelia
-      PASSWORD_authelia-pg: ${BITMAGNET_POSTGRESQL_PASSWORD}
-      PORT_authelia-pg: 5432
-      ENGINE_authelia-pg: postgres@dbgate-plugin-postgres
-
-      LABEL_bitmagnet-pg-db: bitmagnet-pg-db
-      SERVER_bitmagnet-pg-db: bitmagnet-pg-db
-      USER_bitmagnet-pg-db: bitmagnet-pg
-      DATABASE_bitmagnet-pg-db: bitmagnet
-      PASSWORD_bitmagnet-pg-db: ${BITMAGNET_POSTGRESQL_PASSWORD}
-      PORT_bitmagnet-pg-db: 5432
-      ENGINE_bitmagnet-pg-db: postgres@dbgate-plugin-postgres
-
-      LABEL_gitea-db: gitea-db
-      SERVER_gitea-db: gitea-db
-      USER_gitea-db: gitea
-      PASSWORD_gitea-db: ${GITEA_PG_DB_PASSWORD}
-      DATABASE_gitea-db: gitea
-      PORT_gitea-db: 5432
-      ENGINE_gitea-db: postgres@dbgate-plugin-postgres
-
-      LABEL_invidious-db: invidious-db
-      SERVER_invidious-db: invidious-db
-      USER_invidious-db: kemal
-      PASSWORD_invidious-db: ${INVID_PG_DB_PASSWORD}
-      PORT_invidious-db: 5432
-      DATABASE_invidious-db: invidious
-      ENGINE_invidious-db: postgres@dbgate-plugin-postgres
-
-      LABEL_joplin-db: joplin-db
-      SERVER_joplin-db: joplin-db
-      USER_joplin-db: ${JOPLIN_POSTGRES_USER}
-      PASSWORD_joplin-db: ${JOPLIN_POSTGRES_DATABASE}
-      DATABASE_joplin-db: joplin
-      PORT_joplin-db: 5432
-      ENGINE_joplin-db: postgres@dbgate-plugin-postgres
-
-      LABEL_mastodon-pg-db: mastodon-pg-db
-      SERVER_mastodon-pg-db: mastodon-pg-db
-      USER_mastodon-pg-db: mastodon
-      PASSWORD_mastodon-pg-db: ${MASTODON_PG_DB_PASSWORD}
-      DATABASE_mastodon-pg-db: mastodon
-      PORT_mastodon-pg-db: 5432
-      ENGINE_mastodon-pg-db: postgres@dbgate-plugin-postgres
-
-      LABEL_mongodb: mongodb
-      SERVER_mongodb: mongodb
-      USER_mongodb: root
-      PASSWORD_mongodb: ${MONGO_INITDB_ROOT_PASSWORD}
-      PORT_mongodb: 27017
-      DATABSE_mongodb: admin
-      # URI_mongodb: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
-      ENGINE_mongodb: mongo@dbgate-plugin-mongo-v2
-
-      LABEL_navidrome-db: navidrome
-      ENGINE_navidrome-db: sqlite@dbgate-plugin-sqlite
-      FILE_navidrome-db: /root/dbs/navidrome.db
-
-      LABEL_peppermint-db: peppermint-pg-db
-      SERVER_peppermint-db: peppermint-pg-db
-      USER_peppermint-db: peppermint
-      PASSWORD_peppermint-db: ${PEPPERMINT_PG_PASSWORD}
-      PORT_peppermint-db: 5432
-      ENGINE_peppermint-db: postgres@dbgate-plugin-postgres
-
-      LABEL_pgbackweb-db: pgbackweb-db
-      SERVER_pgbackweb-db: pgbackweb-db
-      USER_pgbackweb-db: pgbackweb
-      PASSWORD_pgbackweb-db: ${PGBACKWEB_PG_DB_PASSWD}
-      PORT_pgbackweb-db: 5432
-      ENGINE_pgbackweb-db: postgres@dbgate-plugin-postgres
-
-      LABEL_plausible-db: plausible-db
-      SERVER_plausible-db: plausible-db
-      USER_plausible-db: plausible
-      PASSWORD_plausible-db: ${PLAUSIBLE_PG_PASSWORD}
-      PORT_plausible-db: 5432
-      ENGINE_plausible-db: postgres@dbgate-plugin-postgres
-
-      LABEL_reactive-resume-pg: reactive-resume-pg
-      SERVER_reactive-resume-pg: reactive-resume-pg
-      USER_reactive-resume-pg: reactiveresume
-      PASSWORD_reactive-resume-pg: ${REACTIVE_RESUME_PGSQL_PASSWORD}
-      PORT_reactive-resume-pg: 5432
-      ENGINE_reactive-resume-pg: postgres@dbgate-plugin-postgres
-
-      LABEL_sonarqube-pg-db: sonarqube-pg-db
-      SERVER_sonarqube-pg-db: sonarqube-pg-db
-      USER_sonarqube-pg-db: sonar
-      PASSWORD_sonarqube-pg-db: ${SONARQUBE_POSTGRES_PASSWORD}
-      PORT_sonarqube-pg-db: 5432
-      ENGINE_sonarqube-pg-db: postgres@dbgate-plugin-postgres
-
-      LABEL_tandoor-pg: tandoor-pg
-      SERVER_tandoor-pg: tandoor-pg
-      USER_tandoor-pg: tandoor
-      PASSWORD_tandoor-pg: ${TANDOOR_POSTGRES_PASSWORD}
-      PORT_tandoor-pg: 5432
-      ENGINE_tandoor-pg: postgres@dbgate-plugin-postgres
-
-      LABEL_redis: redis
-      SERVER_redis: redis
-      PORT_redis: 6379
-      ENGINE_redis: redis@dbgate-plugin-redis
-    image: dbgate/dbgate:alpine
-    labels:
-      homepage.group: System Administration
-      homepage.name: DbGate
-      homepage.href: https://dbs.${MY_TLD}
-      homepage.icon: sh-dbgate.png
-      homepage.description: Cross-platform database manager
-      swag: enable
-      swag_port: 3000
-      swag_proto: http
-      swag_url: dbs.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
-    ports:
-      - 49054:3000
-    restart: unless-stopped
-    volumes:
-      - dbgate-data:/root/.dbgate
-      - ${DOCKER_VOLUME_CONFIG}/navidrome/navidrome.db:/root/sqlite/navidrome.db
   delugevpn:
     cap_add:
       - NET_ADMIN
@@ -1284,12 +1164,9 @@ services:
       - dawarich_shared:/backup/dawarich_shared:ro
       - dawarich_public:/backup/dawarich_public:ro
       - dawarich_watched:/backup/dawarich_watched:ro
-      - dbgate-data:/backup/dbgate-data:ro
       - docker-volume-bkup-data:/backup/docker-volume-bkup-data:ro
       - fastenhealth-cache:/backup/fastenhealth-cache:ro
       - fastenhealth-db:/backup/fastenhealth-db:ro
-      - filebeat_etc:/backup/filebeat_etc:ro
-      - filebeat_var:/backup/filebeat_var:ro
       - gitea-pg-db:/backup/gitea-pg-db:ro
       - hortusfox_app_backup:/backup/hortusfox_app_backup:ro
       - hortusfox_app_images:/backup/hortusfox_app_images:ro
@@ -1743,6 +1620,7 @@ services:
       homepage.icon: sh-graylog.svg
       homepage.description: Log Management
       swag: enable
+      swag_port: 9000
       swag_proto: http
       swag.uptime-kuma.enabled: true
     ports:
@@ -3336,6 +3214,7 @@ services:
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
+      BASE_URL: https://scrobble.trez.wtf
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
@@ -5285,18 +5164,12 @@ volumes:
     name: dawarich_public
   dawarich_watched:
     name: dawarich_watched
-  dbgate-data:
-    name: dbgate-data
   docker-volume-bkup-data:
     name: docker-volume-bkup-data
   fastenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:
     name: fastenhealth-db
-  filebeat_etc:
-    name: filebeat_etc
-  filebeat_var:
-    name: filebeat_var
   gitea-pg-db:
     name: gitea-pg-db
   graylog-data:
