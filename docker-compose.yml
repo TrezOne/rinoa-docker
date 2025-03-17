@@ -1164,7 +1164,6 @@ services:
       - dawarich_shared:/backup/dawarich_shared:ro
       - dawarich_public:/backup/dawarich_public:ro
       - dawarich_watched:/backup/dawarich_watched:ro
-      - dbgate-data:/backup/dbgate-data:ro
       - docker-volume-bkup-data:/backup/docker-volume-bkup-data:ro
       - fastenhealth-cache:/backup/fastenhealth-cache:ro
       - fastenhealth-db:/backup/fastenhealth-db:ro
