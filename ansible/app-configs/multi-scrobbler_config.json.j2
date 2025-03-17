@@ -96,7 +96,7 @@
     {
       "name": "Gotify",
       "type": "gotify",
-      "url": "http://gotify:8070",
+      "url": "http://gotify",
       "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MULTI_SCROBBLER_GOTIFY_TOKEN'] }}",
       "priorities": {
         "info": 5,
