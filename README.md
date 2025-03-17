@@ -22,6 +22,7 @@
 | bunkerweb-scheduler | bunkerity/bunkerweb-scheduler:1.6.0 |
 | bunkerweb-autoconf | bunkerity/bunkerweb-autoconf:1.6.0 |
 | bunkerweb-ui | bunkerity/bunkerweb-ui:1.6.0 |
+| bytebase | bytebase/bytebase:3.5.0 |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
 | cloudflared | cloudflare/cloudflared:latest |
@@ -35,7 +36,6 @@
 | dawarich-app | freikin/dawarich:latest |
 | dawarich-pg-db | postgis/postgis:17-3.5-alpine |
 | dawarich-sidekiq | freikin/dawarich:latest |
-| dbgate | dbgate/dbgate:alpine |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | docker-volume-backup | offen/docker-volume-backup:v2 |
