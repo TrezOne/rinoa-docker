@@ -1167,8 +1167,6 @@ services:
       - docker-volume-bkup-data:/backup/docker-volume-bkup-data:ro
       - fastenhealth-cache:/backup/fastenhealth-cache:ro
       - fastenhealth-db:/backup/fastenhealth-db:ro
-      - filebeat_etc:/backup/filebeat_etc:ro
-      - filebeat_var:/backup/filebeat_var:ro
       - gitea-pg-db:/backup/gitea-pg-db:ro
       - hortusfox_app_backup:/backup/hortusfox_app_backup:ro
       - hortusfox_app_images:/backup/hortusfox_app_images:ro
