@@ -3217,6 +3217,7 @@ services:
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
+      BASE_URL: https://scrobble.trez.wtf
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
