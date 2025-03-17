@@ -3061,7 +3061,7 @@ services:
       swag_port: 42010
       swag_url: maloja.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://scrobble.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://maloja.${MY_TLD}
     networks:
       default: null
     ports:
