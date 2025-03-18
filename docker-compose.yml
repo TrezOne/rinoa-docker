@@ -4660,6 +4660,36 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/data:/data
       - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/output:/output
+  stirling-pdf:
+    container_name: stirling-pdf
+    environment:
+      DOCKER_ENABLE_SECURITY: true
+      LANGS: en_US
+      SECURITY_ENABLE_LOGIN: true
+      SYSTEM_SHOW_UPDATE: false
+      SYSTEM_SHOW_UPDATE_ONLY_ADMIN: true
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+    labels:
+      homepage.name: Stirling-PDF
+      homepage.group: Personal/Professional Services
+      homepage.description: PDF Operations
+      homepage.href: https://pdf.${MY_TLD}
+      homepage.icon: stirling-pdf.svg
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: pdf.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://pdf.${MY_TLD}
+    ports:
+      - 58931:8080
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/stirling-pdf/training-data:/usr/share/tessdata # Required for extra OCR languages
+      - ${DOCKER_VOLUME_CONFIG}/stirling-pdf/extra-configs:/configs
+      - ${DOCKER_VOLUME_CONFIG}/stirling-pdf/custom-files:/customFiles/
+      - ${DOCKER_VOLUME_CONFIG}/stirling-pdf/logs:/logs/
+      - ${DOCKER_VOLUME_CONFIG}/stirling-pdf/pipeline:/pipeline/
   swag:
     cap_add:
       - NET_ADMIN
