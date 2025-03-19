@@ -36,7 +36,8 @@ webauthn:
   timeout: 60s
   display_name: Authelia
   attestation_conveyance_preference: indirect
-  user_verification: preferred
+  selection_criteria:
+    user_verification: preferred
 ntp:
   address: "time.cloudflare.com:123"
   version: 4
@@ -143,11 +144,8 @@ identity_providers:
   oidc:
     hmac_secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_OIDC_HMAC_SECRET'] }}'
     jwks:
-      key_id: 'netbird'
-      key: |
-        {{ lookup("community.hashi_vault.vault_kv2_get", "env", engine_mount_point="rinoa-docker", url=vault_addr, token=vault_token_cleaned)["secret"]["AUTHELIA_OIDC_JWKS_KEY"] | replace("\\n", "\n") | indent(8) }}
-      certificate_chain: |
-        {{ lookup("community.hashi_vault.vault_kv2_get", "env", engine_mount_point="rinoa-docker", url=vault_addr, token=vault_token_cleaned)["secret"]["AUTHELIA_OIDC_JWKS_CERT_CHAIN"] | replace("\\n", "\n") | indent(8) }}
+      - key: |
+          {{ lookup("community.hashi_vault.vault_kv2_get", "env", engine_mount_point="rinoa-docker", url=vault_addr, token=vault_token_cleaned)["secret"]["AUTHELIA_OIDC_JWKS_KEY"] | replace("\\n", "\n") | indent(10) }}
     cors:
       allowed_origins_from_client_redirect_uris: true
       endpoints:
