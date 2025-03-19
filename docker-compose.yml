@@ -1561,6 +1561,7 @@ services:
           create_host_path: true
   graylog:
     container_name: graylog
+    hostname: graylog
     image: graylog/graylog:6.1
     depends_on:
       graylog-datanode:
@@ -1613,6 +1614,7 @@ services:
       - graylog-data:/usr/share/graylog/data/data
   graylog-datanode:
     container_name: graylog-datanode
+    hostname: graylog-datanode
     image: graylog/graylog-datanode:6.1
     environment:
       GRAYLOG_NODE_NAME: graylog-datanode
