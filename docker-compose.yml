@@ -1594,8 +1594,10 @@ services:
       homepage.description: Log Management
       swag: enable
       swag_port: 9000
+      swag_url: logs.${MY_TLD}
       swag_proto: http
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://logs.${MY_TLD}
     ports:
     - 5044:5044/tcp   # Beats
     - 5140:5140/udp   # Syslog
