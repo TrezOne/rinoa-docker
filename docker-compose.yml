@@ -1222,32 +1222,6 @@ services:
       - unmanic-cache:/backup/unmanic-cache:ro
       - wallos-db:/backup/wallos-db:ro
       - wallos-logos:/backup/wallos-logos:ro
-  docuseal:
-    container_name: docuseal
-    image: docuseal/docuseal:latest
-    labels:
-      homepage.group: Personal/Professional Services
-      homepage.name: Docuseal
-      homepage.href: https://docs.${MY_TLD}
-      homepage.description: OSS Document Signing & Verification
-      homepage.icon: docuseal.png
-      swag: enable
-      swag_proto: http
-      swag_port: 3000
-      swag_url: sign.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://sign.${MY_TLD}
-    networks:
-      default: null
-    ports:
-      - 3002:3000
-    restart: unless-stopped
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/docuseal
-        target: /data
-        type: bind
-        bind:
-          create_host_path: true
   duplicati:
     container_name: duplicati
     environment:
@@ -1589,7 +1563,7 @@ services:
           create_host_path: true
   graylog:
     container_name: graylog
-    image: ${GRAYLOG_IMAGE:-graylog/graylog:6.1}
+    image: graylog/graylog:6.1
     depends_on:
       graylog-datanode:
         condition: service_started
@@ -1641,9 +1615,9 @@ services:
       - graylog-data:/usr/share/graylog/data/data
   graylog-datanode:
     container_name: graylog-datanode
-    image: ${DATANODE_IMAGE:-graylog/graylog-datanode:6.1}
+    image: graylog/graylog-datanode:6.1
     environment:
-      GRAYLOG_DATANODE_NODE_ID_FILE: /var/lib/graylog-datanode/node-id
+      GRAYLOG_NODE_NAME: graylog-datanode
       GRAYLOG_DATANODE_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
       GRAYLOG_DATANODE_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet=rinoa
       GRAYLOG_PATH_REPO: graylog
@@ -2719,6 +2693,10 @@ services:
       - librechat-vectordb
     environment:
       DB_HOST: librechat-vectordb
+      OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
+      DEEPSEEK_API_KEY: ${LIBRECHAT_DEEPSEEK_API_KEY}
+      MISTRAL_API_KEY: ${LIBRECHAT_MISTRAL_API_KEY}
+      ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
       POSTGRES_DB: librechat
       POSTGRES_USER: librechat
       POSTGRES_PASSWORD: ${LIBRECHAT_PG_DB_PASSWD}
@@ -5276,8 +5254,6 @@ volumes:
     name: paperless-ngx-media
   paperless-ngx-pg:
     name: paperless-ngx-pg
-  peppermint-pg-data:
-    name: peppermint-pg-data
   pgbackweb-data:
     name: pgbackweb-data
   plausible-db-data:
