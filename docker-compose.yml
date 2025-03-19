@@ -1198,11 +1198,9 @@ services:
       - netbird-letsencrypt:/backup/netbird-letsencrypt:ro
       - nextcloud_aio_mastercontainer:/backup/nextcloud_aio_mastercontainer:ro
       - ollama:/backup/ollama:ro
-      - open-webui:/backup/open-webui:ro
       - paperless-ngx-data:/backup/paperless-ngx-data:ro
       - paperless-ngx-media:/backup/paperless-ngx-media:ro
       - paperless-ngx-pg:/backup/paperless-ngx-pg:ro
-      - peppermint-pg-data:/backup/peppermint-pg-data:ro
       - pgbackweb-data:/backup/pgbackweb-data:ro
       - plausible-db-data:/backup/plausible-db-data:ro
       - plausible-event-data:/backup/plausible-event-data:ro
@@ -5246,8 +5244,6 @@ volumes:
     name: nextcloud_aio_mastercontainer
   ollama:
     name: ollama
-  open-webui:
-    name: open-webui
   paperless-ngx-data:
     name: paperless-ngx-data
   paperless-ngx-media:
