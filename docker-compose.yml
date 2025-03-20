@@ -1352,8 +1352,8 @@ services:
       swag.uptime-kuma.monitor.url: https://blog.${MY_TLD}
     links:
       - mariadb
-    networks:
-      default: null
+    ports:
+      - 2368:2368
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/ghost:/home/ghost
