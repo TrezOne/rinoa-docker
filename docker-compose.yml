@@ -1350,8 +1350,6 @@ services:
       swag_url: blog.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://blog.${MY_TLD}
-    links:
-      - mariadb
     ports:
       - 2368:2368
     restart: always
