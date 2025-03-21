@@ -39,7 +39,6 @@
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | docker-volume-backup | offen/docker-volume-backup:v2 |
-| docuseal | docuseal/docuseal:latest |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
