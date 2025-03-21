@@ -1337,6 +1337,21 @@ services:
         condition: service_started
         required: true
         restart: true
+    environment:
+      database__client: mysql
+      database__connection__host: mariadb
+      database__connection__port: 3306
+      database__connection__user: ${GHOST_DB_USER}
+      database__connection__password: ${GHOST_DB_PASSWORD}
+      database__connection__database: ghost_db
+      mail__transport: SMTP
+      mail__options__host: postal-smtp
+      mail__options__port: 25
+      mail__options__secure: false
+      mail__options__auth__user: ${POSTAL_SMTP_AUTH_USER}
+      mail__options__auth__pass: ${POSTAL_SMTP_AUTH_PASSWORD}
+      mail__from: "'Ghost @ Rinoa' <noreply@trez.wtf>"
+      url: https://blog.${MY_TLD}
     image: ghost:latest
     labels:
       homepage.group: Lifestyle
