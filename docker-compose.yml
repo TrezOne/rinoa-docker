@@ -787,7 +787,7 @@ services:
     image: mpepping/cyberchef:latest
     labels:
       homepage.description: Web app for encryption, encoding, compression, and data analysis
-      homepage.group: Code/DevOps
+      homepage.group: Privacy/Security
       homepage.href: https://cchef.trez.wtf
       homepage.icon: cyberchef.svg
       homepage.name: CyberChef
