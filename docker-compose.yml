@@ -1313,7 +1313,7 @@ services:
     image: ghcr.io/lumepart/explo:latest
     restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUME_STORAGE}/Audio/Music:$DOWNLOAD_DIR # has to be in the same path you have your music system pointed to (it's recommended to put explo under a subfolder)
+      - ${DOCKER_VOLUME_STORAGE}/Audio/Explo:/downloads # has to be in the same path you have your music system pointed to (it's recommended to put explo under a subfolder)
       - ${DOCKER_VOLUME_STORAGE}/Audio/Playlists:/playlists
   fastenhealth:
     container_name: fastenhealth
