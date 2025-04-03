@@ -29,6 +29,9 @@ services:
       swag_port: 5006
       swag_proto: http
       swag_url: fin.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       homepage.group: Lifestyle
       homepage.name: Actual Budget
       homepage.icon: actual-budget.svg
@@ -49,6 +52,9 @@ services:
       swag: enable
       swag_proto: http
       swag_url: adgh.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       homepage.group: System Administration
       homepage.name: AdGuard Home
       homepage.icon: adguard-home.png
@@ -117,8 +123,12 @@ services:
       swag_port: 8000
       swag_proto: http
       swag_url: archive.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://archive.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 21324:8000
     restart: unless-stopped
@@ -148,8 +158,12 @@ services:
       swag_address: audiobookshelf
       swag_proto: http
       swag_url: abs.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://abs.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -212,8 +226,12 @@ services:
       swag_proto: http
       swag_port: 9091
       swag_url: auth.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://auth.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     restart: unless-stopped
@@ -262,7 +280,12 @@ services:
       swag: enable
       swag_proto: http
       swag_port: 6767
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://bazaar.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -305,8 +328,12 @@ services:
       swag_proto: http
       swag_port: 8090
       swag_url: beszel.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://beszel.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 22220:8090
     restart: unless-stopped
@@ -366,6 +393,9 @@ services:
       swag_auth_bypass: /v1
       swag_port: 3333
       swag_url: btmag.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
     network_mode: service:gluetun
     restart: always
     volumes:
@@ -426,7 +456,12 @@ services:
       swag_url: bitwarden.${MY_TLD}
       swag_proto: http
       swag_port: 80
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://bitwarden.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -477,8 +512,12 @@ services:
       swag: enable
       swag_port: 3000
       swag_url: bsky.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://bsky.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     restart: unless-stopped
     volumes:
       - type: bind
@@ -523,8 +562,12 @@ services:
       swag_port: 8080
       swag_proto: http
       swag_url: dbs.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 49054:8080
     restart: unless-stopped
@@ -551,8 +594,12 @@ services:
       swag_port: 5000
       swag_proto: http
       swag_url: gist.trez.wtf
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://gist.trez.wtf
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 62139:5000
     restart: always
@@ -595,8 +642,12 @@ services:
       swag_address: castopod
       swag_port: 8000
       swag_url: pod.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://pod.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
@@ -662,8 +713,12 @@ services:
       swag_port: 3000
       swag_proto: http
       swag_url: convert.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://convert.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 38946:3000
     restart: unless-stopped
@@ -688,8 +743,12 @@ services:
       swag_port: 3012
       swag_proto: http
       swag_url: cron.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://cron.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
         - 31037:3012
     restart: always
@@ -769,8 +828,12 @@ services:
       swag_port: 3000
       swag_proto: http
       swag_url: csec.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://csec.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -795,8 +858,12 @@ services:
       swag_port: 8000
       swag_proto: http
       swag_url: cchef.trez.wtf
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://cchef.trez.wtf
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 20992:8000
     restart: unless-stopped
@@ -820,8 +887,12 @@ services:
       swag_port: 5800
       swag_proto: http
       swag_url: czkawka.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://czkawka.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -888,8 +959,12 @@ services:
       swag_port: 3000
       swag_proto: http
       swag_url: loc.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://loc.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 63561:3000
       # - 9394:9394 # Prometheus exporter, uncomment if needed
@@ -1001,8 +1076,12 @@ services:
       swag_port: 8112
       swag_proto: http
       swag_url: deluge.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://deluge.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -1163,6 +1242,9 @@ services:
       swag_port: 8200
       swag_proto: http
       swag_url: dup.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       homepage.group: Automation
       homepage.name: Duplicati
       homepage.href: https://dup.${MY_TLD}
@@ -1200,6 +1282,39 @@ services:
         source: /home/charish/.config/appdata
         target: /source
         type: bind
+  explo:
+    container_name: explo
+    environment:
+      CRON_SCHEDULE: 15 00 * * 2 # Runs weekly, every Tuesday 15 minutes past midnight (UTC time)
+      # Music system you use (emby, jellyfin, mpd, plex or subsonic)
+      EXPLO_SYSTEM: subsonic
+      SYSTEM_URL: http://navidrome:4533
+      SYSTEM_USERNAME: ${NAVIDROME_USERNAME}
+      SYSTEM_PASSWORD: ${NAVIDROME_PASSWORD}
+      DOWNLOAD_DIR: /path/to/music/folder/explo
+      PLAYLIST_DIR: /playlists
+      LISTENBRAINZ_USER: Trez.One
+      YOUTUBE_API_KEY: ${YOUTUBE_DATA_API_V3_KEY}
+      # Assign a custom path to yt-dlp
+      # YTDLP_PATH=
+      # Keywords to ignore on videos downloaded by youtube (separated by only commas)
+      FILTER_LIST: live,remix,instrumental,extended
+      # Define a custom filename sepatator for special characters
+      # FILENAME_SEPARATOR=
+      # true to keep pervious weeks discoveries, only set to false if the parent folder only contains discovered songs (deletes every file in folder)
+      PERSIST: true
+      # 'playlist' to get tracks from Weekly Exploration playlist, anything else gets it from API (not the best recommendations). 'test' will download 1 song
+      LISTENBRAINZ_DISCOVERY: playlist
+      # Time to sleep (in minutes) between scanning and querying tracks from your system (If using Subsonic, Jellyfin)
+      # SLEEP=2
+      # Whether to provide additional info for debugging
+      # DEBUG=false
+      SINGLE_ARTIST: true
+    image: ghcr.io/lumepart/explo:latest
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE}/Audio/Music:$DOWNLOAD_DIR # has to be in the same path you have your music system pointed to (it's recommended to put explo under a subfolder)
+      - ${DOCKER_VOLUME_STORAGE}/Audio/Playlists:/playlists
   fastenhealth:
     container_name: fastenhealth
     image: ghcr.io/fastenhealth/fasten-onprem:main
@@ -1213,8 +1328,12 @@ services:
       swag_proto: http
       swag_port: 8080
       swag_url: health.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://health.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -1293,8 +1412,12 @@ services:
       swag_port: 2368
       swag_proto: http
       swag_url: blog.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://blog.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 2368:2368
     restart: always
@@ -1333,8 +1456,12 @@ services:
       homepage.widget.key: ${GITEA_HOMEPAGE_API_KEY}
       swag: enable
       swag_url: git.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://git.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -1477,7 +1604,12 @@ services:
       homepage.widget.key: ${GOTIFY_HOMEPAGE_CLIENT_KEY}
       swag: enable
       swag_proto: http
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://gotify.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -1526,8 +1658,12 @@ services:
       swag_port: 9000
       swag_url: logs.${MY_TLD}
       swag_proto: http
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://logs.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 5044:5044/tcp   # Beats
       - 5140:5140/udp   # Syslog
@@ -1590,8 +1726,12 @@ services:
       swag_proto: http
       swag_port: 8080
       swag_url: guac.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://guac.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 62173:8080
     restart: always
@@ -1639,8 +1779,12 @@ services:
       swag_proto: http
       swag_port: 1313
       swag_url: it-services.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Personal/Professional Services
       homepage.name: Hugo
       homepage.href: https://it-services.${MY_TLD}
@@ -1682,6 +1826,9 @@ services:
       swag_port: 2283
       swag_url: pics.${MY_TLD}
       swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+
         location /share {
               proxy_pass http://immich-public-proxy:3000;
         }
@@ -1690,6 +1837,7 @@ services:
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Media Library
       homepage.name: Immich
       homepage.href: https://pics.${MY_TLD}
@@ -1806,8 +1954,12 @@ services:
       swag_proto: http
       swag_port: 8086
       swag_url: influxdb.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://influxdb.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
       homepage.name: InfluxDBv2
       homepage.href: https://influxdb.${MY_TLD}
@@ -1838,8 +1990,12 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: invid.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://invid.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Social
       homepage.name: Invidious
       homepage.href: https://invid.${MY_TLD}
@@ -1903,8 +2059,12 @@ services:
       swag: enable
       swag_proto: http
       swag_url: itt.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://itt.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Code/DevOps
       homepage.name: IT-Tools
       homepage.href: https://itt.${MY_TLD}
@@ -1938,8 +2098,12 @@ services:
       swag_url: jf.${MY_TLD}
       swag_port: 8096
       swag_proto: http
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://jf.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 8487:8096
       - 7359:7359
@@ -2485,8 +2649,12 @@ services:
       swag: enable
       swag_proto: https
       swag_url: meet.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://meet.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Social
       homepage.name: Jitsi
       homepage.href: https://meet.${MY_TLD}
@@ -2565,8 +2733,12 @@ services:
       homepage.description: Open-source note taking & to-do
       swag: enable
       swag_url: notes.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://notes.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -2595,8 +2767,12 @@ services:
       swag_port: 3080
       swag_proto: http
       swag_url: ai.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 3080:3080
     restart: always
@@ -2654,8 +2830,12 @@ services:
       swag: enable
       swag_port: 5000
       swag_url: translate.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://translate.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 5000:5000
     restart: unless-stopped
@@ -2681,7 +2861,12 @@ services:
       homepage.widget.url: http://lidarr:8686
       homepage.widget.key: ${LIDARR_API_KEY}
       swag: enable
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://lidarr.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -2738,8 +2923,12 @@ services:
       swag_proto: http
       swag_port: 5000
       swag_url: lidify.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://lidify.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     restart: unless-stopped
@@ -2780,8 +2969,12 @@ services:
       swag: enable
       swag_proto: https
       swag_url: profile.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://profile.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 8190:443
     restart: unless-stopped
@@ -2807,8 +3000,12 @@ services:
       swag_proto: http
       swag_port: 17170
       swag_url: ldap.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://ldap.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -2848,8 +3045,12 @@ services:
       swag_proto: http
       swag_port: 42010
       swag_url: maloja.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://maloja.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -2891,8 +3092,12 @@ services:
       swag_proto: http
       swag_port: 3214
       swag_url: 3dprint.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://3dprint.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 3214:3214
     restart: unless-stopped
@@ -2983,8 +3188,12 @@ services:
       swag_proto: http
       swag_port: 80
       swag_url: mastodon.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Social
       homepage.name: Mastodon
       homepage.href: https://mastodon.${MY_TLD}
@@ -3042,8 +3251,12 @@ services:
       swag_proto: http
       swag_port: 9090
       swag_url: s3.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
       homepage.name: MinIO
       homepage.href: https://s3.${MY_TLD}
@@ -3089,8 +3302,12 @@ services:
       swag_port: 80
       swag_proto: http
       swag_url: social.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://social.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Social
       homepage.name: Mixpost
       homepage.href: https://social.${MY_TLD}
@@ -3147,8 +3364,12 @@ services:
       swag_proto: http
       swag_port: 9078
       swag_url: scrobble.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scrobble.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3175,8 +3396,12 @@ services:
       swag_proto: http
       swag_port: 5678
       swag_url: n8n.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://n8n.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Automation
       homepage.name: n8n
       homepage.href: https://n8n.${MY_TLD}
@@ -3226,8 +3451,12 @@ services:
       swag_port: 4533
       swag_proto: http
       swag_url: navi.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://navi.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3292,6 +3521,7 @@ services:
       swag_url: cloud.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://cloud.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 56713:8080
     restart: unless-stopped
@@ -3324,7 +3554,12 @@ services:
       homepage.widget.url: http://ombi:3579
       homepage.widget.key: ${OMBI_API_KEY}
       swag: enable
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://ombi.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3374,8 +3609,12 @@ services:
       swag_proto: http
       swag_port: 8000
       swag_url: docs.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://docs.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Personal/Professional Services
       homepage.name: Paperless-ngx
       homepage.href: https://docs.${MY_TLD}
@@ -3425,6 +3664,9 @@ services:
       swag_proto: http
       swag_port: 8085
       swag_url: pg.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
     ports:
       - "8085:8085" # Access the web interface at http://localhost:8085
     restart: unless-stopped
@@ -3469,8 +3711,12 @@ services:
       swag_proto: http
       swag_port: 9000
       swag_url: portainer.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://portainer.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
       homepage.name: Portainer
       homepage.href: https://portainer.${MY_TLD}
@@ -3494,8 +3740,12 @@ services:
       swag_proto: http
       swag_port: 8080
       swag_url: portall.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://portall.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
       homepage.name: Portall
       homepage.href: https://portall.${MY_TLD}
@@ -3530,8 +3780,12 @@ services:
       swag_port: 5000
       swag_address: postal-web
       swag_url: post.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://post.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
       homepage.name: Postal
       homepage.href: https://post.${MY_TLD}
@@ -3585,7 +3839,12 @@ services:
       homepage.widget.url: http://prowlarr:9696
       homepage.widget.key: ${PROWLARR_API_KEY}
       swag: enable
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://prowlarr.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3640,8 +3899,12 @@ services:
       swag_port: 5000
       swag_auth: authelia
       swag_url: radarec.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://radarec.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     restart: unless-stopped
@@ -3680,7 +3943,12 @@ services:
       homepage.widget.url: http://radarr:7878
       homepage.widget.key: ${RADARR_API_KEY}
       swag: enable
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://radarr.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3747,8 +4015,12 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: resume.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://resume.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3788,7 +4060,12 @@ services:
       homepage.widget.url: http://readarr:8787
       homepage.widget.key: ${READARR_API_KEY}
       swag: enable
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://readarr.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3871,8 +4148,12 @@ services:
       swag_proto: http
       swag_port: 8080
       swag_url: rlib.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://rlib.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -3913,8 +4194,12 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: chat.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://chat.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     restart: always
   sabnzbdvpn:
     cap_add:
@@ -3952,8 +4237,12 @@ services:
       swag: enable
       swag_proto: http
       swag_url: sabnzbd.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://sabnzbd.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -4001,11 +4290,15 @@ services:
       swag_port: 3000
       swag_url: scrape.${MY_TLD}
       swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+
         location /api {
               proxy_pass http://scraperr-api:8000;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     restart: unless-stopped
@@ -4091,8 +4384,12 @@ services:
       swag_address: searxng
       swag_proto: http
       swag_url: search.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://search.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     logging:
       driver: json-file
       options:
@@ -4138,8 +4435,12 @@ services:
       swag_port: 3000
       swag_proto: http
       swag_url: devops.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://devops.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 3015:3000
     restart: unless-stopped
@@ -4177,8 +4478,12 @@ services:
       swag_proto: http
       swag_port: 9000
       swag_url: sqube.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://sqube.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     volumes:
       - sonarqube-data:/opt/sonarqube/data
       - sonarqube-extensions:/opt/sonarqube/extensions
@@ -4223,7 +4528,12 @@ services:
       homepage.widget.url: http://sonarr:8989
       homepage.widget.key: ${SONARR_API_KEY}
       swag: enable
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://sonarr.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -4278,8 +4588,12 @@ services:
       swag_proto: http
       swag_port: 5000
       swag_url: sonashow.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://sonashow.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     restart: unless-stopped
@@ -4320,8 +4634,12 @@ services:
       swag: enable
       swag_proto: http
       swag_url: speed.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://speed.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
         - 47512:80
         - 62777:443
@@ -4349,8 +4667,12 @@ services:
       swag_port: 7860
       swag_proto: http
       swag_url: sd.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://sd.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 7860:7860
     restart: unless-stopped
@@ -4377,8 +4699,12 @@ services:
       swag_port: 8080
       swag_proto: http
       swag_url: pdf.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://pdf.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 58931:8080
     restart: unless-stopped
@@ -4418,9 +4744,9 @@ services:
       swag_port: 81
       swag_url: swag.${MY_TLD}
       swag_auth: authelia
-      komodo.skip: a
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://swag.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: SWAG Dashboard
       homepage.href: https://swag.${MY_TLD}
@@ -4488,8 +4814,12 @@ services:
       swag: enable
       swag_proto: http
       swag_url: recipes.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://recipes.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -4543,7 +4873,12 @@ services:
       swag_port: 8888
       swag_url: unmanic.${MY_TLD}
       swag_proto: http
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://unmanic.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -4591,6 +4926,9 @@ services:
       swag: enable
       swag_proto: http
       swag_url: uptime.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
     networks:
       default: null
     ports:
@@ -4633,8 +4971,12 @@ services:
       swag_proto: http
       swag_port: 8200
       swag_url: vault.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://vault.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 8200:8200
       - 8250:8250
@@ -4682,7 +5024,12 @@ services:
       swag: enable
       swag_address: wallabag
       swag_proto: http
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://wallabag.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
       homepage.group: Lifestyle
       homepage.name: Wallabag
       homepage.href: https://wallabag.${MY_TLD}
@@ -4713,8 +5060,12 @@ services:
       swag: enable
       swag_proto: http
       swag_url: subs.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://subs.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -4788,8 +5139,12 @@ services:
       swag_proto: http
       swag_url: scan.${MY_TLD}
       swag_port: 3000
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scan.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
@@ -4815,8 +5170,12 @@ services:
       swag_proto: http
       swag_url: ytdl.${MY_TLD}
       swag_port: 8080
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://ytdl.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     networks:
       default: null
     ports:
