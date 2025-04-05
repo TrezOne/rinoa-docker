@@ -67,6 +67,7 @@ services:
       - 853:853
       - 67:67
       - 688:68
+      - 53:53
     restart: unless-stopped
     volumes:
       - bind:
