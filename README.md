@@ -18,10 +18,6 @@
 | bitwarden | vaultwarden/server:latest |
 | bluesky-pds | code.modernleft.org/gravityfargo/bluesky-pds:v0.4.98 |
 | browserless | ghcr.io/browserless/chromium:latest |
-| bunkerweb | bunkerity/bunkerweb:1.6.0 |
-| bunkerweb-scheduler | bunkerity/bunkerweb-scheduler:1.6.0 |
-| bunkerweb-autoconf | bunkerity/bunkerweb-autoconf:1.6.0 |
-| bunkerweb-ui | bunkerity/bunkerweb-ui:1.6.0 |
 | bytebase | bytebase/bytebase:3.5.0 |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
@@ -40,6 +36,7 @@
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | docker-volume-backup | offen/docker-volume-backup:v2 |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
+| explo | ghcr.io/lumepart/explo:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
 | ghost | ghost:latest |
@@ -95,11 +92,6 @@
 | n8n | docker.n8n.io/n8nio/n8n |
 | navidrome | deluan/navidrome:latest |
 | netalertx | jokobsk/netalertx:latest |
-| netbird-dashboard | netbirdio/dashboard:latest |
-| netbird-signal | netbirdio/signal:latest |
-| netbird-relay | netbirdio/relay:latest |
-| netbird-management | netbirdio/management:latest |
-| netbird-coturn | coturn/coturn:latest |
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
@@ -131,10 +123,6 @@
 | sonarqube-pg-db | postgres:17-alpine |
 | sonarr | lscr.io/linuxserver/sonarr:latest |
 | sonashow | thewicklowwolf/sonashow:latest |
-| soularr | mrusse08/soularr:latest |
-| soularr-dashboard | git.trez.wtf/trez.one/soularr-dashboard:v0.1 |
-| soulseek | slskd/slskd |
-| sourcebot | ghcr.io/sourcebot-dev/sourcebot:latest |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | stable-diffusion-download | git.trez.wtf/trez.one/stable-diffusion-download:v9.0.0 |
 | stable-diffusion-webui | git.trez.wtf/trez.one/stable-diffusion-ui:v9.0.1 |
@@ -149,6 +137,5 @@
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
 | web-check | lissy93/web-check |
-| your_spotify | lscr.io/linuxserver/your_spotify:latest |
 | youtubedl | nbr23/youtube-dl-server:latest |
 
