@@ -3044,7 +3044,7 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${DOCKER_VOLUME_CONFIG}/loggifly/config.yml:/app/config.yml  # Path to your config file (ignore if you are only using environment variables)
+      - ${DOCKER_VOLUME_CONFIG}/loggifly/config.yaml:/app/config.yaml  # Path to your config file (ignore if you are only using environment variables)
   maloja:
     container_name: maloja
     environment:
