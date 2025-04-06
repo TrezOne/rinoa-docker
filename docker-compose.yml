@@ -110,6 +110,12 @@ services:
       TZ: ${TZ}
       APPRISE_ATTACH_SIZE: 500
     image: lscr.io/linuxserver/apprise-api:latest
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Apprise
+      homepage.icon: apprise.png
+      homepage.href: https://adgh.${MY_TLD}
+      homepage.description: Multi-channel notification API
     ports:
       - 54995:8000
     restart: unless-stopped
