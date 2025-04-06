@@ -6,6 +6,7 @@
 | --- | --- |
 | actual_server | docker.io/actualbudget/actual-server:latest |
 | adguard | adguard/adguardhome:latest |
+| apprise-api | lscr.io/linuxserver/apprise-api:latest |
 | archivebox | archivebox/archivebox:latest |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
@@ -79,6 +80,7 @@
 | lidify | thewicklowwolf/lidify:latest |
 | linkstack | linkstackorg/linkstack:latest |
 | lldap | lldap/lldap:stable |
+| loggifly | ghcr.io/clemcer/loggifly:latest |
 | maloja | krateng/maloja:latest |
 | manyfold | lscr.io/linuxserver/manyfold:latest |
 | mariadb | linuxserver/mariadb |
