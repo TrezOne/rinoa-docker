@@ -102,6 +102,20 @@ services:
         type: bind
         bind:
           create_host_path: true
+  apprise-api:
+    container_name: apprise-api
+    environment:
+      PUID: ${PUID}
+      PGID: $[PGID]
+      TZ: ${TZ}
+      APPRISE_ATTACH_SIZE: 500
+    image: lscr.io/linuxserver/apprise-api:latest
+    ports:
+      - 54995:8000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/apprise:/etc/apprise
+      - ${DOCKER_VOLUME_CONFIG}/apprise/attachments:/attachments #optional
   archivebox:
     container_name: archivebox
     environment:
@@ -3018,6 +3032,13 @@ services:
         type: bind
         bind:
           create_host_path: true
+  loggifly:
+    image: ghcr.io/clemcer/loggifly:latest
+    container_name: loggifly
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_VOLUME_CONFIG}/loggifly/config.yaml:/app/config.yaml  # Path to your config file (ignore if you are only using environment variables)
   maloja:
     container_name: maloja
     environment:
