@@ -121,7 +121,7 @@ services:
       - 54995:8000
     restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/apprise:/etc/apprise
+      - ${DOCKER_VOLUME_CONFIG}/apprise/config:/etc/apprise
       - ${DOCKER_VOLUME_CONFIG}/apprise/attachments:/attachments #optional
   archivebox:
     container_name: archivebox
@@ -1313,7 +1313,7 @@ services:
       SYSTEM_URL: http://navidrome:4533
       SYSTEM_USERNAME: ${NAVIDROME_USERNAME}
       SYSTEM_PASSWORD: ${NAVIDROME_PASSWORD}
-      DOWNLOAD_DIR: /path/to/music/folder/explo
+      DOWNLOAD_DIR: /downloads
       PLAYLIST_DIR: /playlists
       LISTENBRAINZ_USER: Trez.One
       YOUTUBE_API_KEY: ${YOUTUBE_DATA_API_V3_KEY}
@@ -1335,6 +1335,7 @@ services:
     image: ghcr.io/lumepart/explo:latest
     restart: unless-stopped
     volumes:
+      - ${DOCKER_VOLUME_CONFIG}/explo/local.env:/opt/explo/.env
       - ${DOCKER_VOLUME_STORAGE}/Audio/Explo:/downloads # has to be in the same path you have your music system pointed to (it's recommended to put explo under a subfolder)
       - ${DOCKER_VOLUME_STORAGE}/Audio/Playlists:/playlists
   fastenhealth:
