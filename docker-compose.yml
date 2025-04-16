@@ -76,32 +76,11 @@ services:
       - 53:53
     restart: unless-stopped
     volumes:
-      - bind:
-        create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-        create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/adguard/work
-        target: /opt/adguardhome/work
-        type: bind
-      - bind:
-        create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/adguard/conf
-        target: /opt/adguardhome/conf
-        type: bind
-      - bind:
-        create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
-      - source: ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/live/trez.wtf
-        target: /etc/ssl/certs
-        type: bind
-        bind:
-        create_host_path: true
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/adguard/work:/opt/adguardhome/work
+      - ${DOCKER_VOLUME_CONFIG}/adguard/conf:/opt/adguardhome/conf
+      - /rinoa-storage:/storage
+      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/live/trez.wtf:/etc/ssl/certs
   apprise-api:
     container_name: apprise-api
     environment:
@@ -3735,7 +3714,7 @@ services:
     expose:
       - 9000
       - 9443
-    image: portainer/portainer-ce:2.27.0-alpine
+    image: portainer/portainer-ce:alpine
     labels:
       swag: enable
       swag_proto: http
