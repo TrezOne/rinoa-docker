@@ -77,31 +77,31 @@ services:
     restart: unless-stopped
     volumes:
       - bind:
-          create_host_path: true
+        create_host_path: true
         read_only: true
         source: /etc/localtime
         target: /etc/localtime
         type: bind
       - bind:
-          create_host_path: true
+        create_host_path: true
         source: ${DOCKER_VOLUME_CONFIG}/adguard/work
         target: /opt/adguardhome/work
         type: bind
       - bind:
-          create_host_path: true
+        create_host_path: true
         source: ${DOCKER_VOLUME_CONFIG}/adguard/conf
         target: /opt/adguardhome/conf
         type: bind
       - bind:
-          create_host_path: true
+        create_host_path: true
         source: /rinoa-storage
         target: /storage
         type: bind
-      - source: ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/archive/trez.wtf
+      - source: ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/live/trez.wtf
         target: /etc/ssl/certs
         type: bind
         bind:
-          create_host_path: true
+        create_host_path: true
   apprise-api:
     container_name: apprise-api
     environment:
