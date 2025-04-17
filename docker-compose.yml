@@ -1806,6 +1806,7 @@ services:
       immich-pg-db:
         condition: service_healthy
         required: true
+        restart: true
       immich-machine-learning:
         condition: service_healthy
         required: true
