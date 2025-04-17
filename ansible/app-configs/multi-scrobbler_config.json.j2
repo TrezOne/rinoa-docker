@@ -25,7 +25,7 @@
       "type": "spotify",
       "enable": true,
       "clients": [],
-      "name": "Spotify",
+      "name": "spotify",
       "data": {
         "clientId": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['YOUR_SPOTIFY_ID'] }}",
         "clientSecret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['YOUR_SPOTIFY_SECRET'] }}",
@@ -34,7 +34,7 @@
     },
     {
       "type:": "lastfm",
-      "name": "Last.fm",
+      "name": "lastfm",
       "enable": true,
       "data": {
         "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_KEY'] }}",
@@ -44,7 +44,7 @@
     },
     {
       "type": "listenbrainz",
-      "name": "ListenBrainz",
+      "name": "listenBrainz",
       "enable": true,
       "data": {
         "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
@@ -53,7 +53,7 @@
     },
     {
       "type": "subsonic",
-      "name": "Navidrome",
+      "name": "navidrome",
       "enable": true,
       "data": {
         "url": "http://navidrome:4533",
@@ -65,7 +65,7 @@
   "clients": [
     {
       "type": "lastfm",
-      "name": "Last.fm Client",
+      "name": "lastFmClient",
       "enable": true,
       "data": {
         "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_KEY'] }}",
@@ -75,7 +75,7 @@
     },
     {
       "type": "listenbrainz",
-      "name": "ListenBrainz Client",
+      "name": ";istenBrainzClient",
       "enable": true,
       "data": {
         "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
@@ -85,7 +85,7 @@
     {
       "type": "maloja",
       "enable": true,
-      "name": "Maloja",
+      "name": "maloja",
       "data": {
         "url": "http://maloja:42010",
         "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_API_KEY'] }}"

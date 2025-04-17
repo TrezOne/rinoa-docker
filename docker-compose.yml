@@ -996,6 +996,21 @@ services:
   dawarich-sidekiq:
     command: ['sidekiq']
     container_name: dawarich-sidekiq
+    depends_on:
+      dawarich-app:
+        condition: service_healthy
+        restart: true
+      dawarich-pg-db:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_started
+        restart: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'    # Limit CPU usage to 50% of one core
+          memory: '4G'    # Limit memory usage to 4GB
     entrypoint: sidekiq-entrypoint.sh
     environment:
       RAILS_ENV: development
@@ -1013,21 +1028,6 @@ services:
       PROMETHEUS_EXPORTER_PORT: 9394
       ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
       SELF_HOSTED: true
-    depends_on:
-      dawarich-app:
-        condition: service_healthy
-        restart: true
-      dawarich-pg-db:
-        condition: service_healthy
-        restart: true
-      redis:
-        condition: service_started
-        restart: true
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'    # Limit CPU usage to 50% of one core
-          memory: '4G'    # Limit memory usage to 4GB
     healthcheck:
       test: [ "CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}" ]
       interval: 10s
@@ -4318,7 +4318,7 @@ services:
       LOG_LEVEL: DEBUG
       OLLAMA_URL: http://ollama:11434
       OLLAMA_MODEL: phi3
-      MONGODB_URI: mongodb://mongodb:27017/scrapper
+      MONGODB_URI: mongodb://scraperr:${SCRAPERR_MONGODB_PASSWORD}@mongodb:27017/scraperr?replicaSet=rinoa
       SECRET_KEY: ${SCRAPERR_SECRET_KEY}
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: 600
@@ -4578,8 +4578,8 @@ services:
       minimum_rating: 4.5
       minimum_votes: 50
       quality_profile_id: 1
-      radarr_address: http://sonarr:8989
-      radarr_api_key: ${SONARR_API_KEY}
+      sonarr_address: http://sonarr:8989
+      sonarr_api_key: ${SONARR_API_KEY}
       root_folder_path: /data/media/shows
       search_for_missing_episodes: true
       sonarr_api_timeout: 120
