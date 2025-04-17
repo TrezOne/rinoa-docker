@@ -64,16 +64,15 @@ services:
       homepage.widget.url: http://adguard:80
       homepage.widget.username: admin
       homepage.widget.password: ${ADGUARD_PASSWORD}
-    networks:
-      default: null
     ports:
+      - "192.168.1.254:53:53/udp"
+      - 53:53/tcp
       - 3001:3000
       - 446:443
       - 8008:80
       - 853:853
       - 67:67
       - 688:68
-      - 53:53
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
