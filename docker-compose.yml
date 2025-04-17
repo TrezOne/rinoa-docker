@@ -79,8 +79,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUME_CONFIG}/adguard/work:/opt/adguardhome/work
       - ${DOCKER_VOLUME_CONFIG}/adguard/conf:/opt/adguardhome/conf
-      - /rinoa-storage:/storage
-      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/live/trez.wtf:/etc/ssl/certs
+      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/:/etc/ssl/certs
   apprise-api:
     container_name: apprise-api
     environment:
