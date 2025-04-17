@@ -101,7 +101,7 @@
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
 | plantuml-server | plantuml/plantuml-server:jetty |
-| portainer | portainer/portainer-ce:2.27.0-alpine |
+| portainer | portainer/portainer-ce:alpine |
 | portall | need4swede/portall:latest |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
