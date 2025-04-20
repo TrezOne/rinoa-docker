@@ -63,13 +63,6 @@
 | invidious-db | docker.io/library/postgres:14 |
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
-| jitsi-etherpad | etherpad/etherpad:1.8.6 |
-| jitsi-jibri | jitsi/jibri:stable |
-| jitsi-jicofo | jitsi/jicofo:stable |
-| jitsi-jigasi | jitsi/jigasi:stable |
-| jitsi-jvb | jitsi/jvb:stable |
-| jitsi-prosody | jitsi/prosody:stable |
-| jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
 | librechat-api | ghcr.io/danny-avila/librechat-dev:latest |
@@ -88,6 +81,7 @@
 | mastodon-pg-db | postgres:17-alpine |
 | meilisearch | getmeili/meilisearch:v1.12.3 |
 | minio | minio/minio |
+| mirotalk | mirotalk/p2p:latest |
 | mixpost | inovector/mixpost:latest |
 | mongodb | bitnami/mongodb:7.0 |
 | multi-scrobbler | foxxmd/multi-scrobbler |
