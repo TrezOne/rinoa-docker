@@ -1,0 +1,28 @@
+name: Auto-Unseal for Vault
+on:
+  schedule:
+    - cron: "30 2 * * *"
+jobs:
+  auto-unseal:
+    name: Unseal Vault
+    runs-on: ubuntu-latest
+    env:
+      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+      VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
+      VAULT_SHARDS: |
+        ${{ secrets.VAULT_UNSEAL_SHARDS }}
+      VAULT_NAMESPACE: ""
+    steps:
+      - name: Cache Vault install
+        id: cache-vault
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/vault/1.18.0/x64
+          key: vault-${{ runner.os }}-1.18.0
+      - name: Install Vault
+        uses: cpanato/vault-installer@main
+      - name: Unseal Vault
+        run: |
+          for vault_shard in $(cat ${VAULT_SHARDS}); do
+            vault operator unseal -address=${VAULT_ADDR} -non-interactive "${vault_shard}"
+          done
