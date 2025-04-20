@@ -4286,6 +4286,8 @@ services:
       - run
       - start
     container_name: scraperr
+    depends_on:
+      - scraperr-api
     expose:
       - 3000
     image: jpyles0524/scraperr:latest
@@ -4309,8 +4311,6 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
-    networks:
-      default: null
     restart: unless-stopped
   scraperr-api:
     container_name: scraperr-api
@@ -4326,9 +4326,10 @@ services:
     expose:
       - 8000
     image: jpyles0524/scraperr_api:latest
-    networks:
-      default: null
     restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/scraperr:/project/data
+      # - /var/run/docker.sock:/var/run/docker.sock
   scrutiny:
     cap_add:
       - SYS_RAWIO
