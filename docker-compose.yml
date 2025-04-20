@@ -2748,7 +2748,7 @@ services:
       TURN_SERVER_USERNAME: ${MIROTALK_METERED_TURNSERVER_USER}
       TURN_SERVER_CREDENTIAL: ${MIROTALK_METERED_TURNSERVER_PASSWORD}
       IP_LOOKUP_ENABLED: false # true or false
-      API_KEY_SECRET: ${MIROTALK_API_KEY_SECRRET}
+      API_KEY_SECRET: ${MIROTALK_API_KEY_SECRET}
       API_DISABLED: '["token", "meetings"]'
       SURVEY_ENABLED: false
       REDIRECT_ENABLED: false # true or false
@@ -2790,8 +2790,6 @@ services:
       homepage.href: https://meet.${MY_TLD}
       homepage.icon: sh-mirotalk.svg
       homepage.description: Simple, secure, and fast real-time video conferences
-    ports:
-      - '${PORT}:${PORT}'
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/mirotalk/app/src/config.js:/src/app/src/config.js:ro
