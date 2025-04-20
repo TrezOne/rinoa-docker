@@ -4287,7 +4287,7 @@ services:
       - start
     container_name: scraperr
     depends_on:
-      - scraprr-api
+      - scraperr-api
     expose:
       - 3000
     image: jpyles0524/scraperr:latest
