@@ -66,11 +66,13 @@ services:
       homepage.widget.password: ${ADGUARD_PASSWORD}
     ports:
       - "192.168.1.254:53:53/udp"
+      - "192.168.1.254:53:53/tcp"
       - 53:53/tcp
       - 3001:3000
       - 446:443
       - 8008:80
-      - 853:853
+      - "192.168.1.254:53:853:853/tcp"
+      - "192.168.1.254:53:8853:8853/udp"
       - 67:67
       - 688:68
     restart: unless-stopped
