@@ -46,7 +46,6 @@ services:
     container_name: adguard
     environment:
       TZ: ${TZ}
-#    hostname: Rinoa
     image: adguard/adguardhome:latest
     labels:
       swag: enable
@@ -3104,7 +3103,7 @@ services:
     container_name: omni-tools
     image: iib0011/omni-tools:latest
     labels:
-      homepage.group: Personal Services
+      homepage.group: Personal/Professional Services
       homepage.name: OmniTools
       homepage.href: https://ombi.${MY_TLD}
       homepage.icon: sh-omnitools.svg
