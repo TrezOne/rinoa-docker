@@ -3105,7 +3105,7 @@ services:
     labels:
       homepage.group: Personal/Professional Services
       homepage.name: OmniTools
-      homepage.href: https://ombi.${MY_TLD}
+      homepage.href: https://otools.${MY_TLD}
       homepage.icon: sh-omnitools.svg
       homepage.description: Tools for common tasks
       swag: enable
