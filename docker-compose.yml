@@ -46,7 +46,7 @@ services:
     container_name: adguard
     environment:
       TZ: ${TZ}
-    hostname: Rinoa
+#    hostname: Rinoa
     image: adguard/adguardhome:latest
     labels:
       swag: enable
@@ -68,17 +68,18 @@ services:
       - "192.168.1.254:53:53/udp"
       - "192.168.1.254:53:53/tcp"
       - 3001:3000
-      - 446:443
+      - "192.168.1.254:446:443/tcp"
       - 8008:80
       - "192.168.1.254:853:853/tcp"
       - 67:67
       - 688:68
     restart: unless-stopped
+    user: 1000:1000
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUME_CONFIG}/adguard/work:/opt/adguardhome/work
       - ${DOCKER_VOLUME_CONFIG}/adguard/conf:/opt/adguardhome/conf
-      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/:/etc/ssl/certs
+      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/:/opt/adguardhome/certs
   apprise-api:
     container_name: apprise-api
     environment:
@@ -92,7 +93,7 @@ services:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Apprise
       homepage.icon: apprise.png
-      homepage.href: https://adgh.${MY_TLD}
+      homepage.href: http://192.168.1.254:54995
       homepage.description: Multi-channel notification API
     ports:
       - 54995:8000
@@ -2522,6 +2523,7 @@ services:
       DATABASE_URL: sqlite3:/config/manyfold.sqlite3
       REDIS_URL: redis://redis:6379/2
       SECRET_KEY_BASE: ${MANYFOLD_SECRET_KEY_BASE}
+      MUTLIUSER: enabled
     image: lscr.io/linuxserver/manyfold:latest
     labels:
       homepage.group: Lifestyle
