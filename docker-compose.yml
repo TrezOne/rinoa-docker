@@ -3098,6 +3098,25 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  omni-tools:
+    container_name: omni-tools
+    image: iib0011/omni-tools:latest
+    labels:
+      homepage.group: Personal Services
+      homepage.name: OmniTools
+      homepage.href: https://ombi.${MY_TLD}
+      homepage.icon: sh-omnitools.svg
+      homepage.description: Tools for common tasks
+      swag: enable
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://otools.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 23693:80
+    restart: unless-stopped
   paperless-ngx:
     container_name: paperless-ngx
     depends_on:
