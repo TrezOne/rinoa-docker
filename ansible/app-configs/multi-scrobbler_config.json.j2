@@ -75,7 +75,7 @@
     },
     {
       "type": "listenbrainz",
-      "name": ";istenBrainzClient",
+      "name": "ListenBrainzClient",
       "enable": true,
       "data": {
         "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",

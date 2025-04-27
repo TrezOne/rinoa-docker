@@ -7,6 +7,9 @@ containers
     action_keywords:
       - restart:
           regex: 'ADVICE:.*error'
+  invidious:
+    keywords:
+      - regex: 'Error reading.*Connection reset by peer trying to reconnect...'
 global_keywords:
   keywords:
     - panic
