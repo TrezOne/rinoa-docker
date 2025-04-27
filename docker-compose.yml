@@ -3112,6 +3112,7 @@ services:
       swag_server_custom_directive: |
         access_log /config/log/$$host_access.log ;
         error_log /config/log/$$host_error.log ;
+      swag_url: otools.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://otools.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
