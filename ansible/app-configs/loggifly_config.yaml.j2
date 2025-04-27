@@ -1,8 +1,15 @@
-containers:
+containers
+  ghost_blog:
+    action_keywords:
+      - restart:
+          regex: '^Connection Error: Error: read ECONNRESET$'
   immich-server:
     action_keywords:
       - restart:
           regex: 'ADVICE:.*error'
+  invidious:
+    keywords:
+      - regex: 'Error reading.*Connection reset by peer trying to reconnect...'
 global_keywords:
   keywords:
     - panic
