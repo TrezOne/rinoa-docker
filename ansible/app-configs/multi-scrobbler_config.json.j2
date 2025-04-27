@@ -33,9 +33,10 @@
       }
     },
     {
-      "type:": "lastfm",
-      "name": "lastfm",
+      "type": "lastfm",
       "enable": true,
+      "clients": [],
+      "name": "lastfm",
       "data": {
         "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_KEY'] }}",
         "secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_SECRET'] }}",
@@ -44,8 +45,9 @@
     },
     {
       "type": "listenbrainz",
-      "name": "listenBrainz",
       "enable": true,
+      "clients": [],
+      "name": "listenBrainz",
       "data": {
         "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
         "username": "Trez.One"
@@ -53,8 +55,9 @@
     },
     {
       "type": "subsonic",
-      "name": "navidrome",
       "enable": true,
+      "clients": [],
+      "name": "navidrome",
       "data": {
         "url": "http://navidrome:4533",
         "user": "admin",
@@ -65,8 +68,8 @@
   "clients": [
     {
       "type": "lastfm",
-      "name": "lastFmClient",
       "enable": true,
+      "name": "lastFmClient",
       "data": {
         "apiKey": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_KEY'] }}",
         "secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LASTFM_API_SECRET'] }}",
@@ -75,8 +78,8 @@
     },
     {
       "type": "listenbrainz",
-      "name": "ListenBrainzClient",
       "enable": true,
+      "name": "ListenBrainzClient",
       "data": {
         "token": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MALOJA_LISTENBRAINZ_TOKEN'] }}",
         "username": "Trez.One"
