@@ -91,6 +91,7 @@
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
+| omni-tools | iib0011/omni-tools:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
