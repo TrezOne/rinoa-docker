@@ -1424,7 +1424,7 @@ services:
       - 2368:2368
     restart: always
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/ghost:/home/ghost
+      - ${DOCKER_VOLUME_CONFIG}/ghost:/var/lib/ghost/content
   gitea:
     container_name: gitea
     depends_on:
