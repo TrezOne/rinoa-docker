@@ -3910,7 +3910,7 @@ services:
       - ALL
     container_name: searxng
     environment:
-      SEARXNG_BASE_URL: https://${SEARXNG_BASE_URL:-localhost}/
+      SEARXNG_BASE_URL: https://search.${MY_TLD}
     image: searxng/searxng:latest
     labels:
       homepage.group: Personal/Professional Services
