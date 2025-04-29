@@ -7,13 +7,14 @@
     "client": "mysql",
     "connection": {
       "host"     : "mariadb",
+      "port"     : 3306,
       "user"     : "ghost",
       "password" : "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GHOST_DB_PASSWORD'] }}",
       "database" : "ghost_db"
     }
   },
   "mail": {
-    "from": "'Ghost @ Rinoa' <noreply@trez.wtf>"
+    "from": "'Ghost @ Rinoa' <noreply@trez.wtf>",
     "transport": "SMTP",
     "options": {
       "host": "postal-smtp",
