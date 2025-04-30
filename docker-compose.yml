@@ -1784,7 +1784,7 @@ services:
   hugo:
     command: hugo server --baseURL "it-services.trez.wtf" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
     container_name: hugo
-    image: hugomods/hugo:exts
+    image: hugomods/hugo:exts-0.145.0
     labels:
       swag: enable
       swag_proto: http
