@@ -2136,6 +2136,7 @@ services:
       SKIN_NAME: ${JITSI__ETHERPAD_SKIN_NAME}
       SKIN_VARIANTS: ${JITSI__ETHERPAD_SKIN_VARIANTS}
       SUPPRESS_ERRORS_IN_PAD_TEXT: true
+    hostname: etherpad.meet.jitsi
     image: etherpad/etherpad:1.8.6
     networks:
       default: null
@@ -2205,7 +2206,7 @@ services:
         bind:
           create_host_path: true
   jitsi-jicofo:
-    container_name: focus.meet.jitsi
+    container_name: jitsi-jicofo
     depends_on:
       jitsi-prosody:
         condition: service_started
@@ -2381,7 +2382,7 @@ services:
       SENTRY_RELEASE:
       COLIBRI_REST_ENABLED:
       SHUTDOWN_REST_ENABLED:
-      TZ: ${JITSI__JIGAGI_SIP_SERVER}
+      TZ: ${TZ}
       XMPP_AUTH_DOMAIN:
       XMPP_INTERNAL_MUC_DOMAIN:
       XMPP_SERVER:
@@ -2511,7 +2512,7 @@ services:
         target: /prosody-plugins-custom
         type: bind
   jitsi-web:
-    container_name: meet.jitsi
+    container_name: jitsi-web
     environment:
       AMPLITUDE_ID:
       ANALYTICS_SCRIPT_URLS:
@@ -2656,6 +2657,7 @@ services:
       XMPP_PORT:
       WHITEBOARD_ENABLED:
       WHITEBOARD_COLLAB_SERVER_PUBLIC_URL:
+    hostname: meet.jitsi
     image: jitsi/web:${JITSI_IMAGE_VERSION:-stable}
     labels:
       swag: enable
