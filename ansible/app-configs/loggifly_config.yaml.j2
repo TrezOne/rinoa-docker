@@ -1,8 +1,11 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
 containers:
   ghost_blog:
     action_keywords:
       - restart:
-          regex: '^Connection Error: Error: read ECONNRESET$'
+          regex: ':[0-9]{2}\] ERROR.*$'
   immich-server:
     action_keywords:
       - restart:
