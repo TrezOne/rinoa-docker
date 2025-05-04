@@ -5303,12 +5303,14 @@ services:
         type: bind
   zammad-backup:
     <<: *zammad-service
+    container_name: zammad-backup
     command: ["zammad-backup"]
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-storage:/opt/zammad/storage:ro
     user: 0:0
   zammad-elasticsearch:
+    container_name: zammad-elasticsearch
     image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.17.4}
     restart: ${RESTART:-always}
     profiles:
@@ -5325,17 +5327,20 @@ services:
       ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASS:-zammad}
   zammad-init:
     <<: *zammad-service
+    container_name: zammad-init
     command: ["zammad-init"]
     depends_on:
       - zammad-postgresql
     restart: on-failure
     user: 0:0
   zammad-memcached:
+    container_name: zammad-memcached
     command: memcached -m 256M
     image: memcached:${MEMCACHE_VERSION:-1.6.38-alpine}
     restart: ${RESTART:-always}
   zammad-nginx:
     <<: *zammad-service
+    container_name: zammad-nginx
     command: ["zammad-nginx"]
     expose:
       - "${NGINX_PORT:-8080}"
@@ -5356,6 +5361,7 @@ services:
     depends_on:
       - zammad-railsserver
   zammad-postgresql:
+    container_name: zammad-postgresql
     environment:
       POSTGRES_DB: ${ZAMMAD_POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${ZAMMAD_POSTGRES_USER:-zammad}
@@ -5366,17 +5372,21 @@ services:
       - zammad-postgresql-data:/var/lib/postgresql/data
   zammad-railsserver:
     <<: *zammad-service
+    container_name: zammad-railsserver
     command: ["zammad-railsserver"]
   zammad-redis:
+    container_name: zammad-redis
     image: redis:${REDIS_VERSION:-7.4.2-alpine}
     restart: ${RESTART:-always}
     volumes:
       - zammad-redis-data:/data
   zammad-scheduler:
     <<: *zammad-service
+    container_name: zammad-scheduler
     command: ["zammad-scheduler"]
   zammad-websocket:
     <<: *zammad-service
+    container_name: zammad-websocket
     command: ["zammad-websocket"]
 volumes:
   authelia-pg-db:
