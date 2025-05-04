@@ -5374,6 +5374,8 @@ services:
     <<: *zammad-service
     container_name: zammad-railsserver
     command: ["zammad-railsserver"]
+    expose:
+      - 3000
   zammad-redis:
     container_name: zammad-redis
     image: redis:${REDIS_VERSION:-7.4.2-alpine}
