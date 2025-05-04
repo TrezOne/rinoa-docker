@@ -141,4 +141,14 @@
 | watchtower | ghcr.io/containrrr/watchtower:latest |
 | web-check | lissy93/web-check |
 | youtubedl | nbr23/youtube-dl-server:latest |
+| zammad-backup | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-elasticsearch | bitnami/elasticsearch:8.17.4 |
+| zammad-init | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-memcached | memcached:1.6.38-alpine |
+| zammad-nginx | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-postgresql | postgres:17.4-alpine |
+| zammad-railsserver | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-redis | redis:7.4.2-alpine |
+| zammad-scheduler | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-websocket | ghcr.io/zammad/zammad:6.5.0-15 |
 
