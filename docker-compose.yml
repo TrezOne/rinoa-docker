@@ -2123,6 +2123,104 @@ services:
         type: bind
         bind:
           create_host_path: true
+  invoice-ninja:
+    container_name: invoice-ninja
+    depends_on:
+      mariadb:
+        condition: service_started
+        required: true
+        restart: true
+    environment:
+      APP_DEBUG: true
+      APP_KEY: ${IN_APP_KEY}
+      APP_URL: http://invoice_ninja:8003
+      APP_ENV: /var/www/html/.env
+      DB_DATABASE: invoice_ninja
+      DB_HOST: mariadb
+      DB_PASSWORD: ${IN_MYSQL_PASSWORD}
+      DB_PORT: 3306
+      DB_USERNAME: ininja
+      IN_PASSWORD: ${IN_PASSWORD}
+      IN_USER_EMAIL: charish.patel@${MY_TLD}
+      MAIL_ENCRYPTION: null
+      MAIL_FROM_ADDRESS: noreply@${MY_TLD}
+      MAIL_FROM_NAME: null
+      MAIL_HOST: postal-smtp
+      MAIL_MAILER: log
+      MAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      MAIL_PORT: 25
+      MAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      MYSQL_DATABASE: invoice_ninja
+      MYSQL_PASSWORD: ${IN_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ininja
+      PDF_GENERATOR: snappdf
+      PHANTOMJS_PDF_GENERATION: false
+      QUEUE_CONNECTION: database
+      REQUIRE_HTTPS: false
+      TRUSTED_PROXIES: 172.18.0.0/16
+    expose:
+      - 9000
+    image: invoiceninja/invoiceninja-debian:5
+    restart: always
+    volumes:
+      - invoice-ninja_cache:/var/www/html/bootstrap/cache
+      - invoice-ninja_public:/var/www/html/public
+      - invoice-ninja_storage:/var/www/html/storage
+  invoice-ninja_proxy:
+    container_name: invoice-ninja_proxy
+    depends_on:
+      invoice-ninja:
+        condition: service_started
+        required: true
+        restart: true
+    environment:
+      APP_DEBUG: true
+      APP_KEY: ${IN_APP_KEY}
+      APP_URL: http://invoice_ninja:9000
+      DB_DATABASE: invoice_ninja
+      DB_HOST: mariadb
+      DB_PASSWORD: ${IN_MYSQL_PASSWORD}
+      DB_PORT: 3306
+      DB_USERNAME: ininja
+      IN_PASSWORD: ${IN_PASSWORD}
+      IN_USER_EMAIL: charish.patel@trez.wtf
+      MAIL_ENCRYPTION: null
+      MAIL_FROM_ADDRESS: noreply@trez.wtf
+      MAIL_FROM_NAME: null
+      MAIL_HOST: postal-smtp
+      MAIL_MAILER: log
+      MAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      MAIL_PORT: 25
+      MAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      MYSQL_DATABASE: invoice_ninja
+      MYSQL_PASSWORD: ${IN_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ininja
+      PDF_GENERATOR: snappdf
+      PHANTOMJS_PDF_GENERATION: false
+      QUEUE_CONNECTION: database
+      REQUIRE_HTTPS: false
+      TRUSTED_PROXIES: 172.18.0.0/16
+    image: nginx
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_url: biz.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://biz.${MY_TLD}
+      homepage.group: Professional Services
+      homepage.name: Invoice Ninja
+      homepage.href: https://biz.${MY_TLD}
+      homepage.icon: invoice-ninja.svg
+      homepage.description: Simple invoicing, multiple payment options, expense and vendor management, and more!
+    ports:
+      - 8005:80
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/nginx:/etc/nginx/conf.d:ro
+      - invoice-ninja_public:/var/www/html/public
+      - invoice-ninja_storage:/var/www/html/storage
   it-tools:
     container_name: it-tools
     image: ghcr.io/corentinth/it-tools:latest
