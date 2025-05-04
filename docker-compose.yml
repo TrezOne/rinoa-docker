@@ -5441,9 +5441,9 @@ services:
     container_name: zammad-nginx
     command: ["zammad-nginx"]
     expose:
-      - "${NGINX_PORT:-8080}"
+      - 8080
     ports:
-      - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
+      - 15257:8080
     labels:
       swag: enable
       swag_proto: http
@@ -5472,6 +5472,8 @@ services:
     <<: *zammad-service
     container_name: zammad-railsserver
     command: ["zammad-railsserver"]
+    expose:
+      - 3000
   zammad-redis:
     container_name: zammad-redis
     image: redis:${REDIS_VERSION:-7.4.2-alpine}
