@@ -616,30 +616,6 @@ services:
     networks:
       default: null
     restart: unless-stopped
-  bytebase:
-    container_name: bytebase
-    image: bytebase/bytebase:3.5.0
-    labels:
-      homepage.group: System Administration
-      homepage.name: Bytebase
-      homepage.href: https://dbs.${MY_TLD}
-      homepage.icon: /icons/bytebase.png
-      homepage.description: Database-as-Code CI/CD
-      swag: enable
-      swag_port: 8080
-      swag_proto: http
-      swag_url: dbs.${MY_TLD}
-      swag_server_custom_directive: |
-        access_log /config/log/$$host_access.log ;
-        error_log /config/log/$$host_error.log ;
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-    ports:
-      - 49054:8080
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/bytebase:/var/opt/bytebase
   bytestash:
     container_name: bytestash
     environment:
@@ -1351,6 +1327,27 @@ services:
         source: /home/charish/.config/appdata
         target: /source
         type: bind
+  excalidraw:
+    container_name: excalidraw
+    image: 'excalidraw/excalidraw:latest'
+    labels:
+      homepage.group: Personal/Professional Services
+      homepage.name: Excalidraw
+      homepage.href: https://draw.${MY_TLD}
+      homepage.icon: excalidraw.svg
+      homepage.description: Virtual whiteboard for sketching hand-drawn like diagrams
+      swag: enable
+      swag_proto: http
+      swag_url: draw.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://draw.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 53721:80
+    restart: unless-stopped
   explo:
     container_name: explo
     environment:
@@ -5351,6 +5348,35 @@ services:
     ports:
       - 3010:3000
     restart: unless-stopped
+  whodb:
+    container_name: whodb
+    image: clidey/whodb
+    environment:
+      WHODB_POSTGRES_1: '[{"host":"authelia-pg","user":"authelia","password":"${AUTHELIA_STORAGE_POSTGRES_PASSWORD}","database":"authelia"},{"host":"bitmagnet-pg-db","user":"bitmagnet","password":"${BITMAGNET_POSTGRESQL_PASSWORD}","database":"bitmagnet"},{"host":"dawarich-pg-db","user":"dawarich","password":"${DAWARICH_PG_PASSWORD}","database":"dawarich"},{"host":"gitea-db","user":"gitea","password":"${GITEA_PG_DB_PASSWORD}","database":"gitea"},{"host":"immich-pg-db","user":"immich","password":"${IMMICH_DB_PASSWORD}","database":"immich"},{"host":"invidious-db","user":"kemal","password":"${INVID_PG_DB_PASSWORD}","database":"invidious"},{"host":"librechat-vectordb","user":"librechat","password":"${LIBRECHAT_PG_DB_PASSWD}","database":"librechat"},{"host":"mastodon-pg-db","user":"mastodon","password":"${MASTODON_PG_DB_PASSWORD}","database":"mastodon"},{"host":"reactive-resume-pg","user":"reactiveresume","password":"${REACTIVE_RESUME_PGSQL_PASSWORD}","database":"reactiveresume"},{"host":"sonarqube-pg-db","user":"sonar","password":"${SONARQUBE_POSTGRES_PASSWORD}","database":"sonar"},{"host":"tandoor-pg","user":"tandoor","password":"${TANDOOR_POSTGRES_PASSWORD}","database":"tandoor"},{"host":"zammad-postgresql","user":"zammad","password":"${ZAMMAD_POSTGRES_PASS}","database":"zammad_production"}]'
+      WHODB_MARIADB_1: '[{"host":"mariadb","user":"root","password":"${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}","database":"mysql"}]'
+      WHODB_MONGODB_1: '{"host":"mongodb:27017/admin?replicaSet=rinoa","user":"root","password":"${MONGO_INITDB_ROOT_PASSWORD}"}'
+      WHODB_OLLAMA_HOST: ollama
+      WHODB_OLLAMA_PORT: 11434
+      WHODB_ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
+      WHODB_OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
+    expose:
+      - 8080
+    labels:
+      homepage.group: System Administration
+      homepage.name: WhoDB
+      homepage.href: https://dbs.${MY_TLD}
+      homepage.icon: whodb.png
+      homepage.description: Database-as-Code CI/CD
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: dbs.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
   youtubedl:
     container_name: youtubedl
     environment:
