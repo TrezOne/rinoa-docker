@@ -1998,12 +1998,6 @@ services:
       IMMICH_API_KEY: ${IMMICH_POWER_TOOLS_KEY}
       IMMICH_URL: http://immich-server:2283
     image: ghcr.io/varun-raj/immich-power-tools:latest
-    labels:
-      homepage.group: Lifestyle
-      homepage.name: Immich Power Tools
-      homepage.href: https://pics.${MY_TLD}/tools
-      homepage.icon: sh-immich-power-tools.png
-      homepage.description: Tools for Immich
     ports:
       - 54018:3000
     restart: unless-stopped
