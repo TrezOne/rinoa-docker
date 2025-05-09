@@ -1,7 +1,0 @@
-secret:
-  ignored_matches:
-  - match: d2ce934bc4bb8262e33b0dfd8cc43f9c8e3178e7154f880f1725359f2aa2dbcd
-    name: Cloudflare API Token - rinoa-terraform/cloudflare/.tfvars:l.3
-  - match: 3d3a5780c31d730d80581a0f4d2e0a27eb986a6f6427192741fa8db06226d691
-    name: Generic High Entropy Secret - rinoa-terraform/cloudflare/.tfvars:l.6
-version: 2
