@@ -2908,6 +2908,18 @@ services:
     ports:
       - 22300:22300
     restart: unless-stopped
+  languagetool:
+    container_name: languagetool
+    environment:
+      langtool_languageModel: /opt/languagetool/langModel
+      Java_Xms: 512m
+      Java_Xmx: 1g
+    expose:
+      - 8010
+    image: elestio/languagetool:latest
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/languagetool/:/opt/languagetool/langModel
   librechat-api:
     container_name: librechat-api
     depends_on:
@@ -2985,24 +2997,11 @@ services:
       test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
     environment:
       LT_UPDATE_MODELS: true
-    labels:
-      homepage.group: Personal/Professional Services
-      homepage.name: LibreTranslate
-      homepage.href: https://translate.${MY_TLD}
-      homepage.icon: sh-libretranslate.svg
-      homepage.description: Open-source language translation
-      swag: enable
-      swag_port: 5000
-      swag_url: translate.${MY_TLD}
-      swag_server_custom_directive: |
-        access_log /config/log/$$host_access.log ;
-        error_log /config/log/$$host_error.log ;
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://translate.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 5000:5000
     restart: unless-stopped
+    tty: true
+    stdin_open: true
     volumes:
     #   - libretranslate_api_keys:/app/db
       - libretranslate_models:/home/libretranslate/.local:rw
@@ -3774,6 +3773,32 @@ services:
     ports:
       - 23693:80
     restart: unless-stopped
+  omnipoly:
+    restart: unless-stopped
+    environment:
+      LANGUAGE_TOOL: http://languagetool:8010
+      LIBRETRANSLATE: http://libretranslate:5000
+      OLLAMA: http://ollama:11434
+      OLLAMA_MODEL: smollm2:1.7b
+      THEME: 'pole'
+      DISABLE_DICTIONARY: false
+    expose:
+      - 80
+    image: kweg/omnipoly:latest
+    labels:
+      homepage.group: Personal/Professional Services
+      homepage.name: OmniPoly
+      homepage.href: https://translate.${MY_TLD}
+      homepage.icon: sh-omnipoly.svg
+      homepage.description: Open-source language translation with LanguageTool, LibreTranslate, & Ollama
+      swag: enable
+      swag_url: translate.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://translate.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
   paperless-ngx:
     container_name: paperless-ngx
     depends_on:
@@ -3921,16 +3946,19 @@ services:
     restart: unless-stopped
     volumes:
         - portainer-data:/data
-  portall:
-    container_name: portall
-    image: need4swede/portall:latest
+  portnote-web:
+    container_name: portnote
     environment:
-      SECRET_KEY: ${PORTALL_SECRET_KEY}
+      JWT_SECRET: ${PORTNOTE_JWT_SECRET} # Replace with a secure random string
+      USER_SECRET:  ${PORTNOTE_USER_SECRET} # Replace with a secure random string
+      LOGIN_USERNAME: portnote # Replace with a username
+      LOGIN_PASSWORD: ${PORTNOTE_LOGIN_PASSWORD} # Replace with a custom password
+      DATABASE_URL: "postgresql://portnote:${PORTNOTE_POSTGRES_PASSWORD}@portnote-pg-db:5432/portnote"
+    image: haedlessdev/portnote:latest
     labels:
       swag: enable
-      swag_auth: authelia
       swag_proto: http
-      swag_port: 8080
+      swag_port: 3000
       swag_url: portall.${MY_TLD}
       swag_server_custom_directive: |
         access_log /config/log/$$host_access.log ;
@@ -3944,10 +3972,24 @@ services:
       homepage.icon: sh-portall.png
       homepage.description: Management for container ports
     ports:
-      - 8000:8080
-    restart: unless-stopped
+      - 23186:3000
+  portnote-agent:
+    container_name: portnote-agent
+    image: haedlessdev/portnote-agent:latest
+    environment:
+      DATABASE_URL: "postgresql://portnote:${PORTNOTE_POSTGRES_PASSWORD}@portnote-pg-db:5432/portnote"
+  portnote-pg-db:
+    container_name: portnote-pg-db
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: portnote
+      POSTGRES_PASSWORD: ${PORTNOTE_POSTGRES_PASSWORD}
+      POSTGRES_DB: portnote
+    expose:
+      - 5432
+    restart: always
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/portall:/app/instance
+      - portnote-db-data:/var/lib/postgresql/data
   postal-smtp:
     cap_add:
       - NET_BIND_SERVICE
@@ -5620,6 +5662,8 @@ volumes:
     name: plausible-event-logs
   portainer-data:
     name: portainer-data
+  portnote-db-data:
+    name: portnote-db-data
   reactive-resume-pg:
     name: reactive-resume-pg
   semaphore_config:
