@@ -5414,6 +5414,7 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+    restart: unless-stopped
   youtubedl:
     container_name: youtubedl
     environment:
