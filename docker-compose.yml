@@ -3774,7 +3774,14 @@ services:
       - 23693:80
     restart: unless-stopped
   omnipoly:
-    restart: unless-stopped
+    container_name: omnipoly
+    depends_on:
+      languagetool:
+        condition: service_started
+        required: true
+      libretranslate:
+        condition: service_started
+        required: true
     environment:
       LANGUAGE_TOOL: http://languagetool:8010
       LIBRETRANSLATE: http://libretranslate:5000
@@ -3799,6 +3806,7 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://translate.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+    restart: unless-stopped
   paperless-ngx:
     container_name: paperless-ngx
     depends_on:
@@ -3948,6 +3956,11 @@ services:
         - portainer-data:/data
   portnote-web:
     container_name: portnote
+    depends_on:
+      portnote-pg-db:
+        condition: service_started
+        required: true
+        restart: true
     environment:
       JWT_SECRET: ${PORTNOTE_JWT_SECRET} # Replace with a secure random string
       USER_SECRET:  ${PORTNOTE_USER_SECRET} # Replace with a secure random string
@@ -3959,7 +3972,7 @@ services:
       swag: enable
       swag_proto: http
       swag_port: 3000
-      swag_url: portall.${MY_TLD}
+      swag_url: ports.${MY_TLD}
       swag_server_custom_directive: |
         access_log /config/log/$$host_access.log ;
         error_log /config/log/$$host_error.log ;
@@ -3967,14 +3980,18 @@ services:
       swag.uptime-kuma.monitor.url: https://portall.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
-      homepage.name: Portall
+      homepage.name: PortNote
       homepage.href: https://portall.${MY_TLD}
-      homepage.icon: sh-portall.png
+      homepage.icon: /icons/portnote.png
       homepage.description: Management for container ports
     ports:
       - 23186:3000
   portnote-agent:
     container_name: portnote-agent
+    depends_on:
+      portnote-pg-db:
+        condition: service_started
+        required: true
     image: haedlessdev/portnote-agent:latest
     environment:
       DATABASE_URL: "postgresql://portnote:${PORTNOTE_POSTGRES_PASSWORD}@portnote-pg-db:5432/portnote"
