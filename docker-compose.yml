@@ -806,7 +806,7 @@ services:
       DOCKER_HOST: tcp://dockerproxy:2375
       GID: 1000
       BOUNCER_KEY_SWAG: ${CROWDSEC_API_KEY}
-      COLLECTIONS: crowdsecurity/nginx crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/linux crowdsecurity/iptables
+      COLLECTIONS: corvese/apache-guacamole crowdsecurity/home-assistant crowdsecurity/http-cve crowdsecurity/iptables crowdsecurity/linux crowdsecurity/mariadb crowdsecurity/nextcloud crowdsecurity/nginx crowdsecurity/whitelist-good-actors Dominic-Wagner/vaultwarden gauth-fr/immich LePresidente/adguardhome LePresidente/authelia LePresidente/gitea LePresidente/jellyfin LePresidente/ombi plague-doctor/audiobookshelf schiz0phr3ne/sonarr sdwilsh/navidrome timokoessler/mongodb timokoessler/uptime-kuma xs539/joplin-server
     image: crowdsecurity/crowdsec:latest
     networks:
       default: null
