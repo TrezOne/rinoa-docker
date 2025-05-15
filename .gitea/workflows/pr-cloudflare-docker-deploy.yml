@@ -82,9 +82,11 @@ jobs:
       - name: Detect added, deleted, and modified services
         id: detect_services
         run: |
+          echo "Getting services from main and ${{ github.ref_name }}"
           yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
           yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
 
+          echo "Creating list of modified services..."
           touch service_changes.txt
 
           comm -13 services_main.txt services_head.txt | while read service; do
