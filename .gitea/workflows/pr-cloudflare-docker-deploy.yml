@@ -4,7 +4,7 @@ on:
     branches-ignore:
       - 'main'
     paths:
-      - **/docker-compose.yml
+      - '**/docker-compose.yml'
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
