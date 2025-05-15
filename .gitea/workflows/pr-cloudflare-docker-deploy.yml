@@ -4,7 +4,7 @@ on:
     branches-ignore:
       - 'main'
     paths:
-      - '**/docker-compose.yml'
+      - '**.yml'
       - '!ansible/**.yml'
 jobs:
   check-and-create-pr:
@@ -70,7 +70,7 @@ jobs:
       - name: Compare Docker Compose changes
         run: |
           git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
-          cp docker-compose.yml docker-compose-${{ github.head_ref }}.yml
+          cp docker-compose.yml docker-compose-head.yml
       - name: Detect added, deleted, and modified services
         id: detect_services
         run: |
@@ -88,8 +88,8 @@ jobs:
           done
 
           comm -12 services_main.txt services_head.txt | while read service; do
-            yq ".services[\"$service\"]" main.yml > tmp_main.yml
-            yq ".services[\"$service\"]" head.yml > tmp_head.yml
+            yq ".services[\"$service\"]" docker-compose-main.yml > tmp_main.yml
+            yq ".services[\"$service\"]" docker-compose-head.yml > tmp_head.yml
             if ! diff -q tmp_main.yml tmp_head.yml > /dev/null; then
               echo "$service: modified" >> service_changes.txt
             fi
