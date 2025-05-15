@@ -67,10 +67,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Compare Docker Compose changes
+      - name: Fetch base branch
         run: |
-          git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+      - name: Save both versions of docker-compose.yml
+        run: |
+          BASE=${{ github.event.pull_request.base.ref }}
+          git show origin/$BASE:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
           cp docker-compose.yml docker-compose-head.yml
+      # - name: Compare Docker Compose changes
+      #  run: |
+      #    git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
+      #    cp docker-compose.yml docker-compose-head.yml
       - name: Detect added, deleted, and modified services
         id: detect_services
         run: |
