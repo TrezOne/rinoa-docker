@@ -3,6 +3,8 @@ on:
   push:
     branches-ignore:
       - 'main'
+    paths:
+      - **/docker-compose.yml
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
@@ -64,6 +66,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Compare Docker Compose changes
+        run: |
+          git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
+          cp docker-compose.yml docker-compose-${{ github.head_ref }}.yml
+      - name: Detect added, deleted, and modified services
+        id: detect_services
+        run: |
+          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
+          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
+
+          touch service_changes.txt
+
+          comm -13 services_main.txt services_head.txt | while read service; do
+            echo "$service: added" >> service_changes.txt
+          done
+
+          comm -23 services_main.txt services_head.txt | while read service; do
+            echo "$service: deleted" >> service_changes.txt
+          done
+
+          comm -12 services_main.txt services_head.txt | while read service; do
+            yq ".services[\"$service\"]" main.yml > tmp_main.yml
+            yq ".services[\"$service\"]" head.yml > tmp_head.yml
+            if ! diff -q tmp_main.yml tmp_head.yml > /dev/null; then
+              echo "$service: modified" >> service_changes.txt
+            fi
+          done
+
+          echo "Detected service changes:"
+          cat service_changes.txt
+
+          svc_list=$(paste -sd '|' service_changes.txt)
+          echo "classified_services=$svc_list" >> "$GITHUB_OUTPUT"
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
@@ -93,8 +128,9 @@ jobs:
           playbook: docker_config_deploy.yml
           key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           options: |
-            --inventory inventory/hosts.yml
             --check
+            --extra-vars group_vars/all.yml
+            --inventory inventory/hosts.yml
           requirements: collections/requirements.yml
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
       - name: Gotify Notification
