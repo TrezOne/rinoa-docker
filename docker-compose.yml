@@ -1086,6 +1086,15 @@ services:
       - dawarich_public:/var/app/public
       - dawarich_watched:/var/app/tmp/imports/watched
       - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
+  dead-man-hand:
+    container_name: dead-man-hand
+    environment:
+      DMH_CONFIG_FILE: /data/config.yaml
+    image: 'ghcr.io/bkupidura/dead-man-hand:latest'
+    ports:
+      - '8080:8080'
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/dead-man-hand/data:/data
   delugevpn:
     cap_add:
       - NET_ADMIN
@@ -5672,12 +5681,6 @@ volumes:
     name: paperless-ngx-pg
   pgbackweb-data:
     name: pgbackweb-data
-  plausible-db-data:
-    name: plausible-db-data
-  plausible-event-data:
-    name: plausible-event-data
-  plausible-event-logs:
-    name: plausible-event-logs
   portainer-data:
     name: portainer-data
   portnote-db-data:
