@@ -5,6 +5,7 @@ on:
       - 'main'
     paths:
       - '**/docker-compose.yml'
+      - '!ansible/**.yml'
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
