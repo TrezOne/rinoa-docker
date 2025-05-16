@@ -151,7 +151,7 @@ jobs:
           notification_message: 'Ansible dry run completed successfully; starting Docker Compose dry run...'
       - name: Generate .env file for Docker Compose Dry Run
         run: |
-          echo ${{ steps.detect_services. }}
+          echo ${{ steps.detect_services.outputs.classified_services }}
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Cache .env Files
         uses: actions/cache@v4
