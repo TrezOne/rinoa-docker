@@ -3995,6 +3995,7 @@ services:
       homepage.description: Management for container ports
     ports:
       - 23186:3000
+    restart: always
   portnote-agent:
     container_name: portnote-agent
     depends_on:
@@ -4004,6 +4005,7 @@ services:
     image: haedlessdev/portnote-agent:latest
     environment:
       DATABASE_URL: "postgresql://portnote:${PORTNOTE_POSTGRES_PASSWORD}@portnote-pg-db:5432/portnote"
+    restart: always
   portnote-pg-db:
     container_name: portnote-pg-db
     image: postgres:17-alpine
