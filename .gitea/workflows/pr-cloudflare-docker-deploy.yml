@@ -120,8 +120,8 @@ jobs:
       #   uses: alex-oleshkevich/setup-ansible@v1.0.1
       #   with:
       #     version: "11.0.0"
-      # - name: Install Vault
-      #   uses: cpanato/vault-installer@main
+      - name: Install Vault
+        uses: cpanato/vault-installer@main
       # - name: Install hvac
       #   run: pip install hvac
       # - name: Gotify Notification
@@ -151,7 +151,7 @@ jobs:
           notification_message: 'Ansible dry run completed successfully; starting Docker Compose dry run...'
       - name: Generate .env file for Docker Compose Dry Run
         run: |
-          echo "${{ steps.detect_services.outputs.classified_services }}"
+          cat ${{ steps.detect_services.outputs.classified_services }} | awk -F":" '{print $1}'
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Cache .env Files
         uses: actions/cache@v4
