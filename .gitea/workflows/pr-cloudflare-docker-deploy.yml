@@ -147,17 +147,20 @@ jobs:
         with:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
-          notification_message: 'Ansible dry run completed successfully; starting Docker Compose dry run...'
-      - name: Generate .env file for Docker Compose Dry Run
-        run: |
-          echo "${{ steps.detect_services.outputs.classified_services }}"
-          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
+          notification_message: 'Starting Docker Compose dry run...'
       - name: Cache .env Files
         uses: actions/cache@v4
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
+      - name: Generate modified services list & .env file for Docker Compose Dry Run
+        id: modded_svcs
+        run: |
+          mod_svcs=$(echo "${{ steps.detect_services.outputs.classified_services }}" | sed -e 's/|//g' -e 's/: \(add\|modifi\|delet\)ed/ /g')
+          echo ${mod_svcs}
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          echo "rinoa_svcs=${mod_svcs}" >> "$GITHUB_OUTPUT"
       - name: Docker Compose Dry Run
         uses: yu-ichiro/spin-up-docker-compose-action@v1
         with:
@@ -165,7 +168,7 @@ jobs:
           pull: true
           pull-opts: --dry-run
           up: true
-          up-opts: --dry-run -d --remove-orphans
+          up-opts: --dry-run -d --remove-orphans ${{ steps.modded_svcs.rinoa_svcs.output }}
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
       - name: Gotify Notification
