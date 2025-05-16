@@ -132,17 +132,16 @@ jobs:
           notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
           notification_message: 'Starting Ansible dry run...'
       - name: Ansible Playbook Dry Run
-        uses: dawidd6/action-ansible-playbook@v2
+        uses: arillso/action.playbook@0.1.0
         with:
-          directory: ansible/
-          playbook: docker_config_deploy.yml
-          key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          options: |
-            --check
-            --extra-vars group_vars/all.yml
-            --inventory inventory/hosts.yml
-          requirements: collections/requirements.yml
+          check: true
+          galaxy_collections_path: ansible/collections
+          galaxy_requirements_file: ansible/collections/requirements.yml
+          inventory: ansible/inventory/hosts.yml
+          playbook: ansible/docker_config_deploy.yml
+          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          verbose: 0
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
