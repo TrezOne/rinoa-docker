@@ -109,48 +109,49 @@ jobs:
 
           svc_list=$(paste -sd '|' service_changes.txt)
           echo "classified_services=$svc_list" >> "$GITHUB_OUTPUT"
-      - name: Cache Ansible Galaxy Collections
-        uses: actions/cache@v3
-        with:
-          path: ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-ansible-
-      - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "11.0.0"
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
-      - name: Install hvac
-        run: pip install hvac
+      # - name: Cache Ansible Galaxy Collections
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ansible/collections
+      #     key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-ansible-
+      # - name: Install Ansible
+      #   uses: alex-oleshkevich/setup-ansible@v1.0.1
+      #   with:
+      #     version: "11.0.0"
+      # - name: Install Vault
+      #   uses: cpanato/vault-installer@main
+      # - name: Install hvac
+      #   run: pip install hvac
+      # - name: Gotify Notification
+      #   uses: eikendev/gotify-action@master
+      #   with:
+      #     gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+      #     gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+      #     notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
+      #     notification_message: 'Starting Ansible dry run...'
+      # - name: Ansible Playbook Dry Run
+      #   uses: arillso/action.playbook@0.1.0
+      #   with:
+      #     check: true
+      #     galaxy_collections_path: ansible/collections
+      #     galaxy_requirements_file: ansible/collections/requirements.yml
+      #     inventory: ansible/inventory/hosts.yml
+      #     playbook: ansible/docker_config_deploy.yml
+      #     private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      #     verbose: 0
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
-          notification_message: 'Starting Ansible dry run...'
-      - name: Ansible Playbook Dry Run
-        uses: arillso/action.playbook@0.1.0
-        with:
-          check: true
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/inventory/hosts.yml
-          playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 0
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
-          notification_message: 'Ansible dry run completed successfully; starting Docker Compose'
+          notification_message: 'Ansible dry run completed successfully; starting Docker Compose dry run...'
       - name: Generate .env file for Docker Compose Dry Run
         run: |
+          echo ${{ steps.detect_services. }}
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Cache .env Files
         uses: actions/cache@v4
