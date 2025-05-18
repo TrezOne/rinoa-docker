@@ -19,7 +19,6 @@
 | bitwarden | vaultwarden/server:latest |
 | bluesky-pds | code.modernleft.org/gravityfargo/bluesky-pds:v0.4.98 |
 | browserless | ghcr.io/browserless/chromium:latest |
-| bytebase | bytebase/bytebase:3.5.0 |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
 | cloudflared | cloudflare/cloudflared:latest |
@@ -33,10 +32,11 @@
 | dawarich-app | freikin/dawarich:latest |
 | dawarich-pg-db | postgis/postgis:17-3.5-alpine |
 | dawarich-sidekiq | freikin/dawarich:latest |
+| dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |
 | delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
-| docker-volume-backup | offen/docker-volume-backup:v2 |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
+| excalidraw | excalidraw/excalidraw:latest |
 | explo | ghcr.io/lumepart/explo:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
@@ -61,6 +61,8 @@
 | invidious | quay.io/invidious/invidious:latest |
 | invidious-sig-helper | quay.io/invidious/inv-sig-helper:latest |
 | invidious-db | docker.io/library/postgres:14 |
+| invoice-ninja | invoiceninja/invoiceninja-debian:5 |
+| invoice-ninja_proxy | nginx |
 | it-tools | ghcr.io/corentinth/it-tools:latest |
 | jellyfin | jellyfin/jellyfin |
 | jitsi-etherpad | etherpad/etherpad:1.8.6 |
@@ -72,6 +74,7 @@
 | jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
+| languagetool | elestio/languagetool:latest |
 | librechat-api | ghcr.io/danny-avila/librechat-dev:latest |
 | librechat-vectordb | ankane/pgvector:latest |
 | librechat-rag-api | ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest |
@@ -98,12 +101,15 @@
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
 | omni-tools | iib0011/omni-tools:latest |
+| omnipoly | kweg/omnipoly:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
 | plantuml-server | plantuml/plantuml-server:jetty |
 | portainer | portainer/portainer-ce:alpine |
-| portall | need4swede/portall:latest |
+| portnote-web | haedlessdev/portnote:latest |
+| portnote-agent | haedlessdev/portnote-agent:latest |
+| portnote-pg-db | postgres:17-alpine |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
@@ -140,6 +146,7 @@
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
 | web-check | lissy93/web-check |
+| whodb | clidey/whodb |
 | youtubedl | nbr23/youtube-dl-server:latest |
 | zammad-backup | ghcr.io/zammad/zammad:6.5.0-15 |
 | zammad-elasticsearch | bitnami/elasticsearch:8.17.4 |
