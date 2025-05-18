@@ -806,7 +806,7 @@ services:
       DOCKER_HOST: tcp://dockerproxy:2375
       GID: 1000
       BOUNCER_KEY_SWAG: ${CROWDSEC_API_KEY}
-      COLLECTIONS: crowdsecurity/nginx crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/linux crowdsecurity/iptables
+      COLLECTIONS: corvese/apache-guacamole crowdsecurity/home-assistant crowdsecurity/http-cve crowdsecurity/iptables crowdsecurity/linux crowdsecurity/mariadb crowdsecurity/nextcloud crowdsecurity/nginx crowdsecurity/whitelist-good-actors Dominic-Wagner/vaultwarden gauth-fr/immich LePresidente/adguardhome LePresidente/authelia LePresidente/gitea LePresidente/jellyfin LePresidente/ombi plague-doctor/audiobookshelf schiz0phr3ne/sonarr sdwilsh/navidrome timokoessler/mongodb timokoessler/uptime-kuma xs539/joplin-server
     image: crowdsecurity/crowdsec:latest
     networks:
       default: null
@@ -1086,6 +1086,15 @@ services:
       - dawarich_public:/var/app/public
       - dawarich_watched:/var/app/tmp/imports/watched
       - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
+  dead-man-hand:
+    container_name: dead-man-hand
+    environment:
+      DMH_CONFIG_FILE: /data/config.yaml
+    image: 'ghcr.io/bkupidura/dead-man-hand:latest'
+    ports:
+      - '8080:8080'
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/dead-man-hand/data:/data
   delugevpn:
     cap_add:
       - NET_ADMIN
@@ -1193,87 +1202,6 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
-  docker-volume-backup:
-    container_name: docker-volume-backup
-    image: offen/docker-volume-backup:v2
-    environment:
-      BACKUP_ARCHIVE: /archive
-      BACKUP_CRON_EXPRESSION: '@weekly'
-      BACKUP_COMPRESSION: zst
-      BACKUP_FILENAME: rinoa-docker-backup-%Y-%m-%dT%H-%M-%S.{{ .Extension }}
-      BACKUP_FILENAME_EXPAND: true
-      BACKUP_RETENTION_DAYS: 14
-      DOCKER_HOST: tcp://dockerproxy:2375
-      NOTIFICATION_URLS: gotify://gotify/${DV_BKUP_GOTIFY_TOKEN}
-    restart: always
-    volumes:
-      - ${DOCKER_VOLUME_STORAGE}/backups/docker_volume_bkups:/archive
-      - authelia-pg-db:/backup/authelia-pg-db:ro
-      - bitmagnet-pg-db:/backup/bitmagnet-pg-db:ro
-      - bunkerweb-storage:/backup/bunkerweb-storage:ro
-      - castopod-media:/backup/castopod-media:ro
-      - crowdsec-config:/backup/crowdsec-config:ro
-      - crowdsec-db:/backup/crowdsec-db:ro
-      - dawarich_db_data:/backup/dawarich_db_data:ro
-      - dawarich_shared:/backup/dawarich_shared:ro
-      - dawarich_public:/backup/dawarich_public:ro
-      - dawarich_watched:/backup/dawarich_watched:ro
-      - docker-volume-bkup-data:/backup/docker-volume-bkup-data:ro
-      - fastenhealth-cache:/backup/fastenhealth-cache:ro
-      - fastenhealth-db:/backup/fastenhealth-db:ro
-      - gitea-pg-db:/backup/gitea-pg-db:ro
-      - hortusfox_app_backup:/backup/hortusfox_app_backup:ro
-      - hortusfox_app_images:/backup/hortusfox_app_images:ro
-      - hortusfox_app_logs:/backup/hortusfox_app_logs:ro
-      - hortusfox_app_migrate:/backup/hortusfox_app_migrate:ro
-      - hortusfox_app_themes:/backup/hortusfox_app_themes:ro
-      - hortusfox_db_data:/backup/hortusfox_db_data:ro
-      - immich-model-cache:/backup/immich-model-cache:ro
-      - influxdb2-data:/backup/influxdb2-data:ro
-      - influxdb2-config:/backup/influxdb2-config:ro
-      - invidious-postgres:/backup/invidious-postgres:ro
-      - invoice-ninja_cache:/backup/invoice-ninja_cache:ro
-      - invoice-ninja_public:/backup/invoice-ninja_public:ro
-      - invoice-ninja_storage:/backup/invoice-ninja_storage:ro
-      - jitsi-web-admin-theme:/backup/jitsi-web-admin-theme:ro
-      - jitsi-web-admin-upload:/backup/jitsi-web-admin-upload:ro
-      - joplin_data:/backup/joplin_data:ro
-      - librechat-pg-data:/backup/librechat-pg-data:ro
-      - libretranslate_models:/backup/libretranslate_models:ro
-      - lldap_data:/backup/lldap_data:ro
-      - mastodon-pg-db:/backup/mastodon-pg-db:ro
-      - mixpost-storage:/backup/mixpost-storage:ro
-      - mixpost-logs:/backup/mixpost-logs:ro
-      - mongodb_config:/backup/mongodb_config:ro
-      - mongodb_data:/backup/mongodb_data:ro
-      - n8n-data:/backup/n8n-data:ro
-      - netbird-mgmt:/backup/netbird-mgmt:ro
-      - netbird-signal:/backup/netbird-signal:ro
-      - netbird-letsencrypt:/backup/netbird-letsencrypt:ro
-      - nextcloud_aio_mastercontainer:/backup/nextcloud_aio_mastercontainer:ro
-      - ollama:/backup/ollama:ro
-      - paperless-ngx-data:/backup/paperless-ngx-data:ro
-      - paperless-ngx-media:/backup/paperless-ngx-media:ro
-      - paperless-ngx-pg:/backup/paperless-ngx-pg:ro
-      - pgbackweb-data:/backup/pgbackweb-data:ro
-      - plausible-db-data:/backup/plausible-db-data:ro
-      - plausible-event-data:/backup/plausible-event-data:ro
-      - plausible-event-logs:/backup/plausible-event-logs:ro
-      - portainer-data:/backup/portainer-data:ro
-      - reactive-resume-pg:/backup/reactive-resume-pg:ro
-      - semaphore_config:/backup/semaphore_config:ro
-      - semaphore_data:/backup/semaphore_data:ro
-      - semaphore_tmp:/backup/semaphore_tmp:ro
-      - sonarqube-data:/backup/sonarqube-data:ro
-      - sonarqube-db:/backup/sonarqube-db:ro
-      - sonarqube-db-data:/backup/sonarqube-db-data:ro
-      - sonarqube-extensions:/backup/sonarqube-extensions:ro
-      - sonarqube-logs:/backup/sonarqube-logs:ro
-      - sonarqube-temp:/backup/sonarqube-temp:ro
-      - tandoor-pg:/backup/tandoor-pg:ro
-      - unmanic-cache:/backup/unmanic-cache:ro
-      - wallos-db:/backup/wallos-db:ro
-      - wallos-logos:/backup/wallos-logos:ro
   duplicati:
     container_name: duplicati
     environment:
@@ -3986,6 +3914,7 @@ services:
       homepage.description: Management for container ports
     ports:
       - 23186:3000
+    restart: always
   portnote-agent:
     container_name: portnote-agent
     depends_on:
@@ -3995,6 +3924,7 @@ services:
     image: haedlessdev/portnote-agent:latest
     environment:
       DATABASE_URL: "postgresql://portnote:${PORTNOTE_POSTGRES_PASSWORD}@portnote-pg-db:5432/portnote"
+    restart: always
   portnote-pg-db:
     container_name: portnote-pg-db
     image: postgres:17-alpine
@@ -5672,12 +5602,6 @@ volumes:
     name: paperless-ngx-pg
   pgbackweb-data:
     name: pgbackweb-data
-  plausible-db-data:
-    name: plausible-db-data
-  plausible-event-data:
-    name: plausible-event-data
-  plausible-event-logs:
-    name: plausible-event-logs
   portainer-data:
     name: portainer-data
   portnote-db-data:

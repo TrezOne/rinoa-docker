@@ -3,6 +3,9 @@ on:
   push:
     branches-ignore:
       - 'main'
+    paths:
+      - '**.yml'
+      - '!ansible/**.yml'
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
@@ -64,62 +67,107 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Cache Ansible Galaxy Collections
-        uses: actions/cache@v3
-        with:
-          path: ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-ansible-
-      - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "11.0.0"
+      - name: Fetch base branch
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+      - name: Save both versions of docker-compose.yml
+        run: |
+          git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
+          cp docker-compose.yml docker-compose-head.yml
+      # - name: Compare Docker Compose changes
+      #  run: |
+      #    git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
+      #    cp docker-compose.yml docker-compose-head.yml
+      - name: Detect added, deleted, and modified services
+        id: detect_services
+        run: |
+          echo "Getting services from main and ${{ github.ref_name }}"
+          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
+          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
+
+          echo "Creating list of modified services..."
+          touch service_changes.txt
+
+          comm -13 services_main.txt services_head.txt | while read service; do
+            echo "$service: added" >> service_changes.txt
+          done
+
+          comm -12 services_main.txt services_head.txt | while read service; do
+            yq ".services[\"$service\"]" docker-compose-main.yml > tmp_main.yml
+            yq ".services[\"$service\"]" docker-compose-head.yml > tmp_head.yml
+            if ! diff -q tmp_main.yml tmp_head.yml > /dev/null; then
+              echo "$service: modified" >> service_changes.txt
+            fi
+          done
+
+          echo "Detected service changes:"
+          cat service_changes.txt
+
+          svc_list=$(paste -sd '|' service_changes.txt)
+          echo "classified_services=$svc_list" >> "$GITHUB_OUTPUT"
+      # - name: Cache Ansible Galaxy Collections
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ansible/collections
+      #     key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-ansible-
+      # - name: Install Ansible
+      #   uses: alex-oleshkevich/setup-ansible@v1.0.1
+      #   with:
+      #     version: "11.0.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
-      - name: Install hvac
-        run: pip install hvac
+      # - name: Install hvac
+      #   run: pip install hvac
+      # - name: Gotify Notification
+      #   uses: eikendev/gotify-action@master
+      #   with:
+      #     gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+      #     gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+      #     notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
+      #     notification_message: 'Starting Ansible dry run...'
+      # - name: Ansible Playbook Dry Run
+      #   uses: arillso/action.playbook@0.1.0
+      #   with:
+      #     check: true
+      #     galaxy_collections_path: ansible/collections
+      #     galaxy_requirements_file: ansible/collections/requirements.yml
+      #     inventory: ansible/inventory/hosts.yml
+      #     playbook: ansible/docker_config_deploy.yml
+      #     private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      #     verbose: 0
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
-          notification_message: 'Starting Ansible dry run...'
-      - name: Ansible Playbook Dry Run
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          directory: ansible/
-          playbook: docker_config_deploy.yml
-          key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-          options: |
-            --inventory inventory/hosts.yml
-            --check
-          requirements: collections/requirements.yml
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
-          notification_message: 'Ansible dry run completed successfully; starting Docker Compose'
-      - name: Generate .env file for Docker Compose Dry Run
-        run: |
-          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
+          notification_message: 'Starting Docker Compose dry run...'
       - name: Cache .env Files
         uses: actions/cache@v4
         with:
           path: .env
           key: ${{ runner.os }}-env-${{ hashFiles('docker-compose.yml') }}
+      - name: Generate modified services list & .env file for Docker Compose Dry Run
+        id: modded_svcs
+        run: |
+          mod_svcs=$(echo "${{ steps.detect_services.outputs.classified_services }}" | sed -e 's/|//g' -e 's/: \(add\|modifi\|delet\)ed/ /g')
+          echo ${mod_svcs}
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          echo "rinoa_svcs=${mod_svcs}" >> "$GITHUB_OUTPUT"
       - name: Docker Compose Dry Run
-        uses: yu-ichiro/spin-up-docker-compose-action@v1
+        timeout-minutes: 360
+        continue-on-error: true
+        uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
-          file: docker-compose.yml
-          pull: true
-          pull-opts: --dry-run
-          up: true
-          up-opts: --dry-run -d --remove-orphans
+          docker_compose_file: docker-compose.yml
+          docker_args: -d --remove-orphans --pull missing --no-recreate ${{ steps.modded_svcs.rinoa_svcs.output }}
+          ssh_user: gitea-deploy
+          ssh_host: 192.168.1.254
+          ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
+          ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
       - name: Gotify Notification
@@ -354,7 +402,6 @@ jobs:
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Docker Compose Deployment
-        # if: ${{ steps.regenerate-readme-modified-services.outputs.modified_services != '' }}
         timeout-minutes: 360
         continue-on-error: true
         uses: keatonLiu/docker-compose-remote-action@v1.2
