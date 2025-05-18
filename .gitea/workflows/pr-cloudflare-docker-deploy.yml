@@ -92,10 +92,6 @@ jobs:
             echo "$service: added" >> service_changes.txt
           done
 
-          comm -23 services_main.txt services_head.txt | while read service; do
-            echo "$service: deleted" >> service_changes.txt
-          done
-
           comm -12 services_main.txt services_head.txt | while read service; do
             yq ".services[\"$service\"]" docker-compose-main.yml > tmp_main.yml
             yq ".services[\"$service\"]" docker-compose-head.yml > tmp_head.yml
