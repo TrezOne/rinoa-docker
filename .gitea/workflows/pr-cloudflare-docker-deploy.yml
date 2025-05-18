@@ -162,13 +162,16 @@ jobs:
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
           echo "rinoa_svcs=${mod_svcs}" >> "$GITHUB_OUTPUT"
       - name: Docker Compose Dry Run
-        uses: yu-ichiro/spin-up-docker-compose-action@v1
+        timeout-minutes: 360
+        continue-on-error: true
+        uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
-          file: docker-compose.yml
-          pull: true
-          pull-opts: --dry-run
-          up: true
-          up-opts: --dry-run -d --remove-orphans ${{ steps.modded_svcs.rinoa_svcs.output }}
+          docker_compose_file: docker-compose.yml
+          docker_args: -d --remove-orphans --pull missing --no-recreate ${{ steps.modded_svcs.rinoa_svcs.output }}
+          ssh_user: gitea-deploy
+          ssh_host: 192.168.1.254
+          ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
+          ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
       - name: Gotify Notification
@@ -403,7 +406,6 @@ jobs:
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
       - name: Docker Compose Deployment
-        # if: ${{ steps.regenerate-readme-modified-services.outputs.modified_services != '' }}
         timeout-minutes: 360
         continue-on-error: true
         uses: keatonLiu/docker-compose-remote-action@v1.2
