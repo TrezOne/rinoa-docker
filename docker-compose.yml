@@ -1279,7 +1279,7 @@ services:
   explo:
     container_name: explo
     environment:
-      CRON_SCHEDULE: 15 00 * * 2 # Runs weekly, every Tuesday 15 minutes past midnight (UTC time)
+      CRON_SCHEDULE: 0 5 * * 2
       # Music system you use (emby, jellyfin, mpd, plex or subsonic)
       EXPLO_SYSTEM: subsonic
       SYSTEM_URL: http://navidrome:4533
@@ -1287,7 +1287,7 @@ services:
       SYSTEM_PASSWORD: ${NAVIDROME_PASSWORD}
       DOWNLOAD_DIR: /downloads
       PLAYLIST_DIR: /playlists
-      LISTENBRAINZ_USER: Trez.One
+      LISTENBRAINZ_USER: "Trez.One"
       YOUTUBE_API_KEY: ${YOUTUBE_DATA_API_V3_KEY}
       # Assign a custom path to yt-dlp
       # YTDLP_PATH=
@@ -1300,9 +1300,9 @@ services:
       # 'playlist' to get tracks from Weekly Exploration playlist, anything else gets it from API (not the best recommendations). 'test' will download 1 song
       LISTENBRAINZ_DISCOVERY: playlist
       # Time to sleep (in minutes) between scanning and querying tracks from your system (If using Subsonic, Jellyfin)
-      # SLEEP=2
+      SLEEP: 5
       # Whether to provide additional info for debugging
-      # DEBUG=false
+      DEBUG: true
       SINGLE_ARTIST: true
     image: ghcr.io/lumepart/explo:latest
     restart: unless-stopped
