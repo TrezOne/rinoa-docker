@@ -1,6 +1,5 @@
 name: Auto-Unseal for Vault
 on:
-  push:
   schedule:
     - cron: "30 2 * * *"
 jobs:
