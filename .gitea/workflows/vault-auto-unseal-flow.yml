@@ -29,6 +29,7 @@ jobs:
       - name: Unseal Vault
         run: |
           echo ${VAULT_SHARDS}
+          echo "Unsealing vault..."
           for vault_shard in $(cat ${VAULT_SHARDS}); do
             vault operator unseal -address=${VAULT_ADDR} -non-interactive "${vault_shard}"
           done
