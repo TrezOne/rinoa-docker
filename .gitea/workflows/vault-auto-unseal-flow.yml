@@ -1,7 +1,10 @@
 name: Auto-Unseal for Vault
 on:
-  schedule:
-    - cron: "30 2 * * *"
+  push:
+    branches:
+      - 'main'
+  # schedule:
+  #   - cron: "30 2 * * *"
 jobs:
   auto-unseal:
     name: Unseal Vault
@@ -23,6 +26,7 @@ jobs:
         uses: cpanato/vault-installer@main
       - name: Unseal Vault
         run: |
+          cat ${VAULT_SHARDS}
           for vault_shard in $(cat ${VAULT_SHARDS}); do
             vault operator unseal -address=${VAULT_ADDR} -non-interactive "${vault_shard}"
           done
