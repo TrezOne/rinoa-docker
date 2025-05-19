@@ -1,10 +1,10 @@
-name: Gitea Branch PR, Cloudflare DNS, README generation, & Ansible/Docker Deployment
+name: Gitea Branch PR, Cloudflare DNS, README generation, & Docker Deployment
 on:
   push:
     branches-ignore:
       - 'main'
     paths:
-      - '**.yml'
+      - '**/docker-compose.yml'
       - '!ansible/**.yml'
 jobs:
   check-and-create-pr:
@@ -258,20 +258,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
-      # - name: Fetch main branch for comparison
-      #   run: |
-      #     git fetch origin main:main
-      # - name: Compare services using yq
-      #   continue-on-error: true
-      #   id: compare-services
-      #   run: |
-      #     current_services=$(yq '.services | to_entries' docker-compose.yml)
-      #     git show main:docker-compose.yml > main_compose.yml
-      #     main_services=$(yq '.services | to_entries' main_compose.yml)
-      #     modified_services_file=$(comm -13 <(echo "$main_services") <(echo "$current_services") > changes_compose.yml)
-      #     modified_services=${egrep '^  [a-z]' changes.yml | sed -e 's|^  ||g' -e 's|:||g' | sed ':a;N;$!ba;s/\n/ /g'}
-      #     echo "Modified services: $modified_services"
-      #     echo "modified_services=$modified_services" >> $GITHUB_OUTPUT
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
