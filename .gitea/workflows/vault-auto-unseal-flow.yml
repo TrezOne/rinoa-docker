@@ -28,7 +28,7 @@ jobs:
         uses: cpanato/vault-installer@main
       - name: Unseal Vault
         run: |
-          cat ${VAULT_SHARDS}
+          echo ${VAULT_SHARDS}
           for vault_shard in $(cat ${VAULT_SHARDS}); do
             vault operator unseal -address=${VAULT_ADDR} -non-interactive "${vault_shard}"
           done
