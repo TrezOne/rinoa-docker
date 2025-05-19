@@ -1,4 +1,4 @@
-name: Gitea Branch PR, Cloudflare DNS, README generation, & Ansible/Docker Deployment
+name: Gitea Branch PR, Cloudflare DNS, README generation, & Docker Deployment
 on:
   push:
     branches-ignore:
