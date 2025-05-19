@@ -6,7 +6,7 @@ on:
     paths:
       - '**/vault-auto-unseal.yml'
   # schedule:
-  #   - cron: "30 2 * * *"
+  #   - cron: "30 3 * * *"
 jobs:
   auto-unseal:
     name: Unseal Vault
