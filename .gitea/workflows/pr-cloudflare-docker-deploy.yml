@@ -74,10 +74,6 @@ jobs:
         run: |
           git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
           cp docker-compose.yml docker-compose-head.yml
-      # - name: Compare Docker Compose changes
-      #  run: |
-      #    git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
-      #    cp docker-compose.yml docker-compose-head.yml
       - name: Detect added, deleted, and modified services
         id: detect_services
         run: |
@@ -105,39 +101,8 @@ jobs:
 
           svc_list=$(paste -sd '|' service_changes.txt)
           echo "classified_services=$svc_list" >> "$GITHUB_OUTPUT"
-      # - name: Cache Ansible Galaxy Collections
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ansible/collections
-      #     key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-ansible-
-      # - name: Install Ansible
-      #   uses: alex-oleshkevich/setup-ansible@v1.0.1
-      #   with:
-      #     version: "11.0.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
-      # - name: Install hvac
-      #   run: pip install hvac
-      # - name: Gotify Notification
-      #   uses: eikendev/gotify-action@master
-      #   with:
-      #     gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-      #     gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-      #     notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
-      #     notification_message: 'Starting Ansible dry run...'
-      # - name: Ansible Playbook Dry Run
-      #   uses: arillso/action.playbook@0.1.0
-      #   with:
-      #     check: true
-      #     galaxy_collections_path: ansible/collections
-      #     galaxy_requirements_file: ansible/collections/requirements.yml
-      #     inventory: ansible/inventory/hosts.yml
-      #     playbook: ansible/docker_config_deploy.yml
-      #     private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-      #     verbose: 0
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -250,9 +215,6 @@ jobs:
     name: Update README & Generate List of Modified Services
     runs-on: ubuntu-latest
     needs: [cloudflare-dns-setup]
-    # outputs:
-    #   pr-pushed: ${{ steps.commit-readme.outputs.pushed }}
-    #   modified_services: ${{ steps.compare-services.outputs.modified_services }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -351,32 +313,6 @@ jobs:
           registry: git.trez.wtf
           username: gitea-sonarqube-bot
           password: ${{ secrets.BOT_GITEA_TOKEN }}
-      - name: Install hvac
-        run: pip install hvac
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
-          notification_message: 'Starting config deployment with Ansible.'
-      - name: Deploy Docker Configs via Ansible
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          directory: ansible/
-          playbook: docker_config_deploy.yml
-          key: ${{secrets.RINOA_ANSIBLE_PRIVATE_KEY}}
-          options: |
-            --inventory inventory/hosts.yml
-          requirements: collections/requirements.yml
-          vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
-          notification_message: 'Deployment completed successfully.'
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
