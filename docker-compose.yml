@@ -2205,6 +2205,466 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/Movies:/storage/movies
       - /etc/localtime:/etc/localtime
       - /usr/share/fonts:/usr/local/share/fonts/custom
+  jitsi-admin-app:
+    <<: *jitsi_admin_app
+    container_name: jitsi-admin-app
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      APACHE_DOCUMENT_ROOT: "public/"
+      PHP_EXTENSION_XDEBUG: "1"
+      PHP_INI_MEMORY_LIMIT: "1G"
+      PHP_EXTENSION_LDAP: 1
+      PHP_EXTENSION_INTL: 1
+      PHP_INI_UPLOAD_MAX_FILESIZE: 8M
+      PHP_INI_POST_MAX_SIZE: 8M
+      MAILER_TRANSPORT: smtp
+      OAUTH_KEYCLOAK_CLIENT_ID: jitsiadmin
+      OAUTH_KEYCLOAK_REALM: jitsiadmin
+      input_settings_allow_timezone: 1
+      allowTimeZoneSwitch: 1
+      CRON_USER_1: root
+      CRON_SCHEDULE_1: "* * * * *"
+      CRON_COMMAND_1: "php /var/www/html/bin/console cron:run"
+      ###> symfony/framework-bundle ###
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: ${JITSI_ADMIN_APP_SECRET}
+
+      ###ODC Parameters###
+      IMPRINT: </impressum>
+      DATAPRIVACY: </datenschutzhinweis>
+      HELPURL: </help>
+
+      ###Cron Parameters###
+      CRON_TOKEN: ${JITSI_ADMIN_CRON_TOKEN}
+      CRON_IPADRESS: 127.0.0.1
+
+      DATABASE_URL: mariadb://jitsiadmin:${JITSI__ADMIN_DB_PASSWORD}@mariadb:3306/jitsiadmin
+      DATABSE_SERVER: mariadb
+      MAILER_DSN: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
+
+      TRUSTED_PROXIES: 127.0.0.1,172.18.0.0/16
+
+      ###> demo ###
+      DEMO_INSTALLATION: prod
+      ###< demo ###
+
+      ###> matomo ###
+      MATOMO_ENABLE: 0
+      MATOMO_ID: 1
+      MATOMO_URL: analytics.local.com
+      ###< matomo ###
+
+
+      ###> LaF ###
+      LAF_BBB: 0
+      LAF_STARTPAGE: false
+      LAF_ONLYREGISTEREDPARTICIPENTS: 0
+      LAF_VERSION: 2.0.0-dev
+      LAF_PEXEL_API_KEY: ${JITSI_ADMIN_PEXEL_API_KEY}
+      LAF_PEXEL_REFRESH_TIME: 1200
+      LAF_EMAILTEXTLOGIN: 1
+      LAF_CREATESERVEROPENTOEVERYONE: 1
+      LAF_KEYCLOAKGROUPTOCREATESERVER: /user
+      LAF_ADMINISTRATOREMAIL: admin@localhost.de
+      LAF_NOTIFICATIONURL: ""
+      LAF_BBB_URL: ""
+      LAF_MAX_REPEAT: 56
+      LAF_REFRESHTIMEDASHBOARD: 10000
+      LAF_DARKMODEASDEFAULT: 0
+      LAF_SHOWNAME: "user.username$"
+      LAF_SHOWNAMEFRONTEND: "user.firstName$ user.lastName$"
+      LAF_ADDPARTICIPANTSNOINPUT: 0
+      LAF_ROOMSMOREOPTIONSCOLLAPSED: 1
+      LAF_LOBBY_REKNOCKTIME: 60
+      LAF_LOBBY_POPUPDURATION: 3000
+      ###< LaF ###
+
+      ###> Default Jitsi Server ###
+      DEFAULT_JITSI_SERVER_ID: 0
+      ###< Default Jitsi Server ###
+
+      ### Enterprise Settings ###
+      ENTERPRISE_NOEXTERNAL: 0
+      ALLOWTIMEZONESWITCH: 0
+      EMAILSENDERISMODERATOR: 0
+      ###<Enterprise Settings>###
+
+      ### LDAP Settings ###
+      LDAP_URL: "ldap://lldap:3890"
+      LDAP_BIND_DN: "cn=jitsi-admin,ou=people,dc=trez,dc=wtf"
+      LDAP_PASSWORD: ${JITSI_ADMIN_LDAP_BIND_PASSWORD}
+      LDAP_USER_DN: "ou=people,dc=trez,dc=wtf"
+      LDAP_USER_OBJECT_CLASSES: person,organizationalPerson,user;person,organizationalPerson,user
+      LDAP_SEARCH_SCOPE: sub;one
+      LDAP_USERNAME_ATTRIBUTE: uid
+      LDAP_ATTRIBUTE_MAPPER: '{"firstName":"givenName", "lastName":"sn", "email":"uid"};{"firstName":"givenName", "lastName":"sn", "email":"uid"}'
+      LDAP_BIND_TYPE: simple
+      LDAP_FILTER: ';'
+      LDAP_RDN_LDAP_ATTRIBUTE: uid
+      LDAP_UUID_LDAP_ATTRIBUTE: uuid
+      LDAP_SERVER_INDIVIDUALNAME: lldap
+      ###<LDAP Settings>###
+
+      ### UploadSetting
+      AWS_BUCKET_NAME: 'jitsi-admin'
+      AWS_BASE_URL: 'http://minio:9000'
+      AWS_KEY: ${JITSI_ADMIN_S3_ACCESS_KEY}
+      AWS_SECRET_KEY: ${JITSI_ADMIN_S3_SECRET_KEY}
+      ###<UploadSettings>
+    expose:
+      - 80
+    healthcheck:
+      test: [ "CMD", "curl", "-s", "-f", "-i", "http://localhost:80/health/check" ]
+      interval: 20s
+      timeout: 10s
+      start_period: 30s
+      retries: 10
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 2283
+      swag_url: jadmin.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+
+        location /ws {
+              proxy_pass http://jitsi-admin-websocket:3000;
+        }
+        location /keycloak {
+              proxy_pass http://jitsi-admin-keycloak:8080;
+        }
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://jadmin.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      homepage.group: Media Library
+      homepage.name: Jitsi Admin
+      homepage.href: https://jadmin.${MY_TLD}
+      homepage.description: Admin portal for Jitsi (web-conferencing system)
+    restart: unless-stopped
+    volumes:
+      - ja-theme_data:/var/www/html/theme
+      - ja-image_upload:/var/www/html/public/uploads/images
+      - ja-theme_assests_data:/var/www/html/public/theme
+      - ja-recording_uploads:/var/www/html/data/recording
+  jitsi-admin-keycloak:
+    command:
+      - start-dev
+      - --import-realm
+    container_name: jitsi-admin-keycloak
+    depends_on:
+      jitsi-admin-app:
+        condition: service_healthy
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KC_DB: mariadb
+      KC_DB_USERNAME: keycloak
+      KC_HTTP_RELATIVE_PATH: /keycloak
+      KC_PROXY: edge
+      KC_HOSTNAME: https://jadmin.${MY_TLD}/keycloak
+      ###> symfony/framework-bundle ###
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: ${JITSI_ADMIN_APP_SECRET}
+
+      ###ODC Parameters###
+      IMPRINT: </impressum>
+      DATAPRIVACY: </datenschutzhinweis>
+      HELPURL: </help>
+
+      ###Cron Parameters###
+      CRON_TOKEN: ${JITSI_ADMIN_CRON_TOKEN}
+      CRON_IPADRESS: 127.0.0.1
+
+      DATABASE_URL: mariadb://jitsiadmin:${JITSI__ADMIN_DB_PASSWORD}@mariadb:3306/jitsiadmin
+      DATABSE_SERVER: mariadb
+      MAILER_DSN: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
+
+      TRUSTED_PROXIES: 127.0.0.1,172.18.0.0/16
+
+      ###> demo ###
+      DEMO_INSTALLATION: prod
+      ###< demo ###
+
+      ###> matomo ###
+      MATOMO_ENABLE: 0
+      MATOMO_ID: 1
+      MATOMO_URL: analytics.local.com
+      ###< matomo ###
+
+
+      ###> LaF ###
+      LAF_BBB: 0
+      LAF_STARTPAGE: false
+      LAF_ONLYREGISTEREDPARTICIPENTS: 0
+      LAF_VERSION: 2.0.0-dev
+      LAF_PEXEL_API_KEY: ${JITSI_ADMIN_PEXEL_API_KEY}
+      LAF_PEXEL_REFRESH_TIME: 1200
+      LAF_EMAILTEXTLOGIN: 1
+      LAF_CREATESERVEROPENTOEVERYONE: 1
+      LAF_KEYCLOAKGROUPTOCREATESERVER: /user
+      LAF_ADMINISTRATOREMAIL: admin@localhost.de
+      LAF_NOTIFICATIONURL: ""
+      LAF_BBB_URL: ""
+      LAF_MAX_REPEAT: 56
+      LAF_REFRESHTIMEDASHBOARD: 10000
+      LAF_DARKMODEASDEFAULT: 0
+      LAF_SHOWNAME: "user.username$"
+      LAF_SHOWNAMEFRONTEND: "user.firstName$ user.lastName$"
+      LAF_ADDPARTICIPANTSNOINPUT: 0
+      LAF_ROOMSMOREOPTIONSCOLLAPSED: 1
+      LAF_LOBBY_REKNOCKTIME: 60
+      LAF_LOBBY_POPUPDURATION: 3000
+      ###< LaF ###
+
+      ###> Default Jitsi Server ###
+      DEFAULT_JITSI_SERVER_ID: 0
+      ###< Default Jitsi Server ###
+
+      ### Enterprise Settings ###
+      ENTERPRISE_NOEXTERNAL: 0
+      ALLOWTIMEZONESWITCH: 0
+      EMAILSENDERISMODERATOR: 0
+      ###<Enterprise Settings>###
+
+      ### LDAP Settings ###
+      LDAP_URL: "ldap://lldap:3890"
+      LDAP_BIND_DN: "cn=jitsi-admin,ou=people,dc=trez,dc=wtf"
+      LDAP_PASSWORD: ${JITSI_ADMIN_LDAP_BIND_PASSWORD}
+      LDAP_USER_DN: "ou=people,dc=trez,dc=wtf"
+      LDAP_USER_OBJECT_CLASSES: person,organizationalPerson,user;person,organizationalPerson,user
+      LDAP_SEARCH_SCOPE: sub;one
+      LDAP_USERNAME_ATTRIBUTE: uid
+      LDAP_ATTRIBUTE_MAPPER: '{"firstName":"givenName", "lastName":"sn", "email":"uid"};{"firstName":"givenName", "lastName":"sn", "email":"uid"}'
+      LDAP_BIND_TYPE: simple
+      LDAP_FILTER: ';'
+      LDAP_RDN_LDAP_ATTRIBUTE: uid
+      LDAP_UUID_LDAP_ATTRIBUTE: uuid
+      LDAP_SERVER_INDIVIDUALNAME: lldap
+      ###<LDAP Settings>###
+
+      ### UploadSetting
+      AWS_BUCKET_NAME: 'jitsi-admin'
+      AWS_BASE_URL: 'http://minio:9000'
+      AWS_KEY: ${JITSI_ADMIN_S3_ACCESS_KEY}
+      AWS_SECRET_KEY: ${JITSI_ADMIN_S3_SECRET_KEY}
+      ###<UploadSettings>
+    expose:
+      - 8080
+    image: quay.io/keycloak/keycloak:26.1.0
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/jitsi/admin/keycloak:/opt/keycloak/data/import
+  jitsi-admin-queue:
+    <<: *jitsi_admin_app
+    command: php /var/www/html/bin/console messenger:consume async --memory-limit=126m
+    hostname: app-queu
+    restart: unless-stopped
+    deploy:
+      mode: replicated
+      replicas: 2
+    environment:
+      ###> symfony/framework-bundle ###
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: ${JITSI_ADMIN_APP_SECRET}
+
+      ###ODC Parameters###
+      IMPRINT: </impressum>
+      DATAPRIVACY: </datenschutzhinweis>
+      HELPURL: </help>
+
+      ###Cron Parameters###
+      CRON_TOKEN: ${JITSI_ADMIN_CRON_TOKEN}
+      CRON_IPADRESS: 127.0.0.1
+
+      DATABASE_URL: mariadb://jitsiadmin:${JITSI__ADMIN_DB_PASSWORD}@mariadb:3306/jitsiadmin
+      DATABSE_SERVER: mariadb
+      MAILER_DSN: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
+
+      TRUSTED_PROXIES: 127.0.0.1,172.18.0.0/16
+
+      ###> demo ###
+      DEMO_INSTALLATION: prod
+      ###< demo ###
+
+      ###> matomo ###
+      MATOMO_ENABLE: 0
+      MATOMO_ID: 1
+      MATOMO_URL: analytics.local.com
+      ###< matomo ###
+
+
+      ###> LaF ###
+      LAF_BBB: 0
+      LAF_STARTPAGE: false
+      LAF_ONLYREGISTEREDPARTICIPENTS: 0
+      LAF_VERSION: 2.0.0-dev
+      LAF_PEXEL_API_KEY: ${JITSI_ADMIN_PEXEL_API_KEY}
+      LAF_PEXEL_REFRESH_TIME: 1200
+      LAF_EMAILTEXTLOGIN: 1
+      LAF_CREATESERVEROPENTOEVERYONE: 1
+      LAF_KEYCLOAKGROUPTOCREATESERVER: /user
+      LAF_ADMINISTRATOREMAIL: admin@localhost.de
+      LAF_NOTIFICATIONURL: ""
+      LAF_BBB_URL: ""
+      LAF_MAX_REPEAT: 56
+      LAF_REFRESHTIMEDASHBOARD: 10000
+      LAF_DARKMODEASDEFAULT: 0
+      LAF_SHOWNAME: "user.username$"
+      LAF_SHOWNAMEFRONTEND: "user.firstName$ user.lastName$"
+      LAF_ADDPARTICIPANTSNOINPUT: 0
+      LAF_ROOMSMOREOPTIONSCOLLAPSED: 1
+      LAF_LOBBY_REKNOCKTIME: 60
+      LAF_LOBBY_POPUPDURATION: 3000
+      ###< LaF ###
+
+      ###> Default Jitsi Server ###
+      DEFAULT_JITSI_SERVER_ID: 0
+      ###< Default Jitsi Server ###
+
+      ### Enterprise Settings ###
+      ENTERPRISE_NOEXTERNAL: 0
+      ALLOWTIMEZONESWITCH: 0
+      EMAILSENDERISMODERATOR: 0
+      ###<Enterprise Settings>###
+
+      ### LDAP Settings ###
+      LDAP_URL: "ldap://lldap:3890"
+      LDAP_BIND_DN: "cn=jitsi-admin,ou=people,dc=trez,dc=wtf"
+      LDAP_PASSWORD: ${JITSI_ADMIN_LDAP_BIND_PASSWORD}
+      LDAP_USER_DN: "ou=people,dc=trez,dc=wtf"
+      LDAP_USER_OBJECT_CLASSES: person,organizationalPerson,user;person,organizationalPerson,user
+      LDAP_SEARCH_SCOPE: sub;one
+      LDAP_USERNAME_ATTRIBUTE: uid
+      LDAP_ATTRIBUTE_MAPPER: '{"firstName":"givenName", "lastName":"sn", "email":"uid"};{"firstName":"givenName", "lastName":"sn", "email":"uid"}'
+      LDAP_BIND_TYPE: simple
+      LDAP_FILTER: ';'
+      LDAP_RDN_LDAP_ATTRIBUTE: uid
+      LDAP_UUID_LDAP_ATTRIBUTE: uuid
+      LDAP_SERVER_INDIVIDUALNAME: lldap
+      ###<LDAP Settings>###
+
+      ### UploadSetting
+      AWS_BUCKET_NAME: 'jitsi-admin'
+      AWS_BASE_URL: 'http://minio:9000'
+      AWS_KEY: ${JITSI_ADMIN_S3_ACCESS_KEY}
+      AWS_SECRET_KEY: ${JITSI_ADMIN_S3_SECRET_KEY}
+      ###<UploadSettings>
+    depends_on:
+      app-ja:
+        condition: service_healthy
+    volumes:
+      - ja-theme_data:/var/www/html/theme
+  jitsi-admin-websocket:
+    container_name: jitsi-admin-websocket
+    depends_on:
+      - swag
+    environment:
+      ###> symfony/framework-bundle ###
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: ${JITSI_ADMIN_APP_SECRET}
+
+      ###ODC Parameters###
+      IMPRINT: </impressum>
+      DATAPRIVACY: </datenschutzhinweis>
+      HELPURL: </help>
+
+      ###Cron Parameters###
+      CRON_TOKEN: ${JITSI_ADMIN_CRON_TOKEN}
+      CRON_IPADRESS: 127.0.0.1
+
+      DATABASE_URL: mariadb://jitsiadmin:${JITSI__ADMIN_DB_PASSWORD}@mariadb:3306/jitsiadmin
+      DATABSE_SERVER: mariadb
+      MAILER_DSN: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
+
+      TRUSTED_PROXIES: 127.0.0.1,172.18.0.0/16
+
+      ###> demo ###
+      DEMO_INSTALLATION: prod
+      ###< demo ###
+
+      ###> matomo ###
+      MATOMO_ENABLE: 0
+      MATOMO_ID: 1
+      MATOMO_URL: analytics.local.com
+      ###< matomo ###
+
+
+      ###> LaF ###
+      LAF_BBB: 0
+      LAF_STARTPAGE: false
+      LAF_ONLYREGISTEREDPARTICIPENTS: 0
+      LAF_VERSION: 2.0.0-dev
+      LAF_PEXEL_API_KEY: ${JITSI_ADMIN_PEXEL_API_KEY}
+      LAF_PEXEL_REFRESH_TIME: 1200
+      LAF_EMAILTEXTLOGIN: 1
+      LAF_CREATESERVEROPENTOEVERYONE: 1
+      LAF_KEYCLOAKGROUPTOCREATESERVER: /user
+      LAF_ADMINISTRATOREMAIL: admin@localhost.de
+      LAF_NOTIFICATIONURL: ""
+      LAF_BBB_URL: ""
+      LAF_MAX_REPEAT: 56
+      LAF_REFRESHTIMEDASHBOARD: 10000
+      LAF_DARKMODEASDEFAULT: 0
+      LAF_SHOWNAME: "user.username$"
+      LAF_SHOWNAMEFRONTEND: "user.firstName$ user.lastName$"
+      LAF_ADDPARTICIPANTSNOINPUT: 0
+      LAF_ROOMSMOREOPTIONSCOLLAPSED: 1
+      LAF_LOBBY_REKNOCKTIME: 60
+      LAF_LOBBY_POPUPDURATION: 3000
+      ###< LaF ###
+
+      ###> Default Jitsi Server ###
+      DEFAULT_JITSI_SERVER_ID: 0
+      ###< Default Jitsi Server ###
+
+      ### Enterprise Settings ###
+      ENTERPRISE_NOEXTERNAL: 0
+      ALLOWTIMEZONESWITCH: 0
+      EMAILSENDERISMODERATOR: 0
+      ###<Enterprise Settings>###
+
+      ### LDAP Settings ###
+      LDAP_URL: "ldap://lldap:3890"
+      LDAP_BIND_DN: "cn=jitsi-admin,ou=people,dc=trez,dc=wtf"
+      LDAP_PASSWORD: ${JITSI_ADMIN_LDAP_BIND_PASSWORD}
+      LDAP_USER_DN: "ou=people,dc=trez,dc=wtf"
+      LDAP_USER_OBJECT_CLASSES: person,organizationalPerson,user;person,organizationalPerson,user
+      LDAP_SEARCH_SCOPE: sub;one
+      LDAP_USERNAME_ATTRIBUTE: uid
+      LDAP_ATTRIBUTE_MAPPER: '{"firstName":"givenName", "lastName":"sn", "email":"uid"};{"firstName":"givenName", "lastName":"sn", "email":"uid"}'
+      LDAP_BIND_TYPE: simple
+      LDAP_FILTER: ';'
+      LDAP_RDN_LDAP_ATTRIBUTE: uid
+      LDAP_UUID_LDAP_ATTRIBUTE: uuid
+      LDAP_SERVER_INDIVIDUALNAME: lldap
+      ###<LDAP Settings>###
+
+      ### UploadSetting
+      AWS_BUCKET_NAME: 'jitsi-admin'
+      AWS_BASE_URL: 'http://minio:9000'
+      AWS_KEY: ${JITSI_ADMIN_S3_ACCESS_KEY}
+      AWS_SECRET_KEY: ${JITSI_ADMIN_S3_SECRET_KEY}
+      ###<UploadSettings>
+    expose:
+      - 3000
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/healthz"]
+      interval: 10s
+      retries: 5
+      timeout: 10s
+      start_period: 10s
+    hostname: websocket-ja
+    image: h2invent/jitsi-admin-websocket:latest
+    restart: unless-stopped
+    volumes:
+      - ja-caddy_data:/data
+      - ja-caddy_config:/config
   jitsi-etherpad:
     container_name: jitsi-etherpad
     environment:
@@ -5558,10 +6018,18 @@ volumes:
     name: invoice-ninja_public
   invoice-ninja_storage:
     name: invoice-ninja_storage
-  jitsi-web-admin-theme:
-    name: jitsi-web-admin-theme
-  jitsi-web-admin-upload:
-    name: jitsi-web-admin-upload
+  ja-caddy_config:
+    name: ja-caddy_config
+  ja-caddy_data:
+    name: ja-caddy_data
+  ja-image_upload:
+    name: ja-image_upload
+  ja-recording_uploads:
+    name: ja-recording_uploads
+  ja-theme_assests_data:
+    name: ja-theme_assests_data
+  ja-theme_data:
+    name: ja-theme_data
   joplin_data:
     name: joplin_data
   linkstack_data:
