@@ -57,7 +57,7 @@ jobs:
           notification_title: 'GITEA: PR Check'
           notification_message: 'PR Created 🎟️'
   ansible-linting:
-    name: Docker Compose & Ansible Lints
+    name: Ansible Linting
     needs: [check-and-create-pr]
     runs-on: ubuntu-latest
     env:
@@ -112,7 +112,7 @@ jobs:
           notification_message: 'Docker Compose dry run completed successfully.'
   pr-merge:
     name: PR Merge
-    needs: [regenerate-readme-modified-services]
+    needs: [ansible-linting]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -139,8 +139,8 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: PR Merge Successful'
           notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
-  ansible-config-docker-compose-deploy:
-    name: Ansible Configs & Docker Compose Deployment
+  ansible-config-deploy:
+    name: Ansible Playbook Run
     runs-on: ubuntu-latest
     needs: [pr-merge]
     env:
