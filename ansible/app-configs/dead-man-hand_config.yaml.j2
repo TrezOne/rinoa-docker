@@ -1,0 +1,33 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+components:
+  - vault
+  - dmh
+vault:
+  # key used to encrypt vault data at-rest - `age-keygen` to generate new private key
+  key: 
+  file: /data/vault.json # where to save vault data
+state:
+  file: /data/state.json # where to save dmh data
+# address to vault
+remote_vault:
+  client_uuid: random-uuid-dont-copy # generate new, random, UUID
+  url: http://127.0.0.1:8080
+# how to treat `Action.ProcessAfter`, `Action.MinInterval`, `Secret.ProcessAfter` - supported values 'minute', 'hour'
+action:
+  process_unit: hour
+# configuration for all execute plugins
+execute:
+  plugin:
+    bulksms:
+      routing_group: premium
+      token:
+        id: "auth-token-id"
+        secret: "auth-token-secret"
+    mail:
+      username: "username"
+      password: "password"
+      server: smtp.server.com
+      from: dmh@some-domain.com
+      tls_policy: tls_mandatory
