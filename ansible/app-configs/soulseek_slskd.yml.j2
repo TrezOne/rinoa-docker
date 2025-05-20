@@ -198,15 +198,15 @@ rooms:
 web:
   authentication:
     username: slskd
-    password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_WEB_PASSSWORD'] }}
+    password: {{ vault_secrets['SLSKD_WEB_PASSSWORD'] }}
     api_keys:
       my_api_key:
-        key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_API_KEY'] }}
+        key: {{ vault_secrets['SLSKD_API_KEY'] }}
         role: readwrite
         cidr: 0.0.0.0/0,::/0
 soulseek:
   address: vps.slsknet.org
   port: 2271
   username: Trez.One
-  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSK_USER_PASSWORD'] }}
+  password: {{ vault_secrets['SLSK_USER_PASSWORD'] }}
   diagnostic_level: Info

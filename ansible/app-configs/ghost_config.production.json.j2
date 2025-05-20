@@ -9,7 +9,7 @@
       "host"     : "mariadb",
       "port"     : 3306,
       "user"     : "ghost",
-      "password" : "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GHOST_DB_PASSWORD'] }}",
+      "password" : "{{ vault_secrets['GHOST_DB_PASSWORD'] }}",
       "database" : "ghost_db"
     }
   },
@@ -21,8 +21,8 @@
       "port": 25,
       "secure": false,
       "auth": {
-        "user": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}",
-        "pass": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}"
+        "user": "{{ vault_secrets['POSTAL_SMTP_AUTH_USER'] }}",
+        "pass": "{{ vault_secrets['POSTAL_SMTP_AUTH_PASSWORD'] }}"
       }
     }
   },

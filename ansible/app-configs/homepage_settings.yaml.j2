@@ -6,7 +6,7 @@
 # https://gethomepage.dev/en/configs/settings
 
 providers:
-  openweathermap: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['HOMEPAGE_OPENWEATHERMAP_API_KEY'] }}
+  openweathermap: {{ vault_secrets['HOMEPAGE_OPENWEATHERMAP_API_KEY'] }}
   # weatherapi: weatherapiapikey
 title: Rinoa Dashboard (trez.WTF)
 headerStyle: underlined

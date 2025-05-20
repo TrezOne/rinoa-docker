@@ -3,9 +3,9 @@
 
 {
     "radarr_address": "http://radarr:7878",
-    "radarr_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['RADARR_API_KEY'] }}",
+    "radarr_api_key": "{{ vault_secrets['RADARR_API_KEY'] }}",
     "root_folder_path": "/data/media/movies",
-    "tmdb_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['TMDB_API_KEY'] }}",
+    "tmdb_api_key": "{{ vault_secrets['TMDB_API_KEY'] }}",
     "fallback_to_top_result": false,
     "radarr_api_timeout": 120.0,
     "quality_profile_id": 1,

@@ -7,7 +7,7 @@
   <SslPort>6868</SslPort>
   <EnableSsl>False</EnableSsl>
   <LaunchBrowser>True</LaunchBrowser>
-  <ApiKey>{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['READARR_API_KEY'] }}</ApiKey>
+  <ApiKey>{{ vault_secrets['READARR_API_KEY'] }}</ApiKey>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <Branch>develop</Branch>
   <LogLevel>info</LogLevel>

@@ -2,5 +2,5 @@
 {% set secrets_path = 'rinoa-docker/env' %}
 
 urls:
-  - gotify://gotify/{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['APPRISE_GOTIFY_TOKEN'] }}
-  - mailtos://{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}:{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}@trez.wtf25?smtp=postal-smtp&from=noreply@trez.wtf
+  - gotify://gotify/{{ vault_secrets['APPRISE_GOTIFY_TOKEN'] }}
+  - mailtos://{{ vault_secrets['POSTAL_SMTP_AUTH_USER'] }}:{{ vault_secrets['POSTAL_SMTP_AUTH_PASSWORD'] }}@trez.wtf25?smtp=postal-smtp&from=noreply@trez.wtf
