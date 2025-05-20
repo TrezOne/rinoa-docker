@@ -5,18 +5,18 @@
     appdata_base_path: "~/.docker/config/appdata"
 
   tasks:
-    - name: Fetch Vault secrets once
-      ansible.builtin.set_fact:
-        vault_secrets: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env',
-          engine_mount_point='rinoa-docker', url=vault_addr,
-          token=vault_token_cleaned)['secret'] }}"
-
     - name: Ensure target directories exist
       ansible.builtin.file:
         path: "{{ appdata_base_path }}/{{ (item | basename | regex_replace('\\.j2$', '') | regex_replace('_', '/') | regex_replace('/[^/]+$', '')) }}"
         state: directory
         mode: '0755'
       loop: "{{ query('fileglob', 'app-configs/*.j2') }}"
+
+    - name: Fetch Vault secrets once
+      ansible.builtin.set_fact:
+        vault_secrets: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env',
+          engine_mount_point='rinoa-docker', url=vault_addr,
+          token=vault_token_cleaned)['secret'] }}"
 
     - name: Deploy configuration templates
       ansible.builtin.template:
