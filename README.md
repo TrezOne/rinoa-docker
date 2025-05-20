@@ -33,7 +33,6 @@
 | dawarich-pg-db | postgis/postgis:17-3.5-alpine |
 | dawarich-sidekiq | freikin/dawarich:latest |
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |
-| delugevpn | ghcr.io/binhex/arch-delugevpn:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
 | excalidraw | excalidraw/excalidraw:latest |
@@ -114,6 +113,7 @@
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
 | prowlarr | lscr.io/linuxserver/prowlarr:latest |
+| qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:latest |
 | radarec | thewicklowwolf/radarec:latest |
 | radarr | lscr.io/linuxserver/radarr:latest |
 | reactive-resume | amruthpillai/reactive-resume:latest |
