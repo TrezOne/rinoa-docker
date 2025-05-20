@@ -1088,13 +1088,29 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
   dead-man-hand:
     container_name: dead-man-hand
+    image: ghcr.io/bkupidura/dead-man-hand:latest
     environment:
       DMH_CONFIG_FILE: /data/config.yaml
-    image: 'ghcr.io/bkupidura/dead-man-hand:latest'
+    labels:
+      # homepage.group: Personal/Professional Services
+      # homepage.name: Dawarich
+      # homepage.href: https://loc.${MY_TLD}
+      # homepage.icon: dawarich.svg
+      # homepage.description: Self-hosted alternative to Google Location History
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: dms.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://dms.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
-      - '8080:8080'
+      - 25807:8080
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/dead-man-hand/data:/data
+      - ${DOCKER_VOLUME_CONFIG}/dead-man-hand:/data
   delugevpn:
     cap_add:
       - NET_ADMIN
@@ -1279,7 +1295,7 @@ services:
   explo:
     container_name: explo
     environment:
-      CRON_SCHEDULE: 0 5 * * 2
+      CRON_SCHEDULE: 0 8 * * 2 # Runs weekly, every Tuesday 15 minutes past midnight (UTC time)
       # Music system you use (emby, jellyfin, mpd, plex or subsonic)
       EXPLO_SYSTEM: subsonic
       SYSTEM_URL: http://navidrome:4533
@@ -1287,7 +1303,7 @@ services:
       SYSTEM_PASSWORD: ${NAVIDROME_PASSWORD}
       DOWNLOAD_DIR: /downloads
       PLAYLIST_DIR: /playlists
-      LISTENBRAINZ_USER: "Trez.One"
+      LISTENBRAINZ_USER: Trez.One
       YOUTUBE_API_KEY: ${YOUTUBE_DATA_API_V3_KEY}
       # Assign a custom path to yt-dlp
       # YTDLP_PATH=
