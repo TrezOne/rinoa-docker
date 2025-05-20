@@ -1111,76 +1111,6 @@ services:
       - 25807:8080
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/dead-man-hand:/data
-  delugevpn:
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    container_name: delugevpn
-    environment:
-      ENABLE_PRIVOXY: "no"
-      LAN_NETWORK: 192.168.1.0/24
-      NAME_SERVERS: 192.168.1.254,1.1.1.1
-      PGID: "1000"
-      PUID: "1000"
-      TZ: America/New_York
-      VPN_CLIENT: openvpn
-      VPN_ENABLED: "yes"
-      VPN_INPUT_PORTS: ""
-      VPN_OPTIONS: ""
-      VPN_OUTPUT_PORTS: ""
-      VPN_PASS: ${DELUGEVPN_ENVIRONMENT_VPN_PASS}
-      VPN_PROV: pia
-      VPN_USER: ${DELUGEVPN_ENVIRONMENT_VPN_USER}
-    hostname: Rinoa
-    image: ghcr.io/binhex/arch-delugevpn:latest
-    labels:
-      homepage.group: Downloaders
-      homepage.name: DelugeVPN
-      homepage.href: https://deluge.${MY_TLD}
-      homepage.icon: deluge.png
-      homepage.description: Torrent over VPN
-      homepage.widget.type: deluge
-      homepage.widget.url: http://delugevpn:8112
-      homepage.widget.password: ${DELUGEVPN_PASSWORD}
-      swag: enable
-      swag_port: 8112
-      swag_proto: http
-      swag_url: deluge.${MY_TLD}
-      swag_server_custom_directive: |
-        access_log /config/log/$$host_access.log ;
-        error_log /config/log/$$host_error.log ;
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://deluge.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-    networks:
-      default: null
-    ports:
-      - 58846:58846
-      - 58946:58946
-      - 6881:6881
-      - 8112:8112
-      - 8118:8118
-    privileged: true
-    restart: unless-stopped
-    sysctls:
-      net.ipv4.conf.all.src_valid_mark: "1"
-    volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/delugevpn
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
   docker-socket-proxy:
     container_name: dockerproxy
     environment:
@@ -4064,6 +3994,62 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  qbittorrentvpn:
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    container_name: qbittorrentvpn
+    environment:
+      ENABLE_PRIVOXY: yes
+      ENABLE_SOCKS: yes
+      LAN_NETWORK: 192.168.1.0/24
+      NAME_SERVERS: 192.168.1.254,1.1.1.1
+      PGID: ${PGID}
+      PUID: ${puid}
+      SOCKS_USER: admin
+      SOCKS_PASS: socks
+      TZ: ${TZ}
+      VPN_CLIENT: openvpn
+      VPN_ENABLED: "yes"
+      VPN_INPUT_PORTS: ""
+      VPN_OPTIONS: ""
+      VPN_OUTPUT_PORTS: ""
+      VPN_PASS: ${DELUGEVPN_ENVIRONMENT_VPN_PASS}
+      VPN_PROV: pia
+      VPN_USER: ${DELUGEVPN_ENVIRONMENT_VPN_USER}
+      WEBUI_PORT: 8080
+    image: ghcr.io/binhex/arch-qbittorrentvpn:latest
+    labels:
+      homepage.group: Downloaders
+      homepage.name: qBittorrent
+      homepage.href: https://qbit.${MY_TLD}
+      homepage.icon: qBittorrent.svg
+      homepage.description: qbittorrentvpn over VPN
+      homepage.widget.type: qbittorrent
+      homepage.widget.url: http://qbittorrentvpn:8080
+      homepage.widget.user: admin
+      homepage.widget.password: ${DELUGEVPN_PASSWORD}
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: qbit.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://qbit.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 58846:58846
+      - 58946:58946/udp
+      - 8118:8118
+      - 9118:9118
+      - 38927:8080
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/qbittorrent:/config
+      - /rinoa-storage:/data
   radarec:
     container_name: radarec
     environment:
