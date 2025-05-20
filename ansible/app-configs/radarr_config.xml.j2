@@ -8,7 +8,7 @@
   <SslCertPath></SslCertPath>
   <Port>7878</Port>
   <UrlBase></UrlBase>
-  <ApiKey>{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['RADARR_API_KEY'] }}</ApiKey>
+  <ApiKey>{{ vault_secrets['RADARR_API_KEY'] }}</ApiKey>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <UpdateMechanism>Docker</UpdateMechanism>
   <SslPort>9898</SslPort>

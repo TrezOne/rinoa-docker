@@ -21,7 +21,7 @@
       auth:
         strategy: basic
         user: admin
-        password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['PARSEABLE_PASSWORD'] }}
+        password: {{ vault_secrets['PARSEABLE_PASSWORD'] }}
       request:
         headers:
           X-P-Stream: rinoa-docker-logs

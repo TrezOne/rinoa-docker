@@ -64,11 +64,11 @@ authentication_backend:
       mail: mail
       display_name: displayName
     user: uid=authelia,ou=people,dc=trez,dc=wtf
-    password: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_AUTH_BIND_LDAP_PASSWORD'] }}'
+    password: '{{ vault_secrets['AUTHELIA_AUTH_BIND_LDAP_PASSWORD'] }}'
   refresh_interval: 5m
 identity_validation:
   reset_password:
-    jwt_secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_JWT_SECRET'] }}'
+    jwt_secret: '{{ vault_secrets['AUTHELIA_JWT_SECRET'] }}'
 password_policy:
   standard:
     enabled: true
@@ -104,7 +104,7 @@ access_control:
       - ['user:the.trezured.one']
 session:
   name: authelia_session
-  secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_SESSION_SECRET'] }}'
+  secret: '{{ vault_secrets['AUTHELIA_SESSION_SECRET'] }}'
   expiration: 1h
   inactivity: 5m
   remember_me: 1M
@@ -115,12 +115,12 @@ session:
     host: redis
     port: 6379
 storage:
-  encryption_key: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_STORAGE_ENCRYPTION_KEY'] }}'
+  encryption_key: '{{ vault_secrets['AUTHELIA_STORAGE_ENCRYPTION_KEY'] }}'
   postgres:
     address: 'tcp://authelia-pg:5432'
     database: authelia
     username: authelia
-    password: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_STORAGE_POSTGRES_PASSWORD'] }}'
+    password: '{{ vault_secrets['AUTHELIA_STORAGE_POSTGRES_PASSWORD'] }}'
     timeout: '5s'
 regulation:
   max_retries: 3
@@ -131,8 +131,8 @@ notifier:
   smtp:
     address: 'smtp://postal-smtp:25'
     timeout: '5s'
-    username: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}'
-    password: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}'
+    username: '{{ vault_secrets['POSTAL_SMTP_AUTH_USER'] }}'
+    password: '{{ vault_secrets['POSTAL_SMTP_AUTH_PASSWORD'] }}'
     sender: "Authelia <noreply@trez.wtf>"
     identifier: 'localhost'
     subject: "[Authelia] {title}"
@@ -142,10 +142,10 @@ notifier:
     disable_html_emails: false
 identity_providers:
   oidc:
-    hmac_secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_OIDC_HMAC_SECRET'] }}'
+    hmac_secret: '{{ vault_secrets['AUTHELIA_OIDC_HMAC_SECRET'] }}'
     jwks:
       - key: |
-          {{ lookup("community.hashi_vault.vault_kv2_get", "env", engine_mount_point="rinoa-docker", url=vault_addr, token=vault_token_cleaned)["secret"]["AUTHELIA_OIDC_JWKS_KEY"] | replace("\\n", "\n") | indent(10) }}
+          {{ vault_secrets["AUTHELIA_OIDC_JWKS_KEY"] | replace("\\n", "\n") | indent(10) }}
     cors:
       allowed_origins_from_client_redirect_uris: true
       endpoints:
@@ -157,7 +157,7 @@ identity_providers:
     clients:
       - client_id: 'netbird'
         client_name: 'NetBird'
-        client_secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_NETBIRD_CLIENT_SECRET'] }}'
+        client_secret: '{{ vault_secrets['AUTHELIA_NETBIRD_CLIENT_SECRET'] }}'
         public: false
         authorization_policy: 'two_factor'
         redirect_uris:
