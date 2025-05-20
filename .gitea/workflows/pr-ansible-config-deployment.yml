@@ -140,7 +140,7 @@ jobs:
           notification_title: 'GITEA: PR Merge Successful'
           notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
   ansible-config-deploy:
-    name: Ansible Playbook Run
+    name: Ansible Playbook Run (Service Configs)
     runs-on: ubuntu-latest
     needs: [pr-merge]
     env:
