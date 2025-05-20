@@ -4005,7 +4005,7 @@ services:
       LAN_NETWORK: 192.168.1.0/24
       NAME_SERVERS: 192.168.1.254,1.1.1.1
       PGID: ${PGID}
-      PUID: ${puid}
+      PUID: ${PUID}
       SOCKS_USER: admin
       SOCKS_PASS: socks
       TZ: ${TZ}
