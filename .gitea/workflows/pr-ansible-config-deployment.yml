@@ -6,6 +6,7 @@ on:
     paths:
       - '**.j2'
       - 'ansible/**.yml'
+
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
@@ -70,13 +71,13 @@ jobs:
       - name: Fetch base branch
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
-      - name: Cache Ansible Galaxy Collections
-        uses: actions/cache@v3
-        with:
-          path: ansible/collections
-          key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-ansible-
+      # - name: Cache Ansible Galaxy Collections
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ansible/collections
+      #     key: ${{ runner.os }}-ansible-${{ hashFiles('./ansible/collections/requirements.yml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-ansible-
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
