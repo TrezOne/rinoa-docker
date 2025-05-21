@@ -4494,6 +4494,7 @@ services:
       OLLAMA_URL: http://ollama:11434
       OLLAMA_MODEL: phi3
       MONGODB_URI: mongodb://scraperr:${SCRAPERR_MONGODB_PASSWORD}@mongodb:27017/scraperr?replicaSet=rinoa
+      REGISTRATION_ENABLED: true
       SECRET_KEY: ${SCRAPERR_SECRET_KEY}
       ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_MINUTES: 600
