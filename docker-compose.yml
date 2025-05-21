@@ -3851,12 +3851,12 @@ services:
         access_log /config/log/$$host_access.log ;
         error_log /config/log/$$host_error.log ;
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://portall.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://ports.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
       homepage.name: PortNote
-      homepage.href: https://portall.${MY_TLD}
-      homepage.icon: /icons/portnote.png
+      homepage.href: https://ports.${MY_TLD}
+      homepage.icon: port-note.png
       homepage.description: Management for container ports
     ports:
       - 23186:3000
