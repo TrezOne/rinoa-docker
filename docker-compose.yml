@@ -5341,9 +5341,93 @@ services:
     container_name: whodb
     image: clidey/whodb
     environment:
-      WHODB_POSTGRES_1: '[{"host":"authelia-pg","user":"authelia","password":"${AUTHELIA_STORAGE_POSTGRES_PASSWORD}","database":"authelia"},{"host":"bitmagnet-pg-db","user":"bitmagnet","password":"${BITMAGNET_POSTGRESQL_PASSWORD}","database":"bitmagnet"},{"host":"dawarich-pg-db","user":"dawarich","password":"${DAWARICH_PG_PASSWORD}","database":"dawarich"},{"host":"gitea-db","user":"gitea","password":"${GITEA_PG_DB_PASSWORD}","database":"gitea"},{"host":"immich-pg-db","user":"immich","password":"${IMMICH_DB_PASSWORD}","database":"immich"},{"host":"invidious-db","user":"kemal","password":"${INVID_PG_DB_PASSWORD}","database":"invidious"},{"host":"librechat-vectordb","user":"librechat","password":"${LIBRECHAT_PG_DB_PASSWD}","database":"librechat"},{"host":"mastodon-pg-db","user":"mastodon","password":"${MASTODON_PG_DB_PASSWORD}","database":"mastodon"},{"host":"reactive-resume-pg","user":"reactiveresume","password":"${REACTIVE_RESUME_PGSQL_PASSWORD}","database":"reactiveresume"},{"host":"sonarqube-pg-db","user":"sonar","password":"${SONARQUBE_POSTGRES_PASSWORD}","database":"sonar"},{"host":"tandoor-pg","user":"tandoor","password":"${TANDOOR_POSTGRES_PASSWORD}","database":"tandoor"},{"host":"zammad-postgresql","user":"zammad","password":"${ZAMMAD_POSTGRES_PASS}","database":"zammad_production"}]'
-      WHODB_MARIADB_1: '[{"host":"mariadb","user":"root","password":"${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}","database":"mysql"}]'
-      WHODB_MONGODB_1: '{"host":"mongodb:27017/admin?replicaSet=rinoa","user":"root","password":"${MONGO_INITDB_ROOT_PASSWORD}"}'
+      WHODB_POSTGRES_1: |
+        '[
+          {
+            "host": "authelia-pg",
+            "user": "authelia",
+            "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
+            "database": "authelia"
+          },
+          {
+            "host": "bitmagnet-pg-db",
+            "user": "bitmagnet",
+            "password": "${BITMAGNET_POSTGRESQL_PASSWORD}",
+            "database": "bitmagnet"
+          },
+          {
+            "host": "dawarich-pg-db",
+            "user": "dawarich",
+            "password": "${DAWARICH_PG_PASSWORD}",
+            "database": "dawarich"
+          },
+          {
+            "host": "gitea-db",
+            "user": "gitea",
+            "password": "${GITEA_PG_DB_PASSWORD}",
+            "database": "gitea"
+          },
+          {
+            "host": "immich-pg-db",
+            "user": "immich",
+            "password": "${IMMICH_DB_PASSWORD}",
+            "database": "immich"
+          },
+          {
+            "host": "invidious-db",
+            "user": "kemal",
+            "password": "${INVID_PG_DB_PASSWORD}",
+            "database": "invidious"
+          },
+          {
+            "host": "librechat-vectordb",
+            "user": "librechat",
+            "password": "${LIBRECHAT_PG_DB_PASSWD}",
+            "database": "librechat"
+          },
+          {
+            "host": "mastodon-pg-db",
+            "user": "mastodon",
+            "password": "${MASTODON_PG_DB_PASSWORD}",
+            "database": "mastodon"
+          },
+          {
+            "host": "reactive-resume-pg",
+            "user": "reactiveresume",
+            "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
+            "database": "reactiveresume"
+          },
+          {
+            "host": "sonarqube-pg-db",
+            "user": "sonar",
+            "password": "${SONARQUBE_POSTGRES_PASSWORD}",
+            "database": "sonar"
+          },
+          {
+            "host": "tandoor-pg",
+            "user": "tandoor",
+            "password": "${TANDOOR_POSTGRES_PASSWORD}",
+            "database": "tandoor"
+          },
+          {
+            "host": "zammad-postgresql",
+            "user": "zammad",
+            "password": "${ZAMMAD_POSTGRES_PASS}",
+            "database": "zammad_production"
+          }
+        ]'
+      WHODB_MARIADB_1: |
+        '{
+          "host": "mariadb",
+          "user": "root",
+          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}",
+          "database": "mysql"
+        }'
+      WHODB_MONGODB_1: '{
+          "host": "mongodb:27017/admin?replicaSet=rinoa",
+          "user": "root",
+          "password": "${MONGO_INITDB_ROOT_PASSWORD}"
+        }'
       WHODB_OLLAMA_HOST: ollama
       WHODB_OLLAMA_PORT: 11434
       WHODB_ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
