@@ -5430,10 +5430,9 @@ services:
         ]'
       WHODB_MARIADB_1: |
         '{
-          "host": "mariadb",
+          "host": "mysql://mariadb:3306/",
           "user": "root",
-          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}",
-          "port": 3306
+          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
         }'
       WHODB_MONGODB_1: '{
           "host": "mongodb:27017/admin?replicaSet=rinoa",
