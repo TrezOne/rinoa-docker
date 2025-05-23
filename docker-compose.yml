@@ -5344,88 +5344,64 @@ services:
       WHODB_POSTGRES_1: |
         '[
           {
-            "host": "authelia-pg",
+            "host": "postgresql://authelia-pg:5432/authelia",
             "user": "authelia",
-            "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
-            "database": "authelia",
-            "port": 5342
+            "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}"
           },
           {
-            "host": "bitmagnet-pg-db",
+            "host": "postgresql://bitmagnet-pg-db:5432/bitmagnet",
             "user": "bitmagnet",
-            "password": "${BITMAGNET_POSTGRESQL_PASSWORD}",
-            "database": "bitmagnet",
-            "port": 5342
+            "password": "${BITMAGNET_POSTGRESQL_PASSWORD}"
           },
           {
-            "host": "dawarich-pg-db",
+            "host": "postgresql://dawarich-pg-db:5432/dawarich",
             "user": "dawarich",
-            "password": "${DAWARICH_PG_PASSWORD}",
-            "database": "dawarich",
-            "port": 5342
+            "password": "${DAWARICH_PG_PASSWORD}"
           },
           {
-            "host": "gitea-db",
+            "host": "postgresql://gitea-db:5432/gitea",
             "user": "gitea",
-            "password": "${GITEA_PG_DB_PASSWORD}",
-            "database": "gitea",
-            "port": 5342
+            "password": "${GITEA_PG_DB_PASSWORD}"
           },
           {
-            "host": "immich-pg-db",
+            "host": "postgresql://immich-pg-db:5432/immich",
             "user": "immich",
-            "password": "${IMMICH_DB_PASSWORD}",
-            "database": "immich",
-            "port": 5342
+            "password": "${IMMICH_DB_PASSWORD}"
           },
           {
-            "host": "invidious-db",
+            "host": "postgresql://invidious-db:5432/invidious",
             "user": "kemal",
-            "password": "${INVID_PG_DB_PASSWORD}",
-            "database": "invidious",
-            "port": 5342
+            "password": "${INVID_PG_DB_PASSWORD}"
           },
           {
-            "host": "librechat-vectordb",
+            "host": "postgresql://librechat-vectordb:5432/librechat",
             "user": "librechat",
-            "password": "${LIBRECHAT_PG_DB_PASSWD}",
-            "database": "librechat",
-            "port": 5342
+            "password": "${LIBRECHAT_PG_DB_PASSWD}"
           },
           {
-            "host": "mastodon-pg-db",
+            "host": "postgresql://mastodon-pg-db:5432/mastodon",
             "user": "mastodon",
-            "password": "${MASTODON_PG_DB_PASSWORD}",
-            "database": "mastodon",
-            "port": 5342
+            "password": "${MASTODON_PG_DB_PASSWORD}"
           },
           {
-            "host": "reactive-resume-pg",
+            "host": "postgresql://reactive-resume-pg:5432/reactiveresume",
             "user": "reactiveresume",
-            "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
-            "database": "reactiveresume",
-            "port": 5342
+            "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}"
           },
           {
-            "host": "sonarqube-pg-db",
+            "host": "postgresql://sonarqube-pg-db:5432/sonar",
             "user": "sonar",
-            "password": "${SONARQUBE_POSTGRES_PASSWORD}",
-            "database": "sonar",
-            "port": 5342
+            "password": "${SONARQUBE_POSTGRES_PASSWORD}"
           },
           {
-            "host": "tandoor-pg",
+            "host": "postgresql://tandoor-pg:5432/tandoor",
             "user": "tandoor",
-            "password": "${TANDOOR_POSTGRES_PASSWORD}",
-            "database": "tandoor",
-            "port": 5342
+            "password": "${TANDOOR_POSTGRES_PASSWORD}"
           },
           {
-            "host": "zammad-postgresql",
+            "host": "postgresql://zammad-postgresql:5432/zammad",
             "user": "zammad",
-            "password": "${ZAMMAD_POSTGRES_PASS}",
-            "database": "zammad_production",
-            "port": 5342
+            "password": "${ZAMMAD_POSTGRES_PASS}"
           }
         ]'
       WHODB_MARIADB_1: |
