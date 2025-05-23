@@ -5347,80 +5347,93 @@ services:
             "host": "authelia-pg",
             "user": "authelia",
             "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
-            "database": "authelia"
+            "database": "authelia",
+            "port": 5342
           },
           {
             "host": "bitmagnet-pg-db",
             "user": "bitmagnet",
             "password": "${BITMAGNET_POSTGRESQL_PASSWORD}",
-            "database": "bitmagnet"
+            "database": "bitmagnet",
+            "port": 5342
           },
           {
             "host": "dawarich-pg-db",
             "user": "dawarich",
             "password": "${DAWARICH_PG_PASSWORD}",
-            "database": "dawarich"
+            "database": "dawarich",
+            "port": 5342
           },
           {
             "host": "gitea-db",
             "user": "gitea",
             "password": "${GITEA_PG_DB_PASSWORD}",
-            "database": "gitea"
+            "database": "gitea",
+            "port": 5342
           },
           {
             "host": "immich-pg-db",
             "user": "immich",
             "password": "${IMMICH_DB_PASSWORD}",
-            "database": "immich"
+            "database": "immich",
+            "port": 5342
           },
           {
             "host": "invidious-db",
             "user": "kemal",
             "password": "${INVID_PG_DB_PASSWORD}",
-            "database": "invidious"
+            "database": "invidious",
+            "port": 5342
           },
           {
             "host": "librechat-vectordb",
             "user": "librechat",
             "password": "${LIBRECHAT_PG_DB_PASSWD}",
-            "database": "librechat"
+            "database": "librechat",
+            "port": 5342
           },
           {
             "host": "mastodon-pg-db",
             "user": "mastodon",
             "password": "${MASTODON_PG_DB_PASSWORD}",
-            "database": "mastodon"
+            "database": "mastodon",
+            "port": 5342
           },
           {
             "host": "reactive-resume-pg",
             "user": "reactiveresume",
             "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
-            "database": "reactiveresume"
+            "database": "reactiveresume",
+            "port": 5342
           },
           {
             "host": "sonarqube-pg-db",
             "user": "sonar",
             "password": "${SONARQUBE_POSTGRES_PASSWORD}",
-            "database": "sonar"
+            "database": "sonar",
+            "port": 5342
           },
           {
             "host": "tandoor-pg",
             "user": "tandoor",
             "password": "${TANDOOR_POSTGRES_PASSWORD}",
-            "database": "tandoor"
+            "database": "tandoor",
+            "port": 5342
           },
           {
             "host": "zammad-postgresql",
             "user": "zammad",
             "password": "${ZAMMAD_POSTGRES_PASS}",
-            "database": "zammad_production"
+            "database": "zammad_production",
+            "port": 5342
           }
         ]'
       WHODB_MARIADB_1: |
         '{
           "host": "mariadb",
           "user": "root",
-          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
+          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}",
+          "port": 3306
         }'
       WHODB_MONGODB_1: '{
           "host": "mongodb:27017/admin?replicaSet=rinoa",
