@@ -5420,8 +5420,7 @@ services:
         '{
           "host": "mariadb",
           "user": "root",
-          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}",
-          "database": "mysql"
+          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
         }'
       WHODB_MONGODB_1: '{
           "host": "mongodb:27017/admin?replicaSet=rinoa",
