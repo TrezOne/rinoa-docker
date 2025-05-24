@@ -620,15 +620,6 @@ services:
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
-  cloudflared:
-    command: ['tunnel', '--no-autoupdate', 'run', '--token', '${CLOUDFLARED_TUNNEL_TOKEN}']
-    container_name: cloudflared
-    environment:
-      CLOUDFLARED_TUNNEL_KEY: ${CLOUDFLARED_TUNNEL_TOKEN}
-    image: 'cloudflare/cloudflared:latest'
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/cloudflared:/etc/cloudflared
   cloudflareddns:
     container_name: cloudflareddns
     environment:
