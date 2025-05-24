@@ -4838,6 +4838,7 @@ services:
       homepage.icon: /icons/stable-diffusion.png
       swag: enable
       swag_port: 7860
+      swag_auth: authelia
       swag_proto: http
       swag_url: sd.${MY_TLD}
       swag_server_custom_directive: |
