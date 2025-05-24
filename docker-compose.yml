@@ -5341,13 +5341,14 @@ services:
     container_name: whodb
     image: clidey/whodb
     environment:
-      WHODB_POSTGRES_1: '{
+      WHODB_POSTGRES_1: |
+          {
             "host": "authelia-pg",
             "user": "authelia",
             "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
             "database": "authelia",
             "port": 5342
-          }'
+          }
       WHODB_POSTGRES_2: '{
             "host": "bitmagnet-pg-db",
             "user": "bitmagnet",
