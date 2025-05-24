@@ -14,14 +14,11 @@
 | bazarr | lscr.io/linuxserver/bazarr:latest |
 | beszel | henrygd/beszel:latest |
 | beszel-agent | henrygd/beszel-agent:latest |
-| bitmagnet | ghcr.io/bitmagnet-io/bitmagnet:latest |
-| bitmagnet-pg-db | postgres:17-alpine |
 | bitwarden | vaultwarden/server:latest |
 | bluesky-pds | code.modernleft.org/gravityfargo/bluesky-pds:v0.4.98 |
 | browserless | ghcr.io/browserless/chromium:latest |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
-| cloudflared | cloudflare/cloudflared:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
 | convertx | ghcr.io/c4illin/convertx |
 | cronicle | elestio/cronicle:latest |
@@ -122,6 +119,7 @@
 | redis | redis:alpine |
 | redlib | quay.io/redlib/redlib:latest |
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest |
+| romm | rommapp/romm:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | scraperr | jpyles0524/scraperr:latest |
 | scraperr-api | jpyles0524/scraperr_api:latest |

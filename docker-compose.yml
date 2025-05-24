@@ -423,80 +423,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /rinoa-storage:/extra-filesystems/rinoa-storage:ro
       - /dev/nvme0n1:/extra-filesystems/nvme0n1:ro
-  bitmagnet:
-    command:
-      - worker
-      - run
-      - --keys=http_server
-      - --keys=queue_server
-      - --keys=dht_crawler
-    container_name: bitmagnet
-    depends_on:
-      bitmagnet-pg-db:
-        condition: service_healthy
-        required: true
-      gluetun:
-        condition: service_started
-        required: true
-        restart: true
-    environment:
-      LOG_FILE_ROTATION_ENABLED: true
-      POSTGRES_HOST: bitmagnet-pg-db
-      POSTGRES_PASSWORD: ${BITMAGNET_POSTGRESQL_PASSWORD}
-      POSTGRES_USER: bitmagnet
-    image: ghcr.io/bitmagnet-io/bitmagnet:latest
-    labels:
-      homepage.group: Downloaders
-      homepage.name: Bitmagnet
-      homepage.href: https://btmag.${MY_TLD}
-      homepage.icon: sh-bitmagnet.png
-      homepage.description: Torrent indexer, DHT crawler, search engine, & content classifier
-      homepage.widget.type: gluetun
-      homepage.widget.url: http://gluetun:8000
-      swag: enable
-      swag_proto: http
-      swag_address: gluetun
-      swag_auth: authelia
-      swag_auth_bypass: /v1
-      swag_port: 3333
-      swag_url: btmag.${MY_TLD}
-      swag_server_custom_directive: |
-        access_log /config/log/$$host_access.log ;
-        error_log /config/log/$$host_error.log ;
-    network_mode: service:gluetun
-    restart: always
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/bitmagnet
-        target: /root/.local/share/bitmagnet
-        type: bind
-        bind:
-          create_host_path: true
-  bitmagnet-pg-db:
-    container_name: bitmagnet-pg-db
-    environment:
-      POSTGRES_DB: bitmagnet
-      POSTGRES_PASSWORD: ${BITMAGNET_POSTGRESQL_PASSWORD}
-      POSTGRES_USER: bitmagnet
-    expose:
-      - 5432
-    healthcheck:
-      interval: 10s
-      start_period: 20s
-      test:
-        - CMD-SHELL
-        - pg_isready
-    image: postgres:17-alpine
-    networks:
-      bitmagnet:
-        ipv4_address: 192.168.55.8
-      default: null
-    restart: unless-stopped
-    shm_size: 1g
-    volumes:
-      - source: bitmagnet-pg-db
-        target: /var/lib/postgresql/data
-        type: volume
-        volume: {}
   bitwarden:
     container_name: bitwarden
     environment:
@@ -694,15 +620,6 @@ services:
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
-  cloudflared:
-    command: ['tunnel', '--no-autoupdate', 'run', '--token', '${CLOUDFLARED_TUNNEL_TOKEN}']
-    container_name: cloudflared
-    environment:
-      CLOUDFLARED_TUNNEL_KEY: ${CLOUDFLARED_TUNNEL_TOKEN}
-    image: 'cloudflare/cloudflared:latest'
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/cloudflared:/etc/cloudflared
   cloudflareddns:
     container_name: cloudflareddns
     environment:
@@ -4386,6 +4303,75 @@ services:
       swag.uptime-kuma.monitor.url: https://chat.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     restart: always
+  romm:
+    container_name: romm
+    depends_on:
+      mariadb:
+        condition: service_started
+        restart: true
+    image: rommapp/romm:latest
+    environment:
+      ROMM_DB_DRIVER: mariadb # mariadb | sqlite (default: sqlite)
+      ROMM_HOST: https://localhost:3000 # [Optional] your host ip or domain name (including http(s)://, subdomain and port if needed). Being used only for webRcade feed for now.
+      # [Optional] Only required if using MariaDB as the database
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_USER: romm
+      DB_NAME: romm # Should match the MYSQL_DATABASE value in the mariadb container
+      DB_PASSWD: ${ROMM_MARIADB_PASSWORD}
+      # [Optional WIP] Use SteamGridDB as a source for covers
+      # STEAMGRIDDB_API_KEY: <SteamGridDB api key>
+      # [Optional] Will enable user management and require authentication to access the interface (disabled by default)
+      ROMM_AUTH_ENABLED: true # default: false
+      ROMM_AUTH_SECRET_KEY: ${ROMM_AUTH_SECRET_KEY} # Generate a key with `openssl rand -hex 32`
+      ROMM_AUTH_USERNAME: admin # default: admin
+      ROMM_AUTH_PASSWORD: ${ROMM_AUTH_PASSWORD} # default: admin
+      # [Optional] Only required if authentication is enabled
+      ENABLE_EXPERIMENTAL_REDIS: false # default: false
+      # REDIS_HOST: redis # default: localhost
+      # REDIS_PORT: 6379 # default: 6379
+      # REDIS_PASSWORD: # [Optional] Support for secured redis
+      # [Optional] Will enable asynchronous tasks (all disabled by default)
+      # Important: Do NOT wrap the cron expression in quotes
+      ENABLE_RESCAN_ON_FILESYSTEM_CHANGE: true # Runs a quick scan on the library when a file is added or removed 
+      RESCAN_ON_FILESYSTEM_CHANGE_DELAY: 5 # Delay in seconds before running the quick scan (default: 5)
+      ENABLE_SCHEDULED_RESCAN: true # Runs a quick scan on the library at a given time
+      SCHEDULED_RESCAN_CRON: 0 3 * * * # Cron expression for the scheduled scan (default: 0 3 * * * At 3:00 AM every day)
+      ENABLE_SCHEDULED_UPDATE_SWITCH_TITLEDB: true # Updates the Switch TitleDB database at a given time
+      SCHEDULED_UPDATE_SWITCH_TITLEDB_CRON: 0 4 * * * # Cron expression for the scheduled update (default: 0 4 * * * At 4:00 AM every day)
+      ENABLE_SCHEDULED_UPDATE_MAME_XML: true # Updates the MAME XML database at a given time
+      SCHEDULED_UPDATE_MAME_XML_CRON: 0 5 * * * # Cron expression for the scheduled update (default: 0 5 * * * At 5:00 AM every day)
+      IGDB_CLIENT_ID:  ${ROMM_IGDB_CLIENT_ID} # Generate an ID and SECRET in IGDB
+      IGDB_CLIENT_SECRET: ${ROMM_IGDB_CLIENT_SECRET} # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#igdb
+      MOBYGAMES_API_KEY:  # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#mobygames
+      STEAMGRIDDB_API_KEY: ${ROMM_STEAMGRIDDB_API_KEY} # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#steamgriddb
+      SCREENSCRAPER_USER: ${ROMM_SCREENSCRAPER_USERNAME} # Use your ScreenScraper username and password
+      SCREENSCRAPER_PASSWORD: ${ROMM_SCREENSCRAPER_PASSWORD} # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#screenscraper
+    labels:
+      homepage.group: Media Library
+      homepage.name: RomM
+      homepage.href: https://romm.${MY_TLD}
+      homepage.icon: romm.svg
+      homepage.description: Beautiful, powerful, self-hosted ROM manager
+      homepage.widget.type: romm
+      homepage.widget.url: http://romm:8080
+      swag: enable
+      swag_proto: http
+      swag_url: romm.${MY_TLD}
+      swag_server_custom_directive: |
+        access_log /config/log/$$host_access.log ;
+        error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://romm.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 30229:8080
+    restart: unless-stopped
+    volumes:
+      - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
+      - ${DOCKER_VOLUME_STORAGE}/roms:/romm/library # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
+      - ${DOCKER_VOLUME_STORAGE}/roms/assets:/romm/assets # Uploaded saves, states, etc.
+      - ${DOCKER_VOLUME_CONFIG}/romm:/romm/config # Path where config.yml is stored
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -4852,6 +4838,7 @@ services:
       homepage.icon: /icons/stable-diffusion.png
       swag: enable
       swag_port: 7860
+      swag_auth: authelia
       swag_proto: http
       swag_url: sd.${MY_TLD}
       swag_server_custom_directive: |
@@ -5348,66 +5335,60 @@ services:
             "database": "authelia"
           }'
       WHODB_POSTGRES_2: '{
-            "host": "bitmagnet-pg-db",
-            "user": "bitmagnet",
-            "password": "${BITMAGNET_POSTGRESQL_PASSWORD}",
-            "database": "authelia"
-          }'
-      WHODB_POSTGRES_3: '{
             "host": "dawarich-pg-db",
             "user": "dawarich",
             "password": "${DAWARICH_PG_PASSWORD}",
             "database": "authelia"
           }'
-      WHODB_POSTGRES_4: '{
+      WHODB_POSTGRES_3: '{
             "host": "gitea-db",
             "user": "gitea",
             "password": "${GITEA_PG_DB_PASSWORD}",
             "database": "gitea"
           }'
-      WHODB_POSTGRES_5: '{
+      WHODB_POSTGRES_4: '{
             "host": "immich-pg-db",
             "user": "immich",
             "password": "${IMMICH_DB_PASSWORD}",
             "database": "immich"
           }'
-      WHODB_POSTGRES_6: '{
+      WHODB_POSTGRES_5: '{
             "host": "invidious-db",
             "user": "kemal",
             "password": "${INVID_PG_DB_PASSWORD}",
             "database": "invidious"
           }'
-      WHODB_POSTGRES_7: '{
+      WHODB_POSTGRES_6: '{
             "host": "librechat-vectordb",
             "user": "librechat",
             "password": "${LIBRECHAT_PG_DB_PASSWD}",
             "database": "librechat"
           }'
-      WHODB_POSTGRES_8: '{
+      WHODB_POSTGRES_7: '{
             "host": "mastodon-pg-db",
             "user": "mastodon",
             "password": "${MASTODON_PG_DB_PASSWORD}",
             "database": "mastodon"
           }'
-      WHODB_POSTGRES_9: '{
+      WHODB_POSTGRES_8: '{
             "host": "reactive-resume-pg",
             "user": "reactiveresume",
             "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
             "database": "reactiveresume"
           }'
-      WHODB_POSTGRES_10: '{
+      WHODB_POSTGRES_9: '{
             "host": "sonarqube-pg-db",
             "user": "sonar",
             "password": "${SONARQUBE_POSTGRES_PASSWORD}",
             "database": "sonar"
           }'
-      WHODB_POSTGRES_11: '{
+      WHODB_POSTGRES_10: '{
             "host": "tandoor-pg",
             "user": "tandoor",
             "password": "${TANDOOR_POSTGRES_PASSWORD}",
             "database": "tandoor"
           }'
-      WHODB_POSTGRES_12: '{
+      WHODB_POSTGRES_11: '{
             "host": "zammad-postgresql",
             "user": "zammad",
             "password": "${ZAMMAD_POSTGRES_PASS}",
@@ -5587,10 +5568,6 @@ services:
 volumes:
   authelia-pg-db:
     name: authelia-pg-db
-  bitmagnet-pg-db:
-    name: bitmagnet-pg-db
-  bunkerweb-storage:
-    name: bunkerweb-storage
   castopod-media:
     name: castopod-media
   crowdsec-config:
@@ -5605,8 +5582,6 @@ volumes:
     name: dawarich_public
   dawarich_watched:
     name: dawarich_watched
-  docker-volume-bkup-data:
-    name: docker-volume-bkup-data
   fastenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:
@@ -5693,6 +5668,8 @@ volumes:
     name: portnote-db-data
   reactive-resume-pg:
     name: reactive-resume-pg
+  romm_resources:
+    name: romm_resources
   semaphore_config:
     name: semaphore_config
   semaphore_data:
