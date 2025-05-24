@@ -5397,13 +5397,14 @@ services:
             "host": "postgresql://tandoor-pg:5432/tandoor",
             "user": "tandoor",
             "password": "${TANDOOR_POSTGRES_PASSWORD}"
-          },
-          {
-            "host": "postgresql://zammad-postgresql:5432/zammad",
-            "user": "zammad",
-            "password": "${ZAMMAD_POSTGRES_PASS}"
           }
         ]'
+      WHODB_POSTGRES_2: |
+        '{
+          "host": "postgresql://zammad-postgresql:5432/zammad",
+          "user": "zammad",
+          "password": "${ZAMMAD_POSTGRES_PASS}"
+        }''
       WHODB_MARIADB_1: |
         '{
           "host": "mysql://mariadb:3306/",
