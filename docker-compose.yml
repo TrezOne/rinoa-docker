@@ -5342,13 +5342,13 @@ services:
     image: clidey/whodb
     environment:
       WHODB_POSTGRES_1: |
-          {
-            "host": "authelia-pg",
-            "user": "authelia",
-            "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
-            "database": "authelia",
-            "port": 5342
-          }
+        '{
+          "host": "authelia-pg",
+          "user": "authelia",
+          "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
+          "database": "authelia",
+          "port": 5342
+        }'
       WHODB_POSTGRES_2: '{
             "host": "bitmagnet-pg-db",
             "user": "bitmagnet",
@@ -5426,7 +5426,8 @@ services:
             "database": "zammad_production",
             "port": 5342
           }'
-      WHODB_MARIADB_1: '{
+      WHODB_MARIADB_1: |
+        '{
           "host": "mariadb",
           "user": "root",
           "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}",
