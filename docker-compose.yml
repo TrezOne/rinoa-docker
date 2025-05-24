@@ -5341,73 +5341,68 @@ services:
     container_name: whodb
     image: clidey/whodb
     environment:
-      WHODB_POSTGRES_1: |
-        '[
-          {
+      WHODB_POSTGRES_1: '{
             "host": "postgresql://authelia-pg:5432/authelia",
             "user": "authelia",
             "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_2: '{
             "host": "postgresql://bitmagnet-pg-db:5432/bitmagnet",
             "user": "bitmagnet",
             "password": "${BITMAGNET_POSTGRESQL_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_3: '{
             "host": "postgresql://dawarich-pg-db:5432/dawarich",
             "user": "dawarich",
             "password": "${DAWARICH_PG_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_4: '{
             "host": "postgresql://gitea-db:5432/gitea",
             "user": "gitea",
             "password": "${GITEA_PG_DB_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_5: '{
             "host": "postgresql://immich-pg-db:5432/immich",
             "user": "immich",
             "password": "${IMMICH_DB_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_6: '{
             "host": "postgresql://invidious-db:5432/invidious",
             "user": "kemal",
             "password": "${INVID_PG_DB_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_7: '{
             "host": "postgresql://librechat-vectordb:5432/librechat",
             "user": "librechat",
             "password": "${LIBRECHAT_PG_DB_PASSWD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_8: '{
             "host": "postgresql://mastodon-pg-db:5432/mastodon",
             "user": "mastodon",
             "password": "${MASTODON_PG_DB_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_9: '{
             "host": "postgresql://reactive-resume-pg:5432/reactiveresume",
             "user": "reactiveresume",
             "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_10: '{
             "host": "postgresql://sonarqube-pg-db:5432/sonar",
             "user": "sonar",
             "password": "${SONARQUBE_POSTGRES_PASSWORD}"
-          },
-          {
+          }'
+      WHODB_POSTGRES_11: '{
             "host": "postgresql://tandoor-pg:5432/tandoor",
             "user": "tandoor",
             "password": "${TANDOOR_POSTGRES_PASSWORD}"
-          }
-        ]'
-      WHODB_POSTGRES_2: |
-        '{
-          "host": "postgresql://zammad-postgresql:5432/zammad",
-          "user": "zammad",
-          "password": "${ZAMMAD_POSTGRES_PASS}"
-        }''
-      WHODB_MARIADB_1: |
-        '{
-          "host": "mysql://mariadb:3306/",
+          }'
+      WHODB_POSTGRES_12: '{
+            "host": "postgresql://zammad-postgresql:5432/zammad",
+            "user": "zammad",
+            "password": "${ZAMMAD_POSTGRES_PASS}"
+          }'
+      WHODB_MARIADB_1: '{
+          "host": "mariadb://mariadb:3306/",
           "user": "root",
           "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
         }'
@@ -5420,8 +5415,8 @@ services:
       WHODB_OLLAMA_PORT: 11434
       WHODB_ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
       WHODB_OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
-    expose:
-      - 8080
+    # expose:
+    #   - 8080
     labels:
       homepage.group: System Administration
       homepage.name: WhoDB
@@ -5438,6 +5433,8 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 8080:8080
     restart: unless-stopped
   youtubedl:
     container_name: youtubedl
