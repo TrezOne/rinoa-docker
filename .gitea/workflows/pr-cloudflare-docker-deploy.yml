@@ -65,7 +65,7 @@ jobs:
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_NAMESPACE: ""
     outputs:
-      svc_deploy_list: ${{ steps.detect_services.outputs.classified_services }}
+      svc_deploy_list: ${{ steps.modded_svcs.outputs.rinoa_svcs }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -124,13 +124,16 @@ jobs:
           echo ${mod_svcs}
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
           echo "rinoa_svcs=${mod_svcs}" >> "$GITHUB_OUTPUT"
+      - name: Testing service list output
+        run: |
+          echo ${{ steps.modded_svcs.outputs.rinoa_svcs }}
       - name: Docker Compose Dry Run
         timeout-minutes: 360
         continue-on-error: true
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
           docker_compose_file: docker-compose.yml
-          docker_args: -d --remove-orphans --pull missing --no-recreate ${{ steps.modded_svcs.rinoa_svcs.output }}
+          docker_args: -d --remove-orphans --pull missing ${{ steps.modded_svcs.outputs.rinoa_svcs }}
           ssh_user: gitea-deploy
           ssh_host: 192.168.1.254
           ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
@@ -331,7 +334,7 @@ jobs:
         uses: keatonLiu/docker-compose-remote-action@v1.2
         with:
           docker_compose_file: docker-compose.yml
-          docker_args: -d --remove-orphans --pull missing ${{ steps.docker-compose-dry-run.outputs.svc_deploy_list }}
+          docker_args: -d --remove-orphans --pull missing ${{ docker-compose-dry-run.outputs.svc_deploy_list }}
           ssh_user: gitea-deploy
           ssh_host: 192.168.1.254
           ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
