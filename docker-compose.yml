@@ -5343,73 +5343,72 @@ services:
     environment:
       WHODB_POSTGRES_1: '{
             "host": "authelia-pg",
-            "port": 5432,
             "user": "authelia",
             "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
             "database": "authelia"
           }'
       WHODB_POSTGRES_2: '{
-            "host": "postgresql://bitmagnet-pg-db:5432",
+            "host": "bitmagnet-pg-db",
             "user": "bitmagnet",
             "password": "${BITMAGNET_POSTGRESQL_PASSWORD}",
             "database": "authelia"
           }'
       WHODB_POSTGRES_3: '{
-            "host": "postgresql://dawarich-pg-db:5432",
+            "host": "dawarich-pg-db",
             "user": "dawarich",
             "password": "${DAWARICH_PG_PASSWORD}",
             "database": "authelia"
           }'
       WHODB_POSTGRES_4: '{
-            "host": "postgresql://gitea-db:5432",
+            "host": "gitea-db",
             "user": "gitea",
             "password": "${GITEA_PG_DB_PASSWORD}",
             "database": "gitea"
           }'
       WHODB_POSTGRES_5: '{
-            "host": "postgresql://immich-pg-db:5432",
+            "host": "immich-pg-db",
             "user": "immich",
             "password": "${IMMICH_DB_PASSWORD}",
             "database": "immich"
           }'
       WHODB_POSTGRES_6: '{
-            "host": "postgresql://invidious-db:5432",
+            "host": "invidious-db",
             "user": "kemal",
             "password": "${INVID_PG_DB_PASSWORD}",
             "database": "invidious"
           }'
       WHODB_POSTGRES_7: '{
-            "host": "postgresql://librechat-vectordb:5432",
+            "host": "librechat-vectordb",
             "user": "librechat",
             "password": "${LIBRECHAT_PG_DB_PASSWD}",
             "database": "librechat"
           }'
       WHODB_POSTGRES_8: '{
-            "host": "postgresql://mastodon-pg-db:5432",
+            "host": "mastodon-pg-db",
             "user": "mastodon",
             "password": "${MASTODON_PG_DB_PASSWORD}",
             "database": "mastodon"
           }'
       WHODB_POSTGRES_9: '{
-            "host": "postgresql://reactive-resume-pg:5432",
+            "host": "reactive-resume-pg",
             "user": "reactiveresume",
             "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
             "database": "reactiveresume"
           }'
       WHODB_POSTGRES_10: '{
-            "host": "postgresql://sonarqube-pg-db:5432",
+            "host": "sonarqube-pg-db",
             "user": "sonar",
             "password": "${SONARQUBE_POSTGRES_PASSWORD}",
             "database": "sonar"
           }'
       WHODB_POSTGRES_11: '{
-            "host": "postgresql://tandoor-pg:5432",
+            "host": "tandoor-pg",
             "user": "tandoor",
             "password": "${TANDOOR_POSTGRES_PASSWORD}",
             "database": "tandoor"
           }'
       WHODB_POSTGRES_12: '{
-            "host": "postgresql://zammad-postgresql:5432",
+            "host": "zammad-postgresql",
             "user": "zammad",
             "password": "${ZAMMAD_POSTGRES_PASS}",
             "database": "zammad_production"
@@ -5446,8 +5445,6 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
-    # ports:
-    #   - 8080:8080
     restart: unless-stopped
   youtubedl:
     container_name: youtubedl
