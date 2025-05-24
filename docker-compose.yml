@@ -5415,8 +5415,8 @@ services:
       WHODB_OLLAMA_PORT: 11434
       WHODB_ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
       WHODB_OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
-    # expose:
-    #   - 8080
+    expose:
+      - 8080
     labels:
       homepage.group: System Administration
       homepage.name: WhoDB
@@ -5433,8 +5433,6 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
-    ports:
-      - 8080:8080
     restart: unless-stopped
   youtubedl:
     container_name: youtubedl
