@@ -5342,69 +5342,94 @@ services:
     image: clidey/whodb
     environment:
       WHODB_POSTGRES_1: '{
-            "host": "postgresql://authelia-pg:5432/authelia",
+            "host": "authelia-pg",
             "user": "authelia",
-            "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}"
+            "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
+            "database": "authelia",
+            "port": 5342
           }'
       WHODB_POSTGRES_2: '{
-            "host": "postgresql://bitmagnet-pg-db:5432/bitmagnet",
+            "host": "bitmagnet-pg-db",
             "user": "bitmagnet",
-            "password": "${BITMAGNET_POSTGRESQL_PASSWORD}"
+            "password": "${BITMAGNET_POSTGRESQL_PASSWORD}",
+            "database": "bitmagnet",
+            "port": 5342
           }'
       WHODB_POSTGRES_3: '{
-            "host": "postgresql://dawarich-pg-db:5432/dawarich",
+            "host": "dawarich-pg-db",
             "user": "dawarich",
-            "password": "${DAWARICH_PG_PASSWORD}"
+            "password": "${DAWARICH_PG_PASSWORD}",
+            "database": "dawarich",
+            "port": 5342
           }'
       WHODB_POSTGRES_4: '{
-            "host": "postgresql://gitea-db:5432/gitea",
+            "host": "gitea-db",
             "user": "gitea",
-            "password": "${GITEA_PG_DB_PASSWORD}"
+            "password": "${GITEA_PG_DB_PASSWORD}",
+            "database": "gitea",
+            "port": 5342
           }'
       WHODB_POSTGRES_5: '{
-            "host": "postgresql://immich-pg-db:5432/immich",
+            "host": "immich-pg-db",
             "user": "immich",
-            "password": "${IMMICH_DB_PASSWORD}"
+            "password": "${IMMICH_DB_PASSWORD}",
+            "database": "immich",
+            "port": 5342
           }'
       WHODB_POSTGRES_6: '{
-            "host": "postgresql://invidious-db:5432/invidious",
+            "host": "invidious-db",
             "user": "kemal",
-            "password": "${INVID_PG_DB_PASSWORD}"
+            "password": "${INVID_PG_DB_PASSWORD}",
+            "database": "invidious",
+            "port": 5342
           }'
       WHODB_POSTGRES_7: '{
-            "host": "postgresql://librechat-vectordb:5432/librechat",
+            "host": "librechat-vectordb",
             "user": "librechat",
-            "password": "${LIBRECHAT_PG_DB_PASSWD}"
+            "password": "${LIBRECHAT_PG_DB_PASSWD}",
+            "database": "librechat",
+            "port": 5342
           }'
       WHODB_POSTGRES_8: '{
-            "host": "postgresql://mastodon-pg-db:5432/mastodon",
+            "host": "mastodon-pg-db",
             "user": "mastodon",
-            "password": "${MASTODON_PG_DB_PASSWORD}"
+            "password": "${MASTODON_PG_DB_PASSWORD}",
+            "database": "mastodon",
+            "port": 5342
           }'
       WHODB_POSTGRES_9: '{
-            "host": "postgresql://reactive-resume-pg:5432/reactiveresume",
+            "host": "reactive-resume-pg",
             "user": "reactiveresume",
-            "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}"
+            "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
+            "database": "reactiveresume",
+            "port": 5342
           }'
       WHODB_POSTGRES_10: '{
-            "host": "postgresql://sonarqube-pg-db:5432/sonar",
+            "host": "sonarqube-pg-db",
             "user": "sonar",
-            "password": "${SONARQUBE_POSTGRES_PASSWORD}"
+            "password": "${SONARQUBE_POSTGRES_PASSWORD}",
+            "database": "sonar",
+            "port": 5342
           }'
       WHODB_POSTGRES_11: '{
-            "host": "postgresql://tandoor-pg:5432/tandoor",
+            "host": "tandoor-pg",
             "user": "tandoor",
-            "password": "${TANDOOR_POSTGRES_PASSWORD}"
+            "password": "${TANDOOR_POSTGRES_PASSWORD}",
+            "database": "tandoor",
+            "port": 5342
           }'
       WHODB_POSTGRES_12: '{
-            "host": "postgresql://zammad-postgresql:5432/zammad",
+            "host": "zammad-postgresql",
             "user": "zammad",
-            "password": "${ZAMMAD_POSTGRES_PASS}"
+            "password": "${ZAMMAD_POSTGRES_PASS}",
+            "database": "zammad_production",
+            "port": 5342
           }'
       WHODB_MARIADB_1: '{
-          "host": "mariadb://mariadb:3306/",
+          "host": "mariadb",
           "user": "root",
-          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
+          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}",
+          "port": 3306
         }'
       WHODB_MONGODB_1: '{
           "host": "mongodb:27017/admin?replicaSet=rinoa",
