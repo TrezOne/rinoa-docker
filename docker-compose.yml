@@ -5434,8 +5434,9 @@ services:
       homepage.name: WhoDB
       homepage.href: https://dbs.${MY_TLD}
       homepage.icon: whodb.png
-      homepage.description: Database-as-Code CI/CD
+      homepage.description: Lightweight next-gen database explorer
       swag: enable
+      swag_auth: authelia
       swag_port: 8080
       swag_proto: http
       swag_url: dbs.${MY_TLD}
