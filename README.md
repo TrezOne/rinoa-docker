@@ -19,7 +19,6 @@
 | browserless | ghcr.io/browserless/chromium:latest |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
-| cloudflared | cloudflare/cloudflared:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
 | convertx | ghcr.io/c4illin/convertx |
 | cronicle | elestio/cronicle:latest |
