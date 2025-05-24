@@ -5415,8 +5415,7 @@ services:
             "database": "zammad_production"
           }'
       WHODB_MARIADB_1: '{
-          "host": "mariadb://mariadb",
-          "port": 3306,
+          "host": "mariadb:3306",
           "user": "root",
           "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
         }'
