@@ -4315,8 +4315,8 @@ services:
   romm:
     container_name: romm
     depends_on:
-      romm-db:
-        condition: service_healthy
+      mariadb:
+        condition: service_started
         restart: true
     image: rommapp/romm:latest
     environment:
