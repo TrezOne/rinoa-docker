@@ -5342,7 +5342,8 @@ services:
     image: clidey/whodb
     environment:
       WHODB_POSTGRES_1: '{
-            "host": "authelia-pg:5432",
+            "host": "authelia-pg",
+            "port": 5432,
             "user": "authelia",
             "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
             "database": "authelia"
