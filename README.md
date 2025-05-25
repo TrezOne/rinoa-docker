@@ -121,6 +121,7 @@
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest |
 | romm | rommapp/romm:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
+| sablier | sablierapp/sablier:latest |
 | scraperr | jpyles0524/scraperr:latest |
 | scraperr-api | jpyles0524/scraperr_api:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |

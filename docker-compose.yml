@@ -4441,6 +4441,33 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  sablier:
+    container_name: sablier
+    depends_on:
+      swag:
+        condition: service_started
+        required: true
+    environment:
+      PROVIDER_NAME: docker
+      SERVER_PORT: 10000
+      SERVER_BASE_PATH: /
+      STORAGE_FILE: /opt/sablier/state
+      SESSIONS_DEFAULT_DURATION: 5m
+      SESSIONS_EXPIRATION_INTERVAL: 20s
+      LOGGING_LEVEL: trace
+      STRATEGY_DYNAMIC_CUSTOM_THEMES_PATH: /opt/sablier/custom_themes
+      STRATEGY_DYNAMIC_SHOW_DETAILS_BY_DEFAULT: false
+      STRATEGY_DYNAMIC_DEFAULT_THEME: hacker-terminal
+      STRATEGY_DYNAMIC_DEFAULT_REFRESH_FREQUENCY: 5s
+      STRATEGY_BLOCKING_DEFAULT_TIMEOUT: 1m
+    image: sablierapp/sablier:latest
+    ports:
+      - 19311:10000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/sablier/state:/opt/sablier/state
+      - ${DOCKER_VOLUME_CONFIG}/sablier/custom_themes:/opt/sablier/custom_themes
+      - /var/run/docker.sock:/var/run/docker.sock
   scraperr:
     command:
       - npm
