@@ -2827,22 +2827,10 @@ services:
       - 8686:8686
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/lidarr
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/lidarr:/config
+      - /rinoa-storage:/storage
+      - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads
   lidify:
     container_name: lidify
     environment:
@@ -4057,22 +4045,10 @@ services:
       - 7878:7878
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/radarr
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/radarr:/config
+      - /rinoa-storage:/storage
+      - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads
   reactive-resume:
     container_name: reactive-resume
     depends_on:
@@ -4174,22 +4150,10 @@ services:
       - 8787:8787
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/readarr
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/readarr:/config
+      - /rinoa-storage:/storage
+      - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads
   redis:
     cap_add:
       - SETGID
@@ -4443,10 +4407,6 @@ services:
         type: bind
   sablier:
     container_name: sablier
-    depends_on:
-      swag:
-        condition: service_started
-        required: true
     environment:
       PROVIDER_NAME: docker
       SERVER_PORT: 10000
@@ -4740,22 +4700,10 @@ services:
       - 8989:8989
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/sonarr
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/sonarr:/config
+      - /rinoa-storage:/storage
+      - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads
   sonashow:
     container_name: sonashow
     environment:
@@ -4932,7 +4880,8 @@ services:
       VALIDATION: dns
       CROWDSEC_API_KEY: ${CROWDSEC_API_KEY}
       CROWDSEC_LAPI_URL: http://crowdsec:8080
-      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs #|ghcr.io/linuxserver/mods:swag-crowdsec#|linuxserver/mods:swag-auto-uptime-kuma
+      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|linuxserver/mods:universal-package-install #|ghcr.io/linuxserver/mods:swag-crowdsec#|linuxserver/mods:swag-auto-uptime-kuma
+      INSTALL_PACKAGES: nginx-mod-http-js
       PROPAGATION: 30
       UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
       UPTIME_KUMA_URL: http://uptimekuma:3001
@@ -4964,28 +4913,11 @@ services:
       - 81:81
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/swag
-        target: /config
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
-        type: bind
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/swag:/config
+      - ${DOCKER_VOLUME_CONFIG}/sablier/sablier.js:/etc/nginx/conf.d/sablier.js
+      - /rinoa-storage:/storage
+      - /var/run/docker.sock:/var/run/docker.sock:ro
   tandoor:
     container_name: tandoor-recipes
     depends_on:
@@ -5258,6 +5190,8 @@ services:
       homepage.href: https://subs.${MY_TLD}
       homepage.icon: wallos.png
       homepage.description: Subscription Tracking
+      sablier.enable: true
+      sablier.group: rinoa
       swag: enable
       swag_proto: http
       swag_url: subs.${MY_TLD}
@@ -5341,8 +5275,14 @@ services:
       swag_url: scan.${MY_TLD}
       swag_port: 3000
       swag_server_custom_directive: |
-        access_log /config/log/$$host_access.log ;
-        error_log /config/log/$$host_error.log ;
+        access_log /config/log/$$host_access.log;
+        error_log /config/log/$$host_error.log;
+
+        include /config/nginx/sablier-server.conf;
+
+        location / {
+              include /config/nginx/sablier-location-dynamic.conf
+        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scan.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
