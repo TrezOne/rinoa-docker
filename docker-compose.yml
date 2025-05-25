@@ -3195,7 +3195,7 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_MIMIR_STORAGE_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_MIMIR_STORAGE_SECRET_KEY}
     hostname: minio
-    image: minio/minio
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
     labels:
       swag: enable
       swag_proto: http
@@ -5279,10 +5279,6 @@ services:
         error_log /config/log/$$host_error.log;
 
         include /config/nginx/sablier-server.conf;
-
-        location / {
-              include /config/nginx/sablier-location-dynamic.conf
-        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scan.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
