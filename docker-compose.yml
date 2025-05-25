@@ -5275,10 +5275,11 @@ services:
       swag_url: scan.${MY_TLD}
       swag_port: 3000
       swag_server_custom_directive: |
-        access_log /config/log/$$host_access.log;
-        error_log /config/log/$$host_error.log;
-
         include /config/nginx/sablier-server.conf;
+
+        location / {
+              proxy_pass http://immich-public-proxy:3000;
+        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scan.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
