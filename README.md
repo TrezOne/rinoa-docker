@@ -85,8 +85,11 @@
 | mariadb | linuxserver/mariadb |
 | mastodon | lscr.io/linuxserver/mastodon:latest |
 | mastodon-pg-db | postgres:17-alpine |
+| maxun-backend | getmaxun/maxun-backend:latest |
+| maxun-frontend | getmaxun/maxun-frontend:latest |
+| maxun-pg-db | postgres:17-alpine |
 | meilisearch | getmeili/meilisearch:v1.12.3 |
-| minio | minio/minio |
+| minio | minio/minio:RELEASE.2025-04-22T22-12-26Z |
 | mixpost | inovector/mixpost:latest |
 | mongodb | bitnami/mongodb:7.0 |
 | multi-scrobbler | foxxmd/multi-scrobbler |
@@ -122,8 +125,6 @@
 | romm | rommapp/romm:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | sablier | sablierapp/sablier:latest |
-| scraperr | jpyles0524/scraperr:latest |
-| scraperr-api | jpyles0524/scraperr_api:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
 | semaphore | semaphoreui/semaphore:v2.12.14 |
