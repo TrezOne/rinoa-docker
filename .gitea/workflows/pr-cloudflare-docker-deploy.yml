@@ -72,6 +72,9 @@ jobs:
       - name: Fetch base branch
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
+      - name: Login to Gitea Container Registry
+        run: |
+          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_TOKEN }} http://gitea:3000
       - name: Save both versions of docker-compose.yml
         run: |
           git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
@@ -313,11 +316,8 @@ jobs:
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Login to Gitea Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: https://git.trez.wtf
-          username: gitea-sonarqube-bot
-          password: ${{ secrets.BOT_GITEA_TOKEN }}
+        run: |
+          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_TOKEN }} http://gitea:3000
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
