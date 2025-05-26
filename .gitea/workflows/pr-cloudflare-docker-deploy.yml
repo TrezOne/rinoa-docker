@@ -5,6 +5,7 @@ on:
       - 'main'
     paths:
       - '**/docker-compose.yml'
+      - '**/pr-cloudflare-docker-deploy.yml'
       - '!ansible/**.yml'
 jobs:
   check-and-create-pr:
@@ -74,7 +75,7 @@ jobs:
           git fetch origin ${{ github.event.pull_request.base.ref }}
       - name: Login to Gitea Container Registry
         run: |
-          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_TOKEN }} http://gitea:3000
+          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_TOKEN }} https://git.trez.wtf
       - name: Save both versions of docker-compose.yml
         run: |
           git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
