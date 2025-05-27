@@ -318,7 +318,7 @@ jobs:
         uses: cpanato/vault-installer@main
       - name: Login to Gitea Container Registry
         run: |
-          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_PASSWORD }} http://gitea:3000
+          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_PASSWORD }} git.trez.wtf
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
