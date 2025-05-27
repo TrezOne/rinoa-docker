@@ -1633,7 +1633,7 @@ services:
       swag_proto: http
       swag_port: 2283
       swag_url: pics.${MY_TLD}
-
+      swag_server_custom_directive:
         location /share {
               proxy_pass http://immich-public-proxy:3000;
         }
@@ -5071,12 +5071,6 @@ services:
       swag_proto: http
       swag_url: scan.${MY_TLD}
       swag_port: 3000
-      swag_server_custom_directive: |
-        include /config/nginx/sablier-server.conf;
-
-        location / {
-              proxy_pass http://immich-public-proxy:3000;
-        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scan.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
