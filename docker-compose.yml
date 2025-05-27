@@ -3119,7 +3119,7 @@ services:
     restart: unless-stopped
   maxun-pg-db:
     container_name: maxun-pg-db
-    image: postgres:17-alpine
+    image: postgres:13-alpine
     environment:
       POSTGRES_USER: maxun
       POSTGRES_PASSWORD: ${MAXUN_DB_PASSWORD}
