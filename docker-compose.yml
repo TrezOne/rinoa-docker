@@ -1336,7 +1336,7 @@ services:
     environment:
       CONFIG_FILE: /config.yaml
       DOCKER_HOST: tcp://dockerproxy:2375
-      GITEA_INSTANCE_URL: https://git.trez.wtf
+      GITEA_INSTANCE_URL: http://gitea:3000
       GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN}"
       GITEA_RUNNER_NAME: "gitea-runner-1"
     image: gitea/act_runner:latest
