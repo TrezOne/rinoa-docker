@@ -5240,18 +5240,6 @@ volumes:
     name: graylog-data
   graylog-datanode:
     name: graylog-datanode
-  hortusfox_app_backup:
-    name: hortusfox_app_backup
-  hortusfox_app_images:
-    name: hortusfox_app_images
-  hortusfox_app_logs:
-    name: hortusfox_app_logs
-  hortusfox_app_migrate:
-    name: hortusfox_app_migrate
-  hortusfox_app_themes:
-    name: hortusfox_app_themes
-  hortusfox_db_data:
-    name: hortusfox_db_data
   immich-model-cache:
     name: immich-model-cache
   influxdb2-data:
