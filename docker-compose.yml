@@ -1145,7 +1145,7 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
-  freescout-app:
+  freescout:
     container_name: freescout
     depends_on:
       mariadb:
