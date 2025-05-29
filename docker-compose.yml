@@ -1187,6 +1187,9 @@ services:
       - 59095:80
     restart: unless-stopped
     volumes:
+      - ${DOCKER_VOLUME_CONFIG}/freescout/assets/modules:/assets/modules
+      - ${DOCKER_VOLUME_CONFIG}/freescout/assets/custom:/assets/custom
+      - ${DOCKER_VOLUME_CONFIG}/freescout/assets/custom-scripts:/assets/custom-scripts
       - ${DOCKER_VOLUME_CONFIG}/freescout/data:/www/html
       - ${DOCKER_VOLUME_CONFIG}/freescout/logs/:/www/logs
   ghost:
