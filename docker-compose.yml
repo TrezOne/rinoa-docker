@@ -1175,7 +1175,7 @@ services:
       homepage.group: Lifestyle
       homepage.name: FreeScout
       homepage.icon: sh-freescout.svg
-      homepage.href: http://support.${MY_TLD}
+      homepage.href: https://support.${MY_TLD}
       homepage.description: Lightweight help desk and shared inbox
       swag: enable
       swag_proto: http
