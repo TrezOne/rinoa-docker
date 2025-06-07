@@ -1170,7 +1170,7 @@ services:
       SITE_URL: https://support.${MY_TLD}
       SKIP_STORAGE_PERMISSIONS: FALSE
       TIMEZONE: ${TZ}
-    image: tiredofit/freescout
+    image: tiredofit/freescout:latest
     labels:
       homepage.group: Lifestyle
       homepage.name: FreeScout
