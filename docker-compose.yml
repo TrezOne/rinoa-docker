@@ -88,6 +88,8 @@ services:
     labels:
       swag: enable
       swag_proto: http
+      swag_port: 8008
+      swag_address: 192.168.1.254
       swag_url: adgh.${MY_TLD}
       homepage.group: System Administration
       homepage.name: AdGuard Home
@@ -95,7 +97,7 @@ services:
       homepage.href: https://adgh.${MY_TLD}
       homepage.description: Ad-blocking/DNS
       homepage.widget.type: adguard
-      homepage.widget.url: http://adguard:80
+      homepage.widget.url: http://192.168.1.254:8008
       homepage.widget.username: admin
       homepage.widget.password: ${ADGUARD_PASSWORD}
     network_mode: host
