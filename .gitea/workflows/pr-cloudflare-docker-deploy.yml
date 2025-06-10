@@ -1,5 +1,6 @@
 name: Gitea Branch PR, Cloudflare DNS, README generation, & Docker Deployment
 on:
+  workflow_dispatch:
   push:
     branches-ignore:
       - 'main'
