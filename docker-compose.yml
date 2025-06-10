@@ -80,7 +80,8 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/actual-budget:/data
   adguard:
     cap_add:
-      - SYS_ADMIN
+      - NET_BIND_SERVICE
+      - NET_RAW
     container_name: adguard
     environment:
       TZ: ${TZ}
