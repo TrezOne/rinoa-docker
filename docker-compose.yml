@@ -4586,8 +4586,8 @@ services:
       - --copy-path=/var/tmp/collector-config.yaml
       - --feature-gates=-pkg.translator.prometheus.NormalizeName
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/signoz/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/signoz/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
     environment:
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
