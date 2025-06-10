@@ -60,7 +60,7 @@ x-signoz-common: &signoz-common
       max-size: 50m
       max-file: "3"
 x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
-  !!merge <<: *signoz-common
+  <<: *signoz-common
   # addding non LTS version due to this fix https://github.com/ClickHouse/ClickHouse/commit/32caf8716352f45c1b617274c7508c86b7d1afab
   image: clickhouse/clickhouse-server:24.1.2-alpine
   tty: true
@@ -89,7 +89,7 @@ x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
       soft: 262144
       hard: 262144
 x-signoz-zookeeper-defaults: &signoz-zookeeper-defaults
-  !!merge <<: *signoz-common
+  <<: *signoz-common
   image: bitnami/zookeeper:3.7.1
   user: root
   labels:
@@ -104,7 +104,7 @@ x-signoz-zookeeper-defaults: &signoz-zookeeper-defaults
     timeout: 5s
     retries: 3
 x-signoz-db-depend: &signoz-db-depend
-  !!merge <<: *signoz-common
+  <<: *signoz-common
   depends_on:
     signoz-clickhouse:
       condition: service_healthy
@@ -4496,7 +4496,7 @@ services:
       - semaphore_data:/var/lib/semaphore
       - semaphore_tmp:/tmp/semaphore
   signoz-init-clickhouse:
-    !!merge <<: *signoz-common
+    <<: *signoz-common
     container_name: signoz-init-clickhouse
     command:
       - bash
@@ -4513,9 +4513,9 @@ services:
     image: clickhouse/clickhouse-server:24.1.2-alpine
     restart: on-failure
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts:/var/lib/clickhouse/user_scripts/
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts/:/var/lib/clickhouse/user_scripts/
   signoz-zookeeper-1:
-    !!merge <<: *signoz-zookeeper-defaults
+    <<: *signoz-zookeeper-defaults
     container_name: signoz-zookeeper-1
     environment:
       ZOO_SERVER_ID: 1
@@ -4530,12 +4530,14 @@ services:
     volumes:
       - signoz-zookeeper-1:/bitnami/zookeeper
   signoz-clickhouse:
-    !!merge <<: *signoz-clickhouse-defaults
+    <<: *signoz-clickhouse-defaults
     container_name: signoz-clickhouse
-    # ports:
+    expose:
+      - 9000
+    ports:
     #   - "9000:9000"
-    #   - "8123:8123"
-    #   - "9181:9181"
+      - "8123:8123"
+      - "9181:9181"
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/config.xml:/etc/clickhouse-server/config.xml
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/users.xml:/etc/clickhouse-server/users.xml
@@ -4545,7 +4547,7 @@ services:
       - signoz-clickhouse:/var/lib/clickhouse/
       # - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/storage.xml:/etc/clickhouse-server/config.d/storage.xml
   signoz:
-    !!merge <<: *signoz-db-depend
+    <<: *signoz-db-depend
     container_name: signoz
     command:
       - --config=/root/config/prometheus.yml
@@ -4569,54 +4571,67 @@ services:
       timeout: 5s
       retries: 3
     image: signoz/signoz:${VERSION:-v0.86.2}
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Signoz
+      homepage.href: https://apm.${MY_TLD}
+      homepage.icon: signoz.svg
+      homepage.description: Logs, metrics, and traces in a single pane
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: apm.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://apm.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 36113:8080 # signoz port
     #   - "6060:6060"     # pprof port
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/signoz/prometheus.yml:/root/config/prometheus.yml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/prometheus.yml:/root/config/prometheus.yml
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/dashboards:/root/config/dashboards
       - signoz-sqlite:/var/lib/signoz/
   signoz-otel-collector:
-    !!merge <<: *signoz-db-depend
-    image: signoz/signoz-otel-collector:${OTELCOL_TAG:-v0.111.42}
+    <<: *signoz-db-depend
     container_name: signoz-otel-collector
     command:
       - --config=/etc/otel-collector-config.yaml
       - --manager-config=/etc/manager-config.yaml
       - --copy-path=/var/tmp/collector-config.yaml
       - --feature-gates=-pkg.translator.prometheus.NormalizeName
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
+    depends_on:
+      signoz:
+        condition: service_healthy
     environment:
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
+    image: signoz/signoz-otel-collector:${OTELCOL_TAG:-v0.111.42}
     ports:
       # - "1777:1777"     # pprof extension
       - "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP HTTP receiver
-    depends_on:
-      signoz:
-        condition: service_healthy
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
   signoz-schema-migrator-sync:
-    !!merge <<: *signoz-common
+    <<: *signoz-common
     image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
     container_name: schema-migrator-sync
     command:
       - sync
-      - --dsn=tcp://clickhouse:9000
+      - --dsn=tcp://signoz-clickhouse:9000
       - --up=
     depends_on:
       signoz-clickhouse:
         condition: service_healthy
     restart: on-failure
   signoz-schema-migrator-async:
-    !!merge <<: *signoz-db-depend
+    <<: *signoz-db-depend
     image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
     container_name: schema-migrator-async
     command:
       - async
-      - --dsn=tcp://clickhouse:9000
+      - --dsn=tcp://signoz-clickhouse:9000
       - --up=
     restart: on-failure
   sonarqube:
