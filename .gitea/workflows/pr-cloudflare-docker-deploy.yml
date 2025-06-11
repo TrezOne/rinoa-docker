@@ -50,7 +50,7 @@ jobs:
           tea login default gitea-rinoa
           pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | sed -e 's|"||g' | egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
           pr_index_new=$(expr ${pr_index_old} + 1)
-          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }} -L "Docker Compose, Ansible Configs.j2"
+          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }} -L "Docker Compose"
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -136,14 +136,17 @@ jobs:
       - name: Docker Compose Dry Run
         timeout-minutes: 360
         continue-on-error: true
-        uses: keatonLiu/docker-compose-remote-action@v1.2
+        uses: chaplyk/docker-compose-remote-action@v1.1
         with:
-          docker_compose_file: docker-compose.yml
-          docker_args: -d --remove-orphans --pull missing ${{ steps.modded_svcs.outputs.rinoa_svcs }}
-          ssh_user: gitea-deploy
           ssh_host: 192.168.1.254
-          ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
-          ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+          ssh_port: 22
+          ssh_user: gitea-deploy
+          ssh_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+          service: ${{ steps.modded_svcs.outputs.rinoa_svcs }}
+          compose_file: docker-compose.yml
+          pull: false
+          build: false
+          options: -d --remove-orphans
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
       - name: Gotify Notification
@@ -296,12 +299,13 @@ jobs:
   docker-compose-deploy:
     name: Docker Compose Deployment
     runs-on: ubuntu-latest
-    needs: [pr-merge]
+    needs: [docker-compose-dry-run, pr-merge]
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       DOCKER_HOST: tcp://dockerproxy:2375
       RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
+      DOCKER_SVC_LIST: ${{ needs.docker-compose-dry-run.outputs.svc_deploy_list }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -332,17 +336,22 @@ jobs:
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-      - name: Docker Compose Deployment
+      - name: Docker Compose Dry Run
         timeout-minutes: 360
         continue-on-error: true
-        uses: keatonLiu/docker-compose-remote-action@v1.2
+        uses: chaplyk/docker-compose-remote-action@v1.1
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          docker_compose_file: docker-compose.yml
-          docker_args: -d --remove-orphans --pull missing ${{ docker-compose-dry-run.outputs.svc_deploy_list }}
-          ssh_user: gitea-deploy
           ssh_host: 192.168.1.254
-          ssh_host_public_key: ${{ secrets.RINOA_GITEA_PUBLIC_SSH_KEY }}
-          ssh_private_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+          ssh_port: 22
+          ssh_user: gitea-deploy
+          ssh_key: ${{ secrets.RINOA_GITEA_PRIVATE_SSH_KEY }}
+          service: ${DOCKER_SVC_LIST}
+          compose_file: docker-compose.yml
+          pull: false
+          build: false
+          options: -d --remove-orphans
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:

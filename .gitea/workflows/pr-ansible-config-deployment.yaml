@@ -49,7 +49,7 @@ jobs:
           tea login default gitea-rinoa
           pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | sed -e 's|"||g' | egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
           pr_index_new=$(expr ${pr_index_old} + 1)
-          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }} -L "Docker Compose, Ansible Configs.j2"
+          tea pr c -r ${{ github.repository }} -t "Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }} -L "Ansible Configs.j2"
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
