@@ -722,36 +722,13 @@ services:
     security_opt:
       - no-new-privileges=true
     volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/crowdsec/config.yaml.local
-        target: /etc/crowdsec/config.yaml.local
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/crowdsec/local_api_credentials.yaml.local
-        target: /etc/crowdsec/local_api_credentials.yaml.local
-        type: bind
-        bind:
-          create_host_path: true
-      - read_only: true
-        source: ${DOCKER_VOLUME_CONFIG}/swag/log/nginx
-        target: /var/log/swag
-        type: bind
-        bind:
-          create_host_path: true
-      - source: crowdsec-config
-        target: /etc/crowdsec
-        type: volume
-        volume: {}
-      - source: crowdsec-db
-        target: /var/lib/crowdsec/data
-        type: volume
-        volume: {}
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /var/log/journal
-        target: /var/log/host
-        type: bind
+      - ${DOCKER_VOLUME_CONFIG}/crowdsec/config.yaml.local:/etc/crowdsec/config.yaml
+      - ${DOCKER_VOLUME_CONFIG}/crowdsec/local-api-credentials.yaml:/etc/crowdsec/local_api_credentials.yaml
+      - ${DOCKER_VOLUME_CONFIG}/crowdsec/online-api-credentials.yaml:/etc/crowdsec/online_api_credentials.yaml
+      - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx:/var/log/swag:ro
+      - crowdsec-config:/etc/crowdsec
+      - crowdsec-db:/var/lib/crowdsec/data
+      - /var/log/journal:/var/log/host:ro
   crowdsec-dashboard:
     container_name: crowdsec-dashboard
     depends_on:
