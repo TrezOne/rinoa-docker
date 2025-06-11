@@ -39,7 +39,7 @@
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
 | freescout | tiredofit/freescout:latest |
 | ghost | ghost:latest |
-| gitea | gitea/gitea:1.23.1 |
+| gitea | gitea/gitea:1.24.0 |
 | gitea-db | postgres:14 |
 | gitea-runner | gitea/act_runner:latest |
 | gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |
