@@ -66,6 +66,7 @@ jobs:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_NAMESPACE: ""
+      RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
     outputs:
       svc_deploy_list: ${{ steps.modded_svcs.outputs.rinoa_svcs }}
     steps:
@@ -76,7 +77,7 @@ jobs:
           git fetch origin ${{ github.event.pull_request.base.ref }}
       - name: Login to Gitea Container Registry
         run: |
-          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_PASSWORD }} git.trez.wtf
+          docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
       - name: Save both versions of docker-compose.yml
         run: |
           git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
@@ -300,6 +301,7 @@ jobs:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       DOCKER_HOST: tcp://dockerproxy:2375
+      RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -319,7 +321,7 @@ jobs:
         uses: cpanato/vault-installer@main
       - name: Login to Gitea Container Registry
         run: |
-          docker login -u gitea-sonarqube-bot -p ${{ secrets.BOT_GITEA_PASSWORD }} git.trez.wtf
+          docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
