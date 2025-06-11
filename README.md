@@ -129,6 +129,13 @@
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
 | semaphore | semaphoreui/semaphore:v2.12.14 |
+| signoz-init-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
+| signoz-zookeeper-1 | bitnami/zookeeper:3.7.1 |
+| signoz-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
+| signoz-app | signoz/signoz:v0.86.2 |
+| signoz-otel-collector | signoz/signoz-otel-collector:v0.111.42 |
+| signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.111.42 |
+| signoz-schema-migrator-async | signoz/signoz-schema-migrator:v0.111.42 |
 | sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts |
 | sonarqube-pg-db | postgres:17-alpine |
 | sonarr | lscr.io/linuxserver/sonarr:latest |

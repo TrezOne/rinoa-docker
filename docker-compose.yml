@@ -51,6 +51,65 @@ x-maxun: &maxun-env
     CHROMIUM_FLAGS: '--disable-gpu --no-sandbox --headless=new'
     #DEBUG: pw:api
     #PWDEBUG: 1
+x-signoz-common: &signoz-common
+  # networks:
+  #   - signoz-net
+  restart: unless-stopped
+  logging:
+    options:
+      max-size: 50m
+      max-file: "3"
+x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
+  <<: *signoz-common
+  # addding non LTS version due to this fix https://github.com/ClickHouse/ClickHouse/commit/32caf8716352f45c1b617274c7508c86b7d1afab
+  image: clickhouse/clickhouse-server:24.1.2-alpine
+  tty: true
+  labels:
+    signoz.io/scrape: "true"
+    signoz.io/port: "9363"
+    signoz.io/path: "/metrics"
+  depends_on:
+    signoz-init-clickhouse:
+      condition: service_completed_successfully
+    signoz-zookeeper-1:
+      condition: service_healthy
+  healthcheck:
+    test:
+      - CMD
+      - wget
+      - --spider
+      - -q
+      - 0.0.0.0:8123/ping
+    interval: 30s
+    timeout: 5s
+    retries: 3
+  ulimits:
+    nproc: 65535
+    nofile:
+      soft: 262144
+      hard: 262144
+x-signoz-zookeeper-defaults: &signoz-zookeeper-defaults
+  <<: *signoz-common
+  image: bitnami/zookeeper:3.7.1
+  user: root
+  labels:
+    signoz.io/scrape: "true"
+    signoz.io/port: "9141"
+    signoz.io/path: "/metrics"
+  healthcheck:
+    test:
+      - CMD-SHELL
+      - curl -s -m 2 http://localhost:8080/commands/ruok | grep error | grep null
+    interval: 30s
+    timeout: 5s
+    retries: 3
+x-signoz-db-depend: &signoz-db-depend
+  <<: *signoz-common
+  depends_on:
+    signoz-clickhouse:
+      condition: service_healthy
+    signoz-schema-migrator-sync:
+      condition: service_completed_successfully
 services:
   actual_server:
     container_name: actualbudget
@@ -4436,6 +4495,145 @@ services:
       - semaphore_config:/etc/semaphore
       - semaphore_data:/var/lib/semaphore
       - semaphore_tmp:/tmp/semaphore
+  signoz-init-clickhouse:
+    <<: *signoz-common
+    container_name: signoz-init-clickhouse
+    command:
+      - bash
+      - -c
+      - |
+        version="v0.0.1"
+        node_os=$$(uname -s | tr '[:upper:]' '[:lower:]')
+        node_arch=$$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
+        echo "Fetching histogram-binary for $${node_os}/$${node_arch}"
+        cd /tmp
+        wget -O histogram-quantile.tar.gz "https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F$${version}/histogram-quantile_$${node_os}_$${node_arch}.tar.gz"
+        tar -xvzf histogram-quantile.tar.gz
+        mv histogram-quantile /var/lib/clickhouse/user_scripts/histogramQuantile
+    image: clickhouse/clickhouse-server:24.1.2-alpine
+    restart: on-failure
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts/:/var/lib/clickhouse/user_scripts/
+  signoz-zookeeper-1:
+    <<: *signoz-zookeeper-defaults
+    container_name: signoz-zookeeper-1
+    environment:
+      ZOO_SERVER_ID: 1
+      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOO_AUTOPURGE_INTERVAL: 1
+      ZOO_ENABLE_PROMETHEUS_METRICS: yes
+      ZOO_PROMETHEUS_METRICS_PORT_NUMBER: 9141
+    # ports:
+    #   - "2181:2181"
+    #   - "2888:2888"
+    #   - "3888:3888"
+    volumes:
+      - signoz-zookeeper-1:/bitnami/zookeeper
+  signoz-clickhouse:
+    <<: *signoz-clickhouse-defaults
+    container_name: signoz-clickhouse
+    expose:
+      - 9000
+    ports:
+    #   - "9000:9000"
+      - "8123:8123"
+      - "9181:9181"
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/config.xml:/etc/clickhouse-server/config.xml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/users.xml:/etc/clickhouse-server/users.xml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/custom-function.xml:/etc/clickhouse-server/custom-function.xml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts:/var/lib/clickhouse/user_scripts/
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml
+      - signoz-clickhouse:/var/lib/clickhouse/
+      # - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/storage.xml:/etc/clickhouse-server/config.d/storage.xml
+  signoz-app:
+    <<: *signoz-db-depend
+    container_name: signoz-app
+    command:
+      - --config=/root/config/prometheus.yml
+    environment:
+       SIGNOZ_ALERTMANAGER_PROVIDER: signoz
+       SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN: tcp://signoz-clickhouse:9000
+       SIGNOZ_SQLSTORE_SQLITE_PATH: /var/lib/signoz/signoz.db
+       DASHBOARDS_PATH: /root/config/dashboards
+       STORAGE: clickhouse
+       GODEBUG: netdns=go
+       TELEMETRY_ENABLED: true
+       DEPLOYMENT_TYPE: docker-standalone-amd
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --spider
+        - -q
+        - localhost:8080/api/v1/health
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    image: signoz/signoz:${VERSION:-v0.86.2}
+    labels:
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: Signoz
+      homepage.href: https://apm.${MY_TLD}
+      homepage.icon: signoz.svg
+      homepage.description: Logs, metrics, and traces in a single pane
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: apm.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://apm.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 36113:8080 # signoz port
+      # - "6060:6060"     # pprof port
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/prometheus.yml:/root/config/prometheus.yml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/dashboards:/root/config/dashboards
+      - signoz-sqlite:/var/lib/signoz/
+  signoz-otel-collector:
+    <<: *signoz-db-depend
+    container_name: signoz-otel-collector
+    command:
+      - --config=/etc/otel-collector-config.yaml
+      - --manager-config=/etc/manager-config.yaml
+      - --copy-path=/var/tmp/collector-config.yaml
+      - --feature-gates=-pkg.translator.prometheus.NormalizeName
+    depends_on:
+      signoz:
+        condition: service_healthy
+    environment:
+      OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
+      LOW_CARDINAL_EXCEPTION_GROUPING: false
+    image: signoz/signoz-otel-collector:${OTELCOL_TAG:-v0.111.42}
+    ports:
+      # - "1777:1777"     # pprof extension
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP HTTP receiver
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
+  signoz-schema-migrator-sync:
+    <<: *signoz-common
+    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
+    container_name: schema-migrator-sync
+    command:
+      - sync
+      - --dsn=tcp://signoz-clickhouse:9000
+      - --up=
+    depends_on:
+      signoz-clickhouse:
+        condition: service_healthy
+    restart: on-failure
+  signoz-schema-migrator-async:
+    <<: *signoz-db-depend
+    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
+    container_name: schema-migrator-async
+    command:
+      - async
+      - --dsn=tcp://signoz-clickhouse:9000
+      - --up=
+    restart: on-failure
   sonarqube:
     container_name: sonarqube
     depends_on:
@@ -5315,6 +5513,12 @@ volumes:
     name: semaphore_data
   semaphore_tmp:
     name: semaphore_tmp
+  signoz-clickhouse:
+    name: signoz-clickhouse
+  signoz-sqlite:
+    name: signoz-sqlite
+  signoz-zookeeper-1:
+    name: signoz-zookeeper-1
   sonarqube-data:
     name: sonarqube-data
   sonarqube-db:
