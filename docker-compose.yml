@@ -1067,6 +1067,7 @@ services:
       homepage.icon: /icons/dockflare.png
       homepage.description: Cloudflare Tunnel controller
       swag: enable
+      swag_auth: authelia
       swag_proto: http
       swag_url: cftunn.${MY_TLD}
       swag.uptime-kuma.enabled: true
