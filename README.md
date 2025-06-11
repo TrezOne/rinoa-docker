@@ -31,6 +31,7 @@
 | dawarich-sidekiq | freikin/dawarich:latest |
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
+| dockflare | alplat/dockflare:stable |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
 | excalidraw | excalidraw/excalidraw:latest |
 | explo | ghcr.io/lumepart/explo:latest |

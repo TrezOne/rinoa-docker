@@ -1,13 +1,5 @@
 name: compose
 networks:
-  bitmagnet:
-    driver: bridge
-    ipam:
-      config:
-        - gateway: 192.168.55.1
-          subnet: 192.168.55.0/27
-      driver: default
-    name: compose_bitmagnet
   default:
     name: compose_default
   nextcloud-aio:
@@ -55,10 +47,10 @@ x-signoz-common: &signoz-common
   # networks:
   #   - signoz-net
   restart: unless-stopped
-  logging:
-    options:
-      max-size: 50m
-      max-file: "3"
+  # logging:
+  #   options:
+  #     max-size: 50m
+  #     max-file: "3"
 x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
   <<: *signoz-common
   # addding non LTS version due to this fix https://github.com/ClickHouse/ClickHouse/commit/32caf8716352f45c1b617274c7508c86b7d1afab
@@ -1047,6 +1039,61 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
         type: bind
+  dockflare:
+    container_name: dockflare
+    environment:
+      AGENT_STATUS_UPDATE_INTERVAL_SECONDS: 10
+      CF_ACCOUNT_ID: ${CLOUDFLARE_ACCOUNT_ID}
+      CF_API_TOKEN: ${CLOUDFLAREDDNS_ENVIRONMENT_APITOKEN}
+      CF_ZONE_ID: ${CLOUDFLARE_ZONE_ID}
+      CLEANUP_INTERVAL_SECONDS: 300
+      CLOUDFLARED_NETWORK_NAME: compose_default
+      DEFAULT_NO_TLS_VERIFY: false
+      GRACE_PERIOD_SECONDS: 600
+      LABEL_PREFIX: cloudflare.tunnel
+      MAX_CONCURRENT_DNS_OPS: 3
+      RECONCILIATION_BATCH_SIZE: 3
+      SCAN_ALL_NETWORKS: false
+      STATE_FILE_PATH: /app/data/state.json
+      TRUSTED_PROXIES: 192.168.1.0/24,172.18.0.0/16
+      TUNNEL_DNS_SCAN_ZONE_NAMES:
+      TUNNEL_NAME: dockflared-tunnel
+      TZ: ${TZ}
+    image: alplat/dockflare:stable # Or :unstable for the latest features
+    labels:
+      homepage.group: Privacy/Security
+      homepage.name: DockFlare
+      homepage.href: https://cftunn.${MY_TLD}
+      homepage.icon: /icons/dockflare.png
+      homepage.description: Cloudflare Tunnel controller
+      swag: enable
+      swag_proto: http
+      swag_url: cftunn.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://cftunn.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      ### EXAMPLE CF TUNNEL LABELS ###
+      # Enable DockFlare management for this container
+      # - "cloudflare.tunnel.enable=true" 
+      # The public hostname to expose
+      # - "cloudflare.tunnel.hostname=my-service.example.com"
+      # The internal service address (protocol://container_name_or_ip:port)
+      # Service type (http, https, tcp, ssh, rdp, http_status) is inferred from the prefix.
+      # - "cloudflare.tunnel.service=http://my-service:80" 
+      # Optional: Specify a URL path. Only requests to hostname/path will match.
+      # - "cloudflare.tunnel.path=/app"
+      # Optional: Specify a different Cloudflare Zone for this hostname
+      # - "cloudflare.tunnel.zonename=another.example.com"
+      # Optional: Disable TLS verification if your internal service uses HTTP or a self-signed cert
+      # - "cloudflare.tunnel.no_tls_verify=true"
+      # Optional: Specify Origin Server Name (SNI) for TLS connection to origin
+      # - "cloudflare.tunnel.originsrvname=internal.service.local"
+    ports:
+      - 20756:5000
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - dockflare_data:/app/data
   duplicati:
     container_name: duplicati
     environment:
@@ -1427,13 +1474,7 @@ services:
       VPN_SERVICE_PROVIDER: private internet access
     expose:
       - 8000
-    extra_hosts:
-      - bitmagnet-pg-db:192.168.55.8
     image: qmcgaw/gluetun:latest
-    networks:
-      bitmagnet:
-        ipv4_address: 192.168.55.7
-      default: null
     ports:
       - 3333:3333
       - 3334:3334
@@ -4600,7 +4641,7 @@ services:
       - --copy-path=/var/tmp/collector-config.yaml
       - --feature-gates=-pkg.translator.prometheus.NormalizeName
     depends_on:
-      signoz:
+      signoz-app:
         condition: service_healthy
     environment:
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
@@ -5435,6 +5476,8 @@ volumes:
     name: dawarich_public
   dawarich_watched:
     name: dawarich_watched
+  dockflare_data:
+    name: dockflare_data
   fastenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:
