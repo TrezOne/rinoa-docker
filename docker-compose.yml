@@ -4546,9 +4546,9 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml
       - signoz-clickhouse:/var/lib/clickhouse/
       # - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/storage.xml:/etc/clickhouse-server/config.d/storage.xml
-  signoz:
+  signoz-app:
     <<: *signoz-db-depend
-    container_name: signoz
+    container_name: signoz-app
     command:
       - --config=/root/config/prometheus.yml
     environment:
@@ -4586,7 +4586,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 36113:8080 # signoz port
-    #   - "6060:6060"     # pprof port
+      # - "6060:6060"     # pprof port
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/prometheus.yml:/root/config/prometheus.yml
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/dashboards:/root/config/dashboards
