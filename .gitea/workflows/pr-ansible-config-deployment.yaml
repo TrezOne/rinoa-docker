@@ -59,7 +59,7 @@ jobs:
           notification_title: 'GITEA: PR Check'
           notification_message: 'PR Created 🎟️'
   ansible-linting:
-    name: Ansible Lints
+    name: Ansible Lint
     needs: [check-and-create-pr]
     runs-on: ubuntu-latest
     env:
@@ -92,30 +92,18 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
           notification_message: 'Starting Ansible dry run...'
-      # - name: Ansible Playbook Dry Run
-      #   uses: arillso/action.playbook@0.1.0
-      #   with:
-      #     check: true
-      #     galaxy_collections_path: ansible/collections
-      #     galaxy_requirements_file: ansible/collections/requirements.yml
-      #     inventory: ansible/inventory/hosts.yml
-      #     playbook: ansible/docker_config_deploy.yml
-      #     private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-      #     verbose: 3
       - name: Ansible Playbook Dry Run
         uses: dawidd6/action-ansible-playbook@v3
         with:
-          # Required, playbook filepath
-          playbook: ansible/docker_config_deploy.yml
           directory: ansible/
+          playbook: docker_config_deploy.yml
           key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          requirements: ansible/collections/requirements.yml
+          requirements: collections/requirements.yml
           options: |
             --check
-            --inventory ansible/inventory/hosts.yml
-            -vvv
+            --inventory inventory/hosts.yml
+            -v
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -194,26 +182,13 @@ jobs:
       - name: Ansible Playbook Config Deploy
         uses: dawidd6/action-ansible-playbook@v3
         with:
-          # Required, playbook filepath
-          playbook: ansible/docker_config_deploy.yml
           directory: ansible/
+          playbook: docker_config_deploy.yml
           key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          requirements: ansible/collections/requirements.yml
+          requirements: collections/requirements.yml
           options: |
-            --inventory ansible/inventory/hosts.yml
-            -vvv
-      # - name: Ansible Playbook Config Deploy
-      #   uses: arillso/action.playbook@0.1.0
-      #   with:
-      #     check: false
-      #     galaxy_collections_path: ansible/collections
-      #     galaxy_requirements_file: ansible/collections/requirements.yml
-      #     inventory: ansible/inventory/hosts.yml
-      #     playbook: ansible/docker_config_deploy.yml
-      #     private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
-      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-      #     verbose: 3
+            --inventory inventory/hosts.yml
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
