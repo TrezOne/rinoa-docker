@@ -2,7 +2,7 @@ name: Auto-Unseal for Vault
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 2 * * *"
+    - cron: "0 5 * * *"
 jobs:
   auto-unseal:
     name: Unseal Vault
