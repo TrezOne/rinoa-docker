@@ -1,9 +1,7 @@
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
-
-
 source: journalctl
-journalctl_filter: 
+journalctl_filter:
   - "--directory=/var/log/host/"
 labels:
   type: syslog
@@ -13,3 +11,45 @@ filenames:
 labels:
   type: nginx
 ---
+filenames:
+  - /var/log/auth/auth.log
+labels:
+  type: syslog
+---
+filenames:
+  - /var/lib/mysql/log/mysql/*
+  - /var/lib/mysql/databases/*.err
+  - /var/lib/mysql/databases/*.log
+labels:
+  type: mariadb
+---
+source: docker
+container_name:
+  - adguard
+labels:
+  type: adguardhome
+---
+source: docker
+container_name:
+ - mongodb
+labels:
+  type: mongodb
+---
+source: docker
+container_name:
+ - immich-server
+labels:
+  type: immich
+---
+---
+source: docker
+container_name:
+ - uptimekuma
+labels:
+  type: uptime-kuma
+---
+source: docker
+container_name:
+ - jellyfin
+labels:
+  type: jellyfin
