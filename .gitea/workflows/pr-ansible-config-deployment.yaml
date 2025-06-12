@@ -59,7 +59,7 @@ jobs:
           notification_title: 'GITEA: PR Check'
           notification_message: 'PR Created 🎟️'
   ansible-linting:
-    name: Ansible Lints
+    name: Ansible Lint
     needs: [check-and-create-pr]
     runs-on: ubuntu-latest
     env:
@@ -103,7 +103,7 @@ jobs:
           options: |
             --check
             --inventory inventory/hosts.yml
-            --verbose
+            -v
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
