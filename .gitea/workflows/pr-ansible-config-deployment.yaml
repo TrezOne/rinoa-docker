@@ -107,14 +107,14 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v3
         with:
           # Required, playbook filepath
-          playbook: ansible/docker_config_deploy.yml
+          playbook: docker_config_deploy.yml
           directory: ansible/
           key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          requirements: ansible/collections/requirements.yml
+          requirements: collections/requirements.yml
           options: |
             --check
-            --inventory ansible/inventory/hosts.yml
+            --inventory inventory/hosts.yml
             -vvv
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -195,13 +195,13 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v3
         with:
           # Required, playbook filepath
-          playbook: ansible/docker_config_deploy.yml
+          playbook: docker_config_deploy.yml
           directory: ansible/
           key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          requirements: ansible/collections/requirements.yml
+          requirements: collections/requirements.yml
           options: |
-            --inventory ansible/inventory/hosts.yml
+            --inventory inventory/hosts.yml
             -vvv
       # - name: Ansible Playbook Config Deploy
       #   uses: arillso/action.playbook@0.1.0
