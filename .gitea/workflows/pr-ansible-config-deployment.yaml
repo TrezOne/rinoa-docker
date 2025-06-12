@@ -6,6 +6,7 @@ on:
       - 'main'
     paths:
       - '**.j2'
+      - '**/pr-ansible-config-deployment.yaml'
       - 'ansible/**.yml'
 jobs:
   check-and-create-pr:
@@ -104,7 +105,7 @@ jobs:
           playbook: ansible/docker_config_deploy.yml
           private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 0
+          verbose: 3
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -189,6 +190,7 @@ jobs:
           playbook: ansible/docker_config_deploy.yml
           private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          verbose: 3
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
