@@ -1,0 +1,62 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+version: 2
+
+postal:
+  web_hostname: post.trez.wtf
+  web_protocol: http
+  smtp_hostname: post.trez.wtf
+  use_ip_pools: false
+  signing_key_path: /config/signing.key
+  trusted_proxies: [ "172.18.0.0/16" ]
+
+web_server:
+  default_port: 5000
+  default_bind_address: 0.0.0.0
+
+main_db:
+  host: mariadb
+  username: postal
+  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_MYSQL_PASSWORD'] }}
+  database: postal
+
+message_db:
+  host: mariadb
+  username: postal
+  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_MYSQL_PASSWORD'] }}
+  prefix: postal
+
+smtp_server:
+  default_port: 25
+  default_bind_address: "::"
+  tls_enabled: true
+  tls_certificate_path: /config/certs/fullchain.pem
+  tls_private_key_path: /config/certs/privkey.pem
+
+dns:
+  # Specify the DNS records that you have configured. Refer to the documentation at
+  # https://github.com/atech/postal/wiki/Domains-&-DNS-Configuration for further
+  # information about these.
+  mx_records:
+    - mx.post.trez.wtf
+  spf_include: spf.post.trez.wtf
+  return_path_domain: rp.post.trez.wtf
+  route_domain: routes.post.trez.wtf
+  track_domain: track.post.trez.wtf
+
+smtp:
+  # Specify an SMTP server that can be used to send messages from the Postal management
+  # system to users. You can configure this to use a Postal mail server once the
+  # your installation has been set up.
+  host: postal-smtp
+  port: 25
+  username: rinoa/postal-smtp
+  password: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}"
+  from_name: Postal @ Rinoa
+  from_address: noreply@trez.wtf
+
+rails:
+  # This is generated automatically by the config initialization. It should be a random
+  # string unique to your installation.
+  secret_key: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_RAILS_SECRET_KEY'] }}"

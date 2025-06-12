@@ -1,0 +1,42 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+{
+  "url": "blog.trez.wtf",
+  "database": {
+    "client": "mysql",
+    "connection": {
+      "host"     : "mariadb",
+      "port"     : 3306,
+      "user"     : "ghost",
+      "password" : "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GHOST_DB_PASSWORD'] }}",
+      "database" : "ghost_db"
+    }
+  },
+  "mail": {
+    "from": "'Ghost @ Rinoa' <noreply@trez.wtf>",
+    "transport": "SMTP",
+    "options": {
+      "host": "postal-smtp",
+      "port": 25,
+      "secure": false,
+      "auth": {
+        "user": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}",
+        "pass": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_PASSWORD'] }}"
+      }
+    }
+  },
+  "paths": {
+    "contentPath": "content/"
+  },
+  "privacy": {
+    "useGravatar": true
+  },
+  "logging": {
+    "level": "info",
+    "rotation": {
+      "enabled": true
+    },
+    "transports": ["file"]
+  }
+}

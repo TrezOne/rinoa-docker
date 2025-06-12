@@ -1,0 +1,16 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+tunnel: 52bdee6e-8ccb-47be-ba9e-f8010b905e41
+credentials-file: /etc/cloudflared/52bdee6e-8ccb-47be-ba9e-f8010b905e41.json
+warp-routing:
+  enabled: true
+
+ingress:
+  - hostname: git-ssh.trez.wtf
+    service: ssh://gitea:22
+  - hostname: gist-ssh.trez.wtf
+    service: ssh://gitea-opengist:2222
+  - hostname: ssh.trez.wtf
+    service: ssh://192.168.1.254:22
+  - service: http_status:404  # Default for unmatched requests

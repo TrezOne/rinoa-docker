@@ -1,0 +1,81 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+# Gitea related configuration. Necessary for adding/updating comments on repository pull requests
+gitea:
+  # Endpoint of your Gitea instance. Must be expandable by '/api/v1' to form the API base path as shown in Swagger UI.
+  url: https://git.trez.wtf
+
+  # Created access token for the user that shall be used as bot account.
+  # User needs "Read project" permissions with access to "Pull Requests"
+  token:
+    value: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_GITEA_TOKEN'] }}"
+    # # or path to file containing the plain text secret
+    # file: /path/to/gitea/token
+
+  # If the sent webhook has a signature header, the bot validates the request payload. If the value does not match, the
+  # request will be ignored.
+  # The bot looks for `X-Gitea-Signature` header containing the sha256 hmac hash of the plain text secret. If the header
+  # exists and no webhookSecret is defined here, the bot will ignore the request, because it cannot be validated.
+  webhook:
+    secret: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_GITEA_WEBHOOK_SECRET'] }}"
+    # # or path to file containing the plain text secret
+    # secretFile: /path/to/gitea/webhook/secret
+
+  # Pull Request status check settings.
+  statusCheck:
+    # Configure the label/name of the PR status check.
+    name: "gitea-sonarqube-bot"
+
+# SonarQube related configuration. Necessary for requesting data from the API and processing the webhook.
+sonarqube:
+  # Endpoint of your SonarQube instance. Must be expandable by '/api' to form the API base path.
+  url: https://sqube.trez.wtf
+
+  # Created access token for the user that shall be used as bot account.
+  # User needs "Browse on project" permissions
+  token:
+    value: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_SQUBE_TOKEN'] }}"
+    # # or path to file containing the plain text secret
+    # file: /path/to/sonarqube/token
+
+  # If the sent webhook has a signature header, the bot validates the request payload. If the value does not match, the
+  # request will be ignored.
+  # The bot looks for `X-Sonar-Webhook-HMAC-SHA256` header containing the sha256 hmac hash of the plain text secret.
+  # If the header exists and no webhookSecret is defined here, the bot will ignore the request, because it cannot be
+  # validated.
+  webhook:
+    secret: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_SQUBE_WEBHOOK_SECRET'] }}"
+    # # or path to file containing the plain text secret
+    # secretFile: /path/to/sonarqube/webhook/secret
+
+  # Some useful metrics depend on the edition in use. There are various ones like code_smells, vulnerabilities, bugs, etc.
+  # By default, the bot will extract "bugs,vulnerabilities,code_smells"
+  # Setting this option you can extend that default list by your own metrics.
+  # additionalMetrics: []
+  # - "new_security_hotspots"
+
+# List of project mappings to take care of. Webhooks for other projects will be ignored.
+# At least one must be configured. Otherwise, all webhooks (no matter which source) because the bot cannot map on its own.
+projects:
+  - sonarqube:
+      key: rinoa-docker
+    # A repository specification contains the owner name and the repository name itself. The owner can be the name of a
+    # real account or an organization in which the repository is located.
+    gitea:
+      owner: Trez.One
+      name: rinoa-docker
+
+# Define pull request names from SonarScanner analysis. Default pattern matches the Jenkins Gitea plugin schema.
+namingPattern:
+  # Regular expression that MUST HAVE exactly ONE GROUP that matches the integer part of the PR.
+  # That integer part is identical to the pull request ID in Gitea.
+  regex: "^.*$"
+
+  # Valid Go format string. It MUST have one integer placeholder which will be replaced by the pull request ID.
+  # See: https://pkg.go.dev/fmt#hdr-Printing
+  template: "%s"
+
+  # Example for integer-only names
+  # # regex: "^(\\d+)$"
+  # # template: "%d"
