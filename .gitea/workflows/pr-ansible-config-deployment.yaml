@@ -69,10 +69,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
@@ -89,8 +85,7 @@ jobs:
       - name: Install hvac
         run: |
           pip install hvac
-          export LD_LIBRARY_PATH=/lib64:/lib:$LD_LIBRARY_PATH
-          echo ${LD_LIBRARY_PATH}
+          apt-get update && apt-get install -y libc6 libc6-dev
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -168,10 +163,6 @@ jobs:
         with:
           path: /opt/hostedtoolcache/vault/1.18.0/x64
           key: vault-${{ runner.os }}-1.18.0
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
@@ -181,8 +172,7 @@ jobs:
       - name: Install hvac
         run: |
           pip install hvac
-          export LD_LIBRARY_PATH=/lib64:/lib:$LD_LIBRARY_PATH
-          echo ${LD_LIBRARY_PATH}
+          apt-get update && apt-get install -y libc6 libc6-dev
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
