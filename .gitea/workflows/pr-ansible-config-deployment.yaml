@@ -85,7 +85,6 @@ jobs:
       - name: Install hvac
         run: |
           pip install hvac
-          apt-get update && apt-get install -y libc6 libc6-dev
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -93,17 +92,30 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Ansible Config Dry Run @ Rinoa'
           notification_message: 'Starting Ansible dry run...'
+      # - name: Ansible Playbook Dry Run
+      #   uses: arillso/action.playbook@0.1.0
+      #   with:
+      #     check: true
+      #     galaxy_collections_path: ansible/collections
+      #     galaxy_requirements_file: ansible/collections/requirements.yml
+      #     inventory: ansible/inventory/hosts.yml
+      #     playbook: ansible/docker_config_deploy.yml
+      #     private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      #     verbose: 3
       - name: Ansible Playbook Dry Run
-        uses: arillso/action.playbook@0.1.0
+        uses: dawidd6/action-ansible-playbook@v3
         with:
-          check: true
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/inventory/hosts.yml
+          # Required, playbook filepath
           playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+          directory: ansible/
+          key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 3
+          requirements: ansible/collections/requirements.yml
+          options: |
+            --check
+            --inventory ansible/inventory/hosts.yml
+            -vvv
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -172,7 +184,6 @@ jobs:
       - name: Install hvac
         run: |
           pip install hvac
-          apt-get update && apt-get install -y libc6 libc6-dev
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -181,16 +192,28 @@ jobs:
           notification_title: 'GITEA: Ansible Config Deployment @ Rinoa'
           notification_message: 'Starting config deployment with Ansible...'
       - name: Ansible Playbook Config Deploy
-        uses: arillso/action.playbook@0.1.0
+        uses: dawidd6/action-ansible-playbook@v3
         with:
-          check: false
-          galaxy_collections_path: ansible/collections
-          galaxy_requirements_file: ansible/collections/requirements.yml
-          inventory: ansible/inventory/hosts.yml
+          # Required, playbook filepath
           playbook: ansible/docker_config_deploy.yml
-          private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+          directory: ansible/
+          key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
           vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-          verbose: 3
+          requirements: ansible/collections/requirements.yml
+          options: |
+            --inventory ansible/inventory/hosts.yml
+            -vvv
+      # - name: Ansible Playbook Config Deploy
+      #   uses: arillso/action.playbook@0.1.0
+      #   with:
+      #     check: false
+      #     galaxy_collections_path: ansible/collections
+      #     galaxy_requirements_file: ansible/collections/requirements.yml
+      #     inventory: ansible/inventory/hosts.yml
+      #     playbook: ansible/docker_config_deploy.yml
+      #     private_key: ${{ secrets.RINOA_ANSIBLE_PRIVATE_KEY }}
+      #     vault_password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      #     verbose: 3
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
