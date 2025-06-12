@@ -317,10 +317,7 @@ jobs:
         with:
           path: /opt/hostedtoolcache/vault/1.18.0/x64
           key: vault-${{ runner.os }}-1.18.0
-      - name: Install Ansible
-        uses: alex-oleshkevich/setup-ansible@v1.0.1
-        with:
-          version: "11.0.0"
+
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Login to Gitea Container Registry
@@ -336,7 +333,7 @@ jobs:
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-      - name: Docker Compose Dry Run
+      - name: Docker Compose Deployment
         timeout-minutes: 360
         continue-on-error: true
         uses: chaplyk/docker-compose-remote-action@v1.1
