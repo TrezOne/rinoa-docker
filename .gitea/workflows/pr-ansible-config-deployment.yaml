@@ -58,7 +58,7 @@ jobs:
           notification_title: 'GITEA: PR Check'
           notification_message: 'PR Created 🎟️'
   ansible-linting:
-    name: Docker Compose & Ansible Lints
+    name: Ansible Lints
     needs: [check-and-create-pr]
     runs-on: ubuntu-latest
     env:
@@ -81,7 +81,7 @@ jobs:
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
-          version: "11.0.0"
+          version: "11.4.0"
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Install hvac
