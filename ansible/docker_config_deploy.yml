@@ -1,27 +1,42 @@
----
 - name: Deploy Docker Service Configurations
   hosts: rinoa
   vars:
     appdata_base_path: "~/.docker/config/appdata"
+    template_base_path: "{{ playbook_dir }}/app-configs"
 
   tasks:
     - name: Recursively collect all Jinja2 templates (*.j2)
       ansible.builtin.find:
-        paths: "app-configs"
+        paths: "{{ template_base_path }}"
         patterns: "*.j2"
         recurse: true
       register: template_files
 
+    - name: Set relative template path (without .j2) for each file
+      ansible.builtin.set_fact:
+        rel_template_path: >-
+          {{ item.path
+             | regex_replace('^' + (template_base_path | regex_escape) + '/', '')
+             | regex_replace('\\.j2$', '') }}
+      loop: "{{ template_files.files }}"
+      loop_control:
+        loop_var: item
+      register: rel_paths
+
     - name: Ensure target directories exist
       ansible.builtin.file:
-        path: "{{ appdata_base_path }}/{{ item.path | regex_replace('^app-configs/', '') | regex_replace('\\.j2$', '') | dirname }}"
+        path: "{{ appdata_base_path }}/{{ item.ansible_facts.rel_template_path | dirname }}"
         state: directory
         mode: '0755'
-      loop: "{{ template_files.files }}"
+      loop: "{{ rel_paths.results }}"
+      loop_control:
+        label: "{{ item.ansible_facts.rel_template_path }}"
 
     - name: Deploy rendered templates
       ansible.builtin.template:
-        src: "{{ item.path }}"
-        dest: "{{ appdata_base_path }}/{{ item.path | regex_replace('^app-configs/', '') | regex_replace('\\.j2$', '') }}"
+        src: "{{ item.item.path | regex_replace('^' + (playbook_dir | regex_escape) + '/', '') }}"
+        dest: "{{ appdata_base_path }}/{{ item.ansible_facts.rel_template_path }}"
         mode: '0644'
-      loop: "{{ template_files.files }}"
+      loop: "{{ rel_paths.results }}"
+      loop_control:
+        label: "{{ item.ansible_facts.rel_template_path }}"
