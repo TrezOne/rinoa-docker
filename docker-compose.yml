@@ -749,6 +749,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/crowdsec/online-api-credentials.yaml:/etc/crowdsec/online_api_credentials.yaml
       - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx:/var/log/swag:ro # SWAG
       - ${DOCKER_VOLUME_CONFIG}/mariadb/:/var/lib/mysql:ro # MariaDB
+      - ${DOCKER_VOLUME_CONFIG}/audiobookshelf/.metadata/logs:/var/log/audiobookself:ro # Audiobookshelf
       - crowdsec-config:/etc/crowdsec
       - crowdsec-db:/var/lib/crowdsec/data
       - /var/log/journal:/var/log/host:ro
