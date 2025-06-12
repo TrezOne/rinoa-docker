@@ -1,0 +1,33 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/widgets
+
+- resources:
+    label: System
+    cpu: true
+    memory: true
+    cputemp: true
+    uptime: true
+
+- resources:
+    label: Storage
+    expanded: true
+    disk:
+        - /
+        - /rinoa-storage
+
+- search:
+    provider: custom
+    url: https://search.trez.wtf/search?q=
+    target: _blank
+
+- openweathermap:
+    label: New York
+    latitude: 40.72
+    longitude: -73.85
+    units: imperial
+    provider: openweathermap
+    cache: 10

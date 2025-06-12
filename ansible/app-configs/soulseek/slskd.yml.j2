@@ -1,0 +1,212 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+directories:
+  incomplete: /app/incomplete
+  downloads: /app/downloads
+shares:
+  directories:
+    - /music
+rooms:
+  - '! meow chat :3'
+  - '#ANUS'
+  - '#CORONAVIRUS'
+  - '#Horrorcore'
+  - '#La France'
+  - '#icilombre-hardcore'
+  - '#polska'
+  - '#vegan'
+  - $$RARE RAP MUSIC$$
+  - ([6)]
+  - +Autism+
+  - +BlackMetal+
+  - +HIP_HOP_SCENE_RELEASES+
+  - /mu/
+  - 60lover
+  - 60lover v2
+  - 70 Rare groove Soul Jazz
+  - 80's 12 Inches & More
+  - 90's Rare Riddim !!
+  - 90's emo
+  - <>Electronics Labels<>
+  - ACID
+  - ARGENTINA
+  - "ATLLUMINATI\u201Cawareness"
+  - AUSTRALIA
+  - Alcohol
+  - Ambient
+  - Anime
+  - Audiobooks
+  - Avantgarde
+  - BDSM
+  - BLUES BUNKER MUSIC
+  - BOB DYLAN ROOM
+  - BigEdsClassicRock
+  - BigedsSixties
+  - Blues&Soul
+  - Bootlegged concerts
+  - Brasil
+  - Breakcore
+  - CHILE
+  - Canada
+  - China Room
+  - Chiptunes
+  - Christians
+  - Classical
+  - Come To The Sabbath !
+  - Communism
+  - DEATH METAL CLUB
+  - Dark Ambient
+  - De Koffie Shop
+  - De Kroeg
+  - Deathrock
+  - DieMilitarmusik
+  - Disco Classics
+  - Doom Metal
+  - Doujin Music
+  - Dub Techno
+  - Dubstep
+  - EBM-GOTHIC-INDUSTRIAL
+  - EBooks
+  - Emo
+  - Eurodance
+  - Eurovision Song Contest
+  - Experimental Electronica
+  - FOLK MUSIC
+  - Free Jazz
+  - Furry
+  - Gay
+  - Gothic
+  - Greece
+  - Grindcore
+  - HEE cum eaters 1! !
+  - HOUSE MUSIC LOVERS (AG)
+  - Happy Hardcore
+  - Hardcore NL
+  - Hardcore/punk
+  - Hip Hop
+  - Horror movies
+  - IDM
+  - INDUSTRIAL
+  - IReGGaeGaLaXy
+  - Incredibly Strange Music
+  - Israel
+  - Jaz (Full CDs)
+  - Jazz
+  - Jazz-Rock-Fusion-Guitar
+  - Juggalo Family
+  - Jungle
+  - Korean Music
+  - LANGUAGE EXCHANGE here
+  - LGBTQ+!!
+  - Last.fm
+  - Linux
+  - Lossless Scores
+  - MOVIES
+  - Mac Users
+  - Metal
+  - MovieMusic
+  - NORWAY
+  - New Crystal Vibrations
+  - New Wave
+  - New Zealand
+  - OLD SKOOL GANGSTA SHIT
+  - OLDSCHOOL 88-94
+  - OLI SHOTA CUB ROOM!
+  - Original Blues Bunker
+  - PSYCHEDELIA
+  - PUNK/HARDCORE/GRIND
+  - Portugal
+  - Post Punk
+  - Post-Hardcore (modern)
+  - Progressive Rock
+  - Psychedelic/Acid Rock
+  - Psytrance
+  - Quebec
+  - REGGAE
+  - Rare Music
+  - RareVHS/DVD/Rips
+  - Retro Gaming
+  - Romania
+  - Room Name
+  - SIsk Idiots !!
+  - SLUDGE!
+  - Slovenia
+  - Soundtracks&Scores
+  - Spain
+  - Stoner HiVe
+  - Stoner Rock
+  - Strange Music
+  - TECHNO, Mixes and Tunes
+  - THC
+  - Talia
+  - The Dangerous Kitchen
+  - TheScoreZone
+  - Thrash Metal
+  - Tinmans Movie Room
+  - Trip-Hop
+  - Ttalian_dancefloor
+  - Twee Folks
+  - UK DUB
+  - URIDDIM!!
+  - Ukraine
+  - Underground Hiphop
+  - VAPORWAVE
+  - Video Game Chat
+  - Vinyl Addicts
+  - Vocaloid
+  - WHATCDs
+  - World Music
+  - Yacht Rock
+  - '[German] [Deutsch]'
+  - abbey road Itd
+  - anime cunny
+  - bleeps&klonks
+  - breakbeat
+  - comics
+  - deep house connection
+  - drum'n'bass
+  - eesti mehed
+  - electro
+  - flacfield
+  - food
+  - for Losers
+  - hungary
+  - indie
+  - japanese music
+  - library music
+  - lossless
+  - minimal music
+  - museek
+  - noise
+  - 'on'
+  - postrock
+  - programming
+  - progressive house
+  - public porn
+  - r/musichoarder
+  - ru
+  - shoegaze
+  - tapekvit
+  - test
+  - trancEaddict
+  - trivia
+  - what.cd
+  - what.cd electronic
+  - what.cd-flac
+  - '{Italo Disco'
+web:
+  authentication:
+    username: slskd
+    password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_WEB_PASSSWORD'] }}
+    api_keys:
+      my_api_key:
+        key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_API_KEY'] }}
+        role: readwrite
+        cidr: 0.0.0.0/0,::/0
+soulseek:
+  address: vps.slsknet.org
+  port: 2271
+  username: Trez.One
+  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSK_USER_PASSWORD'] }}
+  diagnostic_level: Info

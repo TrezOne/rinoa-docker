@@ -1,0 +1,33 @@
+{% set vault_addr = 'https://vault.trez.wtf' %}
+{% set secrets_path = 'rinoa-docker/env' %}
+
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/en/configs/services
+
+#- My First Group:
+#    - My First Service:
+#        href: http://localhost/
+#        description: Homepage is awesome
+#
+#- My Second Group:
+#    - My Second Service:
+#        href: http://localhost/
+#        description: Homepage is the best
+#
+#- My Third Group:
+#    - My Third Service:
+#        href: http://localhost/
+#        description: Homepage is 😎
+
+- Automation:
+    - Home Assistant (Rikku):
+        href: https://ha.trez.wtf
+        description: Smart Home
+        icon: home-assistant.png
+        weight: 0
+        widget:
+            type: homeassistant
+            url: http://192.168.1.252:8123
+            key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['HOMEPAGE_HOME_ASSISTANT_API_KEY'] }}
+
