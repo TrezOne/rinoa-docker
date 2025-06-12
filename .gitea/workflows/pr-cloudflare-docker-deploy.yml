@@ -317,7 +317,6 @@ jobs:
         with:
           path: /opt/hostedtoolcache/vault/1.18.0/x64
           key: vault-${{ runner.os }}-1.18.0
-
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Login to Gitea Container Registry
