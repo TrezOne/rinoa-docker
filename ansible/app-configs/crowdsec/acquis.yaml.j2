@@ -41,7 +41,6 @@ container_name:
 labels:
   type: immich
 ---
----
 source: docker
 container_name:
  - uptimekuma
@@ -53,3 +52,9 @@ container_name:
  - jellyfin
 labels:
   type: jellyfin
+---
+source: docker
+container_name:
+ - navidrome
+labels:
+  type: navidrome
