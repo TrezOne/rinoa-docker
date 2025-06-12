@@ -712,7 +712,29 @@ services:
       DOCKER_HOST: tcp://dockerproxy:2375
       GID: 1000
       BOUNCER_KEY_SWAG: ${CROWDSEC_API_KEY}
-      COLLECTIONS: corvese/apache-guacamole crowdsecurity/home-assistant crowdsecurity/http-cve crowdsecurity/iptables crowdsecurity/linux crowdsecurity/mariadb crowdsecurity/nextcloud crowdsecurity/nginx crowdsecurity/whitelist-good-actors Dominic-Wagner/vaultwarden gauth-fr/immich LePresidente/adguardhome LePresidente/authelia LePresidente/gitea LePresidente/jellyfin LePresidente/ombi plague-doctor/audiobookshelf schiz0phr3ne/sonarr sdwilsh/navidrome timokoessler/mongodb timokoessler/uptime-kuma xs539/joplin-server
+      COLLECTIONS: >-
+        corvese/apache-guacamole
+        crowdsecurity/home-assistant
+        crowdsecurity/http-cve
+        crowdsecurity/iptables
+        crowdsecurity/linux
+        crowdsecurity/mariadb
+        crowdsecurity/nextcloud
+        crowdsecurity/nginx
+        crowdsecurity/whitelist-good-actors
+        Dominic-Wagner/vaultwarden
+        gauth-fr/immich
+        LePresidente/adguardhome
+        LePresidente/authelia
+        LePresidente/gitea
+        LePresidente/jellyfin
+        LePresidente/ombi
+        plague-doctor/audiobookshelf
+        schiz0phr3ne/sonarr
+        sdwilsh/navidrome
+        timokoessler/mongodb
+        timokoessler/uptime-kuma
+        xs539/joplin-server
     image: crowdsecurity/crowdsec:latest
     networks:
       default: null
@@ -725,10 +747,12 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/crowdsec/config.yaml.local:/etc/crowdsec/config.yaml
       - ${DOCKER_VOLUME_CONFIG}/crowdsec/local-api-credentials.yaml:/etc/crowdsec/local_api_credentials.yaml
       - ${DOCKER_VOLUME_CONFIG}/crowdsec/online-api-credentials.yaml:/etc/crowdsec/online_api_credentials.yaml
-      - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx:/var/log/swag:ro
+      - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx:/var/log/swag:ro # SWAG
+      - ${DOCKER_VOLUME_CONFIG}/mariadb/:/var/lib/mysql:ro # MariaDB
       - crowdsec-config:/etc/crowdsec
       - crowdsec-db:/var/lib/crowdsec/data
       - /var/log/journal:/var/log/host:ro
+      - /var/log/auth.log:/var/log/host/auth.log:ro
   crowdsec-dashboard:
     container_name: crowdsec-dashboard
     depends_on:
