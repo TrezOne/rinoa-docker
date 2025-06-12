@@ -72,7 +72,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12
+          python-version: 3.11
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
@@ -168,6 +168,10 @@ jobs:
         with:
           path: /opt/hostedtoolcache/vault/1.18.0/x64
           key: vault-${{ runner.os }}-1.18.0
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
       - name: Install Ansible
         uses: alex-oleshkevich/setup-ansible@v1.0.1
         with:
@@ -175,7 +179,10 @@ jobs:
       - name: Install Vault
         uses: cpanato/vault-installer@main
       - name: Install hvac
-        run: pip install hvac
+        run: |
+          pip install hvac
+          export LD_LIBRARY_PATH=/lib64:/lib:$LD_LIBRARY_PATH
+          echo ${LD_LIBRARY_PATH}
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
