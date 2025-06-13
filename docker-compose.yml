@@ -1372,6 +1372,11 @@ services:
       GITEA__mailer__PASSWD: ${POSTAL_SMTP_AUTH_PASSWORD}
     image: gitea/gitea:1.24.0
     labels:
+      cloudflare.tunnel.enable: true
+      cloudflare.tunnel.hostname: git-ssh.trez.wtf
+      cloudflare.tunnel.service: http://gitea:22
+      cloudflare.tunnel.zonename: trez.wtf
+      cloudflare.tunnel.no_tls_verify: true
       homepage.group: Code/DevOps
       homepage.name: Gitea
       homepage.href: https://git.${MY_TLD}
@@ -4430,6 +4435,11 @@ services:
       - "/dev/sdf:/dev/sdf:rwm"
     image: ghcr.io/analogj/scrutiny:master-omnibus
     labels:
+      cloudflare.tunnel.enable: true
+      cloudflare.tunnel.hostname: smartd.trez.wtf
+      cloudflare.tunnel.service: http://scrutiny:8080
+      cloudflare.tunnel.zonename: trez.wtf
+      cloudflare.tunnel.no_tls_verify: true
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Scrutiny
       homepage.href: http://192.168.1.254:8909
@@ -4660,7 +4670,7 @@ services:
   signoz-schema-migrator-sync:
     <<: *signoz-common
     image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
-    container_name: schema-migrator-sync
+    container_name: signoz-schema-migrator-sync
     command:
       - sync
       - --dsn=tcp://signoz-clickhouse:9000
@@ -4672,7 +4682,7 @@ services:
   signoz-schema-migrator-async:
     <<: *signoz-db-depend
     image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
-    container_name: schema-migrator-async
+    container_name: signoz-schema-migrator-async
     command:
       - async
       - --dsn=tcp://signoz-clickhouse:9000
