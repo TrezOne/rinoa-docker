@@ -1375,7 +1375,6 @@ services:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: git-ssh.trez.wtf
       cloudflare.tunnel.service: http://gitea:22
-      cloudflare.tunnel.zonename: trez.wtf
       cloudflare.tunnel.no_tls_verify: true
       homepage.group: Code/DevOps
       homepage.name: Gitea
@@ -4442,7 +4441,7 @@ services:
       cloudflare.tunnel.no_tls_verify: true
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Scrutiny
-      homepage.href: http://192.168.1.254:8909
+      homepage.href: https://smartd.trez.wtf
       homepage.icon: scrutiny.png
       homepage.description: WebUI for smartd S.M.A.R.T monitoring
       homepage.widget.type: scrutiny
