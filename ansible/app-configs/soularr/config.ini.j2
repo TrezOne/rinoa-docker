@@ -1,8 +1,9 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
 [Lidarr]
-api_key = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LIDARR_API_KEY'] }}
+api_key = {{ vault.vault_secret('env', 'LIDARR_API_KEY') }}
 host_url = http://lidarr:8686
 #This should be the path mounted in lidarr that points to your slskd download directory.
 #If Lidarr is not running in Docker then this may just be the same dir as Slskd is using below.
@@ -10,7 +11,7 @@ download_dir = /storage
 
 [Slskd]
 #Api key from Slskd. Need to set this up manually. See link to Slskd docs above.
-api_key = {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_API_KEY'] }}
+api_key = {{ vault.vault_secret('env', 'SLSKD_API_KEY') }}
 host_url = http://gluetun:5030
 #Slskd download directory. Should have set it up when installing Slskd.
 download_dir = /app/downloads

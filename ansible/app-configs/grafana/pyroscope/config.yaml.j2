@@ -1,11 +1,12 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 storage:
   backend: s3
   s3:
     bucket_name: pyroscope
     endpoint: minio:9000
     region: us-east-fh-pln
-    access_key_id: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MINIO_PYROSCOPE_STORAGE_ACCESS_KEY'] }}
-    secret_access_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MINIO_PYROSCOPE_STORAGE_SECRET_KEY'] }}
+    access_key_id: {{ vault.vault_secret('env', 'MINIO_PYROSCOPE_STORAGE_ACCESS_KEY') }}
+    secret_access_key: {{ vault.vault_secret('env', 'MINIO_PYROSCOPE_STORAGE_SECRET_KEY') }}
     insecure: true
 
 analytics:

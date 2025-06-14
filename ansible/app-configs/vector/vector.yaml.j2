@@ -1,3 +1,4 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
   sources:
     rinoa_docker_logs:
       type: docker_logs
@@ -21,7 +22,7 @@
       auth:
         strategy: basic
         user: admin
-        password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['PARSEABLE_PASSWORD'] }}
+        password: {{ vault.vault_secret('env', 'PARSEABLE_PASSWORD') }}
       request:
         headers:
           X-P-Stream: rinoa-docker-logs

@@ -1,11 +1,12 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
 {
     "radarr_address": "http://radarr:7878",
-    "radarr_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['RADARR_API_KEY'] }}",
+    "radarr_api_key": "{{ vault.vault_secret('env', 'RADARR_API_KEY') }}",
     "root_folder_path": "/data/media/movies",
-    "tmdb_api_key": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['TMDB_API_KEY'] }}",
+    "tmdb_api_key": "{{ vault.vault_secret('env', 'TMDB_API_KEY') }}",
     "fallback_to_top_result": false,
     "radarr_api_timeout": 120.0,
     "quality_profile_id": 1,

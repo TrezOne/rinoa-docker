@@ -1,8 +1,9 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {
   "Stuns": [
     {
       "Proto": "udp",
-      "URI": "stun:netbird.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}:3478",
+      "URI": "stun:netbird.{{ vault.vault_secret('env', 'MY_TLD') }}:3478",
       "Username": "",
       "Password": null
     }
@@ -11,9 +12,9 @@
     "Turns": [
       {
         "Proto": "udp",
-        "URI": "turn:netbird.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}:3478",
+        "URI": "turn:netbird.{{ vault.vault_secret('env', 'MY_TLD') }}:3478",
         "Username": "self",
-        "Password": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['NETBIRD_TURN_PASSWORD'] }}"
+        "Password": "{{ vault.vault_secret('env', 'NETBIRD_TURN_PASSWORD') }}"
       }
     ],
     "CredentialsTTL": "12h",
@@ -22,14 +23,14 @@
   },
   "Relay": {
     "Addresses": [
-      "rel://netbird.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}:33080"
+      "rel://netbird.{{ vault.vault_secret('env', 'MY_TLD') }}:33080"
     ],
     "CredentialsTTL": "24h",
-    "Secret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['NETBIRD_RELAY_AUTH_SECRET'] }}"
+    "Secret": "{{ vault.vault_secret('env', 'NETBIRD_RELAY_AUTH_SECRET') }}"
   },
   "Signal": {
     "Proto": "https",
-    "URI": "netbird.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}:10001",
+    "URI": "netbird.{{ vault.vault_secret('env', 'MY_TLD') }}:10001",
     "Username": "",
     "Password": null
   },
@@ -47,14 +48,14 @@
   },
   "HttpConfig": {
     "Address": "0.0.0.0:33073",
-    "AuthIssuer": "https://auth.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}",
+    "AuthIssuer": "https://auth.{{ vault.vault_secret('env', 'MY_TLD') }}",
     "AuthAudience": "netbird",
-    "AuthKeysLocation": "https://auth.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}/jwks.json",
+    "AuthKeysLocation": "https://auth.{{ vault.vault_secret('env', 'MY_TLD') }}/jwks.json",
     "AuthUserIDClaim": "",
     "CertFile": "",
     "CertKey": "",
     "IdpSignKeyRefreshEnabled": true,
-    "OIDCConfigEndpoint": "https://auth.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}/.well-known/openid-configuration"
+    "OIDCConfigEndpoint": "https://auth.{{ vault.vault_secret('env', 'MY_TLD') }}/.well-known/openid-configuration"
   },
   "IdpManagerConfig": {},
   "DeviceAuthorizationFlow": {},
@@ -62,10 +63,10 @@
     "ProviderConfig": {
       "Audience": "netbird",
       "ClientID": "netbird",
-      "ClientSecret": "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_NETBIRD_CLIENT_SECRET'] }}",
+      "ClientSecret": "{{ vault.vault_secret('env', 'AUTHELIA_NETBIRD_CLIENT_SECRET') }}",
       "Domain": "",
-      "AuthorizationEndpoint": "https://auth.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}/api/oidc/authorization",
-      "TokenEndpoint": "https://auth.{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MY_TLD'] }}/api/oidc/token",
+      "AuthorizationEndpoint": "https://auth.{{ vault.vault_secret('env', 'MY_TLD') }}/api/oidc/authorization",
+      "TokenEndpoint": "https://auth.{{ vault.vault_secret('env', 'MY_TLD') }}/api/oidc/token",
       "Scope": "openid profile email offline_access api",
       "RedirectURLs": [
         "http://localhost:53000"

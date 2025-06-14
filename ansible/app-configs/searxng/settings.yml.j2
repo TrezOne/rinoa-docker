@@ -1,3 +1,4 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
@@ -82,7 +83,7 @@ server:
   # If your instance owns a /etc/searxng/settings.yml file, then set the following
   # values there.
 
-  secret_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SEARXNG_SECRET_KEY'] }}  # Is overwritten by ${SEARXNG_SECRET}
+  secret_key: {{ vault.vault_secret('env', 'SEARXNG_SECRET_KEY') }}  # Is overwritten by ${SEARXNG_SECRET}
   # Proxying image results through searx
   image_proxy: true
   # 1.0 and 1.1 are supported

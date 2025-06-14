@@ -1,3 +1,4 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
@@ -46,8 +47,8 @@ storage:
     s3:
       bucket: tempo                    # how to store data in s3
       endpoint: minio:9000
-      access_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MINIO_TEMPO_STORAGE_ACCESS_KEY'] }}
-      secret_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['MINIO_TEMPO_STORAGE_SECRET_KEY'] }}
+      access_key: {{ vault.vault_secret('env', 'MINIO_TEMPO_STORAGE_ACCESS_KEY') }}
+      secret_key: {{ vault.vault_secret('env', 'MINIO_TEMPO_STORAGE_SECRET_KEY') }}
       insecure: true
 
 usage_report:

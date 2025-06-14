@@ -1,3 +1,4 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
@@ -198,15 +199,15 @@ rooms:
 web:
   authentication:
     username: slskd
-    password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_WEB_PASSSWORD'] }}
+    password: {{ vault.vault_secret('env', 'SLSKD_WEB_PASSSWORD') }}
     api_keys:
       my_api_key:
-        key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSKD_API_KEY'] }}
+        key: {{ vault.vault_secret('env', 'SLSKD_API_KEY') }}
         role: readwrite
         cidr: 0.0.0.0/0,::/0
 soulseek:
   address: vps.slsknet.org
   port: 2271
   username: Trez.One
-  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SLSK_USER_PASSWORD'] }}
+  password: {{ vault.vault_secret('env', 'SLSK_USER_PASSWORD') }}
   diagnostic_level: Info

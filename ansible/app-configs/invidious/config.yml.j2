@@ -1,3 +1,4 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
@@ -16,7 +17,7 @@ db:
   host: invidious-db
   port: 5432
   dbname: invidious
-  password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['INVID_PG_DB_PASSWORD'] }}
+  password: {{ vault.vault_secret('env', 'INVID_PG_DB_PASSWORD') }}
 
 ##
 ## Database configuration using a single URI. This is an
@@ -210,8 +211,8 @@ https_only: false
 ## Accepted values: String
 ## Default: <none>
 ##
-po_token: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['INVID_PO_TOKEN'] }}
-visitor_data: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['INVID_VISITOR_DATA'] }}
+po_token: {{ vault.vault_secret('env', 'INVID_PO_TOKEN') }}
+visitor_data: {{ vault.vault_secret('env', 'INVID_VISITOR_DATA') }}
 
 # -----------------------------
 #  Logging
@@ -471,7 +472,7 @@ jobs:
 ## Accepted values: a string
 ## Default: <none>
 ##
-hmac_key: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['INVID_HMAC_KEY'] }}
+hmac_key: {{ vault.vault_secret('env', 'INVID_HMAC_KEY') }}
 
 ##
 ## List of video IDs where the "download" widget must be

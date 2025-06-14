@@ -1,3 +1,4 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
@@ -9,7 +10,7 @@ gitea:
   # Created access token for the user that shall be used as bot account.
   # User needs "Read project" permissions with access to "Pull Requests"
   token:
-    value: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_GITEA_TOKEN'] }}"
+    value: "{{ vault.vault_secret('env', 'GITEA_SONARQUBE_BOT_GITEA_TOKEN') }}"
     # # or path to file containing the plain text secret
     # file: /path/to/gitea/token
 
@@ -18,7 +19,7 @@ gitea:
   # The bot looks for `X-Gitea-Signature` header containing the sha256 hmac hash of the plain text secret. If the header
   # exists and no webhookSecret is defined here, the bot will ignore the request, because it cannot be validated.
   webhook:
-    secret: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_GITEA_WEBHOOK_SECRET'] }}"
+    secret: "{{ vault.vault_secret('env', 'GITEA_SONARQUBE_BOT_GITEA_WEBHOOK_SECRET') }}"
     # # or path to file containing the plain text secret
     # secretFile: /path/to/gitea/webhook/secret
 
@@ -35,7 +36,7 @@ sonarqube:
   # Created access token for the user that shall be used as bot account.
   # User needs "Browse on project" permissions
   token:
-    value: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_SQUBE_TOKEN'] }}"
+    value: "{{ vault.vault_secret('env', 'GITEA_SONARQUBE_BOT_SQUBE_TOKEN') }}"
     # # or path to file containing the plain text secret
     # file: /path/to/sonarqube/token
 
@@ -45,7 +46,7 @@ sonarqube:
   # If the header exists and no webhookSecret is defined here, the bot will ignore the request, because it cannot be
   # validated.
   webhook:
-    secret: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GITEA_SONARQUBE_BOT_SQUBE_WEBHOOK_SECRET'] }}"
+    secret: "{{ vault.vault_secret('env', 'GITEA_SONARQUBE_BOT_SQUBE_WEBHOOK_SECRET') }}"
     # # or path to file containing the plain text secret
     # secretFile: /path/to/sonarqube/webhook/secret
 

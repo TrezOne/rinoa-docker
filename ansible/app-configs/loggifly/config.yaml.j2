@@ -1,3 +1,4 @@
+{% import '../macros/rinoa-macros.j2' as vault %}
 {% set vault_addr = 'https://vault.trez.wtf' %}
 {% set secrets_path = 'rinoa-docker/env' %}
 
@@ -20,7 +21,7 @@ global_keywords:
     - fatal
 notifications:
   apprise:
-    url: gotify://gotify/{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['APPRISE_GOTIFY_TOKEN'] }}    # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
+    url: gotify://gotify/{{ vault.vault_secret('env', 'APPRISE_GOTIFY_TOKEN') }}    # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
 # settings are optional because they all have default values
 settings:
   log_level: INFO               # DEBUG, INFO, WARNING, ERROR

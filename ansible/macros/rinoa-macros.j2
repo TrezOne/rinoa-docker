@@ -1,0 +1,3 @@
+{% macro vault_secret(secret_path, key) %}
+{{ lookup('community.hashi_vault.vault_kv2_get', secret_path, engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret'][key] }}
+{% endmacro %}
