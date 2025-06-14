@@ -33,9 +33,9 @@ x-maxun: &maxun-env
     REDIS_PORT: 6379
     BACKEND_PORT: 8080
     FRONTEND_PORT: 5173
-    BACKEND_URL: http://192.168.1.254:8369
-    PUBLIC_URL: http://192.168.1.254:5173
-    VITE_BACKEND_URL: http://maxun-backend:8080
+    BACKEND_URL: https://scrape.trez.wtf/api
+    PUBLIC_URL: https://scrape.trez.wtf
+    VITE_BACKEND_URL: https://scrape.trez.wtf/api
     VITE_PUBLIC_URL: https://scrape.trez.wtf
     MAXUN_TELEMETRY: true
     PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
@@ -3207,6 +3207,10 @@ services:
     image: getmaxun/maxun-frontend:latest
     labels:
       swag: enable
+      swag_server_custom_directive:
+        location /api {
+              proxy_pass http://maxun-backend:8080;
+        }
       swag_proto: http
       swag_port: 5173
       swag_url: scrape.${MY_TLD}
@@ -3949,12 +3953,12 @@ services:
       homepage.group: Downloaders
       homepage.name: qBittorrent
       homepage.href: https://qbit.${MY_TLD}
-      homepage.icon: qBittorrent.svg
-      homepage.description: qbittorrentvpn over VPN
+      homepage.icon: qbittorrent.svg
+      homepage.description: Fast and stable torrent client
       homepage.widget.type: qbittorrent
       homepage.widget.url: http://qbittorrentvpn:8080
       homepage.widget.user: admin
-      homepage.widget.password: "${DELUGEVPN_PASSWORD}"
+      homepage.widget.password: ${DELUGEVPN_PASSWORD}
       swag: enable
       swag_port: 8080
       swag_proto: http
