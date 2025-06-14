@@ -33,7 +33,7 @@ x-maxun: &maxun-env
     REDIS_PORT: 6379
     BACKEND_PORT: 8080
     FRONTEND_PORT: 5173
-    BACKEND_URL: http://maxun-backend:8080
+    BACKEND_URL: http://192.168.1.254:8369
     PUBLIC_URL: http://192.168.1.254:5173
     VITE_BACKEND_URL: http://maxun-backend:8080
     VITE_PUBLIC_URL: https://scrape.trez.wtf
@@ -3191,10 +3191,12 @@ services:
       - 8080
     image: getmaxun/maxun-backend:latest
     mem_limit: 2g   # Set a 2GB memory limit
+    ports:
+      - 8369:8080
+    restart: unless-stopped
     security_opt:
       - seccomp=unconfined  # This might help with browser sandbox issues
     shm_size: '2gb' # Increase shared memory size for Chromium
-    restart: unless-stopped
     volumes:
       - /var/run/dbus:/var/run/dbus
   maxun-frontend:
