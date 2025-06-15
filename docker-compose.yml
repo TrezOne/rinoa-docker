@@ -788,7 +788,7 @@ services:
       - 8908:3000
     restart: always
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/crowdsec/local-api-credentials.yaml:/etc/crowdsec/local_api_credentials.yaml
+      - ${DOCKER_VOLUME_CONFIG}/crowdsec/local_api_credentials.yaml:/etc/crowdsec/local_api_credentials.yaml
       - source: crowdsec-db
         target: /data/
         type: volume
