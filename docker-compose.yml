@@ -708,6 +708,8 @@ services:
         - ${DOCKER_VOLUME_CONFIG}/cronicle/workloads/app:/app
   crowdsec:
     container_name: crowdsec
+    depends_on:
+      - swag
     environment:
       DOCKER_HOST: tcp://dockerproxy:2375
       GID: 1000
@@ -744,16 +746,14 @@ services:
     security_opt:
       - no-new-privileges=true
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/crowdsec/config.yaml.local:/etc/crowdsec/config.yaml
-      - ${DOCKER_VOLUME_CONFIG}/crowdsec/local_api_credentials.yaml:/etc/crowdsec/local_api_credentials.yaml
-      - ${DOCKER_VOLUME_CONFIG}/crowdsec/online_api_credentials.yaml:/etc/crowdsec/online_api_credentials.yaml
+      # - ${DOCKER_VOLUME_CONFIG}/crowdsec/config.yaml.local:/etc/crowdsec/config.yaml
       - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx:/var/log/swag:ro # SWAG
       - ${DOCKER_VOLUME_CONFIG}/mariadb/:/var/lib/mysql:ro # MariaDB
       - ${DOCKER_VOLUME_CONFIG}/audiobookshelf/.metadata/logs:/var/log/audiobookself:ro # Audiobookshelf
       - crowdsec-config:/etc/crowdsec
       - crowdsec-db:/var/lib/crowdsec/data
-      - /var/log/journal:/var/log/host:ro
-      - /var/log/auth.log:/var/log/rinoa/auth.log:ro
+      - /var/log/journal:/var/log/host/journal:ro
+      - /var/log/auth.log:/var/log/host/auth.log:ro
   crowdsec-dashboard:
     container_name: crowdsec-dashboard
     depends_on:
@@ -788,11 +788,7 @@ services:
       - 8908:3000
     restart: always
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/crowdsec/local_api_credentials.yaml:/etc/crowdsec/local_api_credentials.yaml
-      - source: crowdsec-db
-        target: /data/
-        type: volume
-        volume: {}
+      - crowdsec-db:/data/
   cyber-chef:
     container_name: cyber-chef
     image: mpepping/cyberchef:latest
