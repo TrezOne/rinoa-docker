@@ -753,7 +753,7 @@ services:
       - crowdsec-config:/etc/crowdsec
       - crowdsec-db:/var/lib/crowdsec/data
       - /var/log/journal:/var/log/host:ro
-      - /var/log/auth.log:/var/log/host/auth.log:ro
+      - /var/log/auth.log:/var/log/rinoa/auth.log:ro
   crowdsec-dashboard:
     container_name: crowdsec-dashboard
     depends_on:
