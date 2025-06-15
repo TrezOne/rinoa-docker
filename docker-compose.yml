@@ -33,10 +33,10 @@ x-maxun: &maxun-env
     REDIS_PORT: 6379
     BACKEND_PORT: 8080
     FRONTEND_PORT: 5173
-    BACKEND_URL: https://scrape.trez.wtf/api
-    PUBLIC_URL: https://scrape.trez.wtf
-    VITE_BACKEND_URL: https://scrape.trez.wtf/api
-    VITE_PUBLIC_URL: https://scrape.trez.wtf
+    BACKEND_URL: http://192.168.1.254:8369
+    PUBLIC_URL: http://192.168.1.254:5173
+    VITE_BACKEND_URL: http://192.168.1.254:8369
+    VITE_PUBLIC_URL: http://192.168.1.254:5173
     MAXUN_TELEMETRY: true
     PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
