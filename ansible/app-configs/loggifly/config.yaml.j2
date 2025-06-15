@@ -13,6 +13,10 @@ containers:
   invidious:
     keywords:
       - regex: 'Error reading.*Connection reset by peer trying to reconnect...'
+  scrutiny:
+    action_keywords:
+      - restart:
+          regex: s6.*fatal
 global_keywords:
   keywords:
     - panic
