@@ -866,7 +866,7 @@ services:
     entrypoint: web-entrypoint.sh
     environment:
       RAILS_ENV: development
-      REDIS_URL: redis://redis:6379/
+      REDIS_URL: redis://redis:6379
       DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
@@ -918,7 +918,7 @@ services:
       POSTGRES_USER: dawarich
       POSTGRES_PASSWORD: ${DAWARICH_PG_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d dawarich_development" ]
+      test: [ "CMD-SHELL", "pg_isready -U dawarich -d dawarich" ]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -950,7 +950,7 @@ services:
     entrypoint: sidekiq-entrypoint.sh
     environment:
       RAILS_ENV: development
-      REDIS_URL: redis://redis:6379/
+      REDIS_URL: redis://redis:6379
       DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
