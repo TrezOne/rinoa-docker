@@ -154,7 +154,7 @@ jobs:
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          docker-flags: -H ${DOCKER_HOST}
+          docker-flags: -H $DOCKER_HOST
           services: ${{ steps.modded_svcs.outputs.rinoa_svcs }}
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
