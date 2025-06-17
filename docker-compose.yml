@@ -718,7 +718,7 @@ services:
     environment:
       DOCKER_HOST: tcp://dockerproxy:2375
       GID: 1000
-      BOUNCER_KEY_SWAG: ${CROWDSEC_API_KEY}
+      BOUNCER_KEY_SWAG: ${CROWDSEC_SWAG_API_KEY}
       COLLECTIONS: >-
         corvese/apache-guacamole
         crowdsecurity/home-assistant
