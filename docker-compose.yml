@@ -1395,7 +1395,6 @@ services:
     ports:
       - 3013:3000
       - 222:22
-    profiles: ["ci-exclude"]
     restart: always
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gitea
