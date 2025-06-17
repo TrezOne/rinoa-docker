@@ -336,7 +336,6 @@ jobs:
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          docker-flags: -H "$DOCKER_HOST"
           services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
