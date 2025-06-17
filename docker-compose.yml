@@ -4562,57 +4562,6 @@ services:
       - semaphore_config:/etc/semaphore
       - semaphore_data:/var/lib/semaphore
       - semaphore_tmp:/tmp/semaphore
-  signoz-init-clickhouse:
-    <<: *signoz-common
-    container_name: signoz-init-clickhouse
-    command:
-      - bash
-      - -c
-      - |
-        version="v0.0.1"
-        node_os=$$(uname -s | tr '[:upper:]' '[:lower:]')
-        node_arch=$$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
-        echo "Fetching histogram-binary for $${node_os}/$${node_arch}"
-        cd /tmp
-        wget -O histogram-quantile.tar.gz "https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F$${version}/histogram-quantile_$${node_os}_$${node_arch}.tar.gz"
-        tar -xvzf histogram-quantile.tar.gz
-        mv histogram-quantile /var/lib/clickhouse/user_scripts/histogramQuantile
-    image: clickhouse/clickhouse-server:24.1.2-alpine
-    restart: on-failure
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts/:/var/lib/clickhouse/user_scripts/
-  signoz-zookeeper-1:
-    <<: *signoz-zookeeper-defaults
-    container_name: signoz-zookeeper-1
-    environment:
-      ZOO_SERVER_ID: 1
-      ALLOW_ANONYMOUS_LOGIN: yes
-      ZOO_AUTOPURGE_INTERVAL: 1
-      ZOO_ENABLE_PROMETHEUS_METRICS: yes
-      ZOO_PROMETHEUS_METRICS_PORT_NUMBER: 9141
-    # ports:
-    #   - "2181:2181"
-    #   - "2888:2888"
-    #   - "3888:3888"
-    volumes:
-      - signoz-zookeeper-1:/bitnami/zookeeper
-  signoz-clickhouse:
-    <<: *signoz-clickhouse-defaults
-    container_name: signoz-clickhouse
-    expose:
-      - 9000
-    ports:
-    #   - "9000:9000"
-      - "8123:8123"
-      - "9181:9181"
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/config.xml:/etc/clickhouse-server/config.xml
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/users.xml:/etc/clickhouse-server/users.xml
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/custom-function.xml:/etc/clickhouse-server/custom-function.xml
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts:/var/lib/clickhouse/user_scripts/
-      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml
-      - signoz-clickhouse:/var/lib/clickhouse/
-      # - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/storage.xml:/etc/clickhouse-server/config.d/storage.xml
   signoz-app:
     <<: *signoz-db-depend
     container_name: signoz-app
@@ -4658,6 +4607,53 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/prometheus.yml:/root/config/prometheus.yml
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/dashboards:/root/config/dashboards
       - signoz-sqlite:/var/lib/signoz/
+  signoz-clickhouse:
+    <<: *signoz-clickhouse-defaults
+    container_name: signoz-clickhouse
+    expose:
+      - 9000
+    ports:
+    #   - "9000:9000"
+      - "8123:8123"
+      - "9181:9181"
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/config.xml:/etc/clickhouse-server/config.xml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/users.xml:/etc/clickhouse-server/users.xml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/custom-function.xml:/etc/clickhouse-server/custom-function.xml
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts:/var/lib/clickhouse/user_scripts/
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/cluster.xml:/etc/clickhouse-server/config.d/cluster.xml
+      - signoz-clickhouse:/var/lib/clickhouse/
+      # - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/storage.xml:/etc/clickhouse-server/config.d/storage.xml
+  signoz-init-clickhouse:
+    <<: *signoz-common
+    container_name: signoz-init-clickhouse
+    command:
+      - bash
+      - -c
+      - |
+        version="v0.0.1"
+        node_os=$$(uname -s | tr '[:upper:]' '[:lower:]')
+        node_arch=$$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
+        echo "Fetching histogram-binary for $${node_os}/$${node_arch}"
+        cd /tmp
+        wget -O histogram-quantile.tar.gz "https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F$${version}/histogram-quantile_$${node_os}_$${node_arch}.tar.gz"
+        tar -xvzf histogram-quantile.tar.gz
+        mv histogram-quantile /var/lib/clickhouse/user_scripts/histogramQuantile
+    image: clickhouse/clickhouse-server:24.1.2-alpine
+    restart: on-failure
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts/:/var/lib/clickhouse/user_scripts/
+  signoz-logspout:
+    command: signoz://localhost:8082
+    container_name: signoz-logspout
+    depends_on:
+      signoz-otel-collector:
+        required: true
+        condition: service_started
+    image: pavanputhra/logspout-signoz
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   signoz-otel-collector:
     <<: *signoz-db-depend
     container_name: signoz-otel-collector
@@ -4677,9 +4673,19 @@ services:
       # - "1777:1777"     # pprof extension
       - "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP HTTP receiver
+      - 8082:8082 # Logspout collection (https://signoz.io/blog/logspout-signoz-setup/)
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
+  signoz-schema-migrator-async:
+    <<: *signoz-db-depend
+    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
+    container_name: signoz-schema-migrator-async
+    command:
+      - async
+      - --dsn=tcp://signoz-clickhouse:9000
+      - --up=
+    restart: on-failure
   signoz-schema-migrator-sync:
     <<: *signoz-common
     image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
@@ -4692,15 +4698,21 @@ services:
       signoz-clickhouse:
         condition: service_healthy
     restart: on-failure
-  signoz-schema-migrator-async:
-    <<: *signoz-db-depend
-    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
-    container_name: signoz-schema-migrator-async
-    command:
-      - async
-      - --dsn=tcp://signoz-clickhouse:9000
-      - --up=
-    restart: on-failure
+  signoz-zookeeper-1:
+    <<: *signoz-zookeeper-defaults
+    container_name: signoz-zookeeper-1
+    environment:
+      ZOO_SERVER_ID: 1
+      ALLOW_ANONYMOUS_LOGIN: yes
+      ZOO_AUTOPURGE_INTERVAL: 1
+      ZOO_ENABLE_PROMETHEUS_METRICS: yes
+      ZOO_PROMETHEUS_METRICS_PORT_NUMBER: 9141
+    # ports:
+    #   - "2181:2181"
+    #   - "2888:2888"
+    #   - "3888:3888"
+    volumes:
+      - signoz-zookeeper-1:/bitnami/zookeeper
   sonarqube:
     container_name: sonarqube
     depends_on:
