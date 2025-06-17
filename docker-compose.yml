@@ -4644,7 +4644,7 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts/:/var/lib/clickhouse/user_scripts/
   signoz-logspout:
-    command: signoz://localhost:8082
+    command: signoz://signoz-otel-collector:8082
     container_name: signoz-logspout
     depends_on:
       signoz-otel-collector:
