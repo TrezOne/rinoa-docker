@@ -4649,6 +4649,9 @@ services:
       signoz-otel-collector:
         required: true
         condition: service_started
+    environment:
+      ENV: prod
+      SIGNOZ_LOG_ENDPOINT: http://signoz-otel-collector:8082
     image: pavanputhra/logspout-signoz
     restart: unless-stopped
     volumes:
