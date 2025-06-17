@@ -1395,6 +1395,7 @@ services:
     ports:
       - 3013:3000
       - 222:22
+    profiles: ["ci-exclude"]
     restart: always
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gitea
@@ -1451,6 +1452,7 @@ services:
     image: gitea/act_runner:latest
     ports:
       - 63604:63604
+    profiles: ["ci-exclude"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/act-runner/config.yaml:/config.yaml
