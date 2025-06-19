@@ -4969,7 +4969,7 @@ services:
       VALIDATION: dns
       CROWDSEC_API_KEY: ${CROWDSEC_SWAG_API_KEY}
       CROWDSEC_LAPI_URL: http://crowdsec:8080
-      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-reload|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|linuxserver/mods:universal-package-install|ghcr.io/linuxserver/mods:swag-crowdsec #|linuxserver/mods:swag-auto-uptime-kuma
+      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|linuxserver/mods:universal-package-install|ghcr.io/linuxserver/mods:swag-crowdsec| #linuxserver/mods:swag-auto-uptime-kuma
       INSTALL_PACKAGES: nginx-mod-http-js
       PROPAGATION: 30
       UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
@@ -5005,6 +5005,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUME_CONFIG}/swag:/config
       - ${DOCKER_VOLUME_CONFIG}/sablier/sablier.js:/etc/nginx/conf.d/sablier.js
+      # - ${DOCKER_VOLUME_CONFIG}/swag/otel_ngx_module.so:/usr/lib/nginx/modules/otel_ngx_module.so
+      # - ${DOCKER_VOLUME_CONFIG}/swag/30_http_otel.conf:/etc/nginx/modules/30_http_otel.conf
+      # - ${DOCKER_VOLUME_CONFIG}/swag/opentelemetry_config.toml:/etc/nginx/opentelemetry_config.toml
       - /rinoa-storage:/storage
       - /var/run/docker.sock:/var/run/docker.sock:ro
   tandoor:
