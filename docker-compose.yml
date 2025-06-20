@@ -3741,7 +3741,7 @@ services:
       planka-pg-db:
         condition: service_healthy
     environment:
-      BASE_URL: http://localhost:3000
+      BASE_URL: https://kanban.${MY_TLD}
       DATABASE_URL: postgresql://planka:${PLANKA_PG_PASSWORD}@planka-pg-db/planka
       SECRET_KEY: ${PLANKA_SECRET_KEY}
       LOG_LEVEL: warn
