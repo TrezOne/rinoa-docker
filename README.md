@@ -106,6 +106,8 @@
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
+| planka | ghcr.io/plankanban/planka:2.0.0-rc.3 |
+| planka-pg-db | postgres:16-alpine |
 | plantuml-server | plantuml/plantuml-server:jetty |
 | portainer | portainer/portainer-ce:alpine |
 | portnote-web | haedlessdev/portnote:latest |
@@ -130,13 +132,14 @@
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
 | semaphore | semaphoreui/semaphore:v2.12.14 |
-| signoz-init-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
-| signoz-zookeeper-1 | bitnami/zookeeper:3.7.1 |
-| signoz-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
 | signoz-app | signoz/signoz:v0.86.2 |
+| signoz-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
+| signoz-init-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
+| signoz-logspout | pavanputhra/logspout-signoz |
 | signoz-otel-collector | signoz/signoz-otel-collector:v0.111.42 |
-| signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.111.42 |
 | signoz-schema-migrator-async | signoz/signoz-schema-migrator:v0.111.42 |
+| signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.111.42 |
+| signoz-zookeeper-1 | bitnami/zookeeper:3.7.1 |
 | sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts |
 | sonarqube-pg-db | postgres:17-alpine |
 | sonarr | lscr.io/linuxserver/sonarr:latest |
