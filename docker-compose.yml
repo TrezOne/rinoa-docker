@@ -3735,6 +3735,76 @@ services:
     restart: unless-stopped
     volumes:
       - pgbackweb-data:/var/lib/postgresql/data
+  planka:
+    container_name: planka
+    depends_on:
+      planka-pg-db:
+        condition: service_healthy
+    environment:
+      BASE_URL: http://localhost:3000
+      DATABASE_URL: postgresql://planka:${PLANKA_PG_PASSWORD}@planka-pg-db/planka
+      SECRET_KEY: ${PLANKA_SECRET_KEY}
+      LOG_LEVEL: warn
+      TRUST_PROXY: true
+      TOKEN_EXPIRES_IN: 365 # In days
+      KNEX_REJECT_UNAUTHORIZED_SSL_CERTIFICATE: false
+      DEFAULT_LANGUAGE: en-US
+      DEFAULT_ADMIN_EMAIL: noreply@${MY_TLD}
+      DEFAULT_ADMIN_PASSWORD: ${PLANKA_ADMIN_PASSWORD}
+      DEFAULT_ADMIN_NAME: Planka Rinoa
+      DEFAULT_ADMIN_USERNAME: admin
+      S3_ENDPOINT: http://minio:9000
+      S3_REGION: us-east-fh-pln
+      S3_ACCESS_KEY_ID: ${PLANKA_MINIO_ACCESS_KEY}
+      S3_SECRET_ACCESS_KEY: ${PLANKA_MINIO_SECRET_KEY}
+      S3_BUCKET: planka
+      S3_FORCE_PATH_STYLE: true
+      SMTP_HOST: postal-smtp
+      SMTP_PORT: 25
+      SMTP_NAME: noreply@${MY_TLD}
+      SMTP_SECURE: true
+      SMTP_USER: ${POSTAL_SMTP_AUTH_USER}
+      SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SMTP_FROM: '"Planka @ Rinoa" <noreply@${MY_TLD}>'
+      SMTP_TLS_REJECT_UNAUTHORIZED: false
+    image: ghcr.io/plankanban/planka:2.0.0-rc.3
+    labels:
+      homepage.group: Personal/Professional Services
+      homepage.name: Planka
+      homepage.href: https://kanban.${MY_TLD}
+      homepage.icon: planka.svg
+      homepage.description: Kanban board
+      swag: enable
+      swag_url: kanban.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://kanban.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 54476:1337
+    restart: on-failure
+    volumes:
+      - planka-favicons:/app/public/favicons
+      - planka-user-avatars:/app/public/user-avatars
+      - planka-background-images:/app/public/background-images
+      - planka-attachments:/app/private/attachments
+  planka-pg-db:
+    container_name: planka-pg-db
+    environment:
+      POSTGRES_DB: planka
+      POSTGRES_USER: planka
+      POSTGRES_PASSWORD: ${PLANKA_PG_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d planka"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    image: postgres:16-alpine
+    restart: on-failure
+    volumes:
+      - planka-db-data:/var/lib/postgresql/data
   plantuml-server:
     container_name: plantuml-server
     expose:
@@ -5585,6 +5655,16 @@ volumes:
     name: paperless-ngx-pg
   pgbackweb-data:
     name: pgbackweb-data
+  planka-favicons:
+    name: planka-favicons
+  planka-user-avatars:
+    name: planka-user-avatars
+  planka-background-images:
+    name: planka-background-images
+  planka-attachments:
+    name: planka-attachments
+  planka-db-data:
+    name: planka-db-data
   portainer-data:
     name: portainer-data
   portnote-db-data:
