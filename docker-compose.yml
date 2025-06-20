@@ -208,7 +208,7 @@ services:
       SEARCH_BACKEND_ENGINE: ripgrep       # tells ArchiveBox to use sonic container below for fast full-text search
     image: archivebox/archivebox:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: ArchiveBox
       homepage.href: https://archive.${MY_TLD}
       homepage.icon: archivebox.png
@@ -894,7 +894,7 @@ services:
       timeout: 10s
     image: freikin/dawarich:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Privacy/Security
       homepage.name: Dawarich
       homepage.href: https://loc.${MY_TLD}
       homepage.icon: dawarich.svg
@@ -1152,7 +1152,7 @@ services:
     container_name: excalidraw
     image: 'excalidraw/excalidraw:latest'
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: Excalidraw
       homepage.href: https://draw.${MY_TLD}
       homepage.icon: excalidraw.svg
@@ -1288,7 +1288,7 @@ services:
       TIMEZONE: ${TZ}
     image: tiredofit/freescout:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Professional Services
       homepage.name: FreeScout
       homepage.icon: sh-freescout.svg
       homepage.href: https://support.${MY_TLD}
@@ -1696,7 +1696,7 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
-      homepage.group: Personal/Professional Services
+      homepage.group: Professional Services
       homepage.name: Hugo
       homepage.href: https://it-services.${MY_TLD}
       homepage.icon: hugo.svg
@@ -2036,7 +2036,7 @@ services:
       swag_url: biz.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://biz.${MY_TLD}
-      homepage.group: Personal/Professional Services
+      homepage.group: Professional Services
       homepage.name: Invoice Ninja
       homepage.href: https://biz.${MY_TLD}
       homepage.icon: invoice-ninja.svg
@@ -2645,7 +2645,7 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://meet.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
-      homepage.group: Social
+      homepage.group: Professional Services
       homepage.name: Jitsi
       homepage.href: https://meet.${MY_TLD}
       homepage.icon: jitsi.png
@@ -2716,7 +2716,7 @@ services:
       POSTGRES_HOST: joplin-db
     image: joplin/server:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: Joplin
       homepage.href: https://notes.${MY_TLD}
       homepage.icon: joplin.svg
@@ -2757,7 +2757,7 @@ services:
       RAG_API_URL: http://librechat-rag-api:8000
     image: ghcr.io/danny-avila/librechat-dev:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: LibreChat
       homepage.href: https://ai.${MY_TLD}
       homepage.icon: sh-librechat.svg
@@ -3219,7 +3219,7 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: Maxun
       homepage.href: https://scrape.${MY_TLD}
       homepage.icon: sh-maxun.svg
@@ -3515,7 +3515,7 @@ services:
       - 11000
     image: nextcloud/all-in-one:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Privacy/Security
       homepage.name: NextCloud
       homepage.href: https://cloud.${MY_TLD}
       homepage.icon: nextcloud.svg
@@ -3592,7 +3592,7 @@ services:
     container_name: omni-tools
     image: iib0011/omni-tools:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: OmniTools
       homepage.href: https://otools.${MY_TLD}
       homepage.icon: sh-omnitools.svg
@@ -3625,7 +3625,7 @@ services:
       - 80
     image: kweg/omnipoly:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: OmniPoly
       homepage.href: https://translate.${MY_TLD}
       homepage.icon: sh-omnipoly.svg
@@ -3666,7 +3666,7 @@ services:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://docs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.name: Paperless-ngx
       homepage.href: https://docs.${MY_TLD}
       homepage.icon: paperless-ngx.svg
@@ -3769,7 +3769,7 @@ services:
       SMTP_TLS_REJECT_UNAUTHORIZED: false
     image: ghcr.io/plankanban/planka:2.0.0-rc.3
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Professional Services
       homepage.name: Planka
       homepage.href: https://kanban.${MY_TLD}
       homepage.icon: planka.svg
@@ -4177,7 +4177,7 @@ services:
       TZ: ${TZ}
     image: amruthpillai/reactive-resume:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Professional Services
       homepage.name: Reactive Resume
       homepage.href: https://resume.${MY_TLD}
       homepage.icon: reactive-resume.svg
@@ -4564,7 +4564,7 @@ services:
       SEARXNG_BASE_URL: https://search.${MY_TLD}
     image: searxng/searxng:latest
     labels:
-      homepage.group: Personal/Professional Services
+      homepage.group: Privacy/Security
       homepage.name: SearxNG
       homepage.href: https://search.${MY_TLD}
       homepage.icon: searxng.png
@@ -4972,7 +4972,7 @@ services:
       - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
     labels:
       homepage.name: Stable-Diffusion WebUI
-      homepage.group: Personal/Professional Services
+      homepage.group: Personal Tools
       homepage.description: Deep learning, text-to-image model
       homepage.href: https://sd.${MY_TLD}
       homepage.icon: /icons/stable-diffusion.png
@@ -5002,7 +5002,7 @@ services:
     image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
     labels:
       homepage.name: Stirling-PDF
-      homepage.group: Personal/Professional Services
+      homepage.group: Professional Services
       homepage.description: PDF Operations
       homepage.href: https://pdf.${MY_TLD}
       homepage.icon: stirling-pdf.svg
