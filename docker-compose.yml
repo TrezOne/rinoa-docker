@@ -3776,7 +3776,6 @@ services:
       homepage.description: Kanban board
       swag: enable
       swag_url: kanban.${MY_TLD}
-      swag_port: 1337
       swag_address: planka
       # swag_server_custom_directive:
       #   location ~* \.io {
