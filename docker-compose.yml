@@ -5044,7 +5044,7 @@ services:
       VALIDATION: dns
       CROWDSEC_API_KEY: ${CROWDSEC_SWAG_API_KEY}
       CROWDSEC_LAPI_URL: http://crowdsec:8080
-      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|linuxserver/mods:universal-package-install|ghcr.io/linuxserver/mods:swag-crowdsec|ghcr.io/trezone/swag-auto-uptime-kuma:a443b8542f7d033fb99d2dde3782497534bd7508 #linuxserver/mods:swag-auto-uptime-kuma
+      DOCKER_MODS: linuxserver/mods:universal-docker|linuxserver/mods:swag-auto-proxy|linuxserver/mods:swag-dashboard|linuxserver/mods:swag-maxmind|linuxserver/mods:universal-stdout-logs|linuxserver/mods:universal-package-install|ghcr.io/linuxserver/mods:swag-crowdsec #|ghcr.io/trezone/swag-auto-uptime-kuma:a443b8542f7d033fb99d2dde3782497534bd7508 #linuxserver/mods:swag-auto-uptime-kuma
       INSTALL_PACKAGES: nginx-mod-http-js
       PROPAGATION: 30
       UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
