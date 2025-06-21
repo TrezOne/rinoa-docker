@@ -3747,7 +3747,7 @@ services:
       LOG_LEVEL: warn
       TRUST_PROXY: true
       TOKEN_EXPIRES_IN: 365 # In days
-      KNEX_REJECT_UNAUTHORIZED_SSL_CERTIFICATE: false
+      # KNEX_REJECT_UNAUTHORIZED_SSL_CERTIFICATE: false
       DEFAULT_LANGUAGE: en-US
       DEFAULT_ADMIN_EMAIL: noreply@${MY_TLD}
       DEFAULT_ADMIN_PASSWORD: ${PLANKA_ADMIN_PASSWORD}
@@ -3776,7 +3776,8 @@ services:
       homepage.description: Kanban board
       swag: enable
       swag_url: kanban.${MY_TLD}
-      swag_port: 1337
+      swag_port: 54476
+      swag_address: planka
       swag_server_custom_directive:
         location ~* \.io {
           proxy_set_header Upgrade $$http_upgrade;
@@ -3795,7 +3796,7 @@ services:
           proxy_connect_timeout 1d;
           proxy_send_timeout 1d;
           proxy_read_timeout 1d;
-          proxy_pass http://planka;
+          proxy_pass http://planka:1337;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://kanban.${MY_TLD}
