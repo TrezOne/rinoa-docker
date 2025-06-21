@@ -3776,12 +3776,12 @@ services:
       homepage.description: Kanban board
       swag: enable
       swag_url: kanban.${MY_TLD}
-      swag_port: 54476
+      swag_port: 1337
       swag_address: planka
-      swag_server_custom_directive:
-        location ~* \.io {
-            proxy_pass http://planka:1337;
-        }
+      # swag_server_custom_directive:
+      #   location ~* \.io {
+      #       proxy_pass http://planka:1337;
+      #   }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://kanban.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
