@@ -3802,7 +3802,7 @@ services:
     expose:
       - 5432
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d planka"]
+      test: ["CMD-SHELL", "pg_isready -U planka -d planka"]
       interval: 10s
       timeout: 5s
       retries: 5
