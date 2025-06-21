@@ -3209,10 +3209,6 @@ services:
     image: getmaxun/maxun-frontend:latest
     labels:
       swag: enable
-      # swag_server_custom_directive:
-      #   location /api {
-      #         proxy_pass http://maxun-backend:8080;
-      #   }
       swag_proto: http
       swag_port: 5173
       swag_url: scrape.${MY_TLD}
