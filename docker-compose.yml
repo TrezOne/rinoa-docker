@@ -1425,9 +1425,7 @@ services:
     healthcheck:
       interval: 10s
       start_period: 20s
-      test:
-        - CMD-SHELL
-        - pg_isready
+      test: ["CMD-SHELL", "pg_isready -U gitea -d gitea"]
     image: postgres:14
     networks:
       default: null
@@ -4839,7 +4837,7 @@ services:
       POSTGRES_PASSWORD: ${SONARQUBE_POSTGRES_PASSWORD}
       POSTGRES_DB: sonar
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -U sonar -d sonar"]
       interval: 10s
       timeout: 5s
       retries: 5
