@@ -19,6 +19,7 @@
 | browserless | ghcr.io/browserless/chromium:latest |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
+| chrome | gcr.io/zenika-hub/alpine-chrome:123 |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
 | convertx | ghcr.io/c4illin/convertx |
 | cronicle | elestio/cronicle:latest |
@@ -72,6 +73,7 @@
 | jitsi-web | jitsi/web:stable |
 | joplin-db | postgres:17-alpine |
 | joplin | joplin/server:latest |
+| karakeep | ghcr.io/karakeep-app/karakeep:release |
 | languagetool | elestio/languagetool:latest |
 | librechat-api | ghcr.io/danny-avila/librechat-dev:latest |
 | librechat-vectordb | ankane/pgvector:latest |
@@ -90,7 +92,7 @@
 | maxun-backend | getmaxun/maxun-backend:latest |
 | maxun-frontend | getmaxun/maxun-frontend:latest |
 | maxun-pg-db | postgres:13-alpine |
-| meilisearch | getmeili/meilisearch:v1.12.3 |
+| meilisearch | getmeili/meilisearch:v1.13.3 |
 | minio | minio/minio:RELEASE.2025-04-22T22-12-26Z |
 | mixpost | inovector/mixpost:latest |
 | mongodb | bitnami/mongodb:7.0 |
@@ -154,7 +156,6 @@
 | unmanic | josh5/unmanic:latest |
 | uptimekuma | louislam/uptime-kuma:latest |
 | vault | hashicorp/vault:latest |
-| wallabag | wallabag/wallabag |
 | wallos | bellamy/wallos:latest |
 | watchtower | ghcr.io/containrrr/watchtower:latest |
 | web-check | lissy93/web-check |
