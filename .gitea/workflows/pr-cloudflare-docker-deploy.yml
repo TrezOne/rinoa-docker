@@ -121,7 +121,7 @@ jobs:
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_NAMESPACE: ""
       RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
-      DOCKER_SVC_LIST: ${{ steps.detect_services.outputs.docker_svc_list }}
+      DOCKER_SVC_LIST: ${{ needs.detect_services.outputs.svc_deploy_list }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -140,7 +140,7 @@ jobs:
       - name: Generate .env file for Docker Compose
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-          echo ${DOCKER_SVC_LIST}
+          echo "${DOCKER_SVC_LIST}"
       - name: Docker Compose Dry Run
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
