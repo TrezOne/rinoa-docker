@@ -140,7 +140,7 @@ jobs:
       - name: Generate .env file for Docker Compose
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-          echo "${DOCKER_SVC_LIST}"
+          echo ${DOCKER_SVC_LIST}
       - name: Docker Compose Dry Run
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
@@ -333,13 +333,13 @@ jobs:
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-           echo "${DOCKER_SVC_LIST}"
+           echo ${DOCKER_SVC_LIST}
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
+          services: ${DOCKER_SVC_LIST}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
           compose-flags: --progress tty
