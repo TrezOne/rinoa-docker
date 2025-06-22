@@ -106,9 +106,10 @@ jobs:
           echo "Detected service changes:"
           cat service_changes.txt
 
-          temp_svc_list=$(paste -sd '|' service_changes.txt)
-          mod_svcs=$(echo "${temp_svc_list}" | sed -e 's/|//g' -e 's/: \(add\|modifi\|delet\)ed/ /g')
-          echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
+          mod_svcs=$(cut -d':' -f1 service_changes.txt | sort | uniq)
+          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$mod_svcs" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
       - name: Testing service list output
         run: |
           echo ${{ steps.detect_services.outputs.docker_svc_list }}
@@ -146,7 +147,8 @@ jobs:
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
+          services: |
+            ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
           compose-flags: --dry-run
@@ -339,7 +341,8 @@ jobs:
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
+          services: |
+            ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
       - name: Check Services' Healthiness
