@@ -153,6 +153,7 @@ services:
       homepage.widget.username: admin
       homepage.widget.password: ${ADGUARD_PASSWORD}
     network_mode: host
+    privileged: true
     # ports:
     #   - "192.168.1.254:53:53/udp"
     #   - "192.168.1.254:53:53/tcp"
@@ -620,6 +621,17 @@ services:
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
+  chrome:
+    container_name: chrome
+    command:
+      - --no-sandbox
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --hide-scrollbars
+    image: gcr.io/zenika-hub/alpine-chrome:123
+    restart: unless-stopped
   cloudflareddns:
     container_name: cloudflareddns
     environment:
@@ -2729,6 +2741,36 @@ services:
     ports:
       - 22300:22300
     restart: unless-stopped
+  karakeep:
+    container_name: karakeep
+    image: ghcr.io/karakeep-app/karakeep:release
+    environment:
+      BROWSER_WEB_URL: http://chrome:9222
+      DATA_DIR: /data
+      INFERENCE_TEXT_MODEL: llama3.3:latest
+      INFERENCE_IMAGE_MODEL: llava:latest
+      MEILI_ADDR: http://meilisearch:7700
+      NEXTAUTH_SECRET: ${KARAKEEP_NEXTAUTH_SECRET}
+      NEXTAUTH_URL: https://kkeep.${MY_TLD}
+      OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
+      OLLAMA_BASE_URL: http://ollama:11434
+    labels:
+      homepage.group: Lifestyle
+      homepage.name: Karakeep
+      homepage.href: https://kkeep.${MY_TLD}
+      homepage.icon: karakeep-dark.svg
+      homepage.description: Self-hosted bookmark-everything app with a touch of AI for data hoarders
+      swag: enable
+      swag_url: kkeep.${MY_TLD}
+      swag_port: 3000
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://notes.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 24977:3000
+    restart: unless-stopped
+    volumes:
+      - karakeep-data:/data
   languagetool:
     container_name: languagetool
     environment:
@@ -3248,7 +3290,9 @@ services:
       MEILI_HOST: http://meilisearch:7700
       MEILI_NO_ANALYTICS: true
       MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
-    image: getmeili/meilisearch:v1.12.3
+    image: getmeili/meilisearch:v1.13.3
+    ports:
+      - 7700:7700
     restart: always
     user: ${PUID}:${PGID}
     volumes:
@@ -5270,65 +5314,6 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/config/:/vault/config
       - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/logs/:/vault/logs
-  wallabag:
-    container_name: wallabag
-    depends_on:
-      mariadb:
-        condition: service_started
-        required: true
-        restart: true
-      redis:
-        condition: service_started
-        required: true
-    environment:
-      SYMFONY__ENV__DATABASE_DRIVER: pdo_mysql
-      SYMFONY__ENV__DATABASE_HOST: mariadb
-      SYMFONY__ENV__DATABASE_PORT: 3306
-      SYMFONY__ENV__DATABASE_NAME: ${WALLABAG_DB}
-      SYMFONY__ENV__DATABASE_USER: ${WALLABAG_DB}
-      SYMFONY__ENV__DATABASE_PASSWORD: ${WALLABAG_DB_PASSWORD}
-      SYMFONY__ENV__DATABASE_CHARSET: utf8
-      SYMFONY__ENV__DATABASE_TABLE_PREFIX: "wallabag_"
-      SYMFONY__ENV__MAILER_DSN: smtp://postal-smtp
-      SYMFONY__ENV__FROM_EMAIL: noreply@trez.wtf
-      SYMFONY__ENV__DOMAIN_NAME: https://wallabag.${MY_TLD}
-      SYMFONY__ENV__SERVER_NAME: "Wallabag @ Rinoa"
-      SYMFONY__ENV__REDIS_HOST: redis
-      SYMFONY__ENV__REDIS_PORT: 6379
-    healthcheck:
-      interval: 1m
-      test:
-        - CMD
-        - wget
-        - --no-verbose
-        - --tries=1
-        - --spider
-        - http://localhost
-      timeout: 3s
-    image: wallabag/wallabag
-    labels:
-      swag: enable
-      swag_address: wallabag
-      swag_proto: http
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://wallabag.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      homepage.group: Lifestyle
-      homepage.name: Wallabag
-      homepage.href: https://wallabag.${MY_TLD}
-      homepage.icon: wallabag.png
-      homepage.description: Knowledge Store
-    networks:
-      default: null
-    ports:
-      - 32768:80
-    restart: unless-stopped
-    volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/wallabag/images
-        target: /var/www/wallabag/web/assets/images
-        type: bind
-        bind:
-          create_host_path: true
   wallos:
     container_name: wallos
     environment:
@@ -5624,6 +5609,8 @@ volumes:
     name: jitsi-web-admin-upload
   joplin_data:
     name: joplin_data
+  karakeep-data:
+    name: karakeep-data
   linkstack_data:
     name: linkstack_data
   librechat-pg-data:
