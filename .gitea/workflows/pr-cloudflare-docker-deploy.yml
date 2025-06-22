@@ -146,7 +146,7 @@ jobs:
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          services: ${DOCKER_SVC_LIST}
+          services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
           compose-flags: --dry-run
@@ -339,10 +339,9 @@ jobs:
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          services: ${DOCKER_SVC_LIST}
+          services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
-          compose-flags: --progress tty
       - name: Check Services' Healthiness
         uses: thegabriele97/dockercompose-health-action@main
         with:
