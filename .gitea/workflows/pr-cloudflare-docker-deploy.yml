@@ -112,7 +112,7 @@ jobs:
           echo "EOF" >> "$GITHUB_OUTPUT"
       - name: Testing service list output
         run: |
-          echo ${{ steps.detect_services.outputs.docker_svc_list }}
+          echo -e "${{ steps.detect_services.outputs.docker_svc_list }}"
   docker-compose-dry-run:
     name: Docker Compose Dry Run
     needs: [generate-service-list]
