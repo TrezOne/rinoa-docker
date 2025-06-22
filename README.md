@@ -8,6 +8,7 @@
 | adguard | adguard/adguardhome:latest |
 | apprise-api | lscr.io/linuxserver/apprise-api:latest |
 | archivebox | archivebox/archivebox:latest |
+| argus | quay.io/argus-io/argus:latest |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
 | authelia-pg | postgres:16-alpine |
@@ -110,6 +111,7 @@
 | pgbackweb-db | postgres:16-alpine |
 | planka | ghcr.io/plankanban/planka:2.0.0-rc.3 |
 | planka-pg-db | postgres:16-alpine |
+| plant-it | msdeluise/plant-it-server:latest |
 | plantuml-server | plantuml/plantuml-server:jetty |
 | portainer | portainer/portainer-ce:alpine |
 | portnote-web | haedlessdev/portnote:latest |
