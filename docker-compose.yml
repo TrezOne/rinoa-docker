@@ -2760,6 +2760,9 @@ services:
       homepage.href: https://kkeep.${MY_TLD}
       homepage.icon: karakeep-dark.svg
       homepage.description: Self-hosted bookmark-everything app with a touch of AI for data hoarders
+      homepage.widget.type: karakeep
+      homepage.widget.url: http://karakeep:3000
+      homepage.widget.key: ${KARAKEEP_HOMEPAGE_WIDGET_KEY}
       swag: enable
       swag_url: kkeep.${MY_TLD}
       swag_port: 3000
