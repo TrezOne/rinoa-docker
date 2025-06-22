@@ -147,7 +147,7 @@ jobs:
           services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
-          compose-flags: --dry-run
+          compose-flags: --dry-run --progress tty
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -331,6 +331,7 @@ jobs:
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+           echo "${DOCKER_SVC_LIST}"
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
@@ -339,6 +340,7 @@ jobs:
           services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
+          compose-flags: --progress tty
       - name: Check Services' Healthiness
         uses: thegabriele97/dockercompose-health-action@main
         with:
