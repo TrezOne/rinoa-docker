@@ -349,7 +349,7 @@ jobs:
         uses: thegabriele97/dockercompose-health-action@main
         with:
           filename: 'docker-compose.yml'
-          timeout: '180'
+          timeout: '60'
           workdir: '.'
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
