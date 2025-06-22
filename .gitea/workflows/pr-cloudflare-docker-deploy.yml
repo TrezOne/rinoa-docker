@@ -111,7 +111,7 @@ jobs:
           echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
       - name: Testing service list output
         run: |
-          echo ${{ steps.detected_services.outputs.docker_svc_list }}
+          echo ${{ steps.detect_services.outputs.docker_svc_list }}
   docker-compose-dry-run:
     name: Docker Compose Dry Run
     needs: [generate-service-list]
