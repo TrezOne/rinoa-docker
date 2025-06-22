@@ -121,6 +121,7 @@ jobs:
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_NAMESPACE: ""
       RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
+      DOCKER_SVC_LIST: ${{ steps.detect_services.outputs.docker_svc_list }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -138,7 +139,8 @@ jobs:
           notification_message: 'Starting Docker Compose dry run...'
       - name: Generate .env file for Docker Compose
         run: |
-          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env'
+          echo ${DOCKER_SVC_LIST}
       - name: Docker Compose Dry Run
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
@@ -147,7 +149,7 @@ jobs:
           services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
-          compose-flags: --dry-run --progress tty
+          compose-flags: --dry-run
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
