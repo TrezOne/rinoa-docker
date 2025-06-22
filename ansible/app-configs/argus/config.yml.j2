@@ -1,0 +1,36 @@
+settings:
+  log:
+    level: INFO       # Log level, DEBUG/VERBOSE/INFO/WARNING/ERROR
+    timestamps: false # Log with timestamps
+  data:
+    database_file: data/argus.db # SQLite DB file used to track the state of services
+  web:
+    listen_host: 0.0.0.0  # IP address to listen on
+    listen_port: 8080     # Port to listen on
+    route_prefix: /       # Web route prefix, e.g. /demo means http://IP:PORT/demo to access
+    # cert_file: ''         # HTTPS Cert path, e.g. `cert.pem`
+    # pkey_file: ''         # HTTPS PrivKey path, e.g. `privkey.pem`
+    basic_auth:
+      username: 'admin'        # Basic auth username, e.g. `admin`
+      password: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}'        # Basic auth password, e.g. `test123`
+  disabled_routes: []   # API Routes to disable (see below)
+  favicon:
+    png: ''  # Override /apple-touch-icon.png (e.g. https://example.com/apple-touch-icon.png)
+    svg: ''  # Override /favicon.svg (e.g. https://example.com/favicon.svg)
+notify:
+  rinoa-gotify:
+    type: gotify
+    url_fields:
+      Host: gotify
+      Token: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}
+    params:
+      Title: Argus @ Rinoa
+service:
+  release-argus/argus:
+  latest_version:
+    type: github
+    url: release-argus/argus
+  dashboard:
+    icon: https://raw.githubusercontent.com/release-argus/Argus/master/web/ui/react-app/public/favicon.svg
+    icon_link-to: https://release-argus.io
+    web_url: https://github.com/release-argus/Argus/blob/master/CHANGELOG.md
