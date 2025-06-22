@@ -164,7 +164,6 @@ services:
     #   - 67:67
     #   - 688:68
     restart: unless-stopped
-    user: 1000:1000
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUME_CONFIG}/adguard/work:/opt/adguardhome/work
@@ -227,6 +226,34 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/archivebox:/data
       # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
+  argus:
+    container_name: argus
+    environment:
+      ARGUS_UID: ${PUID}
+      ARGUS_GID: ${PGID}
+    healthcheck:
+      test: ["CMD", "/healthcheck", "http://localhost:8080/api/v1/healthcheck"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    image: quay.io/argus-io/argus:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: adgh.${MY_TLD}
+      homepage.group: System Administration
+      homepage.name: Argus
+      homepage.icon: release-argus.png
+      homepage.href: https://argus.${MY_TLD}
+      homepage.description: Software release monitoring and notifications
+    ports:
+      - 9857:8080
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/argus/config.yml:/app/config.yml
+      - ${DOCKER_VOLUME_CONFIG}/argus/:/app/data/
   audiobookshelf:
     container_name: audiobookshelf
     environment:
@@ -2996,7 +3023,7 @@ services:
       LLDAP_LDAP_BASE_DN: dc=trez,dc=wtf
     image: lldap/lldap:stable
     labels:
-      homepage.group: System Administration
+      homepage.group: Privacy/Security
       homepage.name: LLDAP
       homepage.href: https://ldap.${MY_TLD}
       homepage.icon: /icons/lldap.png
@@ -3855,6 +3882,65 @@ services:
     restart: on-failure
     volumes:
       - planka-db-data:/var/lib/postgresql/data
+  plant-it:
+    image: msdeluise/plant-it-server:latest
+    depends_on:
+      - mariadb
+      - redis
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_PORT: 3306
+      MYSQL_USERNAME: plantit
+      MYSQL_PSW: ${PLANT-IT_DB_PASSWORD}
+      MYSQL_DATABASE: plantit
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
+      JWT_SECRET: ${PLANT-IT_JWT_SECRET}
+      JWT_EXP: 1
+      USERS_LIMIT: -1 # less then 0 means no limit
+      UPLOAD_DIR: /upload-dir # path to the directory used to store uploaded images, if on docker deployment leave as it is and change the volume binding in the docker-compose file if needed
+      API_PORT: 8080
+      FLORACODEX_URL: https://api.floracodex.com
+      FLORACODEX_KEY: ${PLANT-IT_FLORACODEX_APP_KEY}
+      ALLOWED_ORIGINS: '*' # CORS allowed origins (comma separated list)
+      LOG_LEVEL: DEBUG # could be: DEBUG, INFO, WARN, ERROR
+      CONTACT_MAIL: noreply@${MY_TLD} # address used as "contact" for template email
+      REMINDER_NOTIFY_CHECK: 0 30 7 * * * # 6-values crontab expression to set the check time for reminders
+      MAX_REQUESTS_PER_MINUTE: 100 # rate limiting of the upcoming requests
+      NTFY_ENABLED: false # if "false" ntfy service won't be available as notification dispatcher
+      GOTIFY_ENABLED: true # if "false" ntfy service won't be available as notification dispatcher
+      CACHE_TYPE: redis # Cache type. By default, it's "redis" but can also be "none"
+      CACHE_TTL: 86400
+      CACHE_HOST: redis
+      CACHE_PORT: 6379
+      SMTP_HOST: postal-smtp
+      SMTP_PORT: 25
+      SMTP_EMAIL: noreply@${MY_TLD}
+      SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SMTP_AUTH: true
+      SMTP_START_TTL: false
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: plants.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://portainer.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      homepage.group: Lifestyle
+      homepage.name: Plant-It
+      homepage.href: https://plant.${MY_TLD}
+      homepage.icon: plant-it.png
+      homepage.description: 🪴 Self-hosted, open source gardening companion app
+      # homepage.widget.type: portainer
+      # homepage.widget.url: http://portainer:9000
+      # homepage.widget.env: 7
+      # homepage.widget.key: ${PORTAINER_HOMEPAGE_TOKEN}
+    ports:
+      - 64067:8080
+      - 3460:3000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/plant-it:/upload-dir
   plantuml-server:
     container_name: plantuml-server
     expose:
