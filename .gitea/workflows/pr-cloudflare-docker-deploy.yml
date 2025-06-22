@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-and-create-pr]
     outputs:
-      svc_deploy_list: ${{ steps.detected_services.outputs.docker_svc_list }}
+      svc_deploy_list: ${{ steps.detect_services.outputs.docker_svc_list }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -121,7 +121,7 @@ jobs:
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_NAMESPACE: ""
       RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
-      DOCKER_SVC_LIST: ${{ needs.detect_services.outputs.svc_deploy_list }}
+      DOCKER_SVC_LIST: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -146,7 +146,7 @@ jobs:
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
-          services: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
+          services: ${DOCKER_SVC_LIST}
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
           compose-flags: --dry-run
@@ -306,7 +306,7 @@ jobs:
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       DOCKER_HOST: tcp://dockerproxy:2375
       RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
-      DOCKER_SVC_LIST: ${{ needs.docker-compose-dry-run.outputs.svc_deploy_list }}
+      DOCKER_SVC_LIST: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
