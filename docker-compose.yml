@@ -242,7 +242,7 @@ services:
       swag: enable
       swag_proto: http
       swag_port: 8080
-      swag_url: adgh.${MY_TLD}
+      swag_url: argus.${MY_TLD}
       homepage.group: System Administration
       homepage.name: Argus
       homepage.icon: release-argus.png
