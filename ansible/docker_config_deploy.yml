@@ -12,6 +12,8 @@
         patterns: "*.j2"
         recurse: yes
       register: jinja_templates
+      delegate_to: localhost
+      run_once: true
 
     - name: Ensure target directories exist
       ansible.builtin.file:
