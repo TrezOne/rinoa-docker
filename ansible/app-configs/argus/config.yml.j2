@@ -12,7 +12,7 @@ settings:
     # pkey_file: ''         # HTTPS PrivKey path, e.g. `privkey.pem`
     basic_auth:
       username: 'admin'        # Basic auth username, e.g. `admin`
-      password: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}'        # Basic auth password, e.g. `test123`
+      password: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}"       # Basic auth password, e.g. `test123`
   disabled_routes: []   # API Routes to disable (see below)
   favicon:
     png: ''  # Override /apple-touch-icon.png (e.g. https://example.com/apple-touch-icon.png)
