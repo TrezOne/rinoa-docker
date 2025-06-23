@@ -1,22 +1,20 @@
 settings:
   log:
-    level: INFO       # Log level, DEBUG/VERBOSE/INFO/WARNING/ERROR
-    timestamps: false # Log with timestamps
+    level: INFO
+    timestamps: true
   data:
-    database_file: data/argus.db # SQLite DB file used to track the state of services
+    database_file: data/argus.db
   web:
-    listen_host: 0.0.0.0  # IP address to listen on
-    listen_port: 8080     # Port to listen on
-    route_prefix: /       # Web route prefix, e.g. /demo means http://IP:PORT/demo to access
-    # cert_file: ''         # HTTPS Cert path, e.g. `cert.pem`
-    # pkey_file: ''         # HTTPS PrivKey path, e.g. `privkey.pem`
+    listen_host: 0.0.0.0
+    listen_port: 8080
+    route_prefix: /
     basic_auth:
-      username: 'admin'        # Basic auth username, e.g. `admin`
-      password: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}'        # Basic auth password, e.g. `test123`
-  disabled_routes: []   # API Routes to disable (see below)
+      username: 'admin'
+      password: "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ARGUS_WEB_PASSWORD'] }}"
+  disabled_routes: []
   favicon:
-    png: ''  # Override /apple-touch-icon.png (e.g. https://example.com/apple-touch-icon.png)
-    svg: ''  # Override /favicon.svg (e.g. https://example.com/favicon.svg)
+    png: ''
+    svg: ''
 notify:
   rinoa-gotify:
     type: gotify
@@ -34,15 +32,15 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://adguard.trez.wtf/control/status
+      url: "https://adguard.trez.wtf/control/status"
       basic_auth:
         username: admin
         password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['ADGUARD_PASSWORD'] }}
       json: version
       regex: v([0-9.]+)
     dashboard:
-      web_url: https://github.com/AdguardTeam/AdGuardHome/releases/v{{ version }}
-      icon: https://avatars.githubusercontent.com/u/8361145?s=200&v=4
+      web_url: "https://github.com/AdguardTeam/AdGuardHome/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://avatars.githubusercontent.com/u/8361145?s=200&v=4"
   advplyr/audiobookshelf:
     latest_version:
       type: github
@@ -52,21 +50,21 @@ service:
           regex: v([0-9.]+)$
     deployed_version:
       method: GET
-      url: https://abs.trez.wtf/status
+      url: "https://abs.trez.wtf/status"
       json: serverVersion
     dashboard:
-      icon: https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg
-      web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
+      icon: "https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg"
+      web_url: "https://github.com/advplyr/audiobookshelf/releases/tag/v{% raw %}{{ version }}{% endraw %}"
   dani-garcia/vaultwarden:
     latest_version:
       type: github
       url: dani-garcia/vaultwarden
     deployed_version:
-      url: https://bitwarden.trez.wtf/api/version
+      url: "https://bitwarden.trez.wtf/api/version"
       regex: ([0-9.]+)
     dashboard:
-      web_url: https://github.com/dani-garcia/vaultwarden/releases/{{ version }}
-      icon: https://raw.githubusercontent.com/dani-garcia/vaultwarden/main/src/static/images/vaultwarden-icon.png
+      web_url: "https://github.com/dani-garcia/vaultwarden/releases/{% raw %}{{ version }}{% endraw %}"
+      icon: "https://raw.githubusercontent.com/dani-garcia/vaultwarden/main/src/static/images/vaultwarden-icon.png"
   ellite/Wallos:
     latest_version:
       type: github
@@ -76,8 +74,8 @@ service:
       url: http://wallos.com/api/status/version.php?api_key=xxx
       json: version_number
     dashboard:
-      icon: https://github.com/ellite/Wallos/raw/main/images/siteicons/wallos.png
-      web_url: https://github.com/ellite/Wallos/releases
+      icon: "https://github.com/ellite/Wallos/raw/main/images/siteicons/wallos.png"
+      web_url: "https://github.com/ellite/Wallos/releases"
   FlareSolverr/FlareSolverr:
     latest_version:
       type: github
@@ -87,11 +85,11 @@ service:
           regex: v([0-9.]+)$
     deployed_version:
       method: GET
-      url: https://flaresolverr.trez.wtf
+      url: "https://flaresolverr.trez.wtf"
       json: version
     dashboard:
-      icon: https://raw.githubusercontent.com/FlareSolverr/FlareSolverr/master/resources/flaresolverr_logo.png
-      web_url: https://github.com/FlareSolverr/FlareSolverr/releases/tag/v{{ version }}
+      icon: "https://raw.githubusercontent.com/FlareSolverr/FlareSolverr/master/resources/flaresolverr_logo.png"
+      web_url: "https://github.com/FlareSolverr/FlareSolverr/releases/tag/v{% raw %}{{ version }}{% endraw %}"
   go-gitea/gitea:
     latest_version:
       type: github
@@ -100,14 +98,14 @@ service:
         - type: regex
           regex: v([0-9.]+)$
       require:
-        regex_content: gitea-{{ version }}-linux-amd64
+        regex_content: gitea-{% raw %}{{ version }}{% endraw %}-linux-amd64
         regex_version: ^[0-9.]+[0-9]$
     deployed_version:
-      url: https://git.trez.wtf
+      url: "https://git.trez.wtf"
       regex: 'Powered by Gitea\s+Version:\s+([0-9.]+) '
     dashboard:
-      web_url: https://github.com/go-gitea/gitea/releases/v{{ version }}
-      icon: https://raw.githubusercontent.com/go-gitea/gitea/main/public/img/logo.png
+      web_url: "https://github.com/go-gitea/gitea/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://raw.githubusercontent.com/go-gitea/gitea/main/public/img/logo.png"
   gohugoio/hugo:
     latest_version:
       type: github
@@ -116,10 +114,10 @@ service:
         - type: regex
           regex: v([0-9.]+)$
       require:
-        regex_content: hugo_{{ version }}_Linux-64bit\.deb
+        regex_content: hugo_{% raw %}{{ version }}{% endraw %}_Linux-64bit\.deb
     dashboard:
-      web_url: https://github.com/gohugoio/hugo/releases/v{{ version }}
-      icon: https://raw.githubusercontent.com/gohugoio/hugo/master/docs/static/img/hugo.png
+      web_url: "https://github.com/gohugoio/hugo/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://raw.githubusercontent.com/gohugoio/hugo/master/docs/static/img/hugo.png"
   gotify/server:
     latest_version:
       type: github
@@ -128,11 +126,11 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://gotify.trez.wtf/version
+      url: "https://gotify.trez.wtf/version"
       json: version
     dashboard:
-      web_url: https://github.com/gotify/server/releases/v{{ version }}
-      icon: https://github.com/gotify/logo/raw/master/gotify-logo.png
+      web_url: "https://github.com/gotify/server/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://github.com/gotify/logo/raw/master/gotify-logo.png"
   hashicorp/vault:
     latest_version:
       type: github
@@ -141,25 +139,25 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://vault.trez.wtf/v1/sys/health
+      url: "https://vault.trez.wtf/v1/sys/health"
       json: version
     dashboard:
-      web_url: https://github.com/hashicorp/vault/releases/v{{ version }}
-      icon: https://raw.githubusercontent.com/hashicorp/vault/main/ui/public/vault-logo.svg
+      web_url: "https://github.com/hashicorp/vault/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://raw.githubusercontent.com/hashicorp/vault/main/ui/public/vault-logo.svg"
   immich-app/immich:
     latest_version:
       type: github
       url: immich-app/immich
     deployed_version:
-      url: https://pics.trez.wtf/api/server/about
+      url: "https://pics.trez.wtf/api/server/about"
       json: version
       regex: ^v([0-9.]+)$
       headers:
         - key: x-api-key
           value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['IMMICH_POWER_TOOLS_KEY'] }}
     dashboard:
-      icon: https://raw.githubusercontent.com/immich-app/immich/main/web/static/immich-logo.svg
-      web_url: https://github.com/immich-app/immich/releases/tag/v{{ version }}
+      icon: "https://raw.githubusercontent.com/immich-app/immich/main/web/static/immich-logo.svg"
+      web_url: "https://github.com/immich-app/immich/releases/tag/v{% raw %}{{ version }}{% endraw %}"
   influxdata/influxdb:
     latest_version:
       type: github
@@ -168,11 +166,11 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://influxdb.trez.wtf/health
+      url: "https://influxdb.trez.wtf/health"
       json: version
     dashboard:
-      web_url: https://github.com/influxdata/influxdb/releases/tag/v{{ version }}
-      icon: https://github.com/influxdata/ui/raw/master/src/writeData/graphics/influxdb.svg
+      web_url: "https://github.com/influxdata/influxdb/releases/tag/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://github.com/influxdata/ui/raw/master/src/writeData/graphics/influxdb.svg"
   jellyfin/jellyfin:
     latest_version:
       type: github
@@ -181,11 +179,11 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://jellyfin.trez.wtf/System/Info/Public
+      url: "https://jellyfin.trez.wtf/System/Info/Public"
       json: Version
     dashboard:
-      web_url: https://github.com/jellyfin/jellyfin/releases/v{{ version }}
-      icon: https://avatars.githubusercontent.com/u/45698031?s=200&v=4
+      web_url: "https://github.com/jellyfin/jellyfin/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://avatars.githubusercontent.com/u/45698031?s=200&v=4"
   Lidarr/Lidarr:
     options:
       semantic_versioning: false
@@ -197,24 +195,24 @@ service:
           regex: v([0-9.]+)$
     deployed_version:
       method: GET
-      url: https://lidarr.trez.wtf/api/v1/system/status
+      url: "https://lidarr.trez.wtf/api/v1/system/status"
       headers:
         - key: X-Api-Key
           value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['LIDARR_API_KEY'] }}
       json: version
     dashboard:
-      icon: https://raw.githubusercontent.com/Lidarr/Lidarr/develop/Logo/1024.png
-      web_url: https://github.com/Lidarr/Lidarr/releases/v{{ version }}
+      icon: "https://raw.githubusercontent.com/Lidarr/Lidarr/develop/Logo/1024.png"
+      web_url: "https://github.com/Lidarr/Lidarr/releases/v{% raw %}{{ version }}{% endraw %}"
   louislam/uptime-kuma:
     latest_version:
       type: github
       url: louislam/uptime-kuma
     deployed_version:
-      url: https://status.trez.wtf/metrics
+      url: "https://status.trez.wtf/metrics"
       regex: app_version{version=\"([0-9.]+)\",major=\"[0-9]+\",minor=\"[0-9]+\",patch=\"[0-9]+\"}
     dashboard:
-      web_url: https://github.com/louislam/uptime-kuma/releases/{{ version }}
-      icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.png
+      web_url: "https://github.com/louislam/uptime-kuma/releases/{% raw %}{{ version }}{% endraw %}"
+      icon: "https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.png"
   morpheus65535/bazarr:
     latest_version:
       type: github
@@ -223,24 +221,24 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://bazarr.trez.wtf/api/system/status
+      url: "https://bazarr.trez.wtf/api/system/status"
       headers:
         - key: X-API-KEY
           value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['BAZARR_API_KEY'] }}
       json: data.bazarr_version
     dashboard:
-      web_url: https://github.com/morpheus65535/bazarr/releases/v{{ version }}
-      icon: https://raw.githubusercontent.com/morpheus65535/bazarr/master/frontend/public/images/logo128.png
+      web_url: "https://github.com/morpheus65535/bazarr/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://raw.githubusercontent.com/morpheus65535/bazarr/master/frontend/public/images/logo128.png"
   n8n-io/n8n:
     latest_version:
       type: url
-      url: https://github.com/n8n-io/n8n/tags
+      url: "https://github.com/n8n-io/n8n/tags"
       url_commands:
         - type: regex
           regex: n8n\%40([0-9.]+)
     dashboard:
-      web_url: https://github.com/n8n-io/n8n/blob/master/CHANGELOG.md
-      icon: https://raw.githubusercontent.com/n8n-io/n8n-docs/main/docs/_images/n8n-docs-icon.svg
+      web_url: "https://github.com/n8n-io/n8n/blob/master/CHANGELOG.md"
+      icon: "https://raw.githubusercontent.com/n8n-io/n8n-docs/main/docs/_images/n8n-docs-icon.svg"
   extcloud/server:
     latest_version:
       type: github
@@ -249,11 +247,11 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://cloud.trez.wtf/status.php
+      url: "https://cloud.trez.wtf/status.php"
       json: versionstring
     dashboard:
-      web_url: https://nextcloud.com/changelog/#latest{{ version | split:"." | slice:":1" | join:""  }}
-      icon: https://github.com/nextcloud/server/raw/master/core/img/favicon.png
+      web_url: "https://nextcloud.com/changelog/"
+      icon: "https://github.com/nextcloud/server/raw/master/core/img/favicon.png"
   Prowlarr/Prowlarr:
     options:
       semantic_versioning: false
@@ -265,14 +263,14 @@ service:
           regex: v([0-9.]+)$
       use_prerelease: true
     deployed_version:
-      url: https://prowlarr.trez.wtf/api/v1/system/status
+      url: "https://prowlarr.trez.wtf/api/v1/system/status"
       headers:
         - key: X-Api-Key
           value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['PROWLARR_API_KEY'] }}
       json: version
     dashboard:
-      web_url: https://github.com/Prowlarr/Prowlarr/releases/v{{ version }}
-      icon: https://avatars.githubusercontent.com/u/73049443?s=200&v=4
+      web_url: "https://github.com/Prowlarr/Prowlarr/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://avatars.githubusercontent.com/u/73049443?s=200&v=4"
   Radarr/Radarr:
     options:
       semantic_versioning: false
@@ -283,14 +281,14 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: https://radarr.trez.wtf/api/v3/system/status
+      url: "https://radarr.trez.wtf/api/v3/system/status"
       headers:
         - key: X-Api-Key
           value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['RADARR_API_KEY'] }}
       json: version
     dashboard:
-      web_url: https://github.com/Radarr/Radarr/releases/v{{ version }}
-      icon: https://avatars.githubusercontent.com/u/25025331?s=200&v=4
+      web_url: "https://github.com/Radarr/Radarr/releases/v{% raw %}{{ version }}{% endraw %}"
+      icon: "https://avatars.githubusercontent.com/u/25025331?s=200&v=4"
   Readarr/Readarr:
     options:
       semantic_versioning: false
@@ -303,37 +301,37 @@ service:
           regex: v([0-9.]+)$
     deployed_version:
       method: GET
-      url: https://readarr.trez.wtf/api/v1/system/status
+      url: "https://readarr.trez.wtf/api/v1/system/status"
       headers:
         - key: X-Api-Key
           value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['READARR_API_KEY'] }}
       json: version
     dashboard:
-      icon: https://raw.githubusercontent.com/Readarr/Readarr/develop/Logo/1024.png
-      web_url: https://github.com/Readarr/Readarr/releases/v{{ version }}
+      icon: "https://raw.githubusercontent.com/Readarr/Readarr/develop/Logo/1024.png"
+      web_url: "https://github.com/Readarr/Readarr/releases/v{% raw %}{{ version }}{% endraw %}"
   Sonarr/Sonarr:
     options:
       semantic_versioning: false
     latest_version:
       type: url
-      url: https://github.com/Sonarr/Sonarr/tags
+      url: "https://github.com/Sonarr/Sonarr/tags"
       url_commands:
         - type: regex
           regex: \/releases\/tag\/v?([0-9.]+)\"
     deployed_version:
-      url: https://sonarr.trez.wtf/api/v3/system/status
+      url: "https://sonarr.trez.wtf/api/v3/system/status"
       headers:
         - key: X-Api-Key
           value: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['SONARR_API_KEY'] }}
       json: version
     dashboard:
-      web_url: https://sonarr.trez.wtf/system/updates
-      icon: https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png
+      web_url: "https://sonarr.trez.wtf/system/updates"
+      icon: "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
   release-argus/argus:
     latest_version:
       type: github
       url: release-argus/argus
     dashboard:
-      icon: https://raw.githubusercontent.com/release-argus/Argus/master/web/ui/react-app/public/favicon.svg
-      icon_link-to: https://release-argus.io
-      web_url: https://github.com/release-argus/Argus/blob/master/CHANGELOG.md
+      icon: "https://raw.githubusercontent.com/release-argus/Argus/master/web/ui/react-app/public/favicon.svg"
+      icon_link-to: "https://release-argus.io"
+      web_url: "https://github.com/release-argus/Argus/blob/master/CHANGELOG.md"
