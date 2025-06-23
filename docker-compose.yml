@@ -3883,7 +3883,7 @@ services:
     volumes:
       - planka-db-data:/var/lib/postgresql/data
   plant-it:
-    image: msdeluise/plant-it-server:latest
+    container_name: plant-it
     depends_on:
       - mariadb
       - redis
@@ -3918,6 +3918,7 @@ services:
       SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       SMTP_AUTH: true
       SMTP_START_TTL: false
+    image: msdeluise/plant-it-server:latest
     labels:
       swag: enable
       swag_proto: http
@@ -3931,10 +3932,6 @@ services:
       homepage.href: https://plant.${MY_TLD}
       homepage.icon: plant-it.png
       homepage.description: 🪴 Self-hosted, open source gardening companion app
-      # homepage.widget.type: portainer
-      # homepage.widget.url: http://portainer:9000
-      # homepage.widget.env: 7
-      # homepage.widget.key: ${PORTAINER_HOMEPAGE_TOKEN}
     ports:
       - 64067:8080
       - 3460:3000
