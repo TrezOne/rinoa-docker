@@ -3929,7 +3929,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       homepage.group: Lifestyle
       homepage.name: Plant-It
-      homepage.href: https://plant.${MY_TLD}
+      homepage.href: https://plants.${MY_TLD}
       homepage.icon: plant-it.png
       homepage.description: 🪴 Self-hosted, open source gardening companion app
     ports:
