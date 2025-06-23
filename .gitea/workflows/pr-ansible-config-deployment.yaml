@@ -62,6 +62,34 @@ jobs:
     name: Ansible Lint
     needs: [check-and-create-pr]
     runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Gotify Notification
+      uses: eikendev/gotify-action@master
+      with:
+        gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+        gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+        notification_title: 'GITEA: Ansible Lint @ Rinoa'
+        notification_message: 'Starting Ansible Lint...'
+    - name: Run ansible-lint
+      uses: ansible/ansible-lint@main
+      with:
+        args: ""
+        setup_python: "true"
+        working_directory: "./ansible"
+        requirements_file: "collections/requirements.yml"
+    - name: Gotify Notification
+      uses: eikendev/gotify-action@master
+      with:
+        gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+        gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+        notification_title: 'GITEA: Ansible Lint @ Rinoa'
+        notification_message: 'Ansible Linting completed.'
+  ansible-dry-run:
+    name: Ansible Playbook Dry Run
+    needs: [ansible-linting]
+    runs-on: ubuntu-latest
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
@@ -109,11 +137,11 @@ jobs:
         with:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
-          notification_message: 'Docker Compose dry run completed successfully.'
+          notification_title: 'GITEA: Ansible Playbook Dry Run @ Rinoa'
+          notification_message: 'Ansible Playbook dry run completed successfully.'
   pr-merge:
     name: PR Merge
-    needs: [regenerate-readme-modified-services]
+    needs: [ansible-dry-run]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
