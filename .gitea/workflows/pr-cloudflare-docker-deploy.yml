@@ -336,6 +336,15 @@ jobs:
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
            echo ${DOCKER_SVC_LIST}
+      - name: Cache Docker Compose Images
+        id: cache-docker
+        uses: seijikohara/docker-compose-cache-action@v1
+        with:
+          # Optional: Specify one or more compose files
+          compose-files: |
+            docker-compose.yml
+          # Optional: Change the cache key prefix
+          cache-key-prefix: rinoa-docker-images
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
