@@ -1,52 +1,32 @@
+---
 - name: Deploy Docker Service Configurations
   hosts: rinoa
   vars:
-    appdata_base_path: "~/.docker/config/appdata"
     template_base_path: "{{ playbook_dir }}/app-configs"
-    local_render_dir: "/tmp/rendered_templates"  # Temp directory on control node
+    appdata_base_path: "~/.docker/config/appdata"
 
   tasks:
-
-    - name: Ensure local render directory exists
-      ansible.builtin.file:
-        path: "{{ local_render_dir }}"
-        state: directory
-        mode: '0755'
-      delegate_to: localhost
-      run_once: true
-
-    - name: Recursively collect all Jinja2 templates (*.j2)
+    - name: Find all Jinja2 templates
       ansible.builtin.find:
         paths: "{{ template_base_path }}"
         patterns: "*.j2"
-        recurse: true
-      register: template_files
-      delegate_to: localhost
-      run_once: true
+        recurse: yes
+      register: jinja_templates
 
-    - name: Render templates locally
+    - name: Ensure target directories exist
+      ansible.builtin.file:
+        path: "{{ appdata_base_path }}/{{ item.path | regex_replace('^' + template_base_path + '/', '') | regex_replace('\\.j2$', '') | dirname }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ jinja_templates.files }}"
+      loop_control:
+        label: "{{ item.path }}"
+
+    - name: Render and deploy templates
       ansible.builtin.template:
         src: "{{ item.path }}"
-        dest: "{{ local_render_dir }}/{{ item.path | regex_replace('^' + (template_base_path | regex_escape) + '/', '') | regex_replace('\\.j2$', '') }}"
+        dest: "{{ appdata_base_path }}/{{ item.path | regex_replace('^' + template_base_path + '/', '') | regex_replace('\\.j2$', '') }}"
         mode: '0644'
-      loop: "{{ template_files.files }}"
-      delegate_to: localhost
+      loop: "{{ jinja_templates.files }}"
       loop_control:
-        label: "{{ item.path | basename }}"
-      run_once: true
-
-    - name: Copy rendered templates to remote host
-      ansible.builtin.copy:
-        src: "{{ local_render_dir }}/{{ item.path | regex_replace('^' + (template_base_path | regex_escape) + '/', '') | regex_replace('\\.j2$', '') }}"
-        dest: "{{ appdata_base_path }}/{{ item.path | regex_replace('^' + (template_base_path | regex_escape) + '/', '') | regex_replace('\\.j2$', '') }}"
-        mode: '0644'
-      loop: "{{ template_files.files }}"
-      loop_control:
-        label: "{{ item.path | basename }}"
-
-    - name: Clean up local render directory
-      ansible.builtin.file:
-        path: "{{ local_render_dir }}"
-        state: absent
-      delegate_to: localhost
-      run_once: true
+        label: "{{ item.path }}"
