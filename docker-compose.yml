@@ -3345,7 +3345,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       homepage.group: Social
       homepage.name: Meme Search Pro
-      homepage.href: https://scrape.${MY_TLD}
+      homepage.href: https://memes.${MY_TLD}
       homepage.icon: sh-meme-search.svg
       homepage.description: Meme search engine built with Python and Ruby
     ports:
