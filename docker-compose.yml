@@ -3330,7 +3330,7 @@ services:
   meme-search-pro:
     container_name: meme-search-pro
     depends_on:
-      meme_search_db:
+      meme-search-db:
         condition: service_healthy
     environment:
       DATABASE_URL: postgres://meme-search:${MEME_SEARCH_PG_PASSWORD}@meme-search-db:5432/meme-search
