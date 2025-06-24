@@ -94,6 +94,9 @@
 | maxun-frontend | getmaxun/maxun-frontend:latest |
 | maxun-pg-db | postgres:13-alpine |
 | meilisearch | getmeili/meilisearch:v1.13.3 |
+| meme-search-pro | ghcr.io/neonwatty/meme_search_pro:latest |
+| meme-search-pro-img2txt-gen | ghcr.io/neonwatty/image_to_text_generator:latest |
+| meme-search-db | pgvector/pgvector:pg17 |
 | minio | minio/minio:RELEASE.2025-04-22T22-12-26Z |
 | mixpost | inovector/mixpost:latest |
 | mongodb | bitnami/mongodb:7.0 |
@@ -121,6 +124,7 @@
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
 | prowlarr | lscr.io/linuxserver/prowlarr:latest |
+| qbit-manage | ghcr.io/stuffanthings/qbit_manage:latest |
 | qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:latest |
 | radarec | thewicklowwolf/radarec:latest |
 | radarr | lscr.io/linuxserver/radarr:latest |
