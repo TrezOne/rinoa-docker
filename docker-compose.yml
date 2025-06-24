@@ -3327,6 +3327,65 @@ services:
     user: ${PUID}:${PGID}
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meilisearch:/meili_data
+  meme-search-pro:
+    container_name: meme-search-pro
+    depends_on:
+      meme_search_db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://meme-search:${MEME_SEARCH_PG_PASSWORD}@meme-search-db:5432/meme-search
+    image: ghcr.io/neonwatty/meme_search_pro:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 3000
+      swag_url: memes.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://memes.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      homepage.group: Social
+      homepage.name: Meme Search Pro
+      homepage.href: https://scrape.${MY_TLD}
+      homepage.icon: sh-meme-search.svg
+      homepage.description: Meme search engine built with Python and Ruby
+    ports:
+      - 14058:3000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/memes/:/rails/public/memes
+  meme-search-pro-img2txt-gen:
+    image: ghcr.io/neonwatty/image_to_text_generator:latest
+    container_name: meme-search-pro-img2txt-gen
+    deploy:
+      resources:
+        limits:
+          memory: 12GB
+    environment:
+      APP_PORT: 3000
+    expose:
+      - 8000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/memes/:/app/public/memes
+      - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/image_to_text_generator:/app/db
+      - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/models:/root/.cache/huggingface
+  meme-search-db:
+    container_name: meme-search-db
+    environment:
+      POSTGRES_DB: meme-search
+      POSTGRES_USER: meme-search
+      POSTGRES_PASSWORD: ${MEME_SEARCH_PG_PASSWORD}
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U meme-search"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/meme-search-db:/var/lib/postgresql/data
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
@@ -4134,6 +4193,44 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  qbit-manage:
+    container_name: qbit-manage
+    depends_on:
+      qbittorrentvpn:
+        required: true
+        condition: service_started
+    image: ghcr.io/stuffanthings/qbit_manage:latest
+    environment:
+      # Web API Configuration
+      QBT_WEB_SERVER: true    # Set to true to enable web API
+      QBT_PORT: 8080           # Web API port (default: 8080)
+      # Scheduler Configuration
+      QBT_RUN: false
+      QBT_SCHEDULE: 1440
+      QBT_CONFIG: /config/config.yml
+      QBT_LOGFILE: activity.log
+      # Command Flags
+      QBT_RECHECK: false
+      QBT_CAT_UPDATE: false
+      QBT_TAG_UPDATE: false
+      QBT_REM_UNREGISTERED: false
+      QBT_REM_ORPHANED: false
+      QBT_TAG_TRACKER_ERROR: false
+      QBT_TAG_NOHARDLINKS: false
+      QBT_SHARE_LIMITS: false
+      QBT_SKIP_CLEANUP: false
+      QBT_DRY_RUN: false
+      # Logging Configuration
+      QBT_LOG_LEVEL: INFO
+      QBT_DIVIDER: =
+      QBT_WIDTH: 100
+    ports:
+      - 5965:8080
+    restart: on-failure:2
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/qbittorrent/qbit_manage/:/config:rw
+      - ${DOCKER_VOLUME_STORAGE}/downloads/torrents/:/data/torrents:rw
+      - ${DOCKER_VOLUME_CONFIG}/qbittorrent/qBittorrent:/qbittorrent/:ro
   qbittorrentvpn:
     cap_add:
       - NET_ADMIN
@@ -4170,6 +4267,10 @@ services:
       homepage.widget.user: admin
       homepage.widget.password: ${DELUGEVPN_PASSWORD}
       swag: enable
+      swag_server_custom_directive:
+        location /mgmt {
+              proxy_pass http://qbit-manage:8080;
+        }
       swag_port: 8080
       swag_proto: http
       swag_url: qbit.${MY_TLD}
