@@ -6117,6 +6117,8 @@ volumes:
     name: mixpost-storage
   mixpost-logs:
     name: mixpost-logs
+  mixpost-valkey-data:
+    name: mixpost-valkey-data
   mongodb_config:
     name: mongodb_config
   mongodb_data:
