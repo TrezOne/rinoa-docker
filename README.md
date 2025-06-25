@@ -110,6 +110,11 @@
 | omni-tools | iib0011/omni-tools:latest |
 | omnipoly | kweg/omnipoly:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
+| penpot-frontend | penpotapp/frontend:latest |
+| penpot-backend | penpotapp/backend:latest |
+| penpot-exporter | penpotapp/exporter:latest |
+| penpot-pg-db | postgres:15-alpine |
+| penpot-redis | redis:7.2 |
 | pgbackweb | eduardolat/pgbackweb:latest |
 | pgbackweb-db | postgres:16-alpine |
 | planka | ghcr.io/plankanban/planka:2.0.0-rc.3 |
