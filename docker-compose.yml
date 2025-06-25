@@ -13,6 +13,87 @@ x-app-common: &jitsi_admin_app
     PHP_INI_MEMORY_LIMIT: "1G"
     PHP_EXTENSION_LDAP: 1
     PHP_EXTENSION_INTL: 1
+x-librechat: &librechat-env
+  ALLOW_EMAIL_LOGIN: true
+  ALLOW_PASSWORD_RESET: false
+  ALLOW_REGISTRATION: true
+  ALLOW_SHARED_LINKS_PUBLIC: true
+  ALLOW_SHARED_LINKS: true
+  ALLOW_SOCIAL_LOGIN: false
+  ALLOW_SOCIAL_REGISTRATION: false
+  ALLOW_UNVERIFIED_EMAIL_LOGIN: true
+  ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
+  ANTHROPIC_MODELS: claude-3-7-sonnet-latest,claude-3-7-sonnet-20250219,claude-3-5-haiku-20241022,claude-3-5-sonnet-20241022,claude-3-5-sonnet-latest,claude-3-5-sonnet-20240620,claude-3-opus-20240229,claude-3-sonnet-20240229,claude-3-haiku-20240307,claude-2.1,claude-2,claude-1.2,claude-1,claude-1-100k,claude-instant-1,claude-instant-1-100k
+  APPLE_CALLBACK_URL: /oauth/apple/callback
+  APP_TITLE: LibreChat
+  BAN_DURATION: 1000 * 60 * 60 * 2
+  BAN_INTERVAL: 20
+  BAN_VIOLATIONS: true
+  CHECK_BALANCE: false
+  CONCURRENT_MESSAGE_MAX: 2
+  CONCURRENT_VIOLATION_SCORE: 1
+  CONSOLE_JSON: true
+  CREDS_IV: ${LIBRECHAT_CREDS_IV}
+  CREDS_KEY: ${LIBRECHAT_CREDS_KEY}
+  DB_HOST: librechat-vectordb
+  DEBUG_CONSOLE: false
+  DEBUG_LOGGING: true
+  DEBUG_OPENAI: false
+  DEEPSEEK_API_KEY: ${LIBRECHAT_DEEPSEEK_API_KEY}
+  DISCORD_CALLBACK_URL: /oauth/discord/callback
+  DOMAIN_CLIENT: https://ai.${MY_TLD}
+  DOMAIN_SERVER: https://ai.${MY_TLD}
+  EMAIL_FROM: noreply@librechat.ai
+  EMAIL_HOST: postal-smtp
+  EMAIL_PORT: 25
+  FACEBOOK_CALLBACK_URL: /oauth/facebook/callback
+  GITHUB_CALLBACK_URL: /oauth/github/callback
+  GOOGLE_CALLBACK_URL: /oauth/google/callback
+  HELP_AND_FAQ_URL: https://librechat.ai
+  HOST: localhost
+  ILLEGAL_MODEL_REQ_SCORE: 5
+  JWT_REFRESH_SECRET: ${LIBRECHAT_JWT_REFRESH_SECRET}
+  JWT_SECRET: ${LIBRECHAT_JWT_SECRET}
+  LIMIT_CONCURRENT_MESSAGES: true
+  LIMIT_MESSAGE_IP: true
+  LIMIT_MESSAGE_USER: false
+  LOGIN_MAX: 7
+  LOGIN_VIOLATION_SCORE: 1
+  LOGIN_WINDOW: 5
+  MEILI_HOST: http://meilisearch:7700
+  MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
+  MEILI_NO_ANALYTICS: true
+  MESSAGE_IP_MAX: 40
+  MESSAGE_IP_WINDOW: 1
+  MESSAGE_USER_MAX: 40
+  MESSAGE_USER_WINDOW: 1
+  MESSAGE_VIOLATION_SCORE: 1
+  MISTRAL_API_KEY: ${LIBRECHAT_MISTRAL_API_KEY}
+  MONGO_URI: mongodb://librechat:${LIBRECHAT_MONGODB_PASSWORD}@mongodb:27017/librechat?replicaSet=rinoa
+  NO_INDEX: true
+  NON_BROWSER_VIOLATION_SCORE: 20
+  OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
+  OPENAI_MODELS: o1,o1-mini,o1-preview,gpt-4o,chatgpt-4o-latest,gpt-4o-mini,gpt-3.5-turbo-0125,gpt-3.5-turbo-0301,gpt-3.5-turbo,gpt-4,gpt-4-0613,gpt-4-vision-preview,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k-0613,gpt-4-0125-preview,gpt-4-turbo-preview,gpt-4-1106-preview,gpt-3.5-turbo-1106,gpt-3.5-turbo-instruct,gpt-3.5-turbo-instruct-0914,gpt-3.5-turbo-16k
+  OPENAI_MODERATION: false
+  OPENID_CALLBACK_URL: /oauth/openid/callback
+  OPENID_SCOPE: "openid profile email"
+  OPENWEATHER_API_KEY: ${HOMEPAGE_OPENWEATHERMAP_API_KEY}
+  PORT: 3080
+  POSTGRES_DB: librechat
+  POSTGRES_PASSWORD: ${LIBRECHAT_PG_DB_PASSWD}
+  POSTGRES_USER: librechat
+  RAG_PORT: 8000
+  REDIS_PREFIX: librechat_
+  REDIS_URI: librechat-valkey:6379
+  REFRESH_TOKEN_EXPIRY: (1000 * 60 * 60 * 24) * 7
+  REGISTER_MAX: 5
+  REGISTER_WINDOW: 60
+  REGISTRATION_VIOLATION_SCORE: 1
+  SD_WEBUI_URL: http://stable-diffusion-webui:7860
+  SEARCH: true
+  SESSION_EXPIRY: 1000 * 60 * 15
+  TRUST_PROXY: 1
+  USE_REDIS: true
 x-maxun: &maxun-env
   environment:
     NODE_ENV: production
@@ -29,14 +110,14 @@ x-maxun: &maxun-env
     MINIO_CONSOLE_PORT: 9001
     MINIO_ACCESS_KEY: ${MAXUN_MINIO_ACCESS_KEY}
     MINIO_SECRET_KEY: ${MAXUN_MINIO_SECRET_KEY}
-    REDIS_HOST: redis
+    REDIS_HOST: maxun-valkey
     REDIS_PORT: 6379
     BACKEND_PORT: 8080
     FRONTEND_PORT: 5173
-    BACKEND_URL: https://scrape.trez.wtf/api
-    PUBLIC_URL: https://scrape.trez.wtf
-    VITE_BACKEND_URL: https://scrape.trez.wtf/api
-    VITE_PUBLIC_URL: https://scrape.trez.wtf
+    BACKEND_URL: https://scrape.${MY_TLD}/api
+    PUBLIC_URL: https://scrape.${MY_TLD}
+    VITE_BACKEND_URL: https://scrape.${MY_TLD}/api
+    VITE_PUBLIC_URL: https://scrape.${MY_TLD}
     MAXUN_TELEMETRY: true
     PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
@@ -184,9 +265,9 @@ services:
     image: lscr.io/linuxserver/apprise-api:latest
     labels:
       cloudflare.tunnel.enable: true
-      cloudflare.tunnel.hostname: apprise.trez.wtf
+      cloudflare.tunnel.hostname: apprise.${MY_TLD}
       cloudflare.tunnel.service: http://apprise:8000
-      cloudflare.tunnel.zonename: trez.wtf
+      cloudflare.tunnel.zonename: ${MY_TLD}
       cloudflare.tunnel.no_tls_verify: true
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Apprise
@@ -522,14 +603,14 @@ services:
   bluesky-pds:
     container_name: bluesky-pds
     environment:
-      PDS_ADMIN_EMAIL: charish.patel@trez.wtf
-      PDS_HOSTNAME: bsky.trez.wtf
+      PDS_ADMIN_EMAIL: charish.patel@${MY_TLD}
+      PDS_HOSTNAME: bsky.${MY_TLD}
       PDS_JWT_SECRET: ${BLUESKY_PDS_JWT_SECRET}
       PDS_ADMIN_PASSWORD: ${BLUESKY_PDS_ADMIN_PASSWORD}
       PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX: ${BLUESKY_PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX}
       PDS_DATA_DIRECTORY: /pds
       PDS_EMAIL_SMTP_URL: smtp://${POSTAL_SMTP_AUTH_USER}:${POSTAL_SMTP_AUTH_PASSWORD}@postal-smtp:25
-      PDS_EMAIL_FROM_ADDRESS: noreply@trez.wtf
+      PDS_EMAIL_FROM_ADDRESS: noreply@${MY_TLD}
       PDS_BLOBSTORE_DISK_LOCATION: /pds/blocks
       PDS_BLOB_UPLOAD_LIMIT: 52428800
       PDS_DID_PLC_URL: ${PDS_DID_PLC_URL}
@@ -594,15 +675,15 @@ services:
     labels:
       homepage.description: Code Gists/Snippets
       homepage.group: Code/DevOps
-      homepage.href: https://gist.trez.wtf
+      homepage.href: https://gist.${MY_TLD}
       homepage.icon: bytestash.svg
       homepage.name: Bytestash
       swag: enable
       swag_port: 5000
       swag_proto: http
-      swag_url: gist.trez.wtf
+      swag_url: gist.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://gist.trez.wtf
+      swag.uptime-kuma.monitor.url: https://gist.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 62139:5000
@@ -616,6 +697,9 @@ services:
         condition: service_started
         required: true
         restart: true
+      castopod-valkey:
+        condition: service_healthy
+        required: true
     environment:
       MYSQL_DATABASE: castopod
       MYSQL_USER: castopod
@@ -624,13 +708,13 @@ services:
       CP_DATABASE_NAME: castopod
       CP_DATABASE_USERNAME: castopod
       CP_DATABASE_PASSWORD: ${CASTOPOD_MYSQL_PASSWORD}
-      CP_BASEURL: "https://pod.trez.wtf"
+      CP_BASEURL: "https://pod.${MY_TLD}"
       CP_ANALYTICS_SALT: ${CASTOPOD_ANALYTICS_SALT}
       CP_CACHE_HANDLER: redis
       CP_DISABLE_HTTPS: 0
-      CP_REDIS_HOST: redis
+      CP_REDIS_HOST: castopod-valkey
       CP_EMAIL_SMTP_HOST: postal-smtp
-      CP_EMAIL_FROM: noreply@trez.wtf
+      CP_EMAIL_FROM: noreply@${MY_TLD}
       CP_EMAIL_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
       CP_EMAIL_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
     expose:
@@ -652,6 +736,19 @@ services:
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
+  castopod-valkey:
+    container_name: castopod-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - castopod-valkey-data:/data/valkey
   chrome:
     container_name: chrome
     command:
@@ -669,10 +766,10 @@ services:
       ARGS: --dns-cloudflare-propagation-seconds 60
       CF_APIKEY: ${CLOUDFLAREDDNS_ENVIRONMENT_APIKEY}
       CF_APITOKEN: ${CLOUDFLAREDDNS_ENVIRONMENT_APITOKEN}
-      CF_HOSTS: trez.wtf
+      CF_HOSTS: ${MY_TLD}
       CF_RECORDTYPES: A
-      CF_USER: charish.patel@trez.wtf
-      CF_ZONES: trez.wtf
+      CF_USER: charish.patel@${MY_TLD}
+      CF_ZONES: ${MY_TLD}
       DETECTION_MODE: dig-google.com
       INTERVAL: "300"
       LOG_LEVEL: "3"
@@ -843,15 +940,15 @@ services:
     labels:
       homepage.description: Web app for encryption, encoding, compression, and data analysis
       homepage.group: Privacy/Security
-      homepage.href: https://cchef.trez.wtf
+      homepage.href: https://cchef.${MY_TLD}
       homepage.icon: cyberchef.svg
       homepage.name: CyberChef
       swag: enable
       swag_port: 8000
       swag_proto: http
-      swag_url: cchef.trez.wtf
+      swag_url: cchef.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://cchef.trez.wtf
+      swag.uptime-kuma.monitor.url: https://cchef.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 20992:8000
@@ -903,7 +1000,7 @@ services:
       dawarich-pg-db:
         condition: service_healthy
         restart: true
-      redis:
+      dawarich-valkey:
         condition: service_started
         restart: true
     deploy:
@@ -914,13 +1011,13 @@ services:
     entrypoint: web-entrypoint.sh
     environment:
       RAILS_ENV: development
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://dawarich-valkey:6379
       DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
       DATABASE_NAME: dawarich
       MIN_MINUTES_SPENT_IN_CITY: 60
-      APPLICATION_HOSTS: localhost,loc.trez.wtf,192.168.1.254
+      APPLICATION_HOSTS: localhost,loc.${MY_TLD},192.168.1.254
       TIME_ZONE: ${TZ}
       APPLICATION_PROTOCOL: http
       DISTANCE_UNIT: km
@@ -987,8 +1084,8 @@ services:
       dawarich-pg-db:
         condition: service_healthy
         restart: true
-      redis:
-        condition: service_started
+      dawarich-valkey:
+        condition: service_healthy
         restart: true
     deploy:
       resources:
@@ -998,12 +1095,12 @@ services:
     entrypoint: sidekiq-entrypoint.sh
     environment:
       RAILS_ENV: development
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://dawarich-valkey:6379
       DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
       DATABASE_NAME: dawarich
-      APPLICATION_HOSTS: localhost,loc.trez.wtf
+      APPLICATION_HOSTS: localhost,loc.${MY_TLD}
       BACKGROUND_PROCESSING_CONCURRENCY: 10
       APPLICATION_PROTOCOL: http
       DISTANCE_UNIT: km
@@ -1026,6 +1123,19 @@ services:
       - dawarich_public:/var/app/public
       - dawarich_watched:/var/app/tmp/imports/watched
       - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
+  dawarich-valkey:
+    container_name: dawarich-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - dawarich-valkey-data:/bitnami/valkey/data
   dead-man-hand:
     container_name: dead-man-hand
     image: ghcr.io/bkupidura/dead-man-hand:latest
@@ -1372,7 +1482,7 @@ services:
       mail__options__secure: false
       mail__options__auth__user: ${POSTAL_SMTP_AUTH_USER}
       mail__options__auth__pass: ${POSTAL_SMTP_AUTH_PASSWORD}
-      mail__from: "'Ghost @ Rinoa' <noreply@trez.wtf>"
+      mail__from: "'Ghost @ Rinoa' <noreply@${MY_TLD}>"
       url: https://blog.${MY_TLD}
     image: ghost:latest
     labels:
@@ -1408,7 +1518,7 @@ services:
       GITEA__database__USER: gitea
       GITEA__database__PASSWD: ${GITEA_PG_DB_PASSWORD}
       GITEA__mailer__ENABLED: true
-      GITEA__mailer__FROM: '"Gitea" <noreply@trez.wtf>'
+      GITEA__mailer__FROM: '"Gitea" <noreply@${MY_TLD}>'
       GITEA__mailer__PROTOCOL: smtp
       GITEA__mailer__SMTP_ADDR: postal-smtp
       GITEA__mailer__SMTP_PORT: 25
@@ -1417,7 +1527,7 @@ services:
     image: gitea/gitea:1.24.0
     labels:
       cloudflare.tunnel.enable: true
-      cloudflare.tunnel.hostname: git-ssh.trez.wtf
+      cloudflare.tunnel.hostname: git-ssh.${MY_TLD}
       cloudflare.tunnel.service: http://gitea:22
       cloudflare.tunnel.no_tls_verify: true
       homepage.group: Code/DevOps
@@ -1678,7 +1788,7 @@ services:
       homepage.group: System Administration
       homepage.name: Guacamole
       homepage.description: Client-less remote desktop gateway
-      homepage.href: https://guac.trez.wtf
+      homepage.href: https://guac.${MY_TLD}
       homepage.icon: guacamole.svg
       swag: enable
       swag_proto: http
@@ -1726,7 +1836,7 @@ services:
         bind:
           create_host_path: true
   hugo:
-    command: hugo server --baseURL "it-services.trez.wtf" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
+    command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
     container_name: hugo
     image: hugomods/hugo:exts-0.145.0
     labels:
@@ -1751,8 +1861,8 @@ services:
   immich-server:
     container_name: immich-server
     depends_on:
-      redis:
-        condition: service_started
+      immich-valkey:
+        condition: service_healthy
         required: true
       immich-pg-db:
         condition: service_healthy
@@ -1876,13 +1986,26 @@ services:
       DB_PORT: 5432
       DB_USERNAME: immich
       DB_PASSWORD: ${IMMICH_DB_PASSWORD}
-      EXTERNAL_IMMICH_URL: https://pics.trez.wtf
+      EXTERNAL_IMMICH_URL: https://pics.${MY_TLD}
       IMMICH_API_KEY: ${IMMICH_POWER_TOOLS_KEY}
       IMMICH_URL: http://immich-server:2283
     image: ghcr.io/varun-raj/immich-power-tools:latest
     ports:
       - 54018:3000
     restart: unless-stopped
+  immich-valkey:
+    container_name: immich-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - immich-valkey-data:/data/valkey
   influxdb2:
     container_name: influxdb2
     environment:
@@ -2052,9 +2175,9 @@ services:
       DB_PORT: 3306
       DB_USERNAME: ininja
       IN_PASSWORD: ${IN_PASSWORD}
-      IN_USER_EMAIL: charish.patel@trez.wtf
+      IN_USER_EMAIL: charish.patel@${MY_TLD}
       MAIL_ENCRYPTION: null
-      MAIL_FROM_ADDRESS: noreply@trez.wtf
+      MAIL_FROM_ADDRESS: noreply@${MY_TLD}
       MAIL_FROM_NAME: null
       MAIL_HOST: postal-smtp
       MAIL_MAILER: log
@@ -2112,7 +2235,7 @@ services:
   jellyfin:
     container_name: jellyfin
     environment:
-      JELLYFIN_PublishedServerUrl: https://jf.trez.wtf
+      JELLYFIN_PublishedServerUrl: https://jf.${MY_TLD}
     image: jellyfin/jellyfin
     labels:
       homepage.group: Media Library
@@ -2749,7 +2872,7 @@ services:
       MAILER_AUTH_USER: ${POSTAL_SMTP_AUTH_USER}
       MAILER_AUTH_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       MAILER_NOREPLY_NAME: Joplin @ Rinoa
-      MAILER_NOREPLY_EMAIL: noreply@trez.wtf
+      MAILER_NOREPLY_EMAIL: noreply@${MY_TLD}
       POSTGRES_PASSWORD: ${JOPLIN_POSTGRES_PASSWORD}
       POSTGRES_DATABASE: ${JOPLIN_POSTGRES_DATABASE}
       POSTGRES_USER: ${JOPLIN_POSTGRES_USER}
@@ -2823,10 +2946,7 @@ services:
       - mongodb
       - librechat-rag-api
     environment:
-      CONFIG_PATH: /app/librechat.yaml
-      HOST: 0.0.0.0
-      MONGO_URI: mongodb://librechat:${LIBRECHAT_MONGODB_PASSWORD}@mongodb:27017/librechat?replicaSet=rinoa
-      MEILI_HOST: http://meilisearch:7700
+      << : *librechat-env
       RAG_PORT: 8000
       RAG_API_URL: http://librechat-rag-api:8000
     image: ghcr.io/danny-avila/librechat-dev:latest
@@ -2853,6 +2973,28 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/librechat/images:/app/client/public/images
       - ${DOCKER_VOLUME_CONFIG}/librechat/uploads:/app/uploads
       - ${DOCKER_VOLUME_CONFIG}/librechat/logs:/app/api/logs
+  librechat-rag-api:
+    container_name: librechat-rag-api
+    depends_on:
+      - librechat-vectordb
+    environment:
+      << : *librechat-env
+      RAG_PORT: 8000
+    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
+    restart: always
+  librechat-valkey:
+    container_name: librechat-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - librechat-valkey-data:/data/valkey
   librechat-vectordb:
     container_name: librechat-vectordb
     environment:
@@ -2865,24 +3007,6 @@ services:
     restart: always
     volumes:
       - librechat-pg-data:/var/lib/postgresql/data
-  librechat-rag-api:
-    container_name: librechat-rag-api
-    depends_on:
-      - librechat-vectordb
-    # env_file:
-    #   - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env
-    environment:
-      DB_HOST: librechat-vectordb
-      OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
-      DEEPSEEK_API_KEY: ${LIBRECHAT_DEEPSEEK_API_KEY}
-      MISTRAL_API_KEY: ${LIBRECHAT_MISTRAL_API_KEY}
-      ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
-      POSTGRES_DB: librechat
-      POSTGRES_USER: librechat
-      POSTGRES_PASSWORD: ${LIBRECHAT_PG_DB_PASSWD}
-      RAG_PORT: 8000
-    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
-    restart: always
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
@@ -3116,7 +3240,7 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
       DATABASE_URL: sqlite3:/config/manyfold.sqlite3
-      REDIS_URL: redis://redis:6379/2
+      REDIS_URL: redis://manyfold-valkey:6379/2
       SECRET_KEY_BASE: ${MANYFOLD_SECRET_KEY_BASE}
       MUTLIUSER: enabled
     image: lscr.io/linuxserver/manyfold:latest
@@ -3139,6 +3263,19 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/manyfold/config:/config
       - ${DOCKER_VOLUME_CONFIG}/manyfold/library:/libraries #optional
+  manyfold-valkey:
+    container_name: manyfold-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - manyfold-valkey-data:/data/valkey
   mariadb:
     container_name: mariadb
     environment:
@@ -3187,7 +3324,7 @@ services:
       TZ: ${TZ}
       LOCAL_DOMAIN: mastodon.${MY_TLD}
       WEB_DOMAIN: mastodon.${MY_TLD}
-      REDIS_HOST: redis
+      REDIS_HOST: mastodon-valkey
       REDIS_PORT: 6379
       DB_HOST: mastodon-pg-db
       DB_USER: mastodon
@@ -3206,11 +3343,11 @@ services:
       SMTP_PORT: 25
       SMTP_LOGIN: ${POSTAL_SMTP_AUTH_USER}
       SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      SMTP_FROM_ADDRESS: noreply@trez.wtf
+      SMTP_FROM_ADDRESS: noreply@${MY_TLD}
       S3_ENABLED: true
       S3_ENDPOINT: http://minio:9000
       S3_REGION: us-east-fh-pln
-      S3_HOST: s3.trez.wtf
+      S3_HOST: s3.${MY_TLD}
       S3_PROTOCOL: https
       S3_BUCKET: mastodon
       AWS_ACCESS_KEY_ID: ${MASTODON_MINIO_ACCESS_KEY}
@@ -3257,6 +3394,19 @@ services:
     restart: always
     volumes:
       - mastodon-pg-db:/var/lib/postgresql/data
+  mastodon-valkey:
+    container_name: mastodon-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - mastodon-valkey-data:/data/valkey
   maxun-backend:
     container_name: maxun-backend
     depends_on:
@@ -3318,6 +3468,19 @@ services:
     restart: unless-stopped
     volumes:
       - maxun-pg-data:/var/lib/postgresql/data
+  maxun-valkey:
+    container_name: maxun-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - maxun-valkey-data:/data/valkey
   meilisearch:
     container_name: meilisearch
     environment:
@@ -3434,19 +3597,21 @@ services:
     container_name: mixpost
     image: inovector/mixpost:latest
     depends_on:
-      - mariadb
-      - redis
+      mariadb:
+        condition: service_started
+      mixpost-valkey:
+        condition: service_healthy
     environment:
       APP_NAME: Mixpost
       APP_KEY: ${MIXPOST_APP_KEY}
       APP_DEBUG: true
-      APP_DOMAIN: social.trez.wtf
-      APP_URL: https://social.trez.wtf
+      APP_DOMAIN: social.${MY_TLD}
+      APP_URL: https://social.${MY_TLD}
       DB_HOST: mariadb
       DB_DATABASE: mixpost
       DB_USERNAME: mixpost
       DB_PASSWORD: ${MIXPOST_DB_PASSWORD}
-      REDIS_HOST: redis
+      REDIS_HOST: mixpost-valkey
       REDIS_PORT: 6379
     labels:
       swag: enable
@@ -3467,6 +3632,19 @@ services:
     volumes:
         - mixpost-storage:/var/www/html/storage/app
         - mixpost-logs:/var/www/html/storage/logs
+  mixpost-valkey:
+    container_name: mixpost-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - mixpost-valkey-data:/data/valkey
   mongodb:
     container_name: mongodb
     environment:
@@ -3489,7 +3667,7 @@ services:
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
-      BASE_URL: https://scrobble.trez.wtf
+      BASE_URL: https://scrobble.${MY_TLD}
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
@@ -3505,7 +3683,7 @@ services:
     labels:
       homepage.group: Media Library
       homepage.name: Multi-Scrobbler
-      homepage.href: https://scrobble.trez.wtf
+      homepage.href: https://scrobble.${MY_TLD}
       homepage.icon: sh-multi-scrobbler.svg
       homepage.description: JS App for scrobbling/recording play history from/to multiple sources
       swag: enable
@@ -3615,9 +3793,9 @@ services:
     image: jokobsk/netalertx:latest
     labels:
       cloudflare.tunnel.enable: true
-      cloudflare.tunnel.hostname: net.trez.wtf
+      cloudflare.tunnel.hostname: net.${MY_TLD}
       cloudflare.tunnel.service: http://192.168.1.254:20211
-      cloudflare.tunnel.zonename: trez.wtf
+      cloudflare.tunnel.zonename: ${MY_TLD}
       cloudflare.tunnel.no_tls_verify: true
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: NetAlertX
@@ -3786,7 +3964,7 @@ services:
       PAPERLESS_DBUSER: paperless
       PAPERLESS_OCR_LANGUAGE: eng
       PAPERLESS_OCR_LANGUAGES: all
-      PAPERLESS_REDIS: redis://redis:6379
+      PAPERLESS_REDIS: redis://paperless-valkey:6379
       PAPERLESS_SECRET_KEY: ${PAPERLESS_SECRET_KEY}
       PAPERLESS_TIME_ZONE: ${TZ}
       PAPERLESS_URL: https://docs.${MY_TLD}
@@ -3830,6 +4008,19 @@ services:
         type: bind
         bind:
           create_host_path: true
+  paperless-valkey:
+    container_name: paperless-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - paperless-valkey-data:/data/valkey
   penpot-frontend:
     container_name: penpot-frontend
     depends_on:
@@ -4069,7 +4260,7 @@ services:
       GOTIFY_ENABLED: true # if "false" ntfy service won't be available as notification dispatcher
       CACHE_TYPE: redis # Cache type. By default, it's "redis" but can also be "none"
       CACHE_TTL: 86400
-      CACHE_HOST: redis
+      CACHE_HOST: plant-it-valkey
       CACHE_PORT: 6379
       SMTP_HOST: postal-smtp
       SMTP_PORT: 25
@@ -4101,6 +4292,19 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/plant-it:/upload-dir
+  plant-it-valkey:
+    container_name: plant-it-valkey
+    healthcheck:
+      test: redis-cli ping || exit 1
+    image: docker.io/bitnami/valkey:latest
+    environment:
+      VALKEY_DATA_DIR: /data/valkey
+      VALKEY_DATABASE: 0
+    expose:
+      - 6379
+    restart: unless-stopped
+    volumes:
+      - plant-it-valkey-data:/data/valkey
   plantuml-server:
     container_name: plantuml-server
     expose:
@@ -4205,7 +4409,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/postal:/config
-      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/live/trez.wtf:/config/certs
+      - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/live/${MY_TLD}:/config/certs
   postal-web:
     command: postal web-server
     container_name: postal-web
@@ -4257,7 +4461,7 @@ services:
       PUID: ${PUID}
       TZ: America/New_York
       DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
-      TP_DOMAIN: trez.wtf\/themepark
+      TP_DOMAIN: ${MY_TLD}\/themepark
       TP_COMMUNITY_THEME: false
       TP_THEME: space-gray
     hostname: Rinoa
@@ -4498,7 +4702,7 @@ services:
       CHROME_TOKEN: ${CHROMIUM_TOKEN}
       CHROME_URL: wss://browserless:3000
       DATABASE_URL: postgresql://reactiveresume:${REACTIVE_RESUME_PGSQL_PASSWORD}@reactive-resume-pg:5432/reactiveresume
-      MAIL_FROM: noreply@trez.wtf
+      MAIL_FROM: noreply@${MY_TLD}
       NODE_ENV: production
       PORT: 3000
       PUBLIC_URL: http://reactive-resume:3000
@@ -4510,7 +4714,7 @@ services:
       STORAGE_PORT: 9000
       STORAGE_REGION: us-east-fh-pln
       STORAGE_SECRET_KEY: ${REACTIVE_RESUME_S3_SECRET_KEY}
-      STORAGE_URL: https://s3.trez.wtf/reactive-resume
+      STORAGE_URL: https://s3.${MY_TLD}/reactive-resume
       STORAGE_USE_SSL: false
       TZ: ${TZ}
     image: amruthpillai/reactive-resume:latest
@@ -4579,29 +4783,6 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/readarr:/config
       - /rinoa-storage:/storage
       - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads
-  redis:
-    cap_add:
-      - SETGID
-      - SETUID
-      - DAC_OVERRIDE
-    cap_drop:
-      - ALL
-    command: redis-server --save "" --appendonly "no"
-    container_name: redis
-    expose:
-      - 6379
-    # healthcheck:
-    #   test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
-    #   interval: 10s
-    #   retries: 5
-    #   start_period: 30s
-    #   timeout: 10s
-    image: redis:alpine
-    networks:
-      default: null
-    restart: unless-stopped
-    tmpfs:
-      - /var/lib/redis
   redlib:
     cap_drop:
       - ALL
@@ -4661,10 +4842,10 @@ services:
       ADMIN_USERNAME: Trez.One
       ADMIN_NAME: Charish Patel
       ADMIN_PASS: ${ROCKETCHAT_ADMIN_PASSWORD}
-      ADMIN_EMAIL: charish.patel@trez.wtf
+      ADMIN_EMAIL: charish.patel@${MY_TLD}
       MONGO_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/rocketchat?replicaSet=rinoa
       MONGO_OPLOG_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/local?replicaSet=rinoa
-      ROOT_URL: https://chat.trez.wtf
+      ROOT_URL: https://chat.${MY_TLD}
       PORT: 3000
       DEPLOY_METHOD: docker
       DEPLOY_PLATFORM: ${DEPLOY_PLATFORM:-}
@@ -4856,13 +5037,13 @@ services:
     image: ghcr.io/analogj/scrutiny:master-omnibus
     labels:
       cloudflare.tunnel.enable: true
-      cloudflare.tunnel.hostname: smartd.trez.wtf
+      cloudflare.tunnel.hostname: smartd.${MY_TLD}
       cloudflare.tunnel.service: http://scrutiny:8080
-      cloudflare.tunnel.zonename: trez.wtf
+      cloudflare.tunnel.zonename: ${MY_TLD}
       cloudflare.tunnel.no_tls_verify: true
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Scrutiny
-      homepage.href: https://smartd.trez.wtf
+      homepage.href: https://smartd.${MY_TLD}
       homepage.icon: scrutiny.png
       homepage.description: WebUI for smartd S.M.A.R.T monitoring
       homepage.widget.type: scrutiny
@@ -4937,11 +5118,11 @@ services:
       ANSIBLE_HOST_KEY_CHECKING: false
       SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
       SEMAPHORE_ADMIN_NAME: admin
-      SEMAPHORE_ADMIN_EMAIL: charish.patel@trez.wtf
+      SEMAPHORE_ADMIN_EMAIL: charish.patel@${MY_TLD}
       SEMAPHORE_ADMIN: admin
       SEMAPHORE_DB_DIALECT: bolt
       SEMAPHORE_EMAIL_ALERT: true
-      SEMAPHORE_EMAIL_SENDER: noreply@trez.wtf
+      SEMAPHORE_EMAIL_SENDER: noreply@${MY_TLD}
       SEMAPHORE_EMAIL_HOST: postal-smtp
       SEMAPHORE_EMAIL_PORT: 25
       SEMAPHORE_EMAIL_USERNAME: ${POSTAL_SMTP_AUTH_USER}
@@ -5146,7 +5327,7 @@ services:
     labels:
       homepage.group: Code/DevOps
       homepage.name: Sonarqube
-      homepage.href: https://sqube.trez.wtf
+      homepage.href: https://sqube.${MY_TLD}
       homepage.icon: sonarqube.svg
       homepage.description: Code/DevOps quality/security
       swag: enable
@@ -5299,13 +5480,13 @@ services:
         - ${DOCKER_VOLUME_CONFIG}/speedtest-tracker:/config
   stable-diffusion-download:
     container_name: stable-diffusion-download
-    image: git.trez.wtf/trez.one/stable-diffusion-download:v9.0.0
+    image: git.${MY_TLD}/trez.one/stable-diffusion-download:v9.0.0
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/data:/data
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
-    image: git.trez.wtf/trez.one/stable-diffusion-ui:v9.0.1
+    image: git.${MY_TLD}/trez.one/stable-diffusion-ui:v9.0.1
     environment:
       - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
     labels:
@@ -5366,14 +5547,14 @@ services:
     container_name: swag
     environment:
       DNSPLUGIN: cloudflare
-      EMAIL: charish.patel@trez.wtf
+      EMAIL: charish.patel@${MY_TLD}
       EXTRA_DOMAINS:
       ONLY_SUBDOMAINS: false
       PGID: 1000
       PUID: 1000
       SUBDOMAINS: etherpad,ha,www
       TZ: America/New_York
-      URL: trez.wtf
+      URL: ${MY_TLD}
       VALIDATION: dns
       CROWDSEC_API_KEY: ${CROWDSEC_SWAG_API_KEY}
       CROWDSEC_LAPI_URL: http://crowdsec:8080
@@ -5856,6 +6037,8 @@ volumes:
     name: authelia-pg-db
   castopod-media:
     name: castopod-media
+  castopod-valkey-data:
+    name: castopod-valkey-data
   crowdsec-config:
     name: crowdsec-config
   crowdsec-db:
@@ -5866,6 +6049,8 @@ volumes:
     name: dawarich_shared
   dawarich_public:
     name: dawarich_public
+  dawarich-valkey-data:
+    name: dawarich-valkey-data
   dawarich_watched:
     name: dawarich_watched
   dockflare_data:
@@ -5882,6 +6067,8 @@ volumes:
     name: graylog-datanode
   immich-model-cache:
     name: immich-model-cache
+  immich-valkey-data:
+    name: immich-valkey-data
   influxdb2-data:
     name: influxdb2-data
   influxdb2-config:
@@ -5906,14 +6093,22 @@ volumes:
     name: linkstack_data
   librechat-pg-data:
     name: librechat-pg-data
+  librechat-valkey-data:
+    name: librechat-valkey-data
   libretranslate_models:
     name: libretranslate_models
   lldap_data:
     name: lldap_data
+  manyfold-valkey-data:
+    name: manyfold-valkey-data
   mastodon-pg-db:
     name: mastodon-pg-db
+  mastodon-valkey-data:
+    name: mastodon-valkey-data
   maxun-pg-data:
     name: maxun-pg-data
+  maxun-valkey-data:
+    name: maxun-valkey-data
   mixpost-storage:
     name: mixpost-storage
   mixpost-logs:
@@ -5934,6 +6129,8 @@ volumes:
     name: paperless-ngx-media
   paperless-ngx-pg:
     name: paperless-ngx-pg
+  paperless-valkey-data:
+    name: paperless-valkey-data
   penpot-assets:
     name: penpot-assets
   penpot-pg-data:
@@ -5950,6 +6147,8 @@ volumes:
     name: planka-attachments
   planka-db-data:
     name: planka-db-data
+  plant-it-valkey-data:
+    name: plant-it-valkey-data
   portainer-data:
     name: portainer-data
   portnote-db-data:
