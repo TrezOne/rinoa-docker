@@ -4083,6 +4083,10 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: plants.${MY_TLD}
+      swag_server_custom_directive:
+        location /api {
+            proxy_pass http://plant-it:8080;
+        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://portainer.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
