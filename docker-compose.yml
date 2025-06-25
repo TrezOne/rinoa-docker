@@ -44,13 +44,7 @@ x-maxun: &maxun-env
     #DEBUG: pw:api
     #PWDEBUG: 1
 x-signoz-common: &signoz-common
-  # networks:
-  #   - signoz-net
   restart: unless-stopped
-  # logging:
-  #   options:
-  #     max-size: 50m
-  #     max-file: "3"
 x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
   <<: *signoz-common
   # addding non LTS version due to this fix https://github.com/ClickHouse/ClickHouse/commit/32caf8716352f45c1b617274c7508c86b7d1afab
@@ -102,6 +96,16 @@ x-signoz-db-depend: &signoz-db-depend
       condition: service_healthy
     signoz-schema-migrator-sync:
       condition: service_completed_successfully
+x-flags: &penpot-flags
+  PENPOT_FLAGS: enable-smtp enable-prepl-server login-with-password webhooks
+x-uri: &penpot-public-uri
+  PENPOT_PUBLIC_URI: https://penpot.${MY_TLD}
+x-body-size: &penpot-http-body-size
+  # Max body size (30MiB); Used for plain requests, should never be
+  # greater than multi-part size
+  PENPOT_HTTP_SERVER_MAX_BODY_SIZE: 31457280
+  # Max multipart body size (350MiB)
+  PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: 367001600
 services:
   actual_server:
     container_name: actualbudget
@@ -3826,6 +3830,102 @@ services:
         type: bind
         bind:
           create_host_path: true
+  penpot-frontend:
+    container_name: penpot-frontend
+    depends_on:
+      - penpot-backend
+      - penpot-exporter
+    image: penpotapp/frontend:latest
+    environment:
+      << : [*penpot-flags, *penpot-http-body-size]
+    labels:
+      homepage.group: Professional Services
+      homepage.name: Penpot
+      homepage.href: https://penpot.${MY_TLD}
+      homepage.icon: penpot.svg
+      homepage.description: Open-source design and prototyping platform
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: penpot.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://archive.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 17503:8080
+    restart: always
+    volumes:
+      - penpot-assets:/opt/data/assets
+  penpot-backend:
+    container_name: penpot-backend
+    depends_on:
+      penpot-pg-db:
+        condition: service_healthy
+      penpot-redis:
+        condition: service_healthy
+    environment:
+      << : [*penpot-flags, *penpot-public-uri, *penpot-http-body-size]
+      PENPOT_SECRET_KEY: ${PENPOT_SECRET_KEY}
+      PENPOT_PREPL_HOST: 0.0.0.0
+      PENPOT_DATABASE_URI: postgresql://penpot-pg-db/penpot
+      PENPOT_DATABASE_USERNAME: penpot
+      PENPOT_DATABASE_PASSWORD: ${PENPOT_PG_DB_PASSWORD}
+      PENPOT_REDIS_URI: redis://penpot-redis/0
+      PENPOT_ASSETS_STORAGE_BACKEND: assets-fs
+      PENPOT_STORAGE_ASSETS_FS_DIRECTORY: /opt/data/assets
+      PENPOT_TELEMETRY_ENABLED: true
+      PENPOT_TELEMETRY_REFERER: compose
+      PENPOT_SMTP_DEFAULT_FROM: noreply@${MY_TLD}
+      PENPOT_SMTP_DEFAULT_REPLY_TO: noreply@${MY_TLD}
+      PENPOT_SMTP_HOST: postal-smtp
+      PENPOT_SMTP_PORT: 25
+      PENPOT_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      PENPOT_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      PENPOT_SMTP_TLS: false
+      PENPOT_SMTP_SSL: false
+    image: penpotapp/backend:latest
+    restart: always
+    volumes:
+      - penpot-assets:/opt/data/assets
+  penpot-exporter:
+    image: penpotapp/exporter:latest
+    restart: always
+    depends_on:
+      penpot-redis:
+        condition: service_healthy
+    environment:
+      PENPOT_PUBLIC_URI: http://penpot-frontend:8080
+      PENPOT_REDIS_URI: redis://penpot-redis/0
+  penpot-pg-db:
+    container_name: penpot-pg-db
+    environment:
+      POSTGRES_INITDB_ARGS: --data-checksums
+      POSTGRES_DB: penpot
+      POSTGRES_USER: penpot
+      POSTGRES_PASSWORD: ${PENPOT_PG_DB_PASSWORD}
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U penpot"]
+      interval: 2s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+    image: postgres:15-alpine
+    restart: always
+    stop_signal: SIGINT
+    volumes:
+      - penpot-pg-data:/var/lib/postgresql/data
+  penpot-redis:
+    container_name: penpot-redis
+    image: redis:7.2
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
+    restart: always
   pgbackweb:
     container_name: pgbackweb
     depends_on:
@@ -3950,16 +4050,16 @@ services:
       MYSQL_HOST: mariadb
       MYSQL_PORT: 3306
       MYSQL_USERNAME: plantit
-      MYSQL_PSW: ${PLANT-IT_DB_PASSWORD}
+      MYSQL_PSW: ${PLANTIT_DB_PASSWORD}
       MYSQL_DATABASE: plantit
       MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
-      JWT_SECRET: ${PLANT-IT_JWT_SECRET}
+      JWT_SECRET: ${PLANTIT_JWT_SECRET}
       JWT_EXP: 1
       USERS_LIMIT: -1 # less then 0 means no limit
       UPLOAD_DIR: /upload-dir # path to the directory used to store uploaded images, if on docker deployment leave as it is and change the volume binding in the docker-compose file if needed
       API_PORT: 8080
       FLORACODEX_URL: https://api.floracodex.com
-      FLORACODEX_KEY: ${PLANT-IT_FLORACODEX_APP_KEY}
+      FLORACODEX_KEY: ${PLANTIT_FLORACODEX_APP_KEY}
       ALLOWED_ORIGINS: '*' # CORS allowed origins (comma separated list)
       LOG_LEVEL: DEBUG # could be: DEBUG, INFO, WARN, ERROR
       CONTACT_MAIL: noreply@${MY_TLD} # address used as "contact" for template email
@@ -5830,6 +5930,10 @@ volumes:
     name: paperless-ngx-media
   paperless-ngx-pg:
     name: paperless-ngx-pg
+  penpot-assets:
+    name: penpot-assets
+  penpot-pg-data:
+    name: penpot-pg-data
   pgbackweb-data:
     name: pgbackweb-data
   planka-favicons:
