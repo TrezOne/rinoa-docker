@@ -4235,8 +4235,12 @@ services:
   plant-it:
     container_name: plant-it
     depends_on:
-      - mariadb
-      - redis
+      mariadb:
+        condition: service_started
+        required: true
+      plant-it-valkey:
+        condition: service_healthy
+        required: true
     environment:
       MYSQL_HOST: mariadb
       MYSQL_PORT: 3306
