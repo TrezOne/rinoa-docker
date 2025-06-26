@@ -20,6 +20,7 @@
 | browserless | ghcr.io/browserless/chromium:latest |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
+| castopod-valkey | docker.io/bitnami/valkey:latest |
 | chrome | gcr.io/zenika-hub/alpine-chrome:123 |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
 | convertx | ghcr.io/c4illin/convertx |
@@ -31,6 +32,7 @@
 | dawarich-app | freikin/dawarich:latest |
 | dawarich-pg-db | postgis/postgis:17-3.5-alpine |
 | dawarich-sidekiq | freikin/dawarich:latest |
+| dawarich-valkey | docker.io/bitnami/valkey:latest |
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | dockflare | alplat/dockflare:stable |
@@ -57,6 +59,7 @@
 | immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1 |
 | immich-public-proxy | alangrainger/immich-public-proxy:latest |
 | immich-power-tools | ghcr.io/varun-raj/immich-power-tools:latest |
+| immich-valkey | docker.io/bitnami/valkey:latest |
 | influxdb2 | influxdb:2-alpine |
 | invidious | quay.io/invidious/invidious:latest |
 | invidious-sig-helper | quay.io/invidious/inv-sig-helper:latest |
@@ -77,8 +80,9 @@
 | karakeep | ghcr.io/karakeep-app/karakeep:release |
 | languagetool | elestio/languagetool:latest |
 | librechat-api | ghcr.io/danny-avila/librechat-dev:latest |
-| librechat-vectordb | ankane/pgvector:latest |
 | librechat-rag-api | ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest |
+| librechat-valkey | docker.io/bitnami/valkey:latest |
+| librechat-vectordb | ankane/pgvector:latest |
 | libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
@@ -87,18 +91,22 @@
 | loggifly | ghcr.io/clemcer/loggifly:latest |
 | maloja | krateng/maloja:latest |
 | manyfold | lscr.io/linuxserver/manyfold:latest |
+| manyfold-valkey | docker.io/bitnami/valkey:latest |
 | mariadb | linuxserver/mariadb |
 | mastodon | lscr.io/linuxserver/mastodon:latest |
 | mastodon-pg-db | postgres:17-alpine |
+| mastodon-valkey | docker.io/bitnami/valkey:latest |
 | maxun-backend | getmaxun/maxun-backend:latest |
 | maxun-frontend | getmaxun/maxun-frontend:latest |
 | maxun-pg-db | postgres:13-alpine |
+| maxun-valkey | docker.io/bitnami/valkey:latest |
 | meilisearch | getmeili/meilisearch:v1.13.3 |
 | meme-search-pro | ghcr.io/neonwatty/meme_search_pro:latest |
 | meme-search-pro-img2txt-gen | ghcr.io/neonwatty/image_to_text_generator:latest |
 | meme-search-db | pgvector/pgvector:pg17 |
 | minio | minio/minio:RELEASE.2025-04-22T22-12-26Z |
 | mixpost | inovector/mixpost:latest |
+| mixpost-valkey | docker.io/bitnami/valkey:latest |
 | mongodb | bitnami/mongodb:7.0 |
 | multi-scrobbler | foxxmd/multi-scrobbler |
 | n8n | docker.n8n.io/n8nio/n8n |
@@ -110,6 +118,7 @@
 | omni-tools | iib0011/omni-tools:latest |
 | omnipoly | kweg/omnipoly:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
+| paperless-valkey | docker.io/bitnami/valkey:latest |
 | penpot-frontend | penpotapp/frontend:latest |
 | penpot-backend | penpotapp/backend:latest |
 | penpot-exporter | penpotapp/exporter:latest |
@@ -120,6 +129,7 @@
 | planka | ghcr.io/plankanban/planka:2.0.0-rc.3 |
 | planka-pg-db | postgres:16-alpine |
 | plant-it | msdeluise/plant-it-server:latest |
+| plant-it-valkey | docker.io/bitnami/valkey:latest |
 | plantuml-server | plantuml/plantuml-server:jetty |
 | portainer | portainer/portainer-ce:alpine |
 | portnote-web | haedlessdev/portnote:latest |
@@ -136,7 +146,6 @@
 | reactive-resume | amruthpillai/reactive-resume:latest |
 | reactive-resume-pg | postgres:16-alpine |
 | readarr | lscr.io/linuxserver/readarr:develop |
-| redis | redis:alpine |
 | redlib | quay.io/redlib/redlib:latest |
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest |
 | romm | rommapp/romm:latest |
@@ -158,8 +167,8 @@
 | sonarr | lscr.io/linuxserver/sonarr:latest |
 | sonashow | thewicklowwolf/sonashow:latest |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
-| stable-diffusion-download | git.trez.wtf/trez.one/stable-diffusion-download:v9.0.0 |
-| stable-diffusion-webui | git.trez.wtf/trez.one/stable-diffusion-ui:v9.0.1 |
+| stable-diffusion-download | git./trez.one/stable-diffusion-download:v9.0.0 |
+| stable-diffusion-webui | git./trez.one/stable-diffusion-ui:v9.0.1 |
 | stirling-pdf | docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest |
 | swag | lscr.io/linuxserver/swag:latest |
 | tandoor | vabene1111/recipes |
