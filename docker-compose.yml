@@ -1130,7 +1130,7 @@ services:
     container_name: dawarich-valkey
     << : *valkey-params
     volumes:
-      - dawarich-valkey-data:/bitnami/valkey/data
+      - dawarich-valkey-data:/data/valkey
   dead-man-hand:
     container_name: dead-man-hand
     image: ghcr.io/bkupidura/dead-man-hand:latest
