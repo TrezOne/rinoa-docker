@@ -187,6 +187,17 @@ x-body-size: &penpot-http-body-size
   PENPOT_HTTP_SERVER_MAX_BODY_SIZE: 31457280
   # Max multipart body size (350MiB)
   PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: 367001600
+x-valkey-params: &valkey-params
+  healthcheck:
+      test: redis-cli ping || exit 1
+  image: docker.io/bitnami/valkey:latest
+  environment:
+    ALLOW_EMPTY_PASSWORD: yes
+    VALKEY_DATA_DIR: /data/valkey
+    VALKEY_DATABASE: 0
+  expose:
+    - 6379
+  restart: unless-stopped
 services:
   actual_server:
     container_name: actualbudget
@@ -738,15 +749,7 @@ services:
       - castopod-media:/var/www/castopod/public/media
   castopod-valkey:
     container_name: castopod-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - castopod-valkey-data:/data/valkey
   chrome:
@@ -1125,15 +1128,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
   dawarich-valkey:
     container_name: dawarich-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - dawarich-valkey-data:/bitnami/valkey/data
   dead-man-hand:
@@ -1995,15 +1990,7 @@ services:
     restart: unless-stopped
   immich-valkey:
     container_name: immich-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - immich-valkey-data:/data/valkey
   influxdb2:
@@ -2984,15 +2971,7 @@ services:
     restart: always
   librechat-valkey:
     container_name: librechat-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - librechat-valkey-data:/data/valkey
   librechat-vectordb:
@@ -3265,15 +3244,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/manyfold/library:/libraries #optional
   manyfold-valkey:
     container_name: manyfold-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - manyfold-valkey-data:/data/valkey
   mariadb:
@@ -3396,15 +3367,7 @@ services:
       - mastodon-pg-db:/var/lib/postgresql/data
   mastodon-valkey:
     container_name: mastodon-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - mastodon-valkey-data:/data/valkey
   maxun-backend:
@@ -3470,15 +3433,7 @@ services:
       - maxun-pg-data:/var/lib/postgresql/data
   maxun-valkey:
     container_name: maxun-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - maxun-valkey-data:/data/valkey
   meilisearch:
@@ -3634,15 +3589,7 @@ services:
         - mixpost-logs:/var/www/html/storage/logs
   mixpost-valkey:
     container_name: mixpost-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - mixpost-valkey-data:/data/valkey
   mongodb:
@@ -4010,15 +3957,7 @@ services:
           create_host_path: true
   paperless-valkey:
     container_name: paperless-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - paperless-valkey-data:/data/valkey
   penpot-frontend:
@@ -4298,15 +4237,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/plant-it:/upload-dir
   plant-it-valkey:
     container_name: plant-it-valkey
-    healthcheck:
-      test: redis-cli ping || exit 1
-    image: docker.io/bitnami/valkey:latest
-    environment:
-      VALKEY_DATA_DIR: /data/valkey
-      VALKEY_DATABASE: 0
-    expose:
-      - 6379
-    restart: unless-stopped
+    << : *valkey-params
     volumes:
       - plant-it-valkey-data:/data/valkey
   plantuml-server:
