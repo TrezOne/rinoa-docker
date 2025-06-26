@@ -1875,6 +1875,9 @@ services:
       DB_PASSWORD: ${IMMICH_DB_PASSWORD}
       IMMICH_LOG_LEVEL: error
       IMMICH_TELEMETRY_INCLUDE: all
+      REDIS_HOSTNAME: immich-valkey
+      REDIS_PORT: 6379
+      REDIS_DBINDEX: 0
     healthcheck:
       disable: false
     image: ghcr.io/immich-app/immich-server:release
