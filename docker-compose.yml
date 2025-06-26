@@ -5894,6 +5894,19 @@ services:
     container_name: whodb
     image: clidey/whodb
     environment:
+      WHODB_CLICKHOUSE_1: '{
+            "host": "signoz-clickhouse"
+          }'
+      WHODB_MARIADB_1: '{
+          "host": "mariadb",
+          "user": "root",
+          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
+        }'
+      WHODB_MONGODB_1: '{
+          "host": "mongodb:27017/admin?replicaSet=rinoa",
+          "user": "root",
+          "password": "${MONGO_INITDB_ROOT_PASSWORD}"
+        }'
       WHODB_POSTGRES_1: '{
             "host": "authelia-pg",
             "user": "authelia",
@@ -5925,51 +5938,89 @@ services:
             "database": "invidious"
           }'
       WHODB_POSTGRES_6: '{
+            "host": "joplin-db",
+            "user": "joplin",
+            "password": "${JOPLIN_POSTGRES_PASSWORD}",
+            "database": "librechat"
+          }'
+      WHODB_POSTGRES_7: '{
             "host": "librechat-vectordb",
             "user": "librechat",
             "password": "${LIBRECHAT_PG_DB_PASSWD}",
             "database": "librechat"
           }'
-      WHODB_POSTGRES_7: '{
+      WHODB_POSTGRES_8: '{
             "host": "mastodon-pg-db",
             "user": "mastodon",
             "password": "${MASTODON_PG_DB_PASSWORD}",
             "database": "mastodon"
           }'
-      WHODB_POSTGRES_8: '{
+      WHODB_POSTGRES_9: '{
+            "host": "penpot-pg-db",
+            "user": "penpot",
+            "password": "${PENPOT_PG_DB_PASSWORD}",
+            "database": "penpot"
+          }'
+      WHODB_POSTGRES_10: '{
+            "host": "planka-pg-db",
+            "user": "planka",
+            "password": "${PLANKA_PG_PASSWORD}",
+            "database": "planka"
+          }'
+      WHODB_POSTGRES_11: '{
+            "host": "portnote-pg-db",
+            "user": "portnote",
+            "password": "${PORTNOTE_POSTGRES_PASSWORD}",
+            "database": "planka"
+          }'
+      WHODB_POSTGRES_12: '{
             "host": "reactive-resume-pg",
             "user": "reactiveresume",
             "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
             "database": "reactiveresume"
           }'
-      WHODB_POSTGRES_9: '{
+      WHODB_POSTGRES_13: '{
             "host": "sonarqube-pg-db",
             "user": "sonar",
             "password": "${SONARQUBE_POSTGRES_PASSWORD}",
             "database": "sonar"
           }'
-      WHODB_POSTGRES_10: '{
+      WHODB_POSTGRES_14: '{
             "host": "tandoor-pg",
             "user": "tandoor",
             "password": "${TANDOOR_POSTGRES_PASSWORD}",
             "database": "tandoor"
           }'
-      WHODB_POSTGRES_11: '{
-            "host": "zammad-postgresql",
-            "user": "zammad",
-            "password": "${ZAMMAD_POSTGRES_PASS}",
-            "database": "zammad_production"
+      WHODB_REDIS_1: '{
+            "host": "castopod-valkey"
           }'
-      WHODB_MARIADB_1: '{
-          "host": "mariadb",
-          "user": "root",
-          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
-        }'
-      WHODB_MONGODB_1: '{
-          "host": "mongodb:27017/admin?replicaSet=rinoa",
-          "user": "root",
-          "password": "${MONGO_INITDB_ROOT_PASSWORD}"
-        }'
+      WHODB_REDIS_2: '{
+            "host": "dawarich-valkey"
+          }'
+      WHODB_REDIS_3: '{
+            "host": "immich-valkey"
+          }'
+      WHODB_REDIS_4: '{
+            "host": "librechat-valkey"
+          }'
+      WHODB_REDIS_5: '{
+            "host": "manyfold-valkey"
+          }'
+      WHODB_REDIS_6: '{
+            "host": "mastodon-valkey"
+          }'
+      WHODB_REDIS_7: '{
+            "host": "maxun-valkey"
+          }'
+      WHODB_REDIS_8: '{
+            "host": "mixpost-valkey"
+          }'
+      WHODB_REDIS_9: '{
+            "host": "paperless-valkey"
+          }'
+      WHODB_REDIS_10: '{
+            "host": "plant-it-valkey"
+          }'
       WHODB_OLLAMA_HOST: ollama
       WHODB_OLLAMA_PORT: 11434
       WHODB_ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
