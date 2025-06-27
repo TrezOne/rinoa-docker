@@ -112,8 +112,9 @@ session:
     - domain: 'trez.wtf'
       authelia_url: 'https://auth.trez.wtf'
   redis:
-    host: redis
+    host: authelia-valkey
     port: 6379
+    database_index: 0
 storage:
   encryption_key: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_STORAGE_ENCRYPTION_KEY'] }}'
   postgres:

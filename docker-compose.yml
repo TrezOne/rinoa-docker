@@ -468,6 +468,11 @@ services:
         type: volume
         bind:
           create_host_path: true
+  authelia-valkey:
+    container_name: authelia-valkey
+    << : *valkey-params
+    volumes:
+      - authelia-valkey-data:/data/valkey
   bazarr:
     container_name: bazarr
     environment:
@@ -6029,6 +6034,8 @@ services:
 volumes:
   authelia-pg-db:
     name: authelia-pg-db
+  authelia-valkey-data:
+    name: authelia-valkey-data
   castopod-media:
     name: castopod-media
   castopod-valkey-data:
