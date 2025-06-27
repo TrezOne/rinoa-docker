@@ -3450,7 +3450,7 @@ services:
       MEILI_HOST: http://meilisearch:7700
       MEILI_NO_ANALYTICS: true
       MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
-    image: getmeili/meilisearch:v1.13.3
+    image: getmeili/meilisearch:v1.15
     ports:
       - 7700:7700
     restart: always
@@ -4473,7 +4473,7 @@ services:
       QBT_DRY_RUN: false
       # Logging Configuration
       QBT_LOG_LEVEL: INFO
-      QBT_DIVIDER: =
+      QBT_DIVIDER: '='
       QBT_WIDTH: 100
     ports:
       - 5965:8080
