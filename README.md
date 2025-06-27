@@ -12,6 +12,7 @@
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
 | authelia-pg | postgres:16-alpine |
+| authelia-valkey | docker.io/bitnami/valkey:latest |
 | bazarr | lscr.io/linuxserver/bazarr:latest |
 | beszel | henrygd/beszel:latest |
 | beszel-agent | henrygd/beszel-agent:latest |
@@ -149,10 +150,12 @@
 | redlib | quay.io/redlib/redlib:latest |
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest |
 | romm | rommapp/romm:latest |
+| romm-valkey | docker.io/bitnami/valkey:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | sablier | sablierapp/sablier:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
+| searxng-valkey | docker.io/bitnami/valkey:latest |
 | semaphore | semaphoreui/semaphore:v2.12.14 |
 | signoz-app | signoz/signoz:v0.86.2 |
 | signoz-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
@@ -166,6 +169,9 @@
 | sonarqube-pg-db | postgres:17-alpine |
 | sonarr | lscr.io/linuxserver/sonarr:latest |
 | sonashow | thewicklowwolf/sonashow:latest |
+| soularr | mrusse08/soularr:latest |
+| soularr-dashboard | git.trez.wtf/trez.one/soularr-dashboard:v0.1 |
+| soulseek | slskd/slskd |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | stable-diffusion-download | git./trez.one/stable-diffusion-download:v9.0.0 |
 | stable-diffusion-webui | git./trez.one/stable-diffusion-ui:v9.0.1 |
