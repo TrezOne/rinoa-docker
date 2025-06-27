@@ -1,26 +1,26 @@
 version: 1.2.8
 endpoints:
   custom:
-    - name: "ollama"
+    - name: "rinoa-ollama"
       apiKey: "ollama"
       baseURL: "http://ollama:11434/v1/chat/completions"
       models:
         default: [
-          "deepseek-r1:1.5b",
+          "codellama:7b",
           "deepseek-coder-v2:16b",
+          "deepseek-r1:1.5b",
           "deepseek-v3:671b",
+          "dolphin-mistral:7b",
+          "llama2:7b",
           "llama3.3:70b",
+          "mistral-openorca:7b"
+          "mistral:7b",
+          "orca-mini:3b",
           "phi4:14b",
           "qwen2.5",
-          "llama2:7b",
-          "mistral:7b",
-          "codellama:7b",
-          "tinyllama:1.1b",
-          "starcoder2:3b",
-          "dolphin-mistral:7b",
           "smollm2:1.7b",
-          "orca-mini:3b",
-          "mistral-openorca:7b"
+          "starcoder2:3b",
+          "tinyllama:1.1b",
         ]
 # fetching list of models is supported but the `name` field must start
 # with `ollama` (case-insensitive), as it does in this example.
