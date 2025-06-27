@@ -189,7 +189,7 @@ x-body-size: &penpot-http-body-size
   PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: 367001600
 x-valkey-params: &valkey-params
   healthcheck:
-      test: redis-cli ping || exit 1
+    test: redis-cli ping || exit 1
   image: docker.io/bitnami/valkey:latest
   environment:
     ALLOW_EMPTY_PASSWORD: yes
@@ -5891,7 +5891,7 @@ services:
             "host": "joplin-db",
             "user": "joplin",
             "password": "${JOPLIN_POSTGRES_PASSWORD}",
-            "database": "librechat"
+            "database": "joplin"
           }'
       WHODB_POSTGRES_7: '{
             "host": "librechat-vectordb",
@@ -5921,7 +5921,7 @@ services:
             "host": "portnote-pg-db",
             "user": "portnote",
             "password": "${PORTNOTE_POSTGRES_PASSWORD}",
-            "database": "planka"
+            "database": "portnote"
           }'
       WHODB_POSTGRES_12: '{
             "host": "reactive-resume-pg",
