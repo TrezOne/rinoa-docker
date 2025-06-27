@@ -5051,10 +5051,10 @@ services:
         bind:
           create_host_path: true
   searxng-valkey:
-    container_name: castopod-valkey
+    container_name: searxng-valkey
     << : *valkey-params
     volumes:
-      - castopod-valkey-data:/data/valkey
+      - searxng-valkey-data:/data/valkey
   semaphore:
     container_name: semaphore
     environment:
@@ -6153,6 +6153,8 @@ volumes:
     name: reactive-resume-pg
   romm_resources:
     name: romm_resources
+  searxng-valkey-data:
+    name: searxng-valkey-data
   semaphore_config:
     name: semaphore_config
   semaphore_data:
