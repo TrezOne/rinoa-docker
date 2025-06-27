@@ -50,7 +50,7 @@ x-librechat: &librechat-env
   GITHUB_CALLBACK_URL: /oauth/github/callback
   GOOGLE_CALLBACK_URL: /oauth/google/callback
   HELP_AND_FAQ_URL: https://librechat.ai
-  HOST: localhost
+  HOST: 0.0.0.0
   ILLEGAL_MODEL_REQ_SCORE: 5
   JWT_REFRESH_SECRET: ${LIBRECHAT_JWT_REFRESH_SECRET}
   JWT_SECRET: ${LIBRECHAT_JWT_SECRET}
