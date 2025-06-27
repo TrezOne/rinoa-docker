@@ -5050,6 +5050,11 @@ services:
         type: bind
         bind:
           create_host_path: true
+  searxng-valkey:
+    container_name: castopod-valkey
+    << : *valkey-params
+    volumes:
+      - castopod-valkey-data:/data/valkey
   semaphore:
     container_name: semaphore
     environment:
