@@ -5403,6 +5403,77 @@ services:
         source: /etc/localtime
         target: /etc/localtime
         type: bind
+  soularr:
+    container_name: soularr
+    depends_on:
+      - lidarr
+      - soulseek
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      #Script interval in seconds
+      SCRIPT_INTERVAL: 300
+    image: mrusse08/soularr:latest
+    restart: unless-stopped
+    volumes:
+      #"You can set /downloads to whatever you want but will then need to change the Slskd download dir in your config file"
+      - ${DOCKER_VOLUME_STORAGE}/downloads:/downloads
+      #Select where you are storing your config file. Leave "/data" since thats where the script expects the config file to be
+      - ${DOCKER_VOLUME_CONFIG}/soularr:/data
+  soularr-dashboard:
+    container_name: soularr-dashboard
+    depends_on:
+      - soularr
+    environment:
+      DOCKER_HOST: tcp://dockerproxy:2375
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    labels:
+      homepage.name: Soularr
+      homepage.group: Downloaders
+      homepage.description: Dashboard for monitoring Soularr
+      homepage.href: https://slsk.${MY_TLD}
+      homepage.icon: /icons/soularr.png
+    image: git.trez.wtf/trez.one/soularr-dashboard:v0.1
+    ports:
+      - 18364:8080
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/soularr/dashboard:/app
+      - ${DOCKER_VOLUME_CONFIG}/soularr:/data
+      - ${DOCKER_VOLUME_CONFIG}/soularr/logs:/data/logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    working_dir: /app
+  soulseek:
+    container_name: soulseek
+    depends_on:
+      gluetun:
+        condition: service_started
+        required: true
+        restart: true
+    image: slskd/slskd
+    labels:
+      homepage.name: Soulseek
+      homepage.group: Downloaders
+      homepage.description: Modern client-server application for the Soulseek file-sharing network.
+      homepage.href: https://slsk.${MY_TLD}
+      homepage.icon: slskd.svg
+      swag: enable
+      swag_proto: http
+      swag_url: slsk.${MY_TLD}
+      swag_address: gluetun
+      swag_port: 5030
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://slsk.${MY_TLD}
+    network_mode: service:gluetun
+    restart: always
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/soulseek:/app
+      - ${DOCKER_VOLUME_STORAGE}/Audio/Music:/music
+      - ${DOCKER_VOLUME_STORAGE}/downloads/completed/slsk:/app/downloads/
+      - ${DOCKER_VOLUME_STORAGE}/downloads/incomplete/slsk:/app/incomplete
   speedtest-tracker:
     container_name: speedtest-tracker
     image: lscr.io/linuxserver/speedtest-tracker:latest
