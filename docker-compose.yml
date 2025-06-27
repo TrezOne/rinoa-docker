@@ -4834,9 +4834,10 @@ services:
       ROMM_AUTH_USERNAME: admin # default: admin
       ROMM_AUTH_PASSWORD: ${ROMM_AUTH_PASSWORD} # default: admin
       # [Optional] Only required if authentication is enabled
-      ENABLE_EXPERIMENTAL_REDIS: false # default: false
-      # REDIS_HOST: redis # default: localhost
-      # REDIS_PORT: 6379 # default: 6379
+      ENABLE_EXPERIMENTAL_REDIS: true # default: false
+      REDIS_HOST: romm-valkey # default: localhost
+      REDIS_PORT: 6379 # default: 6379
+      REDIS_DB: 0
       # REDIS_PASSWORD: # [Optional] Support for secured redis
       # [Optional] Will enable asynchronous tasks (all disabled by default)
       # Important: Do NOT wrap the cron expression in quotes
@@ -4876,6 +4877,11 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/roms:/romm/library # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
       - ${DOCKER_VOLUME_STORAGE}/roms/assets:/romm/assets # Uploaded saves, states, etc.
       - ${DOCKER_VOLUME_CONFIG}/romm:/romm/config # Path where config.yml is stored
+  romm-valkey:
+    container_name: romm-valkey
+    << : *valkey-params
+    volumes:
+      - romm-valkey-data:/data/valkey
   sabnzbdvpn:
     cap_add:
       - NET_ADMIN
@@ -6160,6 +6166,8 @@ volumes:
     name: reactive-resume-pg
   romm_resources:
     name: romm_resources
+  romm-valkey-data:
+    name: romm-valkey-data
   searxng-valkey-data:
     name: searxng-valkey-data
   semaphore_config:
