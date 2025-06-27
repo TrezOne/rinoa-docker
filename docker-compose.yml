@@ -5434,8 +5434,14 @@ services:
       homepage.name: Soularr
       homepage.group: Downloaders
       homepage.description: Dashboard for monitoring Soularr
-      homepage.href: https://slsk.${MY_TLD}
+      homepage.href: https://soularr.${MY_TLD}
       homepage.icon: /icons/soularr.png
+      swag: enable
+      swag_proto: http
+      swag_url: soularr.${MY_TLD}
+      swag_port: 8080
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://soularr.${MY_TLD}
     image: git.trez.wtf/trez.one/soularr-dashboard:v0.1
     ports:
       - 18364:8080
