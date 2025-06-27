@@ -93,7 +93,7 @@ x-librechat: &librechat-env
   SEARCH: true
   SESSION_EXPIRY: 1000 * 60 * 15
   TRUST_PROXY: 1
-  USE_REDIS: true
+  USE_REDIS: false
 x-maxun: &maxun-env
   environment:
     NODE_ENV: production
