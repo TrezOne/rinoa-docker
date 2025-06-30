@@ -6089,7 +6089,7 @@ services:
       homepage.description: User invitation management system for Jellyfin, Plex, and Emby
       swag: enable
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://sonarr.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://wizarr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 5690:5690
