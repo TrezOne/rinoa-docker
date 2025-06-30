@@ -102,6 +102,14 @@ access_control:
       policy: one_factor
       subject:
       - ['user:the.trezured.one']
+    - domain: wizarr.trez.wtf
+      resources:
+        - '^/join(/.*)?$'
+        - '^/j(/.*)?$'
+        - '^/static(/.*)?$'
+        - '^/setup(/.*)?$'
+        - '^/wizard(/.*)?$'
+      policy: bypass
 session:
   name: authelia_session
   secret: '{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['AUTHELIA_SESSION_SECRET'] }}'
