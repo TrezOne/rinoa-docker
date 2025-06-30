@@ -1816,27 +1816,10 @@ services:
       - 3004:3000
     restart: unless-stopped
     volumes:
-      - source: ${DOCKER_VOLUME_CONFIG}/homepage
-        target: /app/config
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/homepage/images
-        target: /app/public/images
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/homepage/icons
-        target: /app/public/icons
-        type: bind
-        bind:
-          create_host_path: true
-      - read_only: true
-        source: ${DOCKER_VOLUME_STORAGE}
-        target: /rinoa-storage
-        type: bind
-        bind:
-          create_host_path: true
+      - ${DOCKER_VOLUME_CONFIG}/homepage:/app/config
+      - ${DOCKER_VOLUME_CONFIG}/homepage/images:/app/public/images
+      - ${DOCKER_VOLUME_CONFIG}/homepage/icons:/app/public/icons
+      - ${DOCKER_VOLUME_STORAGE}:/rinoa-storage:ro
   hugo:
     command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
     container_name: hugo
