@@ -103,7 +103,6 @@ jobs:
           options: |
             --check
             --inventory inventory/hosts.yml
-            -v
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
