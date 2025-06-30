@@ -1807,6 +1807,8 @@ services:
     container_name: homepage
     environment:
       HOMEPAGE_ALLOWED_HOSTS: ${MY_TLD}
+      PUID: ${PUID}
+      PGID: ${PGID}
     image: ghcr.io/gethomepage/homepage:latest
     labels:
       swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log ;
