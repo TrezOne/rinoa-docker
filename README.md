@@ -101,7 +101,7 @@
 | maxun-frontend | getmaxun/maxun-frontend:latest |
 | maxun-pg-db | postgres:13-alpine |
 | maxun-valkey | docker.io/bitnami/valkey:latest |
-| meilisearch | getmeili/meilisearch:v1.13.3 |
+| meilisearch | getmeili/meilisearch:v1.15 |
 | meme-search-pro | ghcr.io/neonwatty/meme_search_pro:latest |
 | meme-search-pro-img2txt-gen | ghcr.io/neonwatty/image_to_text_generator:latest |
 | meme-search-db | pgvector/pgvector:pg17 |
@@ -186,5 +186,6 @@
 | watchtower | ghcr.io/containrrr/watchtower:latest |
 | web-check | lissy93/web-check |
 | whodb | clidey/whodb |
+| wizarr | ghcr.io/wizarrrr/wizarr |
 | youtubedl | nbr23/youtube-dl-server:latest |
 
