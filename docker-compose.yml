@@ -4161,7 +4161,7 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:16-alpine
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - planka-db-data:/var/lib/postgresql/data
   plant-it:
