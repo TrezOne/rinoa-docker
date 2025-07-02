@@ -5943,7 +5943,7 @@ services:
     environment:
       INDEXER_USERNAME: admin
       INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
-      WAZUH_API_URL: https://wazuh.manager
+      WAZUH_API_URL: https://wazuh-manager
       DASHBOARD_USERNAME: kibanaserver
       DASHBOARD_PASSWORD: ${WAZUH_KIBANA_PASSWORD}
       API_USERNAME: wazuh-wui
@@ -6004,7 +6004,7 @@ services:
   wazuh-manager:
     container_name: wazuh-manager
     environment:
-      INDEXER_URL: https://wazuh.indexer:9200
+      INDEXER_URL: https://wazuh-indexer:9200
       INDEXER_USERNAME: admin
       INDEXER_PASSWORD: ${WAZUH_INDEXER_PASSWORD}
       FILEBEAT_SSL_VERIFICATION_MODE: full
