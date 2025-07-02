@@ -4011,14 +4011,15 @@ services:
     volumes:
       - penpot-assets:/opt/data/assets
   penpot-exporter:
-    image: penpotapp/exporter:latest
-    restart: always
+    container_name: penpot-exporter
     depends_on:
       penpot-redis:
         condition: service_healthy
     environment:
       PENPOT_PUBLIC_URI: http://penpot-frontend:8080
       PENPOT_REDIS_URI: redis://penpot-redis/0
+    image: penpotapp/exporter:latest
+    restart: unless-stopped
   penpot-pg-db:
     container_name: penpot-pg-db
     environment:

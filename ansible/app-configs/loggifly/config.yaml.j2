@@ -5,18 +5,31 @@ containers:
   ghost_blog:
     action_keywords:
       - restart:
-          regex: ':[0-9]{2}\] ERROR.*$'
+          regex: 'Connection Error.*ECONNRESET$'
   immich-server:
     action_keywords:
       - restart:
-          regex: 'ADVICE:.*error'
+          regex: '(ENOTFOUND|Error|ECONNREFUSED)'
   invidious:
-    keywords:
-      - regex: 'Error reading.*Connection reset by peer trying to reconnect...'
+    action_keywords:
+      - restart:
+          regex: 'Error reading.*Connection reset by peer trying to reconnect\.\.\.'
+  maxun-backend:
+    action_keywords:
+      - restart:
+          regex: '[Ee]rror'
+  planka:
+    action_keywords:
+      - restart:
+          regex: 'Failed to lift app: Sails is taking too long to load.$'
   scrutiny:
     action_keywords:
       - restart:
-          regex: s6.*fatal
+          regex: '^s6-rc: fatal: timed out$'
+  swag:
+    action_keywords:
+      - restart:
+          regex: 's6-rc: fatal.*'
 global_keywords:
   keywords:
     - panic
