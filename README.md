@@ -153,6 +153,7 @@
 | romm-valkey | docker.io/bitnami/valkey:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | sablier | sablierapp/sablier:latest |
+| scraparr | ghcr.io/thecfu/scraparr:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
 | searxng-valkey | docker.io/bitnami/valkey:latest |

@@ -4956,6 +4956,28 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/sablier/state:/opt/sablier/state
       - ${DOCKER_VOLUME_CONFIG}/sablier/custom_themes:/opt/sablier/custom_themes
       - /var/run/docker.sock:/var/run/docker.sock
+  scraparr:
+    container_name: scraparr
+    depends_on:
+      - bazarr
+      - prowlarr
+      - radarr
+      - readarr
+      - sonarr
+    environment:
+      BAZARR_API_KEY: ${BAZARR_API_KEY}
+      BAZARR_URL: http://bazarr:6767
+      PROWLARR_API_KEY: ${PROWLARR_API_KEY}
+      PROWLARR_URL: http://prowlarr:9696
+      RADARR_API_KEY: ${RADARR_API_KEY}
+      RADARR_URL: http://radarr:7878
+      READARR_API_KEY: ${READARR_API_KEY}
+      READARR_URL: http://readarr:8787
+      SONARR_API_KEY: ${SONARR_API_KEY}
+      SONARR_URL: http://sonarr:8989
+    image: ghcr.io/thecfu/scraparr:latest
+    ports:
+      - 7100:7100
   scrutiny:
     cap_add:
       - SYS_RAWIO
