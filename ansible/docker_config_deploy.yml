@@ -1,5 +1,5 @@
 ---
-- name: Deploy Docker Service Configurations
+- name: Deploy Docker Service Configurations (Modified in Last 10 Minutes)
   hosts: rinoa
   vars:
     template_base_path: "{{ playbook_dir }}/app-configs"
@@ -15,12 +15,32 @@
       delegate_to: localhost
       run_once: true
 
+    - name: Get parent directories modified in the last 10 minutes
+      ansible.builtin.command: >
+        find {{ template_base_path }} -mindepth 1 -maxdepth 1
+        -type d -mmin -10
+      register: modified_dirs
+      changed_when: false
+      delegate_to: localhost
+      run_once: true
+
+    - name: Set fact for recent directories
+      ansible.builtin.set_fact:
+        recent_dirs: "{{ modified_dirs.stdout_lines }}"
+
+    - name: Filter templates within recently modified folders
+      ansible.builtin.set_fact:
+        selected_templates: >-
+          {{ jinja_templates.files
+             | selectattr('path', 'search', recent_dirs | map('regex_escape') | map('regex_replace', '^', '') | join('|'))
+             | list }}
+
     - name: Ensure target directories exist
       ansible.builtin.file:
         path: "{{ appdata_base_path }}/{{ item.path | regex_replace('^' + template_base_path + '/', '') | regex_replace('\\.j2$', '') | dirname }}"
         state: directory
         mode: '0755'
-      loop: "{{ jinja_templates.files }}"
+      loop: "{{ selected_templates }}"
       loop_control:
         label: "{{ item.path }}"
 
@@ -29,6 +49,6 @@
         src: "{{ item.path }}"
         dest: "{{ appdata_base_path }}/{{ item.path | regex_replace('^' + template_base_path + '/', '') | regex_replace('\\.j2$', '') }}"
         mode: '0644'
-      loop: "{{ jinja_templates.files }}"
+      loop: "{{ selected_templates }}"
       loop_control:
         label: "{{ item.path }}"
