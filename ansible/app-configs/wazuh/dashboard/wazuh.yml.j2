@@ -1,9 +1,0 @@
-{% set vault_addr = 'https://vault.trez.wtf' %}
-{% set secrets_path = 'rinoa-docker/env' %}
-hosts:
-  - 1513629884013:
-      url: "https://wazuh.manager"
-      port: 55000
-      username: wazuh-wui
-      password: {{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['WAZUH_API_PASSWORD'] }}
-      run_as: false
