@@ -1,4 +1,6 @@
 version: 1.2.8
+balance:
+  enabled: false
 endpoints:
   custom:
     - name: "rinoa-ollama"
@@ -13,14 +15,14 @@ endpoints:
           "dolphin-mistral:7b",
           "llama2:7b",
           "llama3.3:70b",
-          "mistral-openorca:7b"
+          "mistral-openorca:7b",
           "mistral:7b",
           "orca-mini:3b",
           "phi4:14b",
           "qwen2.5",
           "smollm2:1.7b",
           "starcoder2:3b",
-          "tinyllama:1.1b",
+          "tinyllama:1.1b"
         ]
 # fetching list of models is supported but the `name` field must start
 # with `ollama` (case-insensitive), as it does in this example.
