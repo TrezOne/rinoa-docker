@@ -1018,7 +1018,7 @@ services:
           memory: '4G'    # Limit memory usage to 4GB
     entrypoint: web-entrypoint.sh
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://dawarich-valkey:6379
       DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
@@ -1029,7 +1029,7 @@ services:
       TIME_ZONE: ${TZ}
       APPLICATION_PROTOCOL: http
       DISTANCE_UNIT: km
-      PROMETHEUS_EXPORTER_ENABLED: false
+      PROMETHEUS_EXPORTER_ENABLED: true
       PROMETHEUS_EXPORTER_HOST: 0.0.0.0
       PROMETHEUS_EXPORTER_PORT: 9394
       ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
@@ -1056,7 +1056,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 63561:3000
-      # - 9394:9394 # Prometheus exporter, uncomment if needed
+      - 9394:9394 # Prometheus exporter, uncomment if needed
     restart: on-failure
     stdin_open: true
     tty: true
@@ -1102,7 +1102,7 @@ services:
           memory: '4G'    # Limit memory usage to 4GB
     entrypoint: sidekiq-entrypoint.sh
     environment:
-      RAILS_ENV: development
+      RAILS_ENV: production
       REDIS_URL: redis://dawarich-valkey:6379
       DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
@@ -4979,6 +4979,7 @@ services:
     image: ghcr.io/thecfu/scraparr:latest
     ports:
       - 7100:7100
+    restart: unless-stopped
   scrutiny:
     cap_add:
       - SYS_RAWIO
