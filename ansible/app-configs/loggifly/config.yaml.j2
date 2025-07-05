@@ -30,6 +30,58 @@ containers:
     action_keywords:
       - restart:
           regex: 's6-rc: fatal.*'
+  authelia-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  castopod-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  dawarich-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  immich-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  librechat-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  manyfold-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  mastodon-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  maxun-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  mixpost-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  paperless-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  plant-it-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  romm-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
+  searxng-valkey:
+    action_keywords:
+    - restart:
+        regex: 'Asynchronous AOF fsync is taking too long.*slow down the server.$'
 global_keywords:
   keywords:
     - panic
