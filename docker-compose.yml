@@ -1464,6 +1464,47 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/freescout/assets/custom-scripts:/assets/custom-scripts
       - ${DOCKER_VOLUME_CONFIG}/freescout/data:/www/html
       - ${DOCKER_VOLUME_CONFIG}/freescout/logs/:/www/logs
+  garage:
+    container_name: garage
+    image: dxflrs/garage:v2.0.0
+    ports:
+      - 3900:3900
+      - 3901:3901
+      - 3902:3902
+      - 3903:3903
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/garage/garage.toml:/etc/garage.toml
+      - ${DOCKER_VOLUME_CONFIG}/garage/meta:/var/lib/garage/meta
+      - ${DOCKER_STORAGE_CONFIG}/garage_data:/var/lib/garage/data
+  garage-webui:
+    container_name: garage-webui
+    depends_on:
+      garage:
+        condition: service_started
+        required: true
+    environment:
+      API_BASE_URL: http://garage:3903
+      S3_ENDPOINT_URL: http://garage:3900
+    image: khairul169/garage-webui:latest
+    labels:
+      # swag: enable
+      # swag_proto: http
+      # swag_port: 9090
+      # swag_url: s3.${MY_TLD}
+      # swag.uptime-kuma.enabled: true
+      # swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
+      # swag.uptime-kuma.monitor.interval: 300
+      homepage.group: System Administration
+      homepage.name: Garage
+      homepage.href: http://192.168.1.254:3909
+      homepage.icon: garage.svg
+      homepage.description: S3-compatible storage backend
+    ports:
+      - 3909:3909
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/garage/garage.toml:/etc/garage.toml:/etc/garage.toml:ro
   ghost:
     container_name: ghost_blog
     depends_on:
