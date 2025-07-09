@@ -8,6 +8,7 @@ replication_factor = 1
 compression_level = 10
 
 rpc_bind_addr = "[::]:3901"
+rpc_public_addr = "localhost:3901"
 rpc_secret = "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}:{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GARAGE_RPC_SECRET'] }}"
 
 [s3_api]
@@ -17,3 +18,8 @@ root_domain = ".s3.trez.wtf"
 
 [s3_web]
 bind_addr = "[::]:3902"
+
+[admin]
+api_bind_addr = "[::]:3903"
+admin_token = "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}:{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GARAGE_ADMIN_TOKEN'] }}"
+metrics_token = "{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['POSTAL_SMTP_AUTH_USER'] }}:{{ lookup('community.hashi_vault.vault_kv2_get', 'env', engine_mount_point='rinoa-docker', url=vault_addr, token=vault_token_cleaned)['secret']['GARAGE_METRICS_TOKEN'] }}"
