@@ -1504,7 +1504,7 @@ services:
       - 3909:3909
     restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/garage/garage.toml:/etc/garage.toml:/etc/garage.toml:ro
+      - ${DOCKER_VOLUME_CONFIG}/garage/garage.toml:/etc/garage.toml:ro
   ghost:
     container_name: ghost_blog
     depends_on:
