@@ -4243,14 +4243,11 @@ services:
     image: 'plantuml/plantuml-server:jetty'
     restart: unless-stopped
   portainer:
-    command: -H tcp://dockerproxy:2375
     container_name: portainer
     depends_on:
       docker-socket-proxy:
         condition: service_started
         required: true
-    environment:
-      DOCKER_HOST: tcp://dockerproxy:2375
     expose:
       - 9000
       - 9443
@@ -4275,6 +4272,7 @@ services:
     restart: unless-stopped
     volumes:
         - portainer-data:/data
+        - /var/run/docker.sock:/var/run/docker.sock
   portnote-web:
     container_name: portnote
     depends_on:
