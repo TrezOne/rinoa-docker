@@ -43,6 +43,8 @@
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
 | freescout | tiredofit/freescout:latest |
+| garage | dxflrs/garage:v2.0.0 |
+| garage-webui | khairul169/garage-webui:latest |
 | ghost | ghost:latest |
 | gitea | gitea/gitea:1.24.0 |
 | gitea-db | postgres:14 |
