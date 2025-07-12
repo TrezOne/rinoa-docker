@@ -1488,13 +1488,6 @@ services:
       S3_ENDPOINT_URL: http://garage:3900
     image: khairul169/garage-webui:latest
     labels:
-      # swag: enable
-      # swag_proto: http
-      # swag_port: 9090
-      # swag_url: s3.${MY_TLD}
-      # swag.uptime-kuma.enabled: true
-      # swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
-      # swag.uptime-kuma.monitor.interval: 300
       homepage.group: System Administration
       homepage.name: Garage
       homepage.href: http://192.168.1.254:3909
