@@ -269,7 +269,7 @@ services:
     container_name: apprise-api
     environment:
       PUID: ${PUID}
-      PGID: $[PGID]
+      PGID: ${PGID}
       TZ: ${TZ}
       APPRISE_ATTACH_SIZE: 500
       APPRISE_STATEFUL_MODE: simple
