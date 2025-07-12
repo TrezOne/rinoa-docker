@@ -1597,7 +1597,6 @@ services:
         condition: service_started
     environment:
       CONFIG_FILE: /config.yaml
-      DOCKER_HOST: tcp://dockerproxy:2375
       GITEA_INSTANCE_URL: http://gitea:3000
       GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN}"
       GITEA_RUNNER_NAME: "gitea-runner-1"
@@ -1608,6 +1607,7 @@ services:
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/act-runner/config.yaml:/config.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
   gitea-sonarqube-bot:
     container_name: gitea-sonarqube-bot
     depends_on:
