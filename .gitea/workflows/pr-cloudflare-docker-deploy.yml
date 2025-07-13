@@ -8,6 +8,10 @@ on:
       - '**/docker-compose.yml'
       - '**/pr-cloudflare-docker-deploy.yml'
       - '!ansible/**.yml'
+env:
+  FLARECTL_VERSION: '0.115.0'
+  HC_VAULT_VERSION: '1.20.0'
+  TEA_VERSION: '0.10.1'
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
@@ -22,14 +26,14 @@ jobs:
         id: cache-tea
         uses: actions/cache@v4
         with:
-          path: /opt/hostedtoolcache/tea/0.9.2/x64
-          key: tea-${{ runner.os }}-0.9.2
+          path: /opt/hostedtoolcache/tea/${{ env.TEA_VERSION }}/x64
+          key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
-          uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
-          name: 'tea'
-          version: '0.9.2'
+          uri: https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64
+          name: tea
+          version: ${{ env.TEA_VERSION }}
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -129,8 +133,17 @@ jobs:
       - name: Login to Gitea Container Registry
         run: |
           docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
-      - name: Install Vault
+      - name: Cache Vault install
+        id: cache-vault
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
+          key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
+      - name: Install Vault (only if not cached)
+        if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
+        with:
+          version: ${{ env.HC_VAULT_VERSION }}
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -172,13 +185,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.flarectl
-          key: flarectl-${{ runner.os }}-${{ hashFiles('workflow-config.yml') }}
+          key: flarectl-${{ runner.os }}-${{ env.FLARECTL_VERSION }}-${{ hashFiles('workflow-config.yml') }}
       - name: Install flarectl
         uses: supplypike/setup-bin@v4
         with:
-          uri: 'https://github.com/cloudflare/cloudflare-go/releases/download/v0.113.0/flarectl_0.113.0_linux_amd64.tar.gz'
-          name: 'flarectl'
-          version: '0.113.0'
+          uri: https://github.com/cloudflare/cloudflare-go/releases/download/v${{ env.FLARECTL_VERSION }}/flarectl_${{ env.FLARECTL_VERSION }}_linux_amd64.tar.gz
+          name: flarectl
+          version: ${{ env.FLARECTL_VERSION }}
       - name: Cache Subdomain Files
         uses: actions/cache@v4
         with:
@@ -277,12 +290,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Cache tea CLI
+        id: cache-tea
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/tea/${{ env.TEA_VERSION }}/x64
+          key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
-          uri: 'https://gitea.com/gitea/tea/releases/download/v0.9.2/tea-0.9.2-linux-amd64'
-          name: 'tea'
-          version: '0.9.2'
+          uri: https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64
+          name: tea
+          version: ${{ env.TEA_VERSION }}
       - name: PR Merge
         id: pr_merge
         run: |
@@ -318,10 +337,13 @@ jobs:
         id: cache-vault
         uses: actions/cache@v4
         with:
-          path: /opt/hostedtoolcache/vault/1.18.0/x64
-          key: vault-${{ runner.os }}-1.18.0
-      - name: Install Vault
+          path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
+          key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
+      - name: Install Vault (only if not cached)
+        if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
+        with:
+          version: ${{ env.HC_VAULT_VERSION }}
       - name: Login to Gitea Container Registry
         run: |
           docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf

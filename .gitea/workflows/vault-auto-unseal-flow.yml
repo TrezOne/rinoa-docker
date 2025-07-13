@@ -1,10 +1,10 @@
 name: Auto-Unseal for Vault
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 5 * * *"
-
+env:
+  HC_VAULT_VERSION: '1.20.0'
 jobs:
   auto-unseal:
     name: Unseal Vault
@@ -14,21 +14,18 @@ jobs:
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_SHARDS: ${{ secrets.VAULT_UNSEAL_SHARDS }}
       VAULT_NAMESPACE: ""
-
     steps:
       - name: Cache Vault install
         id: cache-vault
         uses: actions/cache@v4
         with:
-          path: /opt/hostedtoolcache/vault/1.18.0/x64
-          key: vault-${{ runner.os }}-1.18.0
-
+          path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
+          key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
       - name: Install Vault (only if not cached)
         if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
         with:
-          version: 1.18.0
-
+          version: ${{ env.HC_VAULT_VERSION }}
       - name: Unseal Vault
         run: |
           for vault_shard in $VAULT_SHARDS; do
