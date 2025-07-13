@@ -6278,7 +6278,7 @@ volumes:
     name: dockflare_data
   easyappointments:
     name: easyappointments
-  astenhealth-cache:
+  fastenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:
     name: fastenhealth-db
