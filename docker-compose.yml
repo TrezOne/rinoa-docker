@@ -3326,7 +3326,7 @@ services:
       PUID: 1000
       TZ: America/New_York
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-p$MYSQL_ROOT_PASSWORD"]
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 1m30s
       timeout: 10s
       retries: 5
