@@ -3537,6 +3537,27 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/meme-search-db:/var/lib/postgresql/data
+  mini-qr:
+    container_name: mini-qr
+    image: ghcr.io/lyqht/mini-qr:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 9090
+      swag_url: qr.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      homepage.group: Lifestyle
+      homepage.name: Mini-QR
+      homepage.href: https://qr.${MY_TLD}
+      homepage.icon: sh-mini-qr.svg
+      homepage.description: Scan and generate customized QR codes easily
+    restart: unless-stopped
+    volumes:
+      - ./public:/usr/share/nginx/html/public:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
