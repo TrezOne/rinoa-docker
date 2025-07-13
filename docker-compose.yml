@@ -1330,7 +1330,7 @@ services:
       MAIL_REPLY_TO_ADDRESS: it-services@${MY_TLD}
     labels:
       homepage.group: Professional Services
-      homepage.name: Easy!Appointments
+      homepage.name: "Easy!Appointments"
       homepage.href: https://appt.${MY_TLD}
       homepage.icon: sh-easy-appointments.png
       homepage.description: Highly customizable appointment scheduler
