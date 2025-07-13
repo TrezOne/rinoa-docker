@@ -69,7 +69,7 @@ x-librechat: &librechat-env
   MESSAGE_USER_WINDOW: 1
   MESSAGE_VIOLATION_SCORE: 1
   MISTRAL_API_KEY: ${LIBRECHAT_MISTRAL_API_KEY}
-  MONGO_URI: mongodb://librechat:${LIBRECHAT_MONGODB_PASSWORD}@mongodb:27017/librechat?replicaSet=rinoa
+  MONGO_URI: mongodb://librechat:${LIBRECHAT_MONGODB_PASSWORD}@mongodb:27017/librechat?replicaSet: rinoa
   NO_INDEX: true
   NON_BROWSER_VIOLATION_SCORE: 20
   OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
@@ -121,7 +121,7 @@ x-maxun: &maxun-env
     MAXUN_TELEMETRY: true
     PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
-    CHROMIUM_FLAGS: '--disable-gpu --no-sandbox --headless=new'
+    CHROMIUM_FLAGS: '--disable-gpu --no-sandbox --headless: new'
     #DEBUG: pw:api
     #PWDEBUG: 1
 x-signoz-common: &signoz-common
@@ -204,9 +204,9 @@ services:
     environment:
       ACTUAL_LOGIN_METHOD: "pass"
       ACTUAL_PORT: 5006
-      # - ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB=20
-      # - ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB=50
-      # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=20
+      # - ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB: 20
+      # - ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB: 50
+      # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB: 20
       # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
       # !! If you are not using any of these options, remove the 'environment:' tag entirely.
     image: docker.io/actualbudget/actual-server:latest
@@ -763,8 +763,8 @@ services:
       - --no-sandbox
       - --disable-gpu
       - --disable-dev-shm-usage
-      - --remote-debugging-address=0.0.0.0
-      - --remote-debugging-port=9222
+      - --remote-debugging-address: 0.0.0.0
+      - --remote-debugging-port: 9222
       - --hide-scrollbars
     image: gcr.io/zenika-hub/alpine-chrome:123
     restart: unless-stopped
@@ -897,7 +897,7 @@ services:
       - 8101:8080
     restart: unless-stopped
     security_opt:
-      - no-new-privileges=true
+      - no-new-privileges: true
     volumes:
       # - ${DOCKER_VOLUME_CONFIG}/crowdsec/config.yaml.local:/etc/crowdsec/config.yaml
       - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx:/var/log/swag:ro # SWAG
@@ -1233,20 +1233,20 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       ### EXAMPLE CF TUNNEL LABELS ###
       # Enable DockFlare management for this container
-      # - "cloudflare.tunnel.enable=true"
+      # - "cloudflare.tunnel.enable: true"
       # The public hostname to expose
-      # - "cloudflare.tunnel.hostname=my-service.example.com"
+      # - "cloudflare.tunnel.hostname: my-service.example.com"
       # The internal service address (protocol://container_name_or_ip:port)
       # Service type (http, https, tcp, ssh, rdp, http_status) is inferred from the prefix.
-      # - "cloudflare.tunnel.service=http://my-service:80"
+      # - "cloudflare.tunnel.service: http://my-service:80"
       # Optional: Specify a URL path. Only requests to hostname/path will match.
-      # - "cloudflare.tunnel.path=/app"
+      # - "cloudflare.tunnel.path: /app"
       # Optional: Specify a different Cloudflare Zone for this hostname
-      # - "cloudflare.tunnel.zonename=another.example.com"
+      # - "cloudflare.tunnel.zonename: another.example.com"
       # Optional: Disable TLS verification if your internal service uses HTTP or a self-signed cert
-      # - "cloudflare.tunnel.no_tls_verify=true"
+      # - "cloudflare.tunnel.no_tls_verify: true"
       # Optional: Specify Origin Server Name (SNI) for TLS connection to origin
-      # - "cloudflare.tunnel.originsrvname=internal.service.local"
+      # - "cloudflare.tunnel.originsrvname: internal.service.local"
     ports:
       - 20756:5000
     restart: unless-stopped
@@ -1335,11 +1335,11 @@ services:
       LISTENBRAINZ_USER: Trez.One
       YOUTUBE_API_KEY: ${YOUTUBE_DATA_API_V3_KEY}
       # Assign a custom path to yt-dlp
-      # YTDLP_PATH=
+      # YTDLP_PATH: 
       # Keywords to ignore on videos downloaded by youtube (separated by only commas)
       FILTER_LIST: live,remix,instrumental,extended
       # Define a custom filename sepatator for special characters
-      # FILENAME_SEPARATOR=
+      # FILENAME_SEPARATOR: 
       # true to keep pervious weeks discoveries, only set to false if the parent folder only contains discovered songs (deletes every file in folder)
       PERSIST: true
       # 'playlist' to get tracks from Weekly Exploration playlist, anything else gets it from API (not the best recommendations). 'test' will download 1 song
@@ -1403,7 +1403,7 @@ services:
       - 8191:8191
     restart: unless-stopped
     sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.all.disable_ipv6: 1
     volumes:
       - bind:
           create_host_path: true
@@ -1746,7 +1746,7 @@ services:
       GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_ROOT_PASSWORD_SHA2}
       GRAYLOG_HTTP_BIND_ADDRESS: 0.0.0.0:9000
       GRAYLOG_HTTP_EXTERNAL_URI: http://localhost:9000/
-      GRAYLOG_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet=rinoa
+      GRAYLOG_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet: rinoa
       GRAYLOG_ROOT_EMAIL: charish.patel@${MY_TLD}
       GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME: ${POSTAL_SMTP_AUTH_USER}
@@ -1791,7 +1791,7 @@ services:
     environment:
       GRAYLOG_NODE_NAME: graylog-datanode
       GRAYLOG_DATANODE_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
-      GRAYLOG_DATANODE_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet=rinoa
+      GRAYLOG_DATANODE_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet: rinoa
       GRAYLOG_PATH_REPO: graylog
       GRAYLOG_S3_CLIENT_DEFAULT_ACCESS_KEY: ${GRAYLOG_S3_ACCESS_KEY}
       GRAYLOG_S3_CLIENT_DEFAULT_ENDPOINT: minio:9000
@@ -1857,7 +1857,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/homepage/icons:/app/public/icons
       - ${DOCKER_VOLUME_STORAGE}:/rinoa-storage:ro
   hugo:
-    command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
+    command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort: false --source: /src/it-services --configDir: /src/it-services/config/ -e production --logLevel debug
     container_name: hugo
     image: hugomods/hugo:exts-0.145.0
     labels:
@@ -1949,12 +1949,12 @@ services:
   immich-pg-db:
     command: >-
       postgres
-      -c shared_preload_libraries=vectors.so
-      -c 'search_path="$$user", public, vectors'
-      -c logging_collector=on
-      -c max_wal_size=2GB
-      -c shared_buffers=512MB
-      -c wal_compression=on
+      -c shared_preload_libraries: vectors.so
+      -c 'search_path: "$$user", public, vectors'
+      -c logging_collector: on
+      -c max_wal_size: 2GB
+      -c shared_buffers: 512MB
+      -c wal_compression: on
     container_name: immich-pg-db
     environment:
       POSTGRES_PASSWORD: ${IMMICH_DB_PASSWORD}
@@ -1964,11 +1964,11 @@ services:
       - 5432
     healthcheck:
       test: >-
-        pg_isready --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" || exit 1;
-        Chksum="$$(psql --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" --tuples-only --no-align
-        --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')";
+        pg_isready --dbname: "$${POSTGRES_DB}" --username: "$${POSTGRES_USER}" || exit 1;
+        Chksum: "$$(psql --dbname: "$${POSTGRES_DB}" --username: "$${POSTGRES_USER}" --tuples-only --no-align
+        --command: 'SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')";
         echo "checksum failure count is $$Chksum";
-        [ "$$Chksum" = '0' ] || exit 1
+        [ "$$Chksum" :  '0' ] || exit 1
       interval: 5m
       start_interval: 30s
       start_period: 5m
@@ -2062,7 +2062,7 @@ services:
     healthcheck:
       interval: 30s
       retries: 2
-      test: wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/trending || exit 1
+      test: wget -nv --tries: 1 --spider http://127.0.0.1:3000/api/v1/trending || exit 1
       timeout: 5s
     image: quay.io/invidious/invidious:latest
     labels:
@@ -3156,7 +3156,7 @@ services:
       TZ: ${TZ}
       LLDAP_JWT_SECRET: ${LLDAP_JWT_SECRET}
       LLDAP_KEY_SEED: ${LLDAP_KEY_SEED}
-      LLDAP_LDAP_BASE_DN: dc=trez,dc=wtf
+      LLDAP_LDAP_BASE_DN: dc: trez,dc: wtf
     image: lldap/lldap:stable
     labels:
       homepage.group: Privacy/Security
@@ -3413,7 +3413,7 @@ services:
       - 8369:8080
     restart: unless-stopped
     security_opt:
-      - seccomp=unconfined  # This might help with browser sandbox issues
+      - seccomp: unconfined  # This might help with browser sandbox issues
     shm_size: '2gb' # Increase shared memory size for Chromium
     volumes:
       - /var/run/dbus:/var/run/dbus
@@ -3537,6 +3537,35 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/meme-search-db:/var/lib/postgresql/data
+  mini-qr:
+    container_name: mini-qr
+    environment:
+      VITE_HIDE_CREDITS: false
+      VITE_DEFAULT_PRESET: plain
+      VITE_DEFAULT_DATA_TO_ENCODE:
+      VITE_QR_CODE_PRESETS:
+      VITE_FRAME_PRESET:
+      VITE_FRAME_PRESETS:
+      VITE_DISABLE_LOCAL_STORAGE: false
+    image: ghcr.io/lyqht/mini-qr:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 9090
+      swag_url: s3.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      homepage.group: System Administration
+      homepage.name: MinIO
+      homepage.href: https://s3.${MY_TLD}
+      homepage.icon: minio.png
+      homepage.description: S3-compatible storage backend
+    restart: unless-stopped
+    volumes:
+      - ./public:/usr/share/nginx/html/public:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
@@ -4093,7 +4122,7 @@ services:
         condition: service_healthy
     environment:
       PBW_ENCRYPTION_KEY: ${PGBACKWEB_ENCRYPTION_KEY}
-      PBW_POSTGRES_CONN_STRING: "postgresql://pgbackweb:${PGBACKWEB_PG_DB_PASSWD}@pgbackweb-db:5432/pgbackweb?sslmode=disable"
+      PBW_POSTGRES_CONN_STRING: "postgresql://pgbackweb:${PGBACKWEB_PG_DB_PASSWD}@pgbackweb-db:5432/pgbackweb?sslmode: disable"
       TZ: ${TZ}
     image: eduardolat/pgbackweb:latest
     labels:
@@ -4493,7 +4522,7 @@ services:
       QBT_DRY_RUN: false
       # Logging Configuration
       QBT_LOG_LEVEL: INFO
-      QBT_DIVIDER: '='
+      QBT_DIVIDER: ': '
       QBT_WIDTH: 100
     ports:
       - 5965:8080
@@ -4793,7 +4822,7 @@ services:
     read_only: true
     restart: always
     security_opt:
-      - no-new-privileges=true
+      - no-new-privileges: true
     user: nobody
   rocketchat:
     container_name: rocketchat
@@ -4806,8 +4835,8 @@ services:
       ADMIN_NAME: Charish Patel
       ADMIN_PASS: ${ROCKETCHAT_ADMIN_PASSWORD}
       ADMIN_EMAIL: charish.patel@${MY_TLD}
-      MONGO_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/rocketchat?replicaSet=rinoa
-      MONGO_OPLOG_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/local?replicaSet=rinoa
+      MONGO_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/rocketchat?replicaSet: rinoa
+      MONGO_OPLOG_URL: mongodb://rocketchat:${ROCKETCHAT_MONGODB_PASSWORD}@mongodb:27017/local?replicaSet: rinoa
       ROOT_URL: https://chat.${MY_TLD}
       PORT: 3000
       DEPLOY_METHOD: docker
@@ -4894,7 +4923,7 @@ services:
     restart: unless-stopped
     volumes:
       - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
-      - ${DOCKER_VOLUME_STORAGE}/roms:/romm/library # Your game library. Check https://github.com/rommapp/romm?tab=readme-ov-file#folder-structure for more details.
+      - ${DOCKER_VOLUME_STORAGE}/roms:/romm/library # Your game library. Check https://github.com/rommapp/romm?tab: readme-ov-file#folder-structure for more details.
       - ${DOCKER_VOLUME_STORAGE}/roms/assets:/romm/assets # Uploaded saves, states, etc.
       - ${DOCKER_VOLUME_CONFIG}/romm:/romm/config # Path where config.yml is stored
   romm-valkey:
@@ -5151,14 +5180,14 @@ services:
     <<: *signoz-db-depend
     container_name: signoz-app
     command:
-      - --config=/root/config/prometheus.yml
+      - --config: /root/config/prometheus.yml
     environment:
        SIGNOZ_ALERTMANAGER_PROVIDER: signoz
        SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN: tcp://signoz-clickhouse:9000
        SIGNOZ_SQLSTORE_SQLITE_PATH: /var/lib/signoz/signoz.db
        DASHBOARDS_PATH: /root/config/dashboards
        STORAGE: clickhouse
-       GODEBUG: netdns=go
+       GODEBUG: netdns: go
        TELEMETRY_ENABLED: true
        DEPLOYMENT_TYPE: docker-standalone-amd
     healthcheck:
@@ -5216,9 +5245,9 @@ services:
       - bash
       - -c
       - |
-        version="v0.0.1"
-        node_os=$$(uname -s | tr '[:upper:]' '[:lower:]')
-        node_arch=$$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
+        version: "v0.0.1"
+        node_os: $$(uname -s | tr '[:upper:]' '[:lower:]')
+        node_arch: $$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
         echo "Fetching histogram-binary for $${node_os}/$${node_arch}"
         cd /tmp
         wget -O histogram-quantile.tar.gz "https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F$${version}/histogram-quantile_$${node_os}_$${node_arch}.tar.gz"
@@ -5246,15 +5275,15 @@ services:
     <<: *signoz-db-depend
     container_name: signoz-otel-collector
     command:
-      - --config=/etc/otel-collector-config.yaml
-      - --manager-config=/etc/manager-config.yaml
-      - --copy-path=/var/tmp/collector-config.yaml
-      - --feature-gates=-pkg.translator.prometheus.NormalizeName
+      - --config: /etc/otel-collector-config.yaml
+      - --manager-config: /etc/manager-config.yaml
+      - --copy-path: /var/tmp/collector-config.yaml
+      - --feature-gates: -pkg.translator.prometheus.NormalizeName
     depends_on:
       signoz-app:
         condition: service_healthy
     environment:
-      OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
+      OTEL_RESOURCE_ATTRIBUTES: host.name: signoz-host,os.type: linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
     image: signoz/signoz-otel-collector:${OTELCOL_TAG:-v0.111.42}
     ports:
@@ -5271,8 +5300,8 @@ services:
     container_name: signoz-schema-migrator-async
     command:
       - async
-      - --dsn=tcp://signoz-clickhouse:9000
-      - --up=
+      - --dsn: tcp://signoz-clickhouse:9000
+      - --up: 
     restart: on-failure
   signoz-schema-migrator-sync:
     <<: *signoz-common
@@ -5280,8 +5309,8 @@ services:
     container_name: signoz-schema-migrator-sync
     command:
       - sync
-      - --dsn=tcp://signoz-clickhouse:9000
-      - --up=
+      - --dsn: tcp://signoz-clickhouse:9000
+      - --up: 
     depends_on:
       signoz-clickhouse:
         condition: service_healthy
@@ -5312,11 +5341,11 @@ services:
       SONAR_JDBC_PASSWORD: ${SONARQUBE_POSTGRES_PASSWORD}
       SONAR_SECURITY_REALM: LDAP
       LDAP_URL: ldap://lldap:3890
-      LDAP_BINDDN: cn=sonarqube,ou=people,dc=trez,dc=wtf
+      LDAP_BINDDN: cn: sonarqube,ou: people,dc: trez,dc: wtf
       LDAP_BINDPASSWORD: ${SONARQUBE_LDAP_BIND_PASSWORD}
       LDAP_AUTHENTICATION: simple
-      LDAP_USER_BASEDN: ou=people,dc=trez,dc=wtf
-      LDAP_USER_REQUEST: (&(objectClass=inetOrgPerson)(uid={login})(memberof=cn=sonarqube_users,ou=groups,dc=example,dc=com))
+      LDAP_USER_BASEDN: ou: people,dc: trez,dc: wtf
+      LDAP_USER_REQUEST: (&(objectClass: inetOrgPerson)(uid: {login})(memberof: cn: sonarqube_users,ou: groups,dc: example,dc: com))
       LDAP_USER_REALNAMEATTRIBUTE: cn
       LDAP_USER_EMAILATTRIBUTE: mail
     hostname: sonarqube
@@ -5562,7 +5591,7 @@ services:
     container_name: stable-diffusion-webui
     image: git.${MY_TLD}/trez.one/stable-diffusion-ui:v9.0.1
     environment:
-      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
+      - CLI_ARGS: --allow-code --medvram --xformers --enable-insecure-extension-access --api
     labels:
       homepage.name: Stable-Diffusion WebUI
       homepage.group: Personal Tools
@@ -5973,7 +6002,7 @@ services:
           "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
         }'
       WHODB_MONGODB_1: '{
-          "host": "mongodb:27017/admin?replicaSet=rinoa",
+          "host": "mongodb:27017/admin?replicaSet: rinoa",
           "user": "root",
           "password": "${MONGO_INITDB_ROOT_PASSWORD}"
         }'
