@@ -3554,10 +3554,6 @@ services:
       homepage.icon: sh-mini-qr.svg
       homepage.description: Scan and generate customized QR codes easily
     restart: unless-stopped
-    volumes:
-      - ./public:/usr/share/nginx/html/public:ro
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-
   minio:
     command: server --console-address ":9090" /mnt/data
     container_name: minio
