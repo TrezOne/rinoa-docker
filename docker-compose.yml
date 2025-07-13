@@ -1476,7 +1476,7 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/garage/garage.toml:/etc/garage.toml
       - ${DOCKER_VOLUME_CONFIG}/garage/meta:/var/lib/garage/meta
-      - ${DOCKER_STORAGE_CONFIG}/garage_data:/var/lib/garage/data
+      - ${DOCKER_VOLUME_STORAGE}/garage_data:/var/lib/garage/data
   garage-webui:
     container_name: garage-webui
     depends_on:
