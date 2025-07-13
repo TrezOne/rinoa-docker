@@ -4517,7 +4517,7 @@ services:
     restart: on-failure:2
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/qbittorrent/qbit_manage/:/config:rw
-      - ${DOCKER_VOLUME_STORAGE}/downloads/completed/torrent:/data/torrents:rw
+      - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads:rw
       - ${DOCKER_VOLUME_CONFIG}/qbittorrent/qBittorrent:/qbittorrent/:ro
   qbittorrentvpn:
     cap_add:
