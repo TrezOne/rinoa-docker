@@ -710,7 +710,7 @@ services:
     container_name: castopod
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
       castopod-valkey:
@@ -1303,6 +1303,48 @@ services:
         source: /home/charish/.config/appdata
         target: /source
         type: bind
+  easyapointments:
+    container_name: easyappointments
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        required: true
+    image: alextselegidis/easyappointments:latest
+    environment:
+      BASE_URL: http://appts.${MY_TLD}
+      DEBUG_MODE: TRUE
+      DB_HOST: mariadb
+      DB_NAME: easyappointments
+      DB_USERNAME: easyappt
+      DB_PASSWORD: ${EASYAPPOINTMENTS_DB_PASSWORD}
+      MAIL_PROTOCOL: mail
+      MAIL_SMTP_DEBUG: 0
+      MAIL_SMTP_AUTH: 0
+      MAIL_SMTP_HOST: postal-smtp
+      MAIL_SMTP_USER: ${POSTAL_SMTP_AUTH_USER}
+      MAIL_SMTP_PASS: ${POSTAL_SMTP_AUTH_PASSWORD}
+      MAIL_SMTP_CRYPTO: tls
+      MAIL_SMTP_PORT: 25
+      MAIL_FROM_ADDRESS: noreply@${MY_TLD}
+      MAIL_FROM_NAME: 'Trez'
+      MAIL_REPLY_TO_ADDRESS: it-services@${MY_TLD}
+    labels:
+      homepage.group: Professional Services
+      homepage.name: Easy!Appointments
+      homepage.href: https://appt.${MY_TLD}
+      homepage.icon: sh-easy-appointments.png
+      homepage.description: Highly customizable appointment scheduler
+      swag: enable
+      swag_proto: http
+      swag_url: appt.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://draw.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 8362:80
+    restart: unless-stopped
+    volumes:
+      - easyappointments:/var/www/html
   excalidraw:
     container_name: excalidraw
     image: 'excalidraw/excalidraw:latest'
@@ -1420,7 +1462,7 @@ services:
     container_name: freescout
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
     environment:
       ADMIN_EMAIL: it-services@${MY_TLD}
@@ -1502,7 +1544,7 @@ services:
     container_name: ghost_blog
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -2133,7 +2175,7 @@ services:
     container_name: invoice-ninja
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -3283,6 +3325,11 @@ services:
       PGID: 1000
       PUID: 1000
       TZ: America/New_York
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
     hostname: Rinoa
     image: linuxserver/mariadb
     networks:
@@ -3599,7 +3646,8 @@ services:
     image: inovector/mixpost:latest
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
+        required: true
       mixpost-valkey:
         condition: service_healthy
     environment:
@@ -3946,7 +3994,7 @@ services:
     container_name: paperless-ngx
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -4222,7 +4270,7 @@ services:
     container_name: plant-it
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
       plant-it-valkey:
         condition: service_healthy
@@ -4851,7 +4899,8 @@ services:
     container_name: romm
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
+        required: true
         restart: true
     image: rommapp/romm:latest
     environment:
@@ -6227,7 +6276,9 @@ volumes:
     name: dawarich_watched
   dockflare_data:
     name: dockflare_data
-  fastenhealth-cache:
+  easyappointments:
+    name: easyappointments
+  astenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:
     name: fastenhealth-db
