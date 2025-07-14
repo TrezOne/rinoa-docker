@@ -4574,7 +4574,7 @@ services:
       VPN_PROV: pia
       VPN_USER: ${DELUGEVPN_ENVIRONMENT_VPN_USER}
       WEBUI_PORT: 8080
-    image: ghcr.io/binhex/arch-qbittorrentvpn:latest
+    image: ghcr.io/binhex/arch-qbittorrentvpn:5.1.2-1-03
     labels:
       homepage.group: Downloaders
       homepage.name: qBittorrent
