@@ -1303,7 +1303,7 @@ services:
         source: /home/charish/.config/appdata
         target: /source
         type: bind
-  easyapointments:
+  easyappointments:
     container_name: easyappointments
     depends_on:
       mariadb:
