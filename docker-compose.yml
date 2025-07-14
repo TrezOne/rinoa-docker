@@ -1328,6 +1328,8 @@ services:
       MAIL_FROM_ADDRESS: noreply@${MY_TLD}
       MAIL_FROM_NAME: 'Trez'
       MAIL_REPLY_TO_ADDRESS: it-services@${MY_TLD}
+      PUID: ${PUID}
+      PGID: ${PGID}
     labels:
       homepage.group: Professional Services
       homepage.name: "Easy!Appointments"
@@ -1344,7 +1346,7 @@ services:
       - 8362:80
     restart: unless-stopped
     volumes:
-      - easyappointments:/var/www/html
+      - ${DOCKER_VOLUME_CONFIG}/easyappointments:/var/www/html
   excalidraw:
     container_name: excalidraw
     image: 'excalidraw/excalidraw:latest'
