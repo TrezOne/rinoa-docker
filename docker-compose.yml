@@ -1303,6 +1303,48 @@ services:
         source: /home/charish/.config/appdata
         target: /source
         type: bind
+  easyapointments:
+    container_name: easyappointments
+    depends_on:
+      mariadb:
+        condition: service_started
+        required: true
+    image: alextselegidis/easyappointments:latest
+    environment:
+      BASE_URL: http://appts.${MY_TLD}
+      DEBUG_MODE: TRUE
+      DB_HOST: mariadb
+      DB_NAME: easyappointments
+      DB_USERNAME: easyappt
+      DB_PASSWORD: ${EASYAPPOINTMENTS_DB_PASSWORD}
+      MAIL_PROTOCOL: mail
+      MAIL_SMTP_DEBUG: 0
+      MAIL_SMTP_AUTH: 0
+      MAIL_SMTP_HOST: postal-smtp
+      MAIL_SMTP_USER: ${POSTAL_SMTP_AUTH_USER}
+      MAIL_SMTP_PASS: ${POSTAL_SMTP_AUTH_PASSWORD}
+      MAIL_SMTP_CRYPTO: tls
+      MAIL_SMTP_PORT: 25
+      MAIL_FROM_ADDRESS: noreply@${MY_TLD}
+      MAIL_FROM_NAME: 'Trez'
+      MAIL_REPLY_TO_ADDRESS: it-services@${MY_TLD}
+    labels:
+      homepage.group: Professional Services
+      homepage.name: "Easy!Appointments"
+      homepage.href: https://appt.${MY_TLD}
+      homepage.icon: sh-easy-appointments.png
+      homepage.description: Highly customizable appointment scheduler
+      swag: enable
+      swag_proto: http
+      swag_url: appt.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://draw.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 8362:80
+    restart: unless-stopped
+    volumes:
+      - easyappointments:/var/www/html
   excalidraw:
     container_name: excalidraw
     image: 'excalidraw/excalidraw:latest'
@@ -3280,9 +3322,14 @@ services:
     container_name: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
-      PGID: 1000
-      PUID: 1000
-      TZ: America/New_York
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+    healthcheck:
+      test: [ "CMD-SHELL", "mariadb-admin ping -h localhost || exit 1" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
     hostname: Rinoa
     image: linuxserver/mariadb
     networks:
@@ -3291,27 +3338,10 @@ services:
       - 3306:3306
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: ${DOCKER_VOLUME_CONFIG}/mariadb
-        target: /config
-        type: bind
-      - source: ${DOCKER_VOLUME_STORAGE}
-        target: /storage
-        type: bind
-        bind:
-          create_host_path: true
-      - source: ${DOCKER_VOLUME_CONFIG}/mariadb
-        target: /var/lib/mysql
-        type: bind
-        bind:
-          create_host_path: true
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_VOLUME_CONFIG}/mariadb:/config
+      - ${DOCKER_VOLUME_STORAGE}:/storage
+      - ${DOCKER_VOLUME_CONFIG}/mariadb:/var/lib/mysql
   mastodon:
     container_name: mastodon
     depends_on:
@@ -3600,6 +3630,7 @@ services:
     depends_on:
       mariadb:
         condition: service_started
+        required: true
       mixpost-valkey:
         condition: service_healthy
     environment:
@@ -4852,6 +4883,7 @@ services:
     depends_on:
       mariadb:
         condition: service_started
+        required: true
         restart: true
     image: rommapp/romm:latest
     environment:
@@ -6227,6 +6259,8 @@ volumes:
     name: dawarich_watched
   dockflare_data:
     name: dockflare_data
+  easyappointments:
+    name: easyappointments
   fastenhealth-cache:
     name: fastenhealth-cache
   fastenhealth-db:

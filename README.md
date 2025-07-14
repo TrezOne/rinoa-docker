@@ -38,6 +38,7 @@
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | dockflare | alplat/dockflare:stable |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
+| easyapointments | alextselegidis/easyappointments:latest |
 | excalidraw | excalidraw/excalidraw:latest |
 | explo | ghcr.io/lumepart/explo:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
