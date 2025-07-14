@@ -1328,8 +1328,6 @@ services:
       MAIL_FROM_ADDRESS: noreply@${MY_TLD}
       MAIL_FROM_NAME: 'Trez'
       MAIL_REPLY_TO_ADDRESS: it-services@${MY_TLD}
-      PUID: ${PUID}
-      PGID: ${PGID}
     labels:
       homepage.group: Professional Services
       homepage.name: "Easy!Appointments"
