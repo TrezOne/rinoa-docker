@@ -3932,7 +3932,7 @@ services:
       homepage.group: Personal Tools
       homepage.name: OmniTools
       homepage.href: https://otools.${MY_TLD}
-      homepage.icon: sh-omnitools.svg
+      homepage.icon: sh-omnitools.png
       homepage.description: Tools for common tasks
       swag: enable
       swag_url: otools.${MY_TLD}
