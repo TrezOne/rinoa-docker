@@ -3326,7 +3326,7 @@ services:
       PUID: 1000
       TZ: America/New_York
     healthcheck:
-      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      test: [ "CMD-SHELL", "mariadb-admin ping -h localhost -p${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD} || exit 1" ]
       interval: 1m30s
       timeout: 10s
       retries: 5
