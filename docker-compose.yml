@@ -710,7 +710,7 @@ services:
     container_name: castopod
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
       castopod-valkey:
@@ -1307,7 +1307,7 @@ services:
     container_name: easyappointments
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
     image: alextselegidis/easyappointments:latest
     environment:
@@ -1462,7 +1462,7 @@ services:
     container_name: freescout
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
     environment:
       ADMIN_EMAIL: it-services@${MY_TLD}
@@ -1544,7 +1544,7 @@ services:
     container_name: ghost_blog
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -2175,7 +2175,7 @@ services:
     container_name: invoice-ninja
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -3629,7 +3629,7 @@ services:
     image: inovector/mixpost:latest
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
       mixpost-valkey:
         condition: service_healthy
@@ -3977,7 +3977,7 @@ services:
     container_name: paperless-ngx
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     environment:
@@ -4253,7 +4253,7 @@ services:
     container_name: plant-it
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
       plant-it-valkey:
         condition: service_healthy
@@ -4882,7 +4882,7 @@ services:
     container_name: romm
     depends_on:
       mariadb:
-        condition: service_started
+        condition: service_healthy
         required: true
         restart: true
     image: rommapp/romm:latest
