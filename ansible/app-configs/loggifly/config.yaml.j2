@@ -24,11 +24,11 @@ containers:
   scrutiny:
     action_keywords:
       - restart:
-          regex: '^s6-rc: fatal: timed out$'
+          regex: '^s6-.*: fatal.*$'
   swag:
     action_keywords:
       - restart:
-          regex: 's6-rc: fatal.*'
+          regex: '^s6-.*: fatal.*$'
 global_keywords:
   keywords:
     - panic
