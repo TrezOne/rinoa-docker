@@ -1309,7 +1309,7 @@ services:
       mariadb:
         condition: service_healthy
         required: true
-    image: alextselegidis/easyappointments:latest
+    image: alextselegidis/easyappointments:1.5.1
     environment:
       BASE_URL: http://appt.${MY_TLD}
       DEBUG_MODE: TRUE
@@ -1602,7 +1602,7 @@ services:
       GITEA__mailer__SMTP_PORT: 25
       GITEA__mailer__USER: ${POSTAL_SMTP_AUTH_USER}
       GITEA__mailer__PASSWD: ${POSTAL_SMTP_AUTH_PASSWORD}
-    image: gitea/gitea:1.24.0
+    image: gitea/gitea:1.24.3
     labels:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: git-ssh.${MY_TLD}
