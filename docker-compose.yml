@@ -1311,7 +1311,7 @@ services:
         required: true
     image: alextselegidis/easyappointments:1.5.1
     environment:
-      BASE_URL: http://appt.${MY_TLD}
+      BASE_URL: http://localhost
       DEBUG_MODE: TRUE
       DB_HOST: mariadb
       DB_NAME: easyappointments
