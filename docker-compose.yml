@@ -4584,7 +4584,7 @@ services:
       homepage.widget.type: qbittorrent
       homepage.widget.url: http://qbittorrentvpn:8080
       homepage.widget.user: admin
-      homepage.widget.password: ${DELUGEVPN_PASSWORD}
+      homepage.widget.password: "${DELUGEVPN_PASSWORD}"
       swag: enable
       swag_server_custom_directive:
         location /mgmt {
