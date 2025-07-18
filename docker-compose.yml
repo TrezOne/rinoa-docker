@@ -1313,7 +1313,7 @@ services:
     environment:
       BASE_URL: http://192.168.1.254:8362
       DEBUG_MODE: TRUE
-      DB_HOST: mariadb
+      DB_HOST: mariadb:3306
       DB_NAME: easyappointments
       DB_USERNAME: easyappt
       DB_PASSWORD: ${EASYAPPOINTMENTS_DB_PASSWORD}
