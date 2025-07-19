@@ -4265,6 +4265,7 @@ services:
       MYSQL_PSW: ${PLANTIT_DB_PASSWORD}
       MYSQL_DATABASE: plantit
       MYSQL_ROOT_PASSWORD: ${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}
+      HTTPS_METHOD: noredirect
       JWT_SECRET: ${PLANTIT_JWT_SECRET}
       JWT_EXP: 1
       USERS_LIMIT: -1 # less then 0 means no limit
