@@ -1105,6 +1105,7 @@ services:
     environment:
       RAILS_ENV: production
       REDIS_URL: "redis://dawarich-valkey:6379"
+      DATABASE_HOST: dawarich-pg-db
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
       DATABASE_NAME: dawarich
