@@ -38,7 +38,7 @@
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | dockflare | alplat/dockflare:stable |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
-| easyapointments | alextselegidis/easyappointments:latest |
+| easyappointments | alextselegidis/easyappointments:1.5.1 |
 | excalidraw | excalidraw/excalidraw:latest |
 | explo | ghcr.io/lumepart/explo:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
@@ -47,7 +47,7 @@
 | garage | dxflrs/garage:v2.0.0 |
 | garage-webui | khairul169/garage-webui:latest |
 | ghost | ghost:latest |
-| gitea | gitea/gitea:1.24.0 |
+| gitea | gitea/gitea:1.24.3 |
 | gitea-db | postgres:14 |
 | gitea-runner | gitea/act_runner:latest |
 | gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |
@@ -145,7 +145,7 @@
 | postal-worker | ghcr.io/postalserver/postal:latest |
 | prowlarr | lscr.io/linuxserver/prowlarr:latest |
 | qbit-manage | ghcr.io/stuffanthings/qbit_manage:latest |
-| qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:latest |
+| qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:5.1.2-1-03 |
 | radarec | thewicklowwolf/radarec:latest |
 | radarr | lscr.io/linuxserver/radarr:latest |
 | reactive-resume | amruthpillai/reactive-resume:latest |
