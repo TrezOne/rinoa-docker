@@ -1343,8 +1343,8 @@ services:
     ports:
       - 8362:80
     restart: unless-stopped
-    volumes:
-      - easyappointments:/var/www/html
+    # volumes:
+    #   - easyappointments:/var/www/html
   excalidraw:
     container_name: excalidraw
     image: 'excalidraw/excalidraw:latest'
