@@ -3572,6 +3572,7 @@ services:
     image: ghcr.io/lyqht/mini-qr:latest
     labels:
       swag: enable
+      swag_auth: authelia
       swag_proto: http
       swag_port: 8080
       swag_url: qr.${MY_TLD}
