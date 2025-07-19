@@ -1366,7 +1366,7 @@ services:
   explo:
     container_name: explo
     environment:
-      CRON_SCHEDULE: 0 8 * * 2 # Runs weekly, every Tuesday 15 minutes past midnight (UTC time)
+      CRON_SCHEDULE: 0 8 * * 2
       TZ: ${TZ}
     image: ghcr.io/lumepart/explo:latest
     restart: unless-stopped
@@ -5488,6 +5488,7 @@ services:
       #Script interval in seconds
       SCRIPT_INTERVAL: 300
     image: mrusse08/soularr:latest
+    network_mode: service:gluetun
     restart: unless-stopped
     volumes:
       #"You can set /downloads to whatever you want but will then need to change the Slskd download dir in your config file"
