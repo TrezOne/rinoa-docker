@@ -202,7 +202,7 @@ services:
   actual_server:
     container_name: actualbudget
     environment:
-      ACTUAL_LOGIN_METHOD: "pass"
+      ACTUAL_LOGIN_METHOD: "password"
       ACTUAL_PORT: 5006
       # - ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB=20
       # - ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB=50
