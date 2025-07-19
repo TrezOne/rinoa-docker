@@ -1104,8 +1104,7 @@ services:
     entrypoint: sidekiq-entrypoint.sh
     environment:
       RAILS_ENV: production
-      REDIS_URL: redis://dawarich-valkey:6379/0
-      DATABASE_HOST: dawarich-pg-db
+      REDIS_URL: "redis://dawarich-valkey:6379"
       DATABASE_USERNAME: dawarich
       DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
       DATABASE_NAME: dawarich
