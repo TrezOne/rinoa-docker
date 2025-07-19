@@ -3573,7 +3573,7 @@ services:
     labels:
       swag: enable
       swag_proto: http
-      swag_port: 9090
+      swag_port: 8080
       swag_url: qr.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
@@ -3583,6 +3583,8 @@ services:
       homepage.href: https://qr.${MY_TLD}
       homepage.icon: sh-mini-qr.svg
       homepage.description: Scan and generate customized QR codes easily
+    ports:
+      - 14815:8080
     restart: unless-stopped
   minio:
     command: server --console-address ":9090" /mnt/data
