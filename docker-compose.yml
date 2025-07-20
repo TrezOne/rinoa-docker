@@ -4288,6 +4288,9 @@ services:
       homepage.href: https://plants.${MY_TLD}
       homepage.icon: plant-it.png
       homepage.description: 🪴 Self-hosted, open source gardening companion app
+      homepage.widget.type: plantit
+      homepage.widget.url: http://plant-it:3000
+      homepage.widget.key: ${PLANTIT_API_KEY}
     ports:
       - 64067:8080
       - 3460:3000
