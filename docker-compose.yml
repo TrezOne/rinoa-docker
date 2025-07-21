@@ -1103,24 +1103,26 @@ services:
           memory: '4G'    # Limit memory usage to 4GB
     entrypoint: sidekiq-entrypoint.sh
     environment:
-      RAILS_ENV: production
-      REDIS_URL: "redis://dawarich-valkey:6379"
-      DATABASE_HOST: dawarich-pg-db
-      DATABASE_USERNAME: dawarich
-      DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
-      DATABASE_NAME: dawarich
       APPLICATION_HOSTS: localhost,loc.${MY_TLD}
-      BACKGROUND_PROCESSING_CONCURRENCY: 10
       APPLICATION_PROTOCOL: http
+      BACKGROUND_PROCESSING_CONCURRENCY: 10
+      DATABASE_HOST: dawarich-pg-db
+      DATABASE_NAME: dawarich
+      DATABASE_PASSWORD: ${DAWARICH_PG_PASSWORD}
+      DATABASE_USERNAME: dawarich
       DISTANCE_UNIT: km
-      SECRET_KEY_BASE: ${DAWARICH_SECRET_KEY_BASE}
+      ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
       PROMETHEUS_EXPORTER_ENABLED: false
       PROMETHEUS_EXPORTER_HOST: dawarich-app
       PROMETHEUS_EXPORTER_PORT: 9394
-      ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+      RAILS_ENV: production
+      RAILS_LOG_TO_STDOUT: true
+      REDIS_URL: "redis://dawarich-valkey:6379"
+      SECRET_KEY_BASE: ${DAWARICH_SECRET_KEY_BASE}
       SELF_HOSTED: true
+      STORE_GEODATA: true
     healthcheck:
-      test: [ "CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}" ]
+      test: [ "CMD-SHELL", "pgrep -f sidekiq" ]
       interval: 10s
       retries: 30
       start_period: 30s
