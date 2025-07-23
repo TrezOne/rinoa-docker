@@ -4552,7 +4552,7 @@ services:
       SOCKS_USER: admin
       SOCKS_PASS: socks
       TZ: ${TZ}
-      VPN_CLIENT: openvpn
+      VPN_CLIENT: wireguard
       VPN_ENABLED: "yes"
       VPN_INPUT_PORTS: ""
       VPN_OPTIONS: ""
