@@ -4537,9 +4537,9 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads:rw
       - ${DOCKER_VOLUME_CONFIG}/qbittorrent/qBittorrent:/qbittorrent/:ro
   qbittorrentvpn:
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
+    # cap_add:
+    #   - NET_ADMIN
+    #   - SYS_MODULE
     container_name: qbittorrentvpn
     environment:
       DEBUG: true
