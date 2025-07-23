@@ -4546,7 +4546,7 @@ services:
       ENABLE_PRIVOXY: yes
       ENABLE_SOCKS: yes
       LAN_NETWORK: 192.168.1.0/24
-      NAME_SERVERS: 192.168.1.254,1.1.1.1
+      NAME_SERVERS: 1.1.1.1,1.0.0.1,94.140.14.14,94.140.15.15
       PGID: ${PGID}
       PUID: ${PUID}
       SOCKS_USER: admin
