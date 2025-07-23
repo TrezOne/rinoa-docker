@@ -4596,6 +4596,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUME_CONFIG}/.openvpn:/config/openvpn
+      - ${DOCKER_VOLUME_CONFIG}/.wireguard:/config/wireguard
       - ${DOCKER_VOLUME_CONFIG}/qbittorrent/:/config
       - ${DOCKER_VOLUME_CONFIG}/qbittorrent/data:/data
       - ${DOCKER_VOLUME_STORAGE}/downloads:/downloads
