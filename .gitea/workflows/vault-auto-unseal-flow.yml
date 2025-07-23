@@ -2,7 +2,7 @@ name: Auto-Unseal for Vault
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 5 * * *"
+    - cron: "30 5 * * *"
 env:
   HC_VAULT_VERSION: '1.20.0'
 jobs:
@@ -15,6 +15,13 @@ jobs:
       VAULT_SHARDS: ${{ secrets.VAULT_UNSEAL_SHARDS }}
       VAULT_NAMESPACE: ""
     steps:
+      - name: Vault Unseal tart
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: HC Vault @ Rinoa'
+          notification_message: 'Hashicorp Vault unsealing started... 🔐'
       - name: Cache Vault install
         id: cache-vault
         uses: actions/cache@v4
@@ -31,3 +38,10 @@ jobs:
           for vault_shard in $VAULT_SHARDS; do
             vault operator unseal -address="${VAULT_ADDR}" -non-interactive "${vault_shard}"
           done
+      - name: Vault Unseal Completion
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: HC Vault @ Rinoa'
+          notification_message: 'Hashicorp Vault unsealed! 🔓'
