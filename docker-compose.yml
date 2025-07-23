@@ -128,7 +128,7 @@ x-signoz-common: &signoz-common
   restart: unless-stopped
 x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
   <<: *signoz-common
-  # addding non LTS version due to this fix https://github.com/ClickHouse/ClickHouse/commit/32caf8716352f45c1b617274c7508c86b7d1afab
+  # adding non LTS version due to this fix https://github.com/ClickHouse/ClickHouse/commit/32caf8716352f45c1b617274c7508c86b7d1afab
   image: clickhouse/clickhouse-server:24.1.2-alpine
   tty: true
   labels:
@@ -4589,7 +4589,7 @@ services:
       - 8118:8118
       - 9118:9118
       - 38927:8080
-    # privileged: true
+    privileged: true
     # sysctls:
     #   net.ipv4.conf.all.src_valid_mark: 1
     restart: unless-stopped
