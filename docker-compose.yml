@@ -4537,9 +4537,9 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads:rw
       - ${DOCKER_VOLUME_CONFIG}/qbittorrent/qBittorrent:/qbittorrent/:ro
   qbittorrentvpn:
-    # cap_add:
-    #   - NET_ADMIN
-    #   - SYS_MODULE
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
     container_name: qbittorrentvpn
     environment:
       DEBUG: true
@@ -4552,14 +4552,14 @@ services:
       SOCKS_USER: admin
       SOCKS_PASS: socks
       TZ: ${TZ}
-      VPN_CLIENT: wireguard
+      VPN_CLIENT: openvpn
       VPN_ENABLED: yes
       VPN_INPUT_PORTS: ""
       VPN_OPTIONS: ""
       VPN_OUTPUT_PORTS: ""
+      VPN_USER: ${DELUGEVPN_ENVIRONMENT_VPN_USER}
       VPN_PASS: ${DELUGEVPN_ENVIRONMENT_VPN_PASS}
       VPN_PROV: pia
-      VPN_USER: ${DELUGEVPN_ENVIRONMENT_VPN_USER}
       WEBUI_PORT: 8080
     image: ghcr.io/binhex/arch-qbittorrentvpn:latest
     labels:
@@ -4590,9 +4590,9 @@ services:
       - 9118:9118
       - 38927:8080
     privileged: true
+    restart: unless-stopped
     sysctls:
       net.ipv4.conf.all.src_valid_mark: 1
-    restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_VOLUME_CONFIG}/.openvpn:/config/openvpn
