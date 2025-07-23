@@ -4552,7 +4552,7 @@ services:
       SOCKS_USER: admin
       SOCKS_PASS: socks
       TZ: ${TZ}
-      VPN_CLIENT: wireguard
+      VPN_CLIENT: openvpn
       VPN_ENABLED: "yes"
       VPN_INPUT_PORTS: ""
       VPN_OPTIONS: ""
@@ -4561,7 +4561,7 @@ services:
       VPN_PROV: pia
       VPN_USER: ${DELUGEVPN_ENVIRONMENT_VPN_USER}
       WEBUI_PORT: 8080
-    image: ghcr.io/binhex/arch-qbittorrentvpn:5.1.2-1-03
+    image: ghcr.io/binhex/arch-qbittorrentvpn:latest
     labels:
       homepage.group: Downloaders
       homepage.name: qBittorrent
