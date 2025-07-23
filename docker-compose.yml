@@ -4542,6 +4542,7 @@ services:
       - SYS_MODULE
     container_name: qbittorrentvpn
     environment:
+      DEBUG: true
       ENABLE_PRIVOXY: yes
       ENABLE_SOCKS: yes
       LAN_NETWORK: 192.168.1.0/24
@@ -4551,7 +4552,7 @@ services:
       SOCKS_USER: admin
       SOCKS_PASS: socks
       TZ: ${TZ}
-      VPN_CLIENT: openvpn
+      VPN_CLIENT: wireguard
       VPN_ENABLED: "yes"
       VPN_INPUT_PORTS: ""
       VPN_OPTIONS: ""
@@ -4588,6 +4589,9 @@ services:
       - 8118:8118
       - 9118:9118
       - 38927:8080
+    privileged: true
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: 1
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
