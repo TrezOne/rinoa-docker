@@ -15,7 +15,7 @@ jobs:
       VAULT_SHARDS: ${{ secrets.VAULT_UNSEAL_SHARDS }}
       VAULT_NAMESPACE: ""
     steps:
-      - name: Vault Unseal tart
+      - name: Vault Unseal Start
         uses: eikendev/gotify-action@master
         with:
           gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
