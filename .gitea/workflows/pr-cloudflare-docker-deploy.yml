@@ -370,7 +370,7 @@ jobs:
       - name: Docker Compoose Healthcheck
         uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
         with:
-          max-retries: 5
+          max-retries: 30
           retry-interval: 10
           compose-file: "docker-compose.yml"
           skip-exited: "true"
