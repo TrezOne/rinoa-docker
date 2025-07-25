@@ -186,6 +186,8 @@
 | swag | lscr.io/linuxserver/swag:latest |
 | tandoor | vabene1111/recipes |
 | tandoor-pg | postgres:16-alpine |
+| umami | ghcr.io/umami-software/umami:postgresql-latest |
+| umami-pg-db | postgres:15-alpine |
 | unmanic | josh5/unmanic:latest |
 | uptimekuma | louislam/uptime-kuma:latest |
 | vault | hashicorp/vault:latest |
