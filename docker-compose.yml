@@ -4378,9 +4378,7 @@ services:
   portchecker-api:
     container_name: portchecker-api
     environment:
-      ALLOW_PRIVATE: false  # Prevent usage of private IP addresses
-    expose:
-      - 8000
+      ALLOW_PRIVATE: true  # Prevent usage of private IP addresses
     healthcheck:
       test: ["CMD", "wget", "--spider", "-S", "http://localhost:8000/healthz"]
       interval: 30s
@@ -4388,6 +4386,8 @@ services:
       retries: 3
       start_period: 5s
     image: ghcr.io/dsgnr/portcheckerio-api:latest
+    ports:
+      - 36102:8000
   portnote-web:
     container_name: portnote
     depends_on:
