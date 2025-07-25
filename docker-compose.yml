@@ -4353,7 +4353,7 @@ services:
       API_URL: http://portchecker-api:8000  # Optional, the URL of the API service. The scheme and port is required. Defaults to http://api:8000 if not set.
       # GOOGLE_ANALYTICS:   # Optional, set for Google Analytics integration
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-S", "http://localhost"]
+      test: ["CMD", "wget", "--spider", "-S", "http://127.0.0.1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -4380,7 +4380,7 @@ services:
     environment:
       ALLOW_PRIVATE: true  # Prevent usage of private IP addresses
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-S", "http://localhost:8000/healthz"]
+      test: ["CMD", "wget", "--spider", "-S", "http://127.0.0.1:8000/healthz"]
       interval: 30s
       timeout: 10s
       retries: 3
