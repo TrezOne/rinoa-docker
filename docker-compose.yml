@@ -1878,7 +1878,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/homepage/icons:/app/public/icons
       - ${DOCKER_VOLUME_STORAGE}:/rinoa-storage:ro
   hugo:
-    command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/it-services --configDir=/src/it-services/config/ -e production --logLevel debug
+    command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/ --configDir=/src/config/ -e production --logLevel debug
     container_name: hugo
     image: hugomods/hugo:exts
     labels:
