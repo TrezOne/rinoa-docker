@@ -367,12 +367,14 @@ jobs:
             ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
-      # - name: Check Services' Healthiness
-      #   uses: thegabriele97/dockercompose-health-action@main
-      #   with:
-      #     filename: 'docker-compose.yml'
-      #     timeout: '60'
-      #     workdir: '.'
+      - name: Docker Compoose Healthcheck
+        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
+        with:
+          max-retries: 5
+          retry-interval: 10
+          compose-file: "docker-compose.yml"
+          skip-exited: "true"
+          skip-no-healthcheck: "true"
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
