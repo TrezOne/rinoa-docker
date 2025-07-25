@@ -137,6 +137,8 @@
 | plant-it-valkey | docker.io/bitnami/valkey:latest |
 | plantuml-server | plantuml/plantuml-server:jetty |
 | portainer | portainer/portainer-ce:alpine |
+| portchecker-web | ghcr.io/dsgnr/portcheckerio-web:latest |
+| portchecker-api | ghcr.io/dsgnr/portcheckerio-api:latest |
 | portnote-web | haedlessdev/portnote:latest |
 | portnote-agent | haedlessdev/portnote-agent:latest |
 | portnote-pg-db | postgres:17-alpine |
@@ -145,7 +147,7 @@
 | postal-worker | ghcr.io/postalserver/postal:latest |
 | prowlarr | lscr.io/linuxserver/prowlarr:latest |
 | qbit-manage | ghcr.io/stuffanthings/qbit_manage:latest |
-| qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:5.1.2-1-03 |
+| qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:latest |
 | radarec | thewicklowwolf/radarec:latest |
 | radarr | lscr.io/linuxserver/radarr:latest |
 | reactive-resume | amruthpillai/reactive-resume:latest |
