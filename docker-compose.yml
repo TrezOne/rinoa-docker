@@ -4341,6 +4341,51 @@ services:
     volumes:
         - portainer-data:/data
         - /var/run/docker.sock:/var/run/docker.sock
+  portchecker-web:
+    container_name: portcheckerio-web
+    depends_on:
+      portchecker-api:
+        required: true
+        condition: service_healthy
+    environment:
+      DEFAULT_HOST:   # Optional, Populates a default host address value to be populataed in the in the UI input. Defaults to external/WAN IP.
+      DEFAULT_PORT: 443  # Optional, Populates a default port value to be populataed in the in the UI input
+      API_URL: http://portchecker-api:8000  # Optional, the URL of the API service. The scheme and port is required. Defaults to http://api:8000 if not set.
+      # GOOGLE_ANALYTICS:   # Optional, set for Google Analytics integration
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-S", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    image: ghcr.io/dsgnr/portcheckerio-web:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_url: portc.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://portc.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      homepage.group: System Administration
+      homepage.name: Portchecker.IO
+      homepage.href: https://portc.${MY_TLD}
+      homepage.icon: mdi-check-network-outline
+      homepage.description: Service delivery platform for containerized applications
+    ports:
+      - 31131:80
+  portchecker-api:
+    container_name: portchecker-api
+    environment:
+      ALLOW_PRIVATE: false  # Prevent usage of private IP addresses
+    expose:
+      - 8000
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-S", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    image: ghcr.io/dsgnr/portcheckerio-api:latest
   portnote-web:
     container_name: portnote
     depends_on:
