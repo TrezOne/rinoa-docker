@@ -4342,7 +4342,7 @@ services:
         - portainer-data:/data
         - /var/run/docker.sock:/var/run/docker.sock
   portchecker-web:
-    container_name: portcheckerio-web
+    container_name: portchecker-web
     depends_on:
       portchecker-api:
         required: true
@@ -4361,6 +4361,7 @@ services:
     image: ghcr.io/dsgnr/portcheckerio-web:latest
     labels:
       swag: enable
+      swag_auth: authelia
       swag_proto: http
       swag_url: portc.${MY_TLD}
       swag.uptime-kuma.enabled: true
@@ -4373,6 +4374,7 @@ services:
       homepage.description: Service delivery platform for containerized applications
     ports:
       - 31131:80
+    restart: unless-stopped
   portchecker-api:
     container_name: portchecker-api
     environment:
@@ -6007,7 +6009,7 @@ services:
       homepage.href: https://subs.${MY_TLD}
       homepage.icon: wallos.png
       homepage.description: Subscription Tracking
-      sablier.enable: true
+      sablier.enable: false
       sablier.group: rinoa
       swag: enable
       swag_proto: http
