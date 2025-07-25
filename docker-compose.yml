@@ -5824,6 +5824,56 @@ services:
         target: /var/lib/postgresql/data
         type: volume
         volume: {}
+  umami:
+    container_name: umami
+    depends_on:
+      umami-pg-db:
+        required: true
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_PG_DB_PASSWORD}@umami-pg-db:5432/umami
+      DATABASE_TYPE: postgresql
+      APP_SECRET: ${UMAMI_APP_SECRET}
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:3000/api/heartbeat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    init: true
+    labels:
+      homepage.group: Professional Services
+      homepage.name: Umami
+      homepage.href: https://analytics.${MY_TLD}
+      homepage.icon: umami.svg
+      homepage.description: Simple, fast, privacy-focused alternative to Google Analytics
+      swag: enable
+      swag_port: 3000
+      swag_proto: http
+      swag_url: analytics.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://analytics.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 17382:3000
+    restart: unless-stopped
+  umami-pg-db:
+    container_name: umami-pg-db
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_PG_DB_PASSWORD}
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    image: postgres:15-alpine
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
   unmanic:
     container_name: unmanic
     environment:
@@ -6432,6 +6482,8 @@ volumes:
     name: sonarqube-temp
   tandoor-pg:
     name: tandoor-pg
+  umami-db-data:
+    name: umami-db-data
   unmanic-cache:
     name: unmanic-cache
   wallos-db:
