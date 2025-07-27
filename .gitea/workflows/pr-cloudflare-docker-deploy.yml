@@ -114,7 +114,7 @@ jobs:
           echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
           echo "$mod_svcs" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
-      - name: Testing service list output
+      - name: List of Services for (Re)Deployment
         run: |
           echo -e "${{ steps.detect_services.outputs.docker_svc_list }}"
   docker-compose-dry-run:
