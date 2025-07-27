@@ -5258,7 +5258,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    image: signoz/signoz:${VERSION:-v0.86.2}
+    image: signoz/signoz:${VERSION:-v0.91.0}
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Signoz
@@ -5343,7 +5343,7 @@ services:
     environment:
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
-    image: signoz/signoz-otel-collector:${OTELCOL_TAG:-v0.111.42}
+    image: signoz/signoz-otel-collector:${OTELCOL_TAG:-v0.128.2}
     ports:
       # - "1777:1777"     # pprof extension
       - "4317:4317" # OTLP gRPC receiver
@@ -5354,7 +5354,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
   signoz-schema-migrator-async:
     <<: *signoz-db-depend
-    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
+    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.128.2}
     container_name: signoz-schema-migrator-async
     command:
       - async
@@ -5363,7 +5363,7 @@ services:
     restart: on-failure
   signoz-schema-migrator-sync:
     <<: *signoz-common
-    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.111.42}
+    image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.128.2}
     container_name: signoz-schema-migrator-sync
     command:
       - sync
