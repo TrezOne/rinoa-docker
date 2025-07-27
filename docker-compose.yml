@@ -5331,12 +5331,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   signoz-otel-collector:
     <<: *signoz-db-depend
-    container_name: signoz-otel-collector
     command:
       - --config=/etc/otel-collector-config.yaml
       - --manager-config=/etc/manager-config.yaml
       - --copy-path=/var/tmp/collector-config.yaml
       - --feature-gates=-pkg.translator.prometheus.NormalizeName
+    container_name: signoz-otel-collector
     depends_on:
       signoz-app:
         condition: service_healthy
