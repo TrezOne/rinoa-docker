@@ -5341,6 +5341,8 @@ services:
       signoz-app:
         condition: service_healthy
     environment:
+      NGINX_ACCESS_LOG_FILE: /swag/log/nginx/access.log
+      NGINX_ERROR_LOG_FILE: /swag/log/nginx/error.log
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
     image: signoz/signoz-otel-collector:${OTELCOL_TAG:-v0.128.2}
@@ -5352,6 +5354,8 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/otel/otel-collector-opamp-config.yaml:/etc/manager-config.yaml
+      - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx/access.log:/swag/log/nginx/access.log:ro
+      - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx/error.log:/swag/log/nginx/error.log:ro
   signoz-schema-migrator-async:
     <<: *signoz-db-depend
     image: signoz/signoz-schema-migrator:${OTELCOL_TAG:-v0.128.2}
