@@ -4388,6 +4388,7 @@ services:
     image: ghcr.io/dsgnr/portcheckerio-api:latest
     ports:
       - 36102:8000
+    restart: unless-stopped
   portnote-web:
     container_name: portnote
     depends_on:
