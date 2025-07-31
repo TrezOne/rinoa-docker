@@ -23,6 +23,8 @@
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest |
 | castopod | castopod/castopod:latest |
 | castopod-valkey | docker.io/bitnami/valkey:latest |
+| changedetection | ghcr.io/dgtlmoon/changedetection.io |
+| changedetection-chrome | dgtlmoon/sockpuppetbrowser:latest |
 | chrome | gcr.io/zenika-hub/alpine-chrome:123 |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
 | convertx | ghcr.io/c4illin/convertx |
