@@ -776,7 +776,7 @@ services:
   changedetection:
     container_name: changedetection
     depends_on:
-      browser-sockpuppet-chrome:
+      changedetection-chrome:
         condition: service_started
     environment:
       PORT: 5000
