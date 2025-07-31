@@ -796,6 +796,9 @@ services:
       homepage.href: https://chdt.${MY_TLD}
       homepage.icon: changedetection.svg
       homepage.name: ChangeDetection
+      homepage.widget.type: changedetection
+      homepage.widget.url: http://changedetection:5000
+      homepage.widget.key: ${CHANGEDETECTION_HOMEPAGE_API_KEY}
       swag: enable
       swag_port: 5000
       swag_proto: http
