@@ -773,6 +773,52 @@ services:
     << : *valkey-params
     volumes:
       - castopod-valkey-data:/data/valkey
+  changedetection:
+    container_name: changedetection
+    depends_on:
+      browser-sockpuppet-chrome:
+        condition: service_started
+    environment:
+      PORT: 5000
+      LOGGER_LEVEL: TRACE
+      PLAYWRIGHT_DRIVER_URL: ws://browser-sockpuppet-chrome:3000
+      BASE_URL: https://chdt.${MY_TLD}
+      USE_X_SETTINGS: 1
+      HIDE_REFERER: true
+      ALLOW_FILE_URI: False
+      TZ: ${TZ}
+      LC_ALL: en_US.UTF-8
+      LISTEN_HOST: 0.0.0.0
+    image: ghcr.io/dgtlmoon/changedetection.io
+    labels:
+      homepage.description: Page change monitoring with alerts
+      homepage.group: System Administration
+      homepage.href: https://chdt.${MY_TLD}
+      homepage.icon: changedetection.svg
+      homepage.name: ChangeDetection
+      swag: enable
+      swag_port: 5000
+      swag_proto: http
+      swag_url: chdt.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://chdt.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 15827:5000
+    restart: unless-stopped
+    volumes:
+      - changedetection-data:/datastore
+  changedetection-chrome:
+    cap_add:
+      - SYS_ADMIN
+    container_name: changedetection-chrome
+    image: dgtlmoon/sockpuppetbrowser:latest
+    environment:
+      SCREEN_WIDTH: 1920
+      SCREEN_HEIGHT: 1024
+      SCREEN_DEPTH: 16
+      MAX_CONCURRENT_CHROME_PROCESSES: 10
+    restart: unless-stopped
   chrome:
     container_name: chrome
     command:
@@ -6353,6 +6399,8 @@ volumes:
     name: castopod-media
   castopod-valkey-data:
     name: castopod-valkey-data
+  changedetection-data:
+    name: changedetection-data
   crowdsec-config:
     name: crowdsec-config
   crowdsec-db:
