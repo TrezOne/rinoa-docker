@@ -4,6 +4,7 @@
 
 | Service | Image |
 | --- | --- |
+| 13ft | ghcr.io/wasi-master/13ft:latest |
 | actual_server | docker.io/actualbudget/actual-server:latest |
 | adguard | adguard/adguardhome:latest |
 | apprise-api | lscr.io/linuxserver/apprise-api:latest |
