@@ -210,7 +210,7 @@ services:
       homepage.group: Personal Tools
       homepage.name: 13ft Ladder
       homepage.icon: 13ft.svg
-      homepage.href: https://fin.${MY_TLD}
+      homepage.href: https://13ft.${MY_TLD}
       homepage.description: Web interface for blocking ads and paywalls
     ports:
       - 10633:5000
