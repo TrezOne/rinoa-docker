@@ -6474,6 +6474,7 @@ services:
     depends_on:
       - zammad-railsserver
   zammad-postgresql:
+    container_name: zammad-postgresql
     environment:
       POSTGRES_DB: ${ZAMMAD_POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${ZAMMAD_POSTGRES_USER:-zammad}
@@ -6485,7 +6486,9 @@ services:
   zammad-railsserver:
     <<: *zammad-service
     command: ["zammad-railsserver"]
+    container_name: zammad-railsserver
   zammad-redis:
+    container_name: zammad-redis
     image: redis:${REDIS_VERSION:-7.4.2-alpine}
     restart: ${RESTART:-always}
     volumes:
