@@ -1502,54 +1502,6 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
-  freescout:
-    container_name: freescout
-    depends_on:
-      mariadb:
-        condition: service_healthy
-        required: true
-    environment:
-      ADMIN_EMAIL: it-services@${MY_TLD}
-      ADMIN_FIRST_NAME: Treasured
-      ADMIN_LAST_NAME: IT
-      ADMIN_PASS: ${FREESCOUT_ADMIN_PASS}
-      APP_TRUSTED_PROXIES: 172.18.0.0/16,192.168.1.0/24
-      DB_TYPE: mysql
-      DB_HOST: mariadb
-      DB_PORT: 3306
-      DB_NAME: freescout
-      DB_USER: freescout
-      DB_PASS: ${FREESCOUT_DB_PASS}
-      DB_SSL: FALSE
-      DISPLAY_ERRORS: TRUE
-      ENABLE_AUTO_UPDATE: TRUE
-      SETUP_TYPE: AUTO
-      SITE_URL: https://support.${MY_TLD}
-      SKIP_STORAGE_PERMISSIONS: FALSE
-      TIMEZONE: ${TZ}
-    image: tiredofit/freescout:latest
-    labels:
-      homepage.group: Professional Services
-      homepage.name: FreeScout
-      homepage.icon: sh-freescout.svg
-      homepage.href: https://support.${MY_TLD}
-      homepage.description: Lightweight help desk and shared inbox
-      swag: enable
-      swag_proto: http
-      swag_port: 80
-      swag_url: support.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-    ports:
-      - 59095:80
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/freescout/assets/modules:/assets/modules
-      - ${DOCKER_VOLUME_CONFIG}/freescout/assets/custom:/assets/custom
-      - ${DOCKER_VOLUME_CONFIG}/freescout/assets/custom-scripts:/assets/custom-scripts
-      - ${DOCKER_VOLUME_CONFIG}/freescout/data:/www/html
-      - ${DOCKER_VOLUME_CONFIG}/freescout/logs/:/www/logs
   garage:
     container_name: garage
     image: dxflrs/garage:v2.0.0
@@ -3114,6 +3066,19 @@ services:
     environment:
       LIBREDESK_SYSTEM_USER_PASSWORD: ${LIBREDESK_SYSTEM_USER_PASSWORD}
     image: libredesk/libredesk:latest
+    labels:
+      homepage.group: Professional Services
+      homepage.name: Libredesk
+      homepage.icon: mdi-headset
+      homepage.href: https://support.${MY_TLD}
+      homepage.description: Customer support desk platform
+      swag: enable
+      swag_proto: http
+      swag_port: 9000
+      swag_url: support.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 41372:9000
     restart: unless-stopped
