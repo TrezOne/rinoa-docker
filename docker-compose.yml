@@ -3105,6 +3105,8 @@ services:
   libredesk-valkey:
     container_name: libredesk-valkey
     << : *valkey-params
+    volumes:
+      - libredesk-valkey-data:/data/valkey
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
@@ -6476,6 +6478,8 @@ volumes:
     name: linkstack_data
   libredesk-pg-data:
     name: libredesk-pg-data
+  libredesk-valkey-data:
+    name: libredesk-valkey-data
   librechat-pg-data:
     name: librechat-pg-data
   librechat-valkey-data:
