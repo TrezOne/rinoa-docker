@@ -6466,7 +6466,7 @@ services:
       swag_url: support.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
-      homepage.group: Personal/Professional Services
+      homepage.group: Professional Services
       homepage.name: Zammad
       homepage.href: https://support.${MY_TLD}
       homepage.icon: zammad.svg
