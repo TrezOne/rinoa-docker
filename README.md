@@ -89,9 +89,6 @@
 | librechat-rag-api | ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest |
 | librechat-valkey | docker.io/bitnami/valkey:latest |
 | librechat-vectordb | ankane/pgvector:latest |
-| libredesk | libredesk/libredesk:latest |
-| libredesk-pg-db | postgres:17-alpine |
-| libredesk-valkey | docker.io/bitnami/valkey:latest |
 | libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
@@ -202,4 +199,14 @@
 | whodb | clidey/whodb |
 | wizarr | ghcr.io/wizarrrr/wizarr |
 | youtubedl | nbr23/youtube-dl-server:latest |
+| zammad-backup | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-elasticsearch | elasticsearch:8.18.0 |
+| zammad-init | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-memcached | memcached:1.6.38-alpine |
+| zammad-nginx | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-postgresql | postgres:17.5-alpine |
+| zammad-railsserver | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-redis | redis:7.4.2-alpine |
+| zammad-scheduler | ghcr.io/zammad/zammad:6.5.0-15 |
+| zammad-websocket | ghcr.io/zammad/zammad:6.5.0-15 |
 
