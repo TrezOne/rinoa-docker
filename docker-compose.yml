@@ -3103,7 +3103,7 @@ services:
     volumes:
       - libredesk-pg-data:/var/lib/postgresql/data
   libredesk-valkey:
-    container_name: libredesk=valkey
+    container_name: libredesk-valkey
     << : *valkey-params
   libretranslate:
     container_name: libretranslate
