@@ -6441,21 +6441,24 @@ services:
   zammad-init:
     <<: *zammad-service
     command: ["zammad-init"]
+    container_name: zammad-init
     depends_on:
       - zammad-postgresql
     restart: on-failure
     user: 0:0
   zammad-memcached:
     command: memcached -m 256M
+    container_name: zammad-memcached
     image: memcached:${MEMCACHE_VERSION:-1.6.38-alpine}
     restart: ${RESTART:-always}
   zammad-nginx:
     <<: *zammad-service
     command: ["zammad-nginx"]
+    container_name: zammad-nginx
     expose:
-      - "${NGINX_PORT:-8080}"
+      - 8080
     ports:
-      - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
+      - 15257:8080
     labels:
       swag: enable
       swag_proto: http
