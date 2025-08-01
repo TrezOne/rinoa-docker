@@ -3101,19 +3101,70 @@ services:
     restart: always
     volumes:
       - librechat-pg-data:/var/lib/postgresql/data
+  libredesk:
+    command: [sh, -c, "./libredesk --install --idempotent-install --yes --config /libredesk/config.toml && ./libredesk --upgrade --yes --config /libredesk/config.toml && ./libredesk --config /libredesk/config.toml"]
+    container_name: libredesk
+    depends_on:
+      libredesk-pg-db:
+        condition: service_healthy
+        required: true
+      libredesk-valkey:
+        condition: service_healthy
+        required: true
+    environment:
+      LIBREDESK_SYSTEM_USER_PASSWORD: ${LIBREDESK_SYSTEM_USER_PASSWORD}
+    image: libredesk/libredesk:latest
+    ports:
+      - 41372:9000
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/libredesk/uploads:/libredesk/uploads:rw
+      - ${DOCKER_VOLUME_CONFIG}/libredesk/config.toml:/libredesk/config.toml
+  libredesk-pg-db:
+    container_name: libredesk-pg-db
+    environment:
+      POSTGRES_USER: libredesk
+      POSTGRES_PASSWORD: ${LIBREDESK_PG_DB_PASSWD}
+      POSTGRES_DB: libredesk
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U libredesk -d libredesk"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    image: postgres:17-alpine
+    restart: unless-stopped
+    volumes:
+      - libredesk-pg-data:/var/lib/postgresql/data
+  libredesk-valkey:
+    container_name: libredesk=valkey
+    << : *valkey-params
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
-    image: libretranslate/libretranslate
-    healthcheck:
-      test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
     environment:
       LT_UPDATE_MODELS: true
+    healthcheck:
+      test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
+    image: libretranslate/libretranslate
+    labels:
+      homepage.group: Personal Tools
+      homepage.name: LibreTranslate
+      homepage.href: https://translate.${MY_TLD}
+      homepage.icon: sh-libretranslate.svg
+      homepage.description: Open-source machine translation API
+      swag: enable
+      swag_port: 5000
+      swag_url: translate.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://translate.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
     ports:
       - 5000:5000
     restart: unless-stopped
-    tty: true
     stdin_open: true
+    tty: true
     volumes:
     #   - libretranslate_api_keys:/app/db
       - libretranslate_models:/home/libretranslate/.local:rw
@@ -4005,20 +4056,20 @@ services:
       OLLAMA_MODEL: smollm2:1.7b
       THEME: 'pole'
       DISABLE_DICTIONARY: false
-    expose:
-      - 80
     image: kweg/omnipoly:latest
     labels:
       homepage.group: Personal Tools
       homepage.name: OmniPoly
-      homepage.href: https://translate.${MY_TLD}
+      homepage.href: https://poly.${MY_TLD}
       homepage.icon: sh-omnipoly.svg
       homepage.description: Open-source language translation with LanguageTool, LibreTranslate, & Ollama
       swag: enable
-      swag_url: translate.${MY_TLD}
+      swag_url: poly.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://translate.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://poly.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 3734:80
     restart: unless-stopped
   paperless-ngx:
     container_name: paperless-ngx
@@ -6458,6 +6509,8 @@ volumes:
     name: karakeep-data
   linkstack_data:
     name: linkstack_data
+  libredesk-pg-data:
+    name: libredesk-pg-data
   librechat-pg-data:
     name: librechat-pg-data
   librechat-valkey-data:
