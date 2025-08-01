@@ -4,7 +4,7 @@ networks:
     name: compose_default
   nextcloud-aio:
     external: true
-x-app-common: &jitsi_admin_app
+x-jitsi-admin: &jitsi_admin_app
   image: h2invent/jitsi-admin-main:latest
   #build: .
   environment:
@@ -124,6 +124,16 @@ x-maxun: &maxun-env
     CHROMIUM_FLAGS: '--disable-gpu --no-sandbox --headless=new'
     #DEBUG: pw:api
     #PWDEBUG: 1
+x-penpot-flags: &penpot-flags
+  PENPOT_FLAGS: enable-smtp enable-prepl-server login-with-password webhooks
+x-penpot-uri: &penpot-public-uri
+  PENPOT_PUBLIC_URI: https://penpot.${MY_TLD}
+x-penpot-body-size: &penpot-http-body-size
+  # Max body size (30MiB); Used for plain requests, should never be
+  # greater than multi-part size
+  PENPOT_HTTP_SERVER_MAX_BODY_SIZE: 31457280
+  # Max multipart body size (350MiB)
+  PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: 367001600
 x-signoz-common: &signoz-common
   restart: unless-stopped
 x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
@@ -177,16 +187,6 @@ x-signoz-db-depend: &signoz-db-depend
       condition: service_healthy
     signoz-schema-migrator-sync:
       condition: service_completed_successfully
-x-flags: &penpot-flags
-  PENPOT_FLAGS: enable-smtp enable-prepl-server login-with-password webhooks
-x-uri: &penpot-public-uri
-  PENPOT_PUBLIC_URI: https://penpot.${MY_TLD}
-x-body-size: &penpot-http-body-size
-  # Max body size (30MiB); Used for plain requests, should never be
-  # greater than multi-part size
-  PENPOT_HTTP_SERVER_MAX_BODY_SIZE: 31457280
-  # Max multipart body size (350MiB)
-  PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: 367001600
 x-valkey-params: &valkey-params
   healthcheck:
     test: redis-cli ping || exit 1
@@ -198,6 +198,65 @@ x-valkey-params: &valkey-params
   expose:
     - 6379
   restart: unless-stopped
+x-zammad:
+  zammad-service: &zammad-service
+    environment: &zammad-environment
+      MEMCACHE_SERVERS: ${ZAMMAD_MEMCACHE_SERVERS:-zammad-memcached:11211}
+      POSTGRESQL_DB: ${ZAMMAD_POSTGRES_DB:-zammad_production}
+      POSTGRESQL_HOST: ${ZAMMAD_POSTGRES_HOST:-zammad-postgresql}
+      POSTGRESQL_USER: ${ZAMMAD_POSTGRES_USER:-zammad}
+      POSTGRESQL_PASS: ${ZAMMAD_POSTGRES_PASS:-zammad}
+      POSTGRESQL_PORT: ${ZAMMAD_POSTGRES_PORT:-5432}
+      POSTGRESQL_OPTIONS: ${ZAMMAD_POSTGRESQL_OPTIONS:-?pool=50}
+      POSTGRESQL_DB_CREATE:
+      REDIS_URL: ${ZAMMAD_REDIS_URL:-redis://zammad-redis:6379}
+      S3_URL: http://${ZAMMAD_S3_ACCESS_KEY}:${ZAMMAD_S3_SECRET_KEY}@minio:9000/zammad-storage-bucket?region=us-east-fh-pln&force_path_style=true
+      # Backup settings
+      BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
+      BACKUP_TIME: "${BACKUP_TIME:-03:00}"
+      HOLD_DAYS: "${HOLD_DAYS:-7}"
+      TZ: "${TZ:-Europe/Berlin}"
+      # Allow passing in these variables via .env:
+      AUTOWIZARD_JSON:
+      AUTOWIZARD_RELATIVE_PATH:
+      ELASTICSEARCH_ENABLED: false
+      ELASTICSEARCH_SCHEMA:
+      ELASTICSEARCH_HOST:
+      ELASTICSEARCH_PORT:
+      ELASTICSEARCH_USER: ${ELASTICSEARCH_USER:-elastic}
+      ELASTICSEARCH_PASS: ${ELASTICSEARCH_PASS:-zammad}
+      ELASTICSEARCH_NAMESPACE:
+      ELASTICSEARCH_REINDEX:
+      NGINX_PORT:
+      NGINX_EXPOSE_PORT: 15257
+      NGINX_CLIENT_MAX_BODY_SIZE:
+      NGINX_SERVER_NAME:
+      NGINX_SERVER_SCHEME:
+      RAILS_TRUSTED_PROXIES: 172.18.0.0/16
+      ZAMMAD_HTTP_TYPE:
+      ZAMMAD_FQDN:
+      ZAMMAD_WEB_CONCURRENCY:
+      ZAMMAD_PROCESS_SESSIONS_JOBS_WORKERS:
+      ZAMMAD_PROCESS_SCHEDULED_JOBS_WORKERS:
+      ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
+      # ZAMMAD_SESSION_JOBS_CONCURRENT is deprecated, please use ZAMMAD_PROCESS_SESSIONS_JOBS_WORKERS instead.
+      ZAMMAD_SESSION_JOBS_CONCURRENT:
+      # Variables used by ngingx-proxy container for reverse proxy creations
+      # for docs refer to https://github.com/nginx-proxy/nginx-proxy
+      VIRTUAL_HOST:
+      VIRTUAL_PORT:
+      # Variables used by acme-companion for retrieval of LetsEncrypt certificate
+      # for docs refer to https://github.com/nginx-proxy/acme-companion
+      LETSENCRYPT_HOST:
+      LETSENCRYPT_EMAIL:
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-15}
+    restart: ${RESTART:-always}
+    volumes:
+      - zammad-storage:/opt/zammad/storage
+    depends_on:
+      - zammad-memcached
+      - zammad-postgresql
+      - zammad-redis
 services:
   13ft:
     container_name: 13ft
@@ -3053,60 +3112,6 @@ services:
     restart: always
     volumes:
       - librechat-pg-data:/var/lib/postgresql/data
-  libredesk:
-    command: [sh, -c, "./libredesk --install --idempotent-install --yes --config /libredesk/config.toml && ./libredesk --upgrade --yes --config /libredesk/config.toml && ./libredesk --config /libredesk/config.toml"]
-    container_name: libredesk
-    depends_on:
-      libredesk-pg-db:
-        condition: service_healthy
-        required: true
-      libredesk-valkey:
-        condition: service_healthy
-        required: true
-    environment:
-      LIBREDESK_SYSTEM_USER_PASSWORD: ${LIBREDESK_SYSTEM_USER_PASSWORD}
-    image: libredesk/libredesk:latest
-    labels:
-      homepage.group: Professional Services
-      homepage.name: Libredesk
-      homepage.icon: mdi-headset
-      homepage.href: https://support.${MY_TLD}
-      homepage.description: Customer support desk platform
-      swag: enable
-      swag_proto: http
-      swag_port: 9000
-      swag_url: support.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-    ports:
-      - 41372:9000
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/libredesk/uploads:/libredesk/uploads:rw
-      - ${DOCKER_VOLUME_CONFIG}/libredesk/config.toml:/libredesk/config.toml
-  libredesk-pg-db:
-    container_name: libredesk-pg-db
-    environment:
-      POSTGRES_USER: libredesk
-      POSTGRES_PASSWORD: ${LIBREDESK_PG_DB_PASSWD}
-      POSTGRES_DB: libredesk
-    expose:
-      - 5432
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U libredesk -d libredesk"]
-      interval: 10s
-      timeout: 5s
-      retries: 6
-    image: postgres:17-alpine
-    restart: unless-stopped
-    volumes:
-      - libredesk-pg-data:/var/lib/postgresql/data
-  libredesk-valkey:
-    container_name: libredesk-valkey
-    << : *valkey-params
-    volumes:
-      - libredesk-valkey-data:/data/valkey
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
@@ -6411,6 +6416,83 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
+  zammad-backup:
+    <<: *zammad-service
+    command: ["zammad-backup"]
+    volumes:
+      - zammad-backup:/var/tmp/zammad
+      - zammad-storage:/opt/zammad/storage:ro
+    user: 0:0
+  zammad-elasticsearch:
+    image: elasticsearch:${ELASTICSEARCH_VERSION:-8.18.0}
+    restart: ${RESTART:-always}
+    profiles:
+      - do-not-start
+    volumes:
+      - zammad-elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      # Enable authorization without HTTPS. For external access with
+      #   SSL termination, use solutions like nginx-proxy-manager.
+      ELASTICSEARCH_ENABLE_SECURITY: 'true'
+      ELASTICSEARCH_SKIP_TRANSPORT_TLS: 'true'
+      ELASTICSEARCH_ENABLE_REST_TLS: 'false'
+      # ELASTICSEARCH_USER is hardcoded to 'elastic' in the container.
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASS:-zammad}
+  zammad-init:
+    <<: *zammad-service
+    command: ["zammad-init"]
+    depends_on:
+      - zammad-postgresql
+    restart: on-failure
+    user: 0:0
+  zammad-memcached:
+    command: memcached -m 256M
+    image: memcached:${MEMCACHE_VERSION:-1.6.38-alpine}
+    restart: ${RESTART:-always}
+  zammad-nginx:
+    <<: *zammad-service
+    command: ["zammad-nginx"]
+    expose:
+      - "${NGINX_PORT:-8080}"
+    ports:
+      - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 8080
+      swag_url: support.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
+      homepage.group: Personal/Professional Services
+      homepage.name: Zammad
+      homepage.href: https://support.${MY_TLD}
+      homepage.icon: zammad.svg
+      homepage.description: Open-source helpdesk/customer support system
+    depends_on:
+      - zammad-railsserver
+  zammad-postgresql:
+    environment:
+      POSTGRES_DB: ${ZAMMAD_POSTGRES_DB:-zammad_production}
+      POSTGRES_USER: ${ZAMMAD_POSTGRES_USER:-zammad}
+      POSTGRES_PASSWORD: ${ZAMMAD_POSTGRES_PASS:-zammad}
+    image: postgres:${ZAMMAD_POSTGRES_VERSION:-17.5-alpine}
+    restart: ${RESTART:-always}
+    volumes:
+      - zammad-postgresql-data:/var/lib/postgresql/data
+  zammad-railsserver:
+    <<: *zammad-service
+    command: ["zammad-railsserver"]
+  zammad-redis:
+    image: redis:${REDIS_VERSION:-7.4.2-alpine}
+    restart: ${RESTART:-always}
+    volumes:
+      - zammad-redis-data:/data
+  zammad-scheduler:
+    <<: *zammad-service
+    command: ["zammad-scheduler"]
+  zammad-websocket:
+    <<: *zammad-service
+    command: ["zammad-websocket"]
 volumes:
   authelia-pg-db:
     name: authelia-pg-db
@@ -6476,10 +6558,6 @@ volumes:
     name: karakeep-data
   linkstack_data:
     name: linkstack_data
-  libredesk-pg-data:
-    name: libredesk-pg-data
-  libredesk-valkey-data:
-    name: libredesk-valkey-data
   librechat-pg-data:
     name: librechat-pg-data
   librechat-valkey-data:
@@ -6586,3 +6664,13 @@ volumes:
     name: wallos-db
   wallos-logos:
     name: wallos-logos
+  zammad-backup:
+    name: zammad-backup
+  zammad-storage:
+    name: zammad-storage
+  zammad-elasticsearch-data:
+    name: zammad-elasticsearch-data
+  zammad-postgresql-data:
+    name: zammad-postgresql-data
+  zammad-redis-data:
+    name: zammad-redis-data
