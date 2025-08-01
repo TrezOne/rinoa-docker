@@ -3114,7 +3114,6 @@ services:
       - librechat-pg-data:/var/lib/postgresql/data
   libretranslate:
     container_name: libretranslate
-    # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
     environment:
       LT_UPDATE_MODELS: true
     healthcheck:
@@ -4019,7 +4018,7 @@ services:
         condition: service_started
         required: true
       libretranslate:
-        condition: service_started
+        condition: service_healthy
         required: true
     environment:
       LANGUAGE_TOOL: http://languagetool:8010
