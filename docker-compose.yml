@@ -3131,7 +3131,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-    #   - libretranslate_api_keys:/app/db
+      - libretranslate_api_keys:/app/db
       - libretranslate_models:/home/libretranslate/.local:rw
   lidarr:
     container_name: lidarr
@@ -6480,6 +6480,8 @@ volumes:
     name: librechat-pg-data
   librechat-valkey-data:
     name: librechat-valkey-data
+  libretranslate_api_keys:
+    name: libretranslate_api_keys
   libretranslate_models:
     name: libretranslate_models
   lldap_data:
