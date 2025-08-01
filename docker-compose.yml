@@ -3053,58 +3053,6 @@ services:
     restart: always
     volumes:
       - librechat-pg-data:/var/lib/postgresql/data
-  libredesk:
-    command: [sh, -c, "./libredesk --install --idempotent-install --yes --config /libredesk/config.toml && ./libredesk --upgrade --yes --config /libredesk/config.toml && ./libredesk --config /libredesk/config.toml"]
-    container_name: libredesk
-    depends_on:
-      libredesk-pg-db:
-        condition: service_healthy
-        required: true
-      libredesk-valkey:
-        condition: service_healthy
-        required: true
-    environment:
-      LIBREDESK_SYSTEM_USER_PASSWORD: ${LIBREDESK_SYSTEM_USER_PASSWORD}
-    image: libredesk/libredesk:latest
-    labels:
-      homepage.group: Professional Services
-      homepage.name: Libredesk
-      homepage.icon: mdi-headset
-      homepage.href: https://support.${MY_TLD}
-      homepage.description: Customer support desk platform
-      swag: enable
-      swag_proto: http
-      swag_port: 9000
-      swag_url: support.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-    ports:
-      - 41372:9000
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/libredesk/uploads:/libredesk/uploads:rw
-      - ${DOCKER_VOLUME_CONFIG}/libredesk/config.toml:/libredesk/config.toml
-  libredesk-pg-db:
-    container_name: libredesk-pg-db
-    environment:
-      POSTGRES_USER: libredesk
-      POSTGRES_PASSWORD: ${LIBREDESK_PG_DB_PASSWD}
-      POSTGRES_DB: libredesk
-    expose:
-      - 5432
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U libredesk -d libredesk"]
-      interval: 10s
-      timeout: 5s
-      retries: 6
-    image: postgres:17-alpine
-    restart: unless-stopped
-    volumes:
-      - libredesk-pg-data:/var/lib/postgresql/data
-  libredesk-valkey:
-    container_name: libredesk-valkey
-    << : *valkey-params
   libretranslate:
     container_name: libretranslate
     # command: --ssl --ga-id MY-GA-ID --req-limit 100 --char-limit 500
