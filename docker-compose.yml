@@ -6419,11 +6419,13 @@ services:
   zammad-backup:
     <<: *zammad-service
     command: ["zammad-backup"]
+    container_name: zammad-backup
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-storage:/opt/zammad/storage:ro
     user: 0:0
   zammad-elasticsearch:
+    container_name: zammad-elasticsearch
     image: elasticsearch:${ELASTICSEARCH_VERSION:-8.18.0}
     restart: ${RESTART:-always}
     profiles:
@@ -6496,9 +6498,11 @@ services:
   zammad-scheduler:
     <<: *zammad-service
     command: ["zammad-scheduler"]
+    container_name: zammad-scheduler
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
+    container_name: zammad-websocket
 volumes:
   authelia-pg-db:
     name: authelia-pg-db
