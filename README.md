@@ -89,9 +89,6 @@
 | librechat-rag-api | ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest |
 | librechat-valkey | docker.io/bitnami/valkey:latest |
 | librechat-vectordb | ankane/pgvector:latest |
-| libredesk | libredesk/libredesk:latest |
-| libredesk-pg-db | postgres:17-alpine |
-| libredesk-valkey | docker.io/bitnami/valkey:latest |
 | libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
