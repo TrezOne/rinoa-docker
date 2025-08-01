@@ -46,7 +46,6 @@
 | explo | ghcr.io/lumepart/explo:latest |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main |
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |
-| freescout | tiredofit/freescout:latest |
 | garage | dxflrs/garage:v2.0.0 |
 | garage-webui | khairul169/garage-webui:latest |
 | ghost | ghost:latest |
@@ -90,6 +89,9 @@
 | librechat-rag-api | ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest |
 | librechat-valkey | docker.io/bitnami/valkey:latest |
 | librechat-vectordb | ankane/pgvector:latest |
+| libredesk | libredesk/libredesk:latest |
+| libredesk-pg-db | postgres:17-alpine |
+| libredesk-valkey | docker.io/bitnami/valkey:latest |
 | libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
