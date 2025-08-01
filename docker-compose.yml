@@ -6664,3 +6664,13 @@ volumes:
     name: wallos-db
   wallos-logos:
     name: wallos-logos
+  zammad-backup:
+    name: zammad-backup
+  zammad-storage:
+    name: zammad-storage
+  zammad-elasticsearch-data:
+    name: zammad-elasticsearch-data
+  zammad-postgresql-data:
+    name: zammad-postgresql-data
+  zammad-redis-data:
+    name: zammad-redis-data
