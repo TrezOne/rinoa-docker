@@ -150,7 +150,7 @@
 | postal-worker | ghcr.io/postalserver/postal:latest |
 | prowlarr | lscr.io/linuxserver/prowlarr:latest |
 | qbit-manage | ghcr.io/stuffanthings/qbit_manage:latest |
-| qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:5.1.0-1-01 |
+| qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:latest |
 | radarec | thewicklowwolf/radarec:latest |
 | radarr | lscr.io/linuxserver/radarr:latest |
 | reactive-resume | amruthpillai/reactive-resume:latest |
@@ -160,7 +160,7 @@
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest |
 | romm | rommapp/romm:latest |
 | romm-valkey | docker.io/bitnami/valkey:latest |
-| sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:4.5.1-1-02 |
+| sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | sablier | sablierapp/sablier:latest |
 | scraparr | ghcr.io/thecfu/scraparr:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
