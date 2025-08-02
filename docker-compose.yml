@@ -4727,7 +4727,7 @@ services:
       VPN_PASS: ${DELUGEVPN_ENVIRONMENT_VPN_PASS}
       VPN_PROV: pia
       WEBUI_PORT: 8080
-    image: ghcr.io/binhex/arch-qbittorrentvpn:5.1.0-1-01
+    image: ghcr.io/binhex/arch-qbittorrentvpn:latest
     labels:
       homepage.group: Downloaders
       homepage.name: qBittorrent
@@ -5130,7 +5130,7 @@ services:
       VPN_USER: ${SABNZBDVPN_ENVIRONMENT_VPN_USER}
       DEBUG: true
     hostname: Rinoa
-    image: ghcr.io/binhex/arch-sabnzbdvpn:4.5.1-1-02
+    image: ghcr.io/binhex/arch-sabnzbdvpn:latest
     labels:
       homepage.group: Downloaders
       homepage.name: SABnzbd
