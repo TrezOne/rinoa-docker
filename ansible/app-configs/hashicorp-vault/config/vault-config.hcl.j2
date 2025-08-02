@@ -1,0 +1,22 @@
+ui = true
+disable_clustering = true
+log_level = "debug"
+api_addr = "http://127.0.0.1:8200"
+// storage "raft" {
+//   path = "/path/to/raft/data"
+//   node_id = "raft_node_id"
+// }
+
+storage "s3" {
+    endpoint = "minio:9000"
+    bucket = "secrets-vault"
+    region = "us-east-fh-pln"
+    s3_force_path_style = "true"
+    disable_ssl = "true"
+}
+
+listener "tcp" {
+  address = "0.0.0.0:8200"
+  proxy_protocol_behavior = "use_always"
+  tls_disable = 1
+}
