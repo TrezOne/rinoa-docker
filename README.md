@@ -26,6 +26,7 @@
 | changedetection | ghcr.io/dgtlmoon/changedetection.io |
 | changedetection-chrome | dgtlmoon/sockpuppetbrowser:latest |
 | chrome | gcr.io/zenika-hub/alpine-chrome:123 |
+| clipcascade | sathvikrao/clipcascade:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
 | convertx | ghcr.io/c4illin/convertx |
 | cronicle | elestio/cronicle:latest |

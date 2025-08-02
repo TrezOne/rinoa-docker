@@ -892,6 +892,32 @@ services:
       - --hide-scrollbars
     image: gcr.io/zenika-hub/alpine-chrome:123
     restart: unless-stopped
+  clipcascade:
+    container_name: clipcascade
+    environment:
+      CC_MAX_MESSAGE_SIZE_IN_MiB: 25   # Maximum message size in MiB (ignored if P2P mode is enabled)
+      CC_P2P_ENABLED: false  # Enables or disables peer-to-peer(P2P) mode
+      # CC_ALLOWED_ORIGINS: https://clipcascade.example.com  # Defines allowed CORS origins for security
+      CC_SIGNUP_ENABLED: false  # Enables or disables user self-registration
+    image: sathvikrao/clipcascade:latest
+    labels:
+      homepage.group: Personal Tools
+      homepage.name: ClipCascade
+      homepage.href: https://clip.${MY_TLD}
+      homepage.icon: sh-clipcascade.svg
+      homepage.description: Online file converter
+      swag: enable
+      swag_port: 3000
+      swag_proto: http
+      swag_url: clip.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.url: https://clip.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+    ports:
+      - 64048:8080
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/clipcascade:/database  # Persistent storage for user data
   cloudflareddns:
     container_name: cloudflareddns
     environment:
