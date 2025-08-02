@@ -907,7 +907,7 @@ services:
       homepage.icon: sh-clipcascade.svg
       homepage.description: Online file converter
       swag: enable
-      swag_port: 3000
+      swag_port: 8080
       swag_proto: http
       swag_url: clip.${MY_TLD}
       swag.uptime-kuma.enabled: true
