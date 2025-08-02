@@ -1357,6 +1357,7 @@ services:
       CF_API_TOKEN: ${CLOUDFLAREDDNS_ENVIRONMENT_APITOKEN}
       CF_ZONE_ID: ${CLOUDFLARE_ZONE_ID}
       CLEANUP_INTERVAL_SECONDS: 300
+      CLOUDFLARED_METRICS_PORT: 20119
       CLOUDFLARED_NETWORK_NAME: compose_default
       DEFAULT_NO_TLS_VERIFY: false
       GRACE_PERIOD_SECONDS: 600
@@ -1376,6 +1377,10 @@ services:
       homepage.href: https://cftunn.${MY_TLD}
       homepage.icon: /icons/dockflare.png
       homepage.description: Cloudflare Tunnel controller
+      homepage.widget.type: cloudflared
+      homepage.widget.accountid: ${CLOUDFLARE_ACCOUNT_ID}
+      homepage.widget.tunnelid: ${DOCKFLARE_CLOUDFLARE_TUNNEL_ID}
+      homepage.widget.key: ${CLOUDFLAREDDNS_ENVIRONMENT_APITOKEN}
       swag: enable
       swag_auth: authelia
       swag_proto: http
