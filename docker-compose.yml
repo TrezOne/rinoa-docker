@@ -1495,7 +1495,7 @@ services:
       swag_proto: http
       swag_url: appt.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://draw.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://appt.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 8362:80
@@ -3065,7 +3065,7 @@ services:
       swag_url: kkeep.${MY_TLD}
       swag_port: 3000
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://notes.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://kkeep.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 24977:3000
@@ -3674,7 +3674,7 @@ services:
       swag_port: 8080
       swag_url: qr.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://qr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
       homepage.group: Lifestyle
       homepage.name: Mini-QR
@@ -4156,7 +4156,7 @@ services:
       swag_proto: http
       swag_url: penpot.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://archive.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://penpot.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 17503:8080
@@ -4401,7 +4401,7 @@ services:
             proxy_pass http://plant-it:8080;
         }
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://portainer.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://plants.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
       homepage.group: Lifestyle
       homepage.name: Plant-It
