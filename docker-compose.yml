@@ -6352,6 +6352,7 @@ services:
       WHODB_REDIS_10: '{
             "host": "plant-it-valkey"
           }'
+      WHODB_SQLITE3_1: '{"database":"kuma.db"}'
       WHODB_OLLAMA_HOST: ollama
       WHODB_OLLAMA_PORT: 11434
       WHODB_ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
@@ -6373,6 +6374,8 @@ services:
       swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
     restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/uptimekuma/:/db
   wizarr:
     container_name: wizarr
     depends_on:
