@@ -367,7 +367,7 @@ jobs:
             ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
-      - name: Docker Compoose Healthcheck
+      - name: Docker Compose Healthcheck
         uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
         with:
           max-retries: 30
