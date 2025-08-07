@@ -123,7 +123,7 @@
 | nextcloud | nextcloud/all-in-one:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
-| omni-tools | iib0011/omni-tools:latest |
+| omnitools | iib0011/omni-tools:latest |
 | omnipoly | kweg/omnipoly:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | paperless-valkey | docker.io/bitnami/valkey:latest |
@@ -166,7 +166,7 @@
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
 | searxng-valkey | docker.io/bitnami/valkey:latest |
-| semaphore | semaphoreui/semaphore:v2.12.14 |
+| semaphore-ui | semaphoreui/semaphore:v2.12.14 |
 | signoz-app | signoz/signoz:v0.91.0 |
 | signoz-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
 | signoz-init-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |
