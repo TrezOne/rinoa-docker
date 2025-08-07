@@ -266,6 +266,12 @@ services:
       swag_port: 5000
       swag_proto: http
       swag_url: 13ft.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: 13ft Ladder
+      swag.uptime-kuma.monitor.url: https://13ft.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Personal Tools
       homepage.name: 13ft Ladder
       homepage.icon: 13ft.svg
@@ -290,6 +296,12 @@ services:
       swag_port: 5006
       swag_proto: http
       swag_url: fin.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Actual Budget
+      swag.uptime-kuma.monitor.url: https://13ft.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Lifestyle
       homepage.name: Actual Budget
       homepage.icon: actual-budget.svg
@@ -314,6 +326,12 @@ services:
       swag_port: 8008
       swag_address: 192.168.1.254
       swag_url: adgh.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: AdGuard Home
+      swag.uptime-kuma.monitor.url: https://adgh.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
       homepage.name: AdGuard Home
       homepage.icon: adguard-home.png
@@ -389,8 +407,11 @@ services:
       swag_proto: http
       swag_url: archive.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: ArchiveBox
       swag.uptime-kuma.monitor.url: https://archive.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 21324:8000
     restart: unless-stopped
@@ -414,6 +435,12 @@ services:
       swag_proto: http
       swag_port: 8080
       swag_url: argus.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Argus
+      swag.uptime-kuma.monitor.url: https://argus.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
       homepage.name: Argus
       homepage.icon: release-argus.png
@@ -449,8 +476,11 @@ services:
       swag_proto: http
       swag_url: abs.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Audiobookshelf
       swag.uptime-kuma.monitor.url: https://abs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -514,8 +544,11 @@ services:
       swag_port: 9091
       swag_url: auth.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Authelia
       swag.uptime-kuma.monitor.url: https://auth.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     restart: unless-stopped
@@ -570,8 +603,11 @@ services:
       swag_proto: http
       swag_port: 6767
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Bazarr
       swag.uptime-kuma.monitor.url: https://bazaar.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -615,8 +651,11 @@ services:
       swag_port: 8090
       swag_url: beszel.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Beszel
       swag.uptime-kuma.monitor.url: https://beszel.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 22220:8090
     restart: unless-stopped
@@ -666,8 +705,11 @@ services:
       swag_proto: http
       swag_port: 80
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Vaultwarden
       swag.uptime-kuma.monitor.url: https://bitwarden.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -719,8 +761,11 @@ services:
       swag_port: 3000
       swag_url: bsky.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: BlueSky PDS
       swag.uptime-kuma.monitor.url: https://bsky.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     restart: unless-stopped
     volumes:
       - type: bind
@@ -768,14 +813,17 @@ services:
       homepage.group: Code/DevOps
       homepage.href: https://gist.${MY_TLD}
       homepage.icon: bytestash.svg
-      homepage.name: Bytestash
+      homepage.name: ByteStash
       swag: enable
       swag_port: 5000
       swag_proto: http
       swag_url: gist.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: ByteStash
       swag.uptime-kuma.monitor.url: https://gist.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 62139:5000
     restart: always
@@ -822,8 +870,11 @@ services:
       swag_port: 8000
       swag_url: pod.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Castopod
       swag.uptime-kuma.monitor.url: https://pod.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
@@ -863,8 +914,11 @@ services:
       swag_proto: http
       swag_url: chdt.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: ChangeDetection
       swag.uptime-kuma.monitor.url: https://chdt.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 15827:5000
     restart: unless-stopped
@@ -911,8 +965,11 @@ services:
       swag_proto: http
       swag_url: clip.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: ClipCascade
       swag.uptime-kuma.monitor.url: https://clip.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 64048:8080
     restart: unless-stopped
@@ -972,8 +1029,11 @@ services:
       swag_proto: http
       swag_url: convert.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: ConvertX
       swag.uptime-kuma.monitor.url: https://convert.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 38946:3000
     restart: unless-stopped
@@ -999,8 +1059,11 @@ services:
       swag_proto: http
       swag_url: cron.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Cronicle
       swag.uptime-kuma.monitor.url: https://cron.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
         - 31037:3012
     restart: always
@@ -1083,8 +1146,11 @@ services:
       swag_proto: http
       swag_url: csec.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Crowdsec
       swag.uptime-kuma.monitor.url: https://csec.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -1106,8 +1172,11 @@ services:
       swag_proto: http
       swag_url: cchef.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: CyberChef
       swag.uptime-kuma.monitor.url: https://cchef.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 20992:8000
     restart: unless-stopped
@@ -1132,8 +1201,11 @@ services:
       swag_proto: http
       swag_url: czkawka.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Czkawka
       swag.uptime-kuma.monitor.url: https://czkawka.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -1203,8 +1275,11 @@ services:
       swag_proto: http
       swag_url: loc.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Dawarich
       swag.uptime-kuma.monitor.url: https://loc.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 63561:3000
       - 9394:9394 # Prometheus exporter, uncomment if needed
@@ -1386,8 +1461,11 @@ services:
       swag_proto: http
       swag_url: cftunn.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: DockFlare
       swag.uptime-kuma.monitor.url: https://cftunn.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       ### EXAMPLE CF TUNNEL LABELS ###
       # Enable DockFlare management for this container
       # - "cloudflare.tunnel.enable=true"
@@ -1413,9 +1491,9 @@ services:
   duplicati:
     container_name: duplicati
     environment:
-      PGID: "1000"
-      PUID: "1000"
-      TZ: America/New_York
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
     hostname: Rinoa
     image: lscr.io/linuxserver/duplicati:latest
     labels:
@@ -1423,6 +1501,12 @@ services:
       swag_port: 8200
       swag_proto: http
       swag_url: dup.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Duplicati
+      swag.uptime-kuma.monitor.url: https://dup.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Automation
       homepage.name: Duplicati
       homepage.href: https://dup.${MY_TLD}
@@ -1495,8 +1579,11 @@ services:
       swag_proto: http
       swag_url: appt.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: "Easy!Appointments"
       swag.uptime-kuma.monitor.url: https://appt.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 8362:80
     restart: unless-stopped
@@ -1515,8 +1602,11 @@ services:
       swag_proto: http
       swag_url: draw.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Excalidraw
       swag.uptime-kuma.monitor.url: https://draw.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 53721:80
     restart: unless-stopped
@@ -1536,7 +1626,7 @@ services:
     image: ghcr.io/fastenhealth/fasten-onprem:main
     labels:
       homepage.group: Lifestyle
-      homepage.name: Fasten
+      homepage.name: Fasten Health
       homepage.icon: sh-fasten-health.svg
       homepage.href: http://health.${MY_TLD}
       homepage.description: Open-source, self-hosted, personal/family electronic medical record aggregator
@@ -1545,8 +1635,11 @@ services:
       swag_port: 8080
       swag_url: health.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Fasten Health
       swag.uptime-kuma.monitor.url: https://health.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -1660,8 +1753,11 @@ services:
       swag_proto: http
       swag_url: blog.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Ghost
       swag.uptime-kuma.monitor.url: https://blog.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 2368:2368
     restart: always
@@ -1705,8 +1801,11 @@ services:
       swag: enable
       swag_url: git.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Gitea
       swag.uptime-kuma.monitor.url: https://git.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -1843,8 +1942,11 @@ services:
       swag: enable
       swag_proto: http
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Gotify
       swag.uptime-kuma.monitor.url: https://gotify.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -1894,8 +1996,11 @@ services:
       swag_url: logs.${MY_TLD}
       swag_proto: http
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Graylog
       swag.uptime-kuma.monitor.url: https://logs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 5044:5044/tcp   # Beats
       - 5140:5140/udp   # Syslog
@@ -1959,8 +2064,11 @@ services:
       swag_port: 8080
       swag_url: guac.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Guacamole
       swag.uptime-kuma.monitor.url: https://guac.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 62173:8080
     restart: always
@@ -1975,7 +2083,12 @@ services:
       PGID: ${PGID}
     image: ghcr.io/gethomepage/homepage:latest
     labels:
-      swag_server_custom_directive: access_log /config/log/$$host_access.log ; error_log /config/log/$$host_error.log ;
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Homepage
+      swag.uptime-kuma.monitor.url: https://${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 3004:3000
     restart: unless-stopped
@@ -1994,8 +2107,11 @@ services:
       swag_port: 1313
       swag_url: it-services.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Hugo
       swag.uptime-kuma.monitor.url: https://it-services.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Professional Services
       homepage.name: Hugo
       homepage.href: https://it-services.${MY_TLD}
@@ -2048,8 +2164,11 @@ services:
               proxy_pass http://immich-power-tools:3000;
         }
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Immich
       swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Media Library
       homepage.name: Immich
       homepage.href: https://pics.${MY_TLD}
@@ -2129,6 +2248,12 @@ services:
       homepage.widget.url: http://immich-server:2283
       homepage.widget.key: ${IMMICH_POWER_TOOLS_KEY}
       homepage.widget.version: 2
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Immich Public Proxy
+      swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}/share
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     restart: always
   immich-power-tools:
     container_name: immich-power-tools
@@ -2199,8 +2324,11 @@ services:
       swag_port: 3000
       swag_url: invid.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Invidious
       swag.uptime-kuma.monitor.url: https://invid.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Social
       homepage.name: Invidious
       homepage.href: https://invid.${MY_TLD}
@@ -2343,7 +2471,11 @@ services:
       swag_proto: http
       swag_url: biz.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Invoice Ninja
       swag.uptime-kuma.monitor.url: https://biz.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Professional Services
       homepage.name: Invoice Ninja
       homepage.href: https://biz.${MY_TLD}
@@ -2364,8 +2496,11 @@ services:
       swag_proto: http
       swag_url: itt.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: IT-Tools
       swag.uptime-kuma.monitor.url: https://itt.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Code/DevOps
       homepage.name: IT-Tools
       homepage.href: https://itt.${MY_TLD}
@@ -2400,8 +2535,11 @@ services:
       swag_port: 8096
       swag_proto: http
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Jellyfin
       swag.uptime-kuma.monitor.url: https://jf.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 8487:8096
       - 7359:7359
@@ -2951,8 +3089,11 @@ services:
       swag_proto: https
       swag_url: meet.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Jitsi
       swag.uptime-kuma.monitor.url: https://meet.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Professional Services
       homepage.name: Jitsi
       homepage.href: https://meet.${MY_TLD}
@@ -3032,8 +3173,11 @@ services:
       swag: enable
       swag_url: notes.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Joplin
       swag.uptime-kuma.monitor.url: https://notes.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -3065,8 +3209,11 @@ services:
       swag_url: kkeep.${MY_TLD}
       swag_port: 3000
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Karakeep
       swag.uptime-kuma.monitor.url: https://kkeep.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 24977:3000
     restart: unless-stopped
@@ -3105,8 +3252,11 @@ services:
       swag_proto: http
       swag_url: ai.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: LibreChat
       swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 3080:3080
     restart: always
@@ -3160,8 +3310,11 @@ services:
       swag_port: 5000
       swag_url: translate.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: LibreTranslate
       swag.uptime-kuma.monitor.url: https://translate.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 5000:5000
     restart: unless-stopped
@@ -3190,8 +3343,11 @@ services:
       homepage.widget.key: ${LIDARR_API_KEY}
       swag: enable
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Lidarr
       swag.uptime-kuma.monitor.url: https://lidarr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -3237,8 +3393,11 @@ services:
       swag_port: 5000
       swag_url: lidify.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Lidify
       swag.uptime-kuma.monitor.url: https://lidify.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     restart: unless-stopped
@@ -3280,8 +3439,11 @@ services:
       swag_proto: https
       swag_url: profile.${MY_TLD}
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.url: https://profile.${MY_TLD}
+      swag.uptime-kuma.name: LinkStack
+      swag.uptime-kuma.monitor.url: "https://profile.${MY_TLD}/@Trez.One"
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 8190:443
     restart: unless-stopped
@@ -3308,8 +3470,11 @@ services:
       swag_port: 17170
       swag_url: ldap.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: LLDAP
       swag.uptime-kuma.monitor.url: https://ldap.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -3357,8 +3522,11 @@ services:
       swag_port: 42010
       swag_url: maloja.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Maloja
       swag.uptime-kuma.monitor.url: https://maloja.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -3488,8 +3656,11 @@ services:
       swag_port: 80
       swag_url: mastodon.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Mastodon
       swag.uptime-kuma.monitor.url: https://mastodon.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Social
       homepage.name: Mastodon
       homepage.href: https://mastodon.${MY_TLD}
@@ -3560,8 +3731,11 @@ services:
               proxy_pass http://maxun-backend:8080;
         }
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Maxun (Frontend)
       swag.uptime-kuma.monitor.url: https://scrape.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Personal Tools
       homepage.name: Maxun
       homepage.href: https://scrape.${MY_TLD}
@@ -3619,8 +3793,11 @@ services:
       swag_port: 3000
       swag_url: memes.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Meme Search Pro
       swag.uptime-kuma.monitor.url: https://memes.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Social
       homepage.name: Meme Search Pro
       homepage.href: https://memes.${MY_TLD}
@@ -3674,8 +3851,11 @@ services:
       swag_port: 8080
       swag_url: qr.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Mini-QR
       swag.uptime-kuma.monitor.url: https://qr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Lifestyle
       homepage.name: Mini-QR
       homepage.href: https://qr.${MY_TLD}
@@ -3700,8 +3880,11 @@ services:
       swag_port: 9090
       swag_url: s3.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: MinIO
       swag.uptime-kuma.monitor.url: https://s3.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
       homepage.name: MinIO
       homepage.href: https://s3.${MY_TLD}
@@ -3751,8 +3934,11 @@ services:
       swag_proto: http
       swag_url: social.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Mixpost
       swag.uptime-kuma.monitor.url: https://social.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Social
       homepage.name: Mixpost
       homepage.href: https://social.${MY_TLD}
@@ -3815,8 +4001,11 @@ services:
       swag_port: 9078
       swag_url: scrobble.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Multi-Scrobbler
       swag.uptime-kuma.monitor.url: https://scrobble.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -3844,8 +4033,11 @@ services:
       swag_port: 5678
       swag_url: n8n.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: n8n
       swag.uptime-kuma.monitor.url: https://n8n.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Automation
       homepage.name: n8n
       homepage.href: https://n8n.${MY_TLD}
@@ -3896,8 +4088,11 @@ services:
       swag_proto: http
       swag_url: navi.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Navidrome
       swag.uptime-kuma.monitor.url: https://navi.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -3929,6 +4124,12 @@ services:
       homepage.widget.type: netalertx
       homepage.widget.url: http://192.168.1.254:20211
       homepage.widget.key: ${NETALERTX_API_TOKEN}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: NetAlertX
+      swag.uptime-kuma.monitor.url: https://pics.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     network_mode: host
     restart: unless-stopped
     volumes:
@@ -3966,8 +4167,11 @@ services:
       swag_address: nextcloud-aio-apache
       swag_url: cloud.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: NextCloud
       swag.uptime-kuma.monitor.url: https://cloud.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 56713:8080
     restart: unless-stopped
@@ -4001,8 +4205,11 @@ services:
       homepage.widget.key: ${OMBI_API_KEY}
       swag: enable
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Ombi
       swag.uptime-kuma.monitor.url: https://ombi.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -4025,8 +4232,8 @@ services:
         source: /rinoa-storage
         target: /storage
         type: bind
-  omni-tools:
-    container_name: omni-tools
+  omnitools:
+    container_name: omnitools
     image: iib0011/omni-tools:latest
     labels:
       homepage.group: Personal Tools
@@ -4037,8 +4244,11 @@ services:
       swag: enable
       swag_url: otools.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: OmniTools
       swag.uptime-kuma.monitor.url: https://otools.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 23693:80
     restart: unless-stopped
@@ -4068,8 +4278,11 @@ services:
       swag: enable
       swag_url: poly.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: OmniPoly
       swag.uptime-kuma.monitor.url: https://poly.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 3734:80
     restart: unless-stopped
@@ -4101,8 +4314,11 @@ services:
       swag_port: 8000
       swag_url: docs.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Paperless-ngx
       swag.uptime-kuma.monitor.url: https://docs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Personal Tools
       homepage.name: Paperless-ngx
       homepage.href: https://docs.${MY_TLD}
@@ -4156,8 +4372,11 @@ services:
       swag_proto: http
       swag_url: penpot.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Penpot
       swag.uptime-kuma.monitor.url: https://penpot.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 17503:8080
     restart: always
@@ -4254,6 +4473,12 @@ services:
       swag_proto: http
       swag_port: 8085
       swag_url: pg.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: PG Back Web
+      swag.uptime-kuma.monitor.url: https://pg.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - "8085:8085" # Access the web interface at http://localhost:8085
     restart: unless-stopped
@@ -4401,8 +4626,11 @@ services:
             proxy_pass http://plant-it:8080;
         }
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Plant-It
       swag.uptime-kuma.monitor.url: https://plants.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Lifestyle
       homepage.name: Plant-It
       homepage.href: https://plants.${MY_TLD}
@@ -4444,8 +4672,11 @@ services:
       swag_port: 9000
       swag_url: portainer.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Portainer
       swag.uptime-kuma.monitor.url: https://portainer.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
       homepage.name: Portainer
       homepage.href: https://portainer.${MY_TLD}
@@ -4483,10 +4714,13 @@ services:
       swag_proto: http
       swag_url: portc.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: PortChecker
       swag.uptime-kuma.monitor.url: https://portc.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
-      homepage.name: Portchecker.IO
+      homepage.name: PortChecker
       homepage.href: https://portc.${MY_TLD}
       homepage.icon: mdi-check-network-outline
       homepage.description: Service delivery platform for containerized applications
@@ -4527,8 +4761,11 @@ services:
       swag_port: 3000
       swag_url: ports.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: PortNote
       swag.uptime-kuma.monitor.url: https://ports.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
       homepage.name: PortNote
       homepage.href: https://ports.${MY_TLD}
@@ -4584,8 +4821,11 @@ services:
       swag_address: postal-web
       swag_url: post.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Postal
       swag.uptime-kuma.monitor.url: https://post.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
       homepage.name: Postal
       homepage.href: https://post.${MY_TLD}
@@ -4640,8 +4880,11 @@ services:
       homepage.widget.key: ${PROWLARR_API_KEY}
       swag: enable
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Prowlarr
       swag.uptime-kuma.monitor.url: https://prowlarr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -4747,8 +4990,11 @@ services:
       swag_proto: http
       swag_url: qbit.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: qBittorrent
       swag.uptime-kuma.monitor.url: https://qbit.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 58846:58846
       - 58946:58946/udp
@@ -4799,8 +5045,11 @@ services:
       swag_auth: authelia
       swag_url: radarec.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: RadaRec
       swag.uptime-kuma.monitor.url: https://radarec.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     restart: unless-stopped
@@ -4840,8 +5089,11 @@ services:
       homepage.widget.key: ${RADARR_API_KEY}
       swag: enable
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Radarr
       swag.uptime-kuma.monitor.url: https://radarr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -4897,8 +5149,11 @@ services:
       swag_port: 3000
       swag_url: resume.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Reactive Resume
       swag.uptime-kuma.monitor.url: https://resume.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -4939,8 +5194,11 @@ services:
       homepage.widget.key: ${READARR_API_KEY}
       swag: enable
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Readarr
       swag.uptime-kuma.monitor.url: https://readarr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -4989,8 +5247,11 @@ services:
       swag_port: 8080
       swag_url: rlib.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Redlib
       swag.uptime-kuma.monitor.url: https://rlib.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -5032,8 +5293,11 @@ services:
       swag_port: 3000
       swag_url: chat.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Rocket.Chat
       swag.uptime-kuma.monitor.url: https://chat.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     restart: always
   romm:
     container_name: romm
@@ -5093,8 +5357,11 @@ services:
       swag_proto: http
       swag_url: romm.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: RomM
       swag.uptime-kuma.monitor.url: https://romm.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 30229:8080
     restart: unless-stopped
@@ -5145,8 +5412,11 @@ services:
       swag_proto: http
       swag_url: sabnzbd.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: SABnzbd
       swag.uptime-kuma.monitor.url: https://sabnzbd.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -5246,6 +5516,12 @@ services:
       homepage.description: WebUI for smartd S.M.A.R.T monitoring
       homepage.widget.type: scrutiny
       homepage.widget.url: http://scrutiny:8080
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Scrutiny
+      swag.uptime-kuma.monitor.url: https://smartd.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -5291,8 +5567,11 @@ services:
       swag_proto: http
       swag_url: search.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: SearxNG
       swag.uptime-kuma.monitor.url: https://search.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     logging:
       driver: json-file
       options:
@@ -5315,8 +5594,8 @@ services:
     << : *valkey-params
     volumes:
       - searxng-valkey-data:/data/valkey
-  semaphore:
-    container_name: semaphore
+  semaphore-ui:
+    container_name: semaphore-ui
     environment:
       ANSIBLE_HOST_KEY_CHECKING: false
       SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
@@ -5335,7 +5614,7 @@ services:
     image: semaphoreui/semaphore:v2.12.14
     labels:
       homepage.group: Code/DevOps
-      homepage.name: Semaphore
+      homepage.name: Semaphore UI
       homepage.href: https://devops.${MY_TLD}
       homepage.icon: semaphore.svg
       homepage.description: Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools
@@ -5344,8 +5623,11 @@ services:
       swag_proto: http
       swag_url: devops.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Semaphore UI
       swag.uptime-kuma.monitor.url: https://devops.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 3015:3000
     restart: unless-stopped
@@ -5389,8 +5671,11 @@ services:
       swag_port: 8080
       swag_url: apm.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Signoz
       swag.uptime-kuma.monitor.url: https://apm.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 36113:8080 # signoz port
       # - "6060:6060"     # pprof port
@@ -5533,7 +5818,7 @@ services:
     image: mc1arke/sonarqube-with-community-branch-plugin:lts
     labels:
       homepage.group: Code/DevOps
-      homepage.name: Sonarqube
+      homepage.name: SonarQube
       homepage.href: https://sqube.${MY_TLD}
       homepage.icon: sonarqube.svg
       homepage.description: Code/DevOps quality/security
@@ -5542,8 +5827,11 @@ services:
       swag_port: 9000
       swag_url: sqube.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: SonarQube
       swag.uptime-kuma.monitor.url: https://sqube.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     volumes:
       - sonarqube-data:/opt/sonarqube/data
       - sonarqube-extensions:/opt/sonarqube/extensions
@@ -5589,8 +5877,11 @@ services:
       homepage.widget.key: ${SONARR_API_KEY}
       swag: enable
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Sonarr
       swag.uptime-kuma.monitor.url: https://sonarr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -5624,7 +5915,7 @@ services:
     image: thewicklowwolf/sonashow:latest
     labels:
       homepage.group: Servarr Stack
-      homepage.name: Sonashow
+      homepage.name: SonaShow
       homepage.href: https://sonashow.${MY_TLD}
       homepage.icon: sh-sonashow.png
       homepage.description: TV show discovery based on library/tastes
@@ -5634,8 +5925,11 @@ services:
       swag_port: 5000
       swag_url: sonashow.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: SonaShow
       swag.uptime-kuma.monitor.url: https://sonashow.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     restart: unless-stopped
@@ -5684,6 +5978,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+    image: git.trez.wtf/trez.one/soularr-dashboard:v0.1
     labels:
       homepage.name: Soularr
       homepage.group: Downloaders
@@ -5695,8 +5990,11 @@ services:
       swag_url: soularr.${MY_TLD}
       swag_port: 8080
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Soularr
       swag.uptime-kuma.monitor.url: https://soularr.${MY_TLD}
-    image: git.trez.wtf/trez.one/soularr-dashboard:v0.1
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 18364:8080
     restart: unless-stopped
@@ -5726,7 +6024,11 @@ services:
       swag_address: gluetun
       swag_port: 5030
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: SoulSeek
       swag.uptime-kuma.monitor.url: https://slsk.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     network_mode: service:gluetun
     restart: always
     volumes:
@@ -5755,8 +6057,11 @@ services:
       swag_proto: http
       swag_url: speed.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Speedtest Tracker
       swag.uptime-kuma.monitor.url: https://speed.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
         - 47512:80
         - 62777:443
@@ -5786,8 +6091,11 @@ services:
       swag_proto: http
       swag_url: sd.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Stable-Diffusion WebUI
       swag.uptime-kuma.monitor.url: https://sd.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 7860:7860
     restart: unless-stopped
@@ -5815,8 +6123,11 @@ services:
       swag_proto: http
       swag_url: pdf.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Stirling-PDF
       swag.uptime-kuma.monitor.url: https://pdf.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 58931:8080
     restart: unless-stopped
@@ -5859,7 +6170,10 @@ services:
       swag_auth: authelia
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.url: https://swag.${MY_TLD}
+      swag.uptime-kuma.name: SWAG Dashboard
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: SWAG Dashboard
       homepage.href: https://swag.${MY_TLD}
@@ -5914,8 +6228,11 @@ services:
       swag_proto: http
       swag_url: recipes.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Tandoor Recipes
       swag.uptime-kuma.monitor.url: https://recipes.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -5977,8 +6294,11 @@ services:
       swag_proto: http
       swag_url: analytics.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Umami
       swag.uptime-kuma.monitor.url: https://analytics.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 17382:3000
     restart: unless-stopped
@@ -6103,17 +6423,20 @@ services:
     image: hashicorp/vault:latest
     labels:
       homepage.group: Code/DevOps
-      homepage.name: Vault
+      homepage.name: HashiCorp Vault
       homepage.icon: vault.png
       homepage.href: https://vault.${MY_TLD}
-      homepage.description: Hashicorp Vault for secrets, key/value stores, etc.
+      homepage.description: HashiCorp Vault for secrets, key/value stores, etc.
       swag: enable
       swag_proto: http
       swag_port: 8200
       swag_url: vault.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: HashiCorp Vault
       swag.uptime-kuma.monitor.url: https://vault.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 8200:8200
       - 8250:8250
@@ -6138,8 +6461,11 @@ services:
       swag_proto: http
       swag_url: subs.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Wallos
       swag.uptime-kuma.monitor.url: https://subs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -6214,8 +6540,11 @@ services:
       swag_url: scan.${MY_TLD}
       swag_port: 3000
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Web-Check
       swag.uptime-kuma.monitor.url: https://scan.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -6371,8 +6700,11 @@ services:
       swag_proto: http
       swag_url: dbs.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: WhoDB
       swag.uptime-kuma.monitor.url: https://dbs.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/uptimekuma/:/db
@@ -6396,8 +6728,11 @@ services:
       homepage.description: User invitation management system for Jellyfin, Plex, and Emby
       swag: enable
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Wizarr
       swag.uptime-kuma.monitor.url: https://wizarr.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 5690:5690
     restart: unless-stopped
@@ -6425,8 +6760,11 @@ services:
       swag_url: ytdl.${MY_TLD}
       swag_port: 8080
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: YoutubeDL
       swag.uptime-kuma.monitor.url: https://ytdl.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
     ports:
@@ -6500,7 +6838,11 @@ services:
       swag_port: 8080
       swag_url: support.${MY_TLD}
       swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Zammad
       swag.uptime-kuma.monitor.url: https://support.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryinterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: Professional Services
       homepage.name: Zammad
       homepage.href: https://support.${MY_TLD}
