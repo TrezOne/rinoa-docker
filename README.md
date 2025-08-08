@@ -29,11 +29,11 @@
 | clipcascade | sathvikrao/clipcascade:latest |
 | cloudflareddns | ghcr.io/hotio/cloudflareddns:latest |
 | convertx | ghcr.io/c4illin/convertx |
-| cronicle | elestio/cronicle:latest |
 | crowdsec | crowdsecurity/crowdsec:latest |
 | crowdsec-dashboard | metabase/metabase |
 | cyber-chef | mpepping/cyberchef:latest |
 | czkawka | jlesage/czkawka |
+| dagu | ghcr.io/dagu-org/dagu:alpine |
 | dawarich-app | freikin/dawarich:latest |
 | dawarich-pg-db | postgis/postgis:17-3.5-alpine |
 | dawarich-sidekiq | freikin/dawarich:latest |
