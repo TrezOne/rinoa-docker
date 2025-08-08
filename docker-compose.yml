@@ -4355,6 +4355,82 @@ services:
     << : *valkey-params
     volumes:
       - paperless-valkey-data:/data/valkey
+  patchman-server:
+    command: server
+    container_name: patchman-server
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        required: true
+      patchman-memcached:
+        condition: service_healthy
+        required: true
+    environment:
+      ADMIN_USERNAME: admin
+      ADMIN_EMAIL: noreply@${MY_TLD}
+      SECRET_KEY: ${PATCHMAN_SECRET_KEY}
+      DB_ENGINE: mysql
+      DB_HOST: mariadb
+      DB_NAME: patchman
+      DB_USER: patchman
+      DB_PASSWORD: ${PATCHMAN_DB_PASSWORD}
+      PATCHMAN_MAINTENANCE_ENABLED: true
+      PATCHMAN_MAINTENANCE_SCHEDULE: '@daily'
+    image: ghcr.io/tigattack/patchman
+    labels:
+      homepage.group: System Administration
+      homepage.name: Patchman
+      homepage.href: https://patch.${MY_TLD}
+      homepage.icon: mdi-update
+      homepage.description: Open-source design and prototyping platform
+      swag: enable
+      swag_port: 80
+      swag_proto: http
+      swag_url: patch.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Patchman
+      swag.uptime-kuma.monitor.url: https://patch.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+    ports: [2939:80]
+    restart: unless-stopped
+  patchman-worker:
+    command: worker
+    container_name: patchman-worker
+    depends_on:
+      patchman-valkey:
+        condition: service_healthy
+        required: true
+    environment:
+      ADMIN_USERNAME: admin
+      ADMIN_EMAIL: noreply@${MY_TLD}
+      SECRET_KEY: ${PATCHMAN_SECRET_KEY}
+      DB_ENGINE: mysql
+      DB_HOST: mariadb
+      DB_NAME: patchman
+      DB_USER: patchman
+      DB_PASSWORD: ${PATCHMAN_DB_PASSWORD}
+      PATCHMAN_MAINTENANCE_ENABLED: true
+      PATCHMAN_MAINTENANCE_SCHEDULE: '@daily'
+    image: ghcr.io/tigattack/patchman
+    restart: unless-stopped
+  patchman-memcached:
+    container_name: patchman-memcached
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "echo version | nc -vn -w 1 127.0.0.1 11211"
+      start_period: 5s
+      timeout: 2s
+      interval: 10s
+    image: memcached:1.6-alpine
+    restart: unless-stopped
+  patchman-valkey:
+    container_name: patchman-valkey
+    << : *valkey-params
+    volumes:
+      - patchman-valkey-data:/data/valkey
   penpot-frontend:
     container_name: penpot-frontend
     depends_on:
@@ -6991,6 +7067,8 @@ volumes:
     name: paperless-ngx-pg
   paperless-valkey-data:
     name: paperless-valkey-data
+  patchman-valkey-data:
+    name: patchman-valkey-data
   penpot-assets:
     name: penpot-assets
   penpot-pg-data:

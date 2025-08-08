@@ -127,6 +127,10 @@
 | omnipoly | kweg/omnipoly:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | paperless-valkey | docker.io/bitnami/valkey:latest |
+| patchman-server | ghcr.io/tigattack/patchman |
+| patchman-worker | ghcr.io/tigattack/patchman |
+| patchman-memcached | memcached:1.6-alpine |
+| patchman-valkey | docker.io/bitnami/valkey:latest |
 | penpot-frontend | penpotapp/frontend:latest |
 | penpot-backend | penpotapp/backend:latest |
 | penpot-exporter | penpotapp/exporter:latest |
