@@ -3997,6 +3997,7 @@ services:
       homepage.icon: sh-multi-scrobbler.svg
       homepage.description: JS App for scrobbling/recording play history from/to multiple sources
       swag: enable
+      swag_auth: authelia
       swag_proto: http
       swag_port: 9078
       swag_url: scrobble.${MY_TLD}
