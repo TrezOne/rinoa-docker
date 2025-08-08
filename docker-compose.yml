@@ -1039,39 +1039,6 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/convertx:/app/data
-  cronicle:
-    container_name: cronicle
-    entrypoint: manager
-    environment:
-      CRONICLE_manager: 1
-      CRONICLE_secret_key: "${CRONICLE_SECRET_KEY}"
-      DOCKER_HOST: tcp://dockerproxy:2375
-    hostname: cronicle
-    image: elestio/cronicle:latest
-    labels:
-      homepage.group: Automation
-      homepage.name: Cronicle
-      homepage.href: https://cron.${MY_TLD}
-      homepage.icon: sh-cronicle.png
-      homepage.description: Multi-server task schedule with a web interface
-      swag: enable
-      swag_port: 3012
-      swag_proto: http
-      swag_url: cron.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.name: Cronicle
-      swag.uptime-kuma.monitor.url: https://cron.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
-    ports:
-        - 31037:3012
-    restart: always
-    volumes:
-        - ${DOCKER_VOLUME_CONFIG}/cronicle/data:/opt/cronicle/data
-        - ${DOCKER_VOLUME_CONFIG}/cronicle/logs:/opt/cronicle/logs
-        - ${DOCKER_VOLUME_CONFIG}/cronicle/plugins:/opt/cronicle/plugins
-        - ${DOCKER_VOLUME_CONFIG}/cronicle/workloads/app:/app
   crowdsec:
     container_name: crowdsec
     depends_on:
@@ -1223,6 +1190,40 @@ services:
         type: bind
         bind:
           create_host_path: true
+  dagu:
+    container_name: dagu
+    environment:
+      DAGU_PORT: 8080
+      DAGU_TZ: ${TZ} # optional. default is local timezone
+      DAGU_BASE_PATH: /
+      DAGU_HOME: /dagu
+      DAGU_AUTH_BASIC_USERNAME: admin
+      DAGU_AUTH_BASIC_PASSWORD: ${DAGU_AUTH_BASIC_PASSWORD}
+      DAGU_AUTH_TOKEN: ${DAGU_AUTH_TOKEN}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    image: ghcr.io/dagu-org/dagu:alpine
+    labels:
+      homepage.group: Automation
+      homepage.name: Dagu
+      homepage.href: https://cron.${MY_TLD}
+      homepage.icon: sh-dagu.svg
+      homepage.description: Cron alternative with a web UI
+      swag: enable
+      swag_port: 8080
+      swag_proto: http
+      swag_url: cron.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Dagu
+      swag.uptime-kuma.monitor.url: https://cron.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+    ports:
+      - 31037:8080
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/dagu/:/dagu
+      - /var/run/docker.sock:/var/run/docker.sock
   dawarich-app:
     command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
     container_name: dawarich-app
@@ -6894,6 +6895,8 @@ volumes:
     name: crowdsec-config
   crowdsec-db:
     name: crowdsec-db
+  dagu-data:
+    name: dagu-data
   dawarich_db_data:
     name: dawarich_db_data
   dawarich_shared:
