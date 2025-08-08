@@ -4411,6 +4411,8 @@ services:
       DB_NAME: patchman
       DB_USER: patchman
       DB_PASSWORD: ${PATCHMAN_DB_PASSWORD}
+      CELERY_REDIS_HOST: patchman-valkey
+      CELERY_REDIS_PORT: 6379
       PATCHMAN_MAINTENANCE_ENABLED: true
       PATCHMAN_MAINTENANCE_SCHEDULE: '@daily'
     image: ghcr.io/tigattack/patchman
