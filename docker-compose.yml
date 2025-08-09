@@ -491,6 +491,7 @@ services:
     ports:
       - 4000:4000
       - 4002:4002
+    restart: unless-stopped
     volumes:
       - asciinema-data:/var/opt/asciinema
   asciinema-pg-db:
@@ -507,6 +508,7 @@ services:
       timeout: 5s
       retries: 10
     image: postgres:14-alpine
+    restart: unless-stopped
     volumes:
       - asciinema-pg-data:/var/lib/postgresql/data
   audiobookshelf:
@@ -1278,6 +1280,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 31037:8080
+    restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/dagu/:/dagu
       - /var/run/docker.sock:/var/run/docker.sock
