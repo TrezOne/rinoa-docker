@@ -123,6 +123,9 @@
 | navidrome | deluan/navidrome:latest |
 | netalertx | jokobsk/netalertx:latest |
 | nextcloud | nextcloud/all-in-one:latest |
+| nocodb | nocodb/nocodb:latest |
+| nocodb-pg-db | postgres:16-alpine |
+| nocodb-valkey | docker.io/bitnami/valkey:latest |
 | ollama | ollama/ollama |
 | ombi | lscr.io/linuxserver/ombi:latest |
 | omnitools | iib0011/omni-tools:latest |
