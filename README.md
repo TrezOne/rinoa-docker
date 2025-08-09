@@ -10,6 +10,8 @@
 | apprise-api | lscr.io/linuxserver/apprise-api:latest |
 | archivebox | archivebox/archivebox:latest |
 | argus | quay.io/argus-io/argus:latest |
+| asciinema | ghcr.io/asciinema/asciinema-server:latest |
+| asciinema-pg-db | postgres:14-alpine |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
 | authelia | authelia/authelia:master |
 | authelia-pg | postgres:16-alpine |
@@ -136,8 +138,6 @@
 | penpot-exporter | penpotapp/exporter:latest |
 | penpot-pg-db | postgres:15-alpine |
 | penpot-redis | redis:7.2 |
-| pgbackweb | eduardolat/pgbackweb:latest |
-| pgbackweb-db | postgres:16-alpine |
 | planka | ghcr.io/plankanban/planka:2.0.0-rc.3 |
 | planka-pg-db | postgres:16-alpine |
 | plant-it | msdeluise/plant-it-server:latest |
