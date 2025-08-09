@@ -452,6 +452,62 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/argus/config.yml:/app/config.yml
       - ${DOCKER_VOLUME_CONFIG}/argus/:/app/data/
+  asciinema:
+    container_name: asciinema
+    depends_on:
+      asciinema-pg-db:
+        condition: service_healthy
+        required: true
+    environment:
+      DATABASE_URL: postgresql://asciinema:${ASCIINEMA_PG_DB_PASSWORD}@asciinema-pg-db:5432/asciinema
+      DEFAULT_AVATAR: gravatar
+      SECRET_KEY_BASE: ${ASCIINEMA_SECRET_KEY_BASE}
+      SIGN_UP_DISABLED: true
+      SMTP_HOST: postal-smtp
+      SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SMTP_PORT: 25
+      UPLOAD_AUTH_REQUIRED: true
+      URL_HOST: asciinema.trz.wtf
+      URL_PORT: 4000
+      URL_SCHEME: https
+    image: ghcr.io/asciinema/asciinema-server:latest
+    labels:
+      homepage.group: Code/DevOps
+      homepage.name: Asciinema
+      homepage.href: https://asciinema.${MY_TLD}
+      homepage.icon: asciinema.svg
+      homepage.description: Platform for hosting and sharing terminal session recordings
+      swag: enable
+      swag_port: 4000
+      swag_proto: http
+      swag_url: asciinema.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Asciinema
+      swag.uptime-kuma.monitor.url: https://asciinema.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+    ports:
+      - 4000:4000
+    volumes:
+      - asciinema-data:/var/opt/asciinema
+  asciinema-pg-db:
+    container_name: asciinema-pg-db
+    environment:
+      POSTGRES_PASSWORD: ${ASCIINEMA_PG_DB_PASSWORD}
+      POSTGRES_USER: asciinema
+      POSTGRES_DB: asciinema
+    expose:
+      - 5432
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U asciinema']
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    image: postgres:14-alpine
+    volumes:
+      - asciinema-pg-data:/var/lib/postgresql/data
   audiobookshelf:
     container_name: audiobookshelf
     environment:
@@ -6685,6 +6741,12 @@ services:
             "password": "${TANDOOR_POSTGRES_PASSWORD}",
             "database": "tandoor"
           }'
+      WHODB_POSTGRES_15: '{
+            "host": "asciinema-pg-db",
+            "user": "asciinema",
+            "password": "${ASCIINEMA_PG_DB_PASSWORD}",
+            "database": "asciinema"
+          }'
       WHODB_REDIS_1: '{
             "host": "castopod-valkey"
           }'
@@ -6913,6 +6975,10 @@ services:
     command: ["zammad-websocket"]
     container_name: zammad-websocket
 volumes:
+  asciinema-data:
+    name: asciinema-data
+  asciinema-pg-data:
+    name: asciinema-pg-data
   authelia-pg-db:
     name: authelia-pg-db
   authelia-valkey-data:
