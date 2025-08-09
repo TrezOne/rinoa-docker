@@ -463,13 +463,13 @@ services:
       DEFAULT_AVATAR: gravatar
       MAIL_FROM_ADDRESS: noreply@${MY_TLD}
       SECRET_KEY_BASE: ${ASCIINEMA_SECRET_KEY_BASE}
-      SIGN_UP_DISABLED: false
+      SIGN_UP_DISABLED: true
       SMTP_HOST: postal-smtp
       SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
       SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       SMTP_PORT: 25
       UPLOAD_AUTH_REQUIRED: true
-      URL_HOST: asciinema.trz.wtf
+      URL_HOST: asciinema.trez.wtf
       URL_PORT: 4000
       URL_SCHEME: https
     image: ghcr.io/asciinema/asciinema-server:latest
