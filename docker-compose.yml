@@ -461,6 +461,7 @@ services:
     environment:
       DATABASE_URL: postgresql://asciinema:${ASCIINEMA_PG_DB_PASSWORD}@asciinema-pg-db:5432/asciinema
       DEFAULT_AVATAR: gravatar
+      MAIL_FROM_ADDRESS: noreply@${MY_TLD}
       SECRET_KEY_BASE: ${ASCIINEMA_SECRET_KEY_BASE}
       SIGN_UP_DISABLED: false
       SMTP_HOST: postal-smtp
