@@ -462,7 +462,7 @@ services:
       DATABASE_URL: postgresql://asciinema:${ASCIINEMA_PG_DB_PASSWORD}@asciinema-pg-db:5432/asciinema
       DEFAULT_AVATAR: gravatar
       SECRET_KEY_BASE: ${ASCIINEMA_SECRET_KEY_BASE}
-      SIGN_UP_DISABLED: true
+      SIGN_UP_DISABLED: false
       SMTP_HOST: postal-smtp
       SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
       SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
