@@ -490,6 +490,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 4000:4000
+      - 4002:4002
     volumes:
       - asciinema-data:/var/opt/asciinema
   asciinema-pg-db:
