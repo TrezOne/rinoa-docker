@@ -4321,7 +4321,7 @@ services:
       homepage.icon: open-webui.svg
       homepage.description: User-friendly and extensible AI interface
       swag: enable
-      swag_port: 3080
+      swag_port: 8080
       swag_proto: http
       swag_auth: authelia
       swag_url: ai.${MY_TLD}
