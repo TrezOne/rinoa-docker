@@ -88,10 +88,6 @@
 | joplin | joplin/server:latest |
 | karakeep | ghcr.io/karakeep-app/karakeep:release |
 | languagetool | elestio/languagetool:latest |
-| librechat-api | ghcr.io/danny-avila/librechat-dev:latest |
-| librechat-rag-api | ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest |
-| librechat-valkey | docker.io/bitnami/valkey:latest |
-| librechat-vectordb | ankane/pgvector:latest |
 | libretranslate | libretranslate/libretranslate |
 | lidarr | lscr.io/linuxserver/lidarr:latest |
 | lidify | thewicklowwolf/lidify:latest |
@@ -126,10 +122,12 @@
 | nocodb | nocodb/nocodb:latest |
 | nocodb-pg-db | postgres:16-alpine |
 | nocodb-valkey | docker.io/bitnami/valkey:latest |
-| ollama | ollama/ollama |
+| ollama | ollama/ollama:latest |
 | ombi | lscr.io/linuxserver/ombi:latest |
 | omnitools | iib0011/omni-tools:latest |
 | omnipoly | kweg/omnipoly:latest |
+| open-webui | ghcr.io/open-webui/open-webui:main |
+| open-webui-valkey | docker.io/bitnami/valkey:latest |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest |
 | paperless-valkey | docker.io/bitnami/valkey:latest |
 | patchman-server | ghcr.io/tigattack/patchman |
@@ -190,8 +188,7 @@
 | soularr-dashboard | git.trez.wtf/trez.one/soularr-dashboard:v0.1 |
 | soulseek | slskd/slskd |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
-| stable-diffusion-download | git./trez.one/stable-diffusion-download:v9.0.0 |
-| stable-diffusion-webui | git./trez.one/stable-diffusion-ui:v9.0.1 |
+| stable-diffusion-webui | ghcr.io/neggles/sd-webui-docker:latest |
 | stirling-pdf | docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest |
 | swag | lscr.io/linuxserver/swag:latest |
 | tandoor | vabene1111/recipes |
