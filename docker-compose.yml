@@ -13,87 +13,6 @@ x-jitsi-admin: &jitsi_admin_app
     PHP_INI_MEMORY_LIMIT: "1G"
     PHP_EXTENSION_LDAP: 1
     PHP_EXTENSION_INTL: 1
-x-librechat: &librechat-env
-  ALLOW_EMAIL_LOGIN: true
-  ALLOW_PASSWORD_RESET: false
-  ALLOW_REGISTRATION: true
-  ALLOW_SHARED_LINKS_PUBLIC: true
-  ALLOW_SHARED_LINKS: true
-  ALLOW_SOCIAL_LOGIN: false
-  ALLOW_SOCIAL_REGISTRATION: false
-  ALLOW_UNVERIFIED_EMAIL_LOGIN: true
-  ANTHROPIC_API_KEY: ${LIBRECHAT_ANTHROPIC_API_KEY}
-  ANTHROPIC_MODELS: claude-3-7-sonnet-latest,claude-3-7-sonnet-20250219,claude-3-5-haiku-20241022,claude-3-5-sonnet-20241022,claude-3-5-sonnet-latest,claude-3-5-sonnet-20240620,claude-3-opus-20240229,claude-3-sonnet-20240229,claude-3-haiku-20240307,claude-2.1,claude-2,claude-1.2,claude-1,claude-1-100k,claude-instant-1,claude-instant-1-100k
-  APPLE_CALLBACK_URL: /oauth/apple/callback
-  APP_TITLE: LibreChat
-  BAN_DURATION: 1000 * 60 * 60 * 2
-  BAN_INTERVAL: 20
-  BAN_VIOLATIONS: true
-  CHECK_BALANCE: false
-  CONCURRENT_MESSAGE_MAX: 2
-  CONCURRENT_VIOLATION_SCORE: 1
-  CONSOLE_JSON: true
-  CREDS_IV: ${LIBRECHAT_CREDS_IV}
-  CREDS_KEY: ${LIBRECHAT_CREDS_KEY}
-  DB_HOST: librechat-vectordb
-  DEBUG_CONSOLE: false
-  DEBUG_LOGGING: true
-  DEBUG_OPENAI: false
-  DEEPSEEK_API_KEY: ${LIBRECHAT_DEEPSEEK_API_KEY}
-  DISCORD_CALLBACK_URL: /oauth/discord/callback
-  DOMAIN_CLIENT: https://ai.${MY_TLD}
-  DOMAIN_SERVER: https://ai.${MY_TLD}
-  EMAIL_FROM: noreply@librechat.ai
-  EMAIL_HOST: postal-smtp
-  EMAIL_PORT: 25
-  FACEBOOK_CALLBACK_URL: /oauth/facebook/callback
-  GITHUB_CALLBACK_URL: /oauth/github/callback
-  GOOGLE_CALLBACK_URL: /oauth/google/callback
-  HELP_AND_FAQ_URL: https://librechat.ai
-  HOST: 0.0.0.0
-  ILLEGAL_MODEL_REQ_SCORE: 5
-  JWT_REFRESH_SECRET: ${LIBRECHAT_JWT_REFRESH_SECRET}
-  JWT_SECRET: ${LIBRECHAT_JWT_SECRET}
-  LIMIT_CONCURRENT_MESSAGES: true
-  LIMIT_MESSAGE_IP: true
-  LIMIT_MESSAGE_USER: false
-  LOGIN_MAX: 7
-  LOGIN_VIOLATION_SCORE: 1
-  LOGIN_WINDOW: 5
-  MEILI_HOST: http://meilisearch:7700
-  MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
-  MEILI_NO_ANALYTICS: true
-  MESSAGE_IP_MAX: 40
-  MESSAGE_IP_WINDOW: 1
-  MESSAGE_USER_MAX: 40
-  MESSAGE_USER_WINDOW: 1
-  MESSAGE_VIOLATION_SCORE: 1
-  MISTRAL_API_KEY: ${LIBRECHAT_MISTRAL_API_KEY}
-  MONGO_URI: mongodb://librechat:${LIBRECHAT_MONGODB_PASSWORD}@mongodb:27017/librechat?replicaSet=rinoa
-  NO_INDEX: true
-  NON_BROWSER_VIOLATION_SCORE: 20
-  OPENAI_API_KEY: ${LIBRECHAT_OPENAI_API_KEY}
-  OPENAI_MODELS: o1,o1-mini,o1-preview,gpt-4o,chatgpt-4o-latest,gpt-4o-mini,gpt-3.5-turbo-0125,gpt-3.5-turbo-0301,gpt-3.5-turbo,gpt-4,gpt-4-0613,gpt-4-vision-preview,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k-0613,gpt-4-0125-preview,gpt-4-turbo-preview,gpt-4-1106-preview,gpt-3.5-turbo-1106,gpt-3.5-turbo-instruct,gpt-3.5-turbo-instruct-0914,gpt-3.5-turbo-16k
-  OPENAI_MODERATION: false
-  OPENID_CALLBACK_URL: /oauth/openid/callback
-  OPENID_SCOPE: "openid profile email"
-  OPENWEATHER_API_KEY: ${HOMEPAGE_OPENWEATHERMAP_API_KEY}
-  PORT: 3080
-  POSTGRES_DB: librechat
-  POSTGRES_PASSWORD: ${LIBRECHAT_PG_DB_PASSWD}
-  POSTGRES_USER: librechat
-  RAG_PORT: 8000
-  REDIS_PREFIX: librechat_
-  REDIS_URI: librechat-valkey:6379
-  REFRESH_TOKEN_EXPIRY: (1000 * 60 * 60 * 24) * 7
-  REGISTER_MAX: 5
-  REGISTER_WINDOW: 60
-  REGISTRATION_VIOLATION_SCORE: 1
-  SD_WEBUI_URL: http://stable-diffusion-webui:7860
-  SEARCH: true
-  SESSION_EXPIRY: 1000 * 60 * 15
-  TRUST_PROXY: 1
-  USE_REDIS: false
 x-maxun: &maxun-env
   environment:
     NODE_ENV: production
@@ -3293,68 +3212,6 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/languagetool/:/opt/languagetool/langModel
-  librechat-api:
-    container_name: librechat-api
-    depends_on:
-      - mongodb
-      - librechat-rag-api
-    environment:
-      << : *librechat-env
-      RAG_PORT: 8000
-      RAG_API_URL: http://librechat-rag-api:8000
-    image: ghcr.io/danny-avila/librechat-dev:latest
-    labels:
-      homepage.group: Personal Tools
-      homepage.name: LibreChat
-      homepage.href: https://ai.${MY_TLD}
-      homepage.icon: sh-librechat.svg
-      homepage.description: Local AI chat
-      swag: enable
-      swag_port: 3080
-      swag_proto: http
-      swag_url: ai.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.name: LibreChat
-      swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
-    ports:
-      - 3080:3080
-    restart: always
-    user: ${PUID}:${PGID}
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.env:/app/.env
-      - ${DOCKER_VOLUME_CONFIG}/librechat/librechat.yaml:/app/librechat.yaml
-      - ${DOCKER_VOLUME_CONFIG}/librechat/images:/app/client/public/images
-      - ${DOCKER_VOLUME_CONFIG}/librechat/uploads:/app/uploads
-      - ${DOCKER_VOLUME_CONFIG}/librechat/logs:/app/api/logs
-  librechat-rag-api:
-    container_name: librechat-rag-api
-    depends_on:
-      - librechat-vectordb
-    environment:
-      << : *librechat-env
-      RAG_PORT: 8000
-    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
-    restart: always
-  librechat-valkey:
-    container_name: librechat-valkey
-    << : *valkey-params
-    volumes:
-      - librechat-valkey-data:/data/valkey
-  librechat-vectordb:
-    container_name: librechat-vectordb
-    environment:
-      POSTGRES_DB: librechat
-      POSTGRES_USER: librechat
-      POSTGRES_PASSWORD: ${LIBRECHAT_PG_DB_PASSWD}
-    expose:
-      - 5432
-    image: ankane/pgvector:latest
-    restart: always
-    volumes:
-      - librechat-pg-data:/var/lib/postgresql/data
   libretranslate:
     container_name: libretranslate
     environment:
@@ -4309,7 +4166,7 @@ services:
       - nocodb_valkey_data:/data/valkey
   ollama:
     container_name: ollama
-    image: ollama/ollama
+    image: ollama/ollama:latest
     ports:
       - 11434:11434
     restart: unless-stopped
@@ -4415,6 +4272,76 @@ services:
     ports:
       - 3734:80
     restart: unless-stopped
+  open-webui:
+    container_name: open-webui
+    depends_on:
+      ollama:
+        condition: service_started
+        required: true
+      stable-diffusion-webui:
+        condition: service_started
+        required: true
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      WEBUI_AUTH: false
+      ENABLE_IMAGE_GENERATION: "true"
+      AUTOMATIC1111_BASE_URL: http://stable-diffusion-webui:7860
+      IMAGE_SIZE: "64x64"
+      IMAGE_STEPS: "3"
+      ENABLE_OTEL: true
+      ENABLE_OTEL_METRICS: true
+      OTEL_EXPORTER_OTLP_INSECURE: true # Use insecure connection for OTLP, remove in production
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://signoz-otel-collector:4317
+      OTEL_SERVICE_NAME: open-webui
+      ENABLE_RAG_WEB_SEARCH: True
+      RAG_WEB_SEARCH_ENGINE: searxng
+      RAG_WEB_SEARCH_RESULT_COUNT: 3
+      RAG_WEB_SEARCH_CONCURRENT_REQUESTS: 10
+      SEARXNG_QUERY_URL: "http://searxng:8080/search?q=<query>"
+      # LibreTranslate
+      LT_DEBUG: false
+      LT_UPDATE_MODELS: true
+      LT_SSL: false
+      LT_SUGGESTIONS: false
+      LT_METRICS: false
+      LT_HOST: http://libretranslate:5000
+      LT_API_KEYS: false
+      LT_THREADS: 12
+      LT_FRONTEND_TIMEOUT: 2000
+      # Redis Websocket
+      ENABLE_WEBSOCKET_SUPPORT: true
+      WEBSOCKET_MANAGER: redis
+      WEBSOCKET_REDIS_URL: redis://open-webui-valkey:6379/0
+      REDIS_KEY_PREFIX: open-webui
+    image: ghcr.io/open-webui/open-webui:main
+    labels:
+      homepage.group: Personal Tools
+      homepage.name: Open WebUI
+      homepage.href: https://ai.${MY_TLD}
+      homepage.icon: open-webui.svg
+      homepage.description: User-friendly and extensible AI interface
+      swag: enable
+      swag_port: 3080
+      swag_proto: http
+      swag_auth: authelia
+      swag_url: ai.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: Open WebUI
+      swag.uptime-kuma.monitor.url: https://ai.${MY_TLD}/health
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+      swag.uptime-kuma.monitor.type: https
+    ports:
+      - 3080:8080
+    restart: unless-stopped
+    volumes:
+      - open-webui-data:/app/backend/data
+  open-webui-valkey:
+    container_name: open-webui-valkey
+    << : *valkey-params
+    volumes:
+      - open-webui-valkey-data:/data/valkey
   paperless-ngx:
     container_name: paperless-ngx
     depends_on:
@@ -6229,38 +6156,17 @@ services:
     restart: unless-stopped
     volumes:
         - ${DOCKER_VOLUME_CONFIG}/speedtest-tracker:/config
-  stable-diffusion-download:
-    container_name: stable-diffusion-download
-    image: git.${MY_TLD}/trez.one/stable-diffusion-download:v9.0.0
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/data:/data
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
-    image: git.${MY_TLD}/trez.one/stable-diffusion-ui:v9.0.1
+    image: ghcr.io/neggles/sd-webui-docker:latest
     environment:
-      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
-    labels:
-      homepage.name: Stable-Diffusion WebUI
-      homepage.group: Personal Tools
-      homepage.description: Deep learning, text-to-image model
-      homepage.href: https://sd.${MY_TLD}
-      homepage.icon: /icons/stable-diffusion.png
-      swag: enable
-      swag_port: 7860
-      swag_auth: authelia
-      swag_proto: http
-      swag_url: sd.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.name: Stable-Diffusion WebUI
-      swag.uptime-kuma.monitor.url: https://sd.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
+      CLI_ARGS: "--api --use-cpu all --precision full --no-half --skip-torch-cuda-test --ckpt /empty.pt --do-not-download-clip --disable-nan-check --disable-opt-split-attention"
+      PYTHONUNBUFFERED: "1"
+      TERM: "vt100"
+      SD_WEBUI_VARIANT: "default"
     ports:
       - 7860:7860
     restart: unless-stopped
-    tty: true
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/data:/data
       - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/output:/output
@@ -7116,10 +7022,6 @@ volumes:
     name: karakeep-data
   linkstack_data:
     name: linkstack_data
-  librechat-pg-data:
-    name: librechat-pg-data
-  librechat-valkey-data:
-    name: librechat-valkey-data
   libretranslate_api_keys:
     name: libretranslate_api_keys
   libretranslate_models:
@@ -7158,6 +7060,10 @@ volumes:
     name: nocodb_valkey_data
   ollama:
     name: ollama
+  open-webui-data:
+    name: open-webui-data
+  open-webui-valkey-data:
+    name: open-webui-valkey-data
   paperless-ngx-data:
     name: paperless-ngx-data
   paperless-ngx-media:
