@@ -4167,12 +4167,12 @@ services:
   ollama:
     container_name: ollama
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:11434/api/tags", "||", "exit 1"]
+      test: ollama list || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 5s
-    image: ollama/ollama
+    image: ollama/ollama:latest
     ports:
       - 11434:11434
     restart: unless-stopped
