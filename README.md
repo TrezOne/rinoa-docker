@@ -147,9 +147,7 @@
 | portainer | portainer/portainer-ce:alpine |
 | portchecker-web | ghcr.io/dsgnr/portcheckerio-web:latest |
 | portchecker-api | ghcr.io/dsgnr/portcheckerio-api:latest |
-| portnote-web | haedlessdev/portnote:latest |
-| portnote-agent | haedlessdev/portnote-agent:latest |
-| portnote-pg-db | postgres:17-alpine |
+| portracker | mostafawahied/portracker:latest |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
