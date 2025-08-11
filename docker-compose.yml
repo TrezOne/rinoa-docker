@@ -1,7 +1,7 @@
-name: compose
+name: rinoa
 networks:
   default:
-    name: compose_default
+    name: rinoa_default
   nextcloud-aio:
     external: true
 x-jitsi-admin: &jitsi_admin_app
