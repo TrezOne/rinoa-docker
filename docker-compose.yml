@@ -4829,61 +4829,35 @@ services:
     ports:
       - 36102:8000
     restart: unless-stopped
-  portnote-web:
-    container_name: portnote
-    depends_on:
-      portnote-pg-db:
-        condition: service_started
-        required: true
-        restart: true
+  portracker:
+    container_name: portracker
     environment:
-      JWT_SECRET: ${PORTNOTE_JWT_SECRET} # Replace with a secure random string
-      USER_SECRET:  ${PORTNOTE_USER_SECRET} # Replace with a secure random string
-      LOGIN_USERNAME: portnote # Replace with a username
-      LOGIN_PASSWORD: ${PORTNOTE_LOGIN_PASSWORD} # Replace with a custom password
-      DATABASE_URL: "postgresql://portnote:${PORTNOTE_POSTGRES_PASSWORD}@portnote-pg-db:5432/portnote"
-    image: haedlessdev/portnote:latest
+      DATABASE_PATH: /data/portracker.db
+      PORT: 4999
+    image: mostafawahied/portracker:latest
     labels:
       swag: enable
+      swag_auth: authelia
       swag_proto: http
-      swag_port: 3000
+      swag_port: 4999
       swag_url: ports.${MY_TLD}
+      swag_address: 192.168.1.254
       swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.name: PortNote
+      swag.uptime-kuma.name: Portracker
       swag.uptime-kuma.monitor.url: https://ports.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
       homepage.group: System Administration
-      homepage.name: PortNote
+      homepage.name: Portracker
       homepage.href: https://ports.${MY_TLD}
-      homepage.icon: port-note.png
-      homepage.description: Management for container ports
-    ports:
-      - 23186:3000
-    restart: always
-  portnote-agent:
-    container_name: portnote-agent
-    depends_on:
-      portnote-pg-db:
-        condition: service_started
-        required: true
-    image: haedlessdev/portnote-agent:latest
-    environment:
-      DATABASE_URL: "postgresql://portnote:${PORTNOTE_POSTGRES_PASSWORD}@portnote-pg-db:5432/portnote"
-    restart: always
-  portnote-pg-db:
-    container_name: portnote-pg-db
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_USER: portnote
-      POSTGRES_PASSWORD: ${PORTNOTE_POSTGRES_PASSWORD}
-      POSTGRES_DB: portnote
-    expose:
-      - 5432
-    restart: always
+      homepage.icon: sh-portracker.svg
+      homepage.description: Real-time port monitoring and discovery
+    network_mode: host
+    restart: unless-stopped
     volumes:
-      - portnote-db-data:/var/lib/postgresql/data
+      - ${DOCKER_VOLUME_CONFIG}/portracker:/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
   postal-smtp:
     cap_add:
       - NET_BIND_SERVICE
