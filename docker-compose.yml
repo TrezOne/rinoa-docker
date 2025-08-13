@@ -1,4 +1,4 @@
-name: rinoa
+name: compose
 networks:
   default:
     name: rinoa_default
