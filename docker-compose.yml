@@ -4117,8 +4117,8 @@ services:
       NC_SMTP_HOST: postal-smtp
       NC_SMTP_PORT: 25
       NC_SMTP_SECURE: true
-      NC_SMTP_USERNAME: ${POSTAL_NC_SMTP_AUTH_USER}
-      NC_SMTP_PASSWORD: ${POSTAL_NC_SMTP_AUTH_PASSWORD}
+      NC_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      NC_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       NC_SMTP_FROM: noreply@${MY_TLD}
     image: "nocodb/nocodb:latest"
     labels:
