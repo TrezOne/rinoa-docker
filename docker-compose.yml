@@ -6248,6 +6248,7 @@ services:
     environment:
       DB_ENGINE: django.db.backends.postgresql
       GID: 1000
+      GUNICORN_MEDIA: 1
       POSTGRES_DB: tandoor
       POSTGRES_HOST: tandoor-pg
       POSTGRES_PASSWORD: ${TANDOOR_POSTGRES_PASSWORD}
