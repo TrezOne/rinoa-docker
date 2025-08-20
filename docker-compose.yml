@@ -1877,6 +1877,7 @@ services:
       homepage.description: .gitignore generator
       swag: enable
       swag_url: gitignore.${MY_TLD}
+      swag_address: gitignore-io
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.name: gitignore-io
       swag.uptime-kuma.monitor.url: https://gitignore.${MY_TLD}
@@ -6288,6 +6289,7 @@ services:
       homepage.widget.key: ${TANDOOR_API_TOKEN}
       swag: enable
       swag_proto: http
+      swag_address: tandoor-recipes
       swag_url: recipes.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.name: Tandoor Recipes
