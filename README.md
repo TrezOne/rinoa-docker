@@ -56,6 +56,7 @@
 | gitea-db | postgres:14 |
 | gitea-runner | gitea/act_runner:latest |
 | gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |
+| gitignore-io | guog/gitignore.io:latest |
 | gluetun | qmcgaw/gluetun:latest |
 | gotify | gotify/server |
 | graylog | graylog/graylog:6.1 |
