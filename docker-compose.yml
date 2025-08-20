@@ -1866,6 +1866,26 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/sonarqube-bot/:/home/bot/config/
+  gitignore-io:
+    container_name: gitignore-io
+    image: guog/gitignore.io:latest
+    labels:
+      homepage.group: Code/DevOps
+      homepage.name: gitignore-io
+      homepage.href: https://gitignore.${MY_TLD}
+      homepage.icon: /icons/gitignore-io.svg
+      homepage.description: .gitignore generator
+      swag: enable
+      swag_url: gitignore.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.name: gitignore-io
+      swag.uptime-kuma.monitor.url: https://gitignore.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+    ports:
+      - 14822:8080
+    restart: unless-stopped
   gluetun:
     cap_add:
       - NET_ADMIN
