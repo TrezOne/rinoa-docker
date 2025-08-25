@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
       - name: Cache tea CLI
@@ -70,7 +70,7 @@ jobs:
       svc_deploy_list: ${{ steps.detect_services.outputs.docker_svc_list }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Fetch base branch
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
@@ -129,7 +129,7 @@ jobs:
       DOCKER_SVC_LIST: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Login to Gitea Container Registry
         run: |
           docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
@@ -178,7 +178,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
       - name: Cache flarectl CLI
@@ -247,7 +247,7 @@ jobs:
     needs: [cloudflare-dns-setup]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
       - name: Gotify Notification
@@ -289,7 +289,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Cache tea CLI
         id: cache-tea
         uses: actions/cache@v4
@@ -330,7 +330,7 @@ jobs:
       DOCKER_SVC_LIST: ${{ needs.generate-service-list.outputs.svc_deploy_list }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: main
       - name: Cache Vault install

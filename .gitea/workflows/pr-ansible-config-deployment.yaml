@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
       - name: Cache tea CLI
@@ -68,7 +68,7 @@ jobs:
       VAULT_NAMESPACE: ""
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Cache Ansible Galaxy Collections
         uses: actions/cache@v3
         with:
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
@@ -149,7 +149,7 @@ jobs:
       DOCKER_HOST: tcp://dockerproxy:2375
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: main
       - name: Set up Python
