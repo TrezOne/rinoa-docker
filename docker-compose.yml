@@ -1400,11 +1400,7 @@ services:
     privileged: true
     restart: unless-stopped
     volumes:
-      - bind:
-          create_host_path: true
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
-        type: bind
+      - /var/run/docker.sock:/var/run/docker.sock
   dockflare:
     container_name: dockflare
     environment:
@@ -4303,11 +4299,11 @@ services:
         condition: service_started
         required: true
     environment:
-      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_BASE_URLS: http://ollama:11434;http://192.168.1.252:11434
       WEBUI_AUTH: false
       ENABLE_IMAGE_GENERATION: "true"
       AUTOMATIC1111_BASE_URL: http://stable-diffusion-webui:7860
-      IMAGE_SIZE: "64x64"
+      IMAGE_SIZE: "1024x1024"
       IMAGE_STEPS: "3"
       ENABLE_OTEL: true
       ENABLE_OTEL_METRICS: true
@@ -4851,9 +4847,13 @@ services:
       - 36102:8000
     restart: unless-stopped
   portracker:
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
     container_name: portracker
     environment:
       DATABASE_PATH: /data/portracker.db
+      DEBUG: false
       PORT: 4999
     image: mostafawahied/portracker:latest
     labels:
@@ -4874,8 +4874,10 @@ services:
       homepage.href: https://ports.${MY_TLD}
       homepage.icon: sh-portracker.svg
       homepage.description: Real-time port monitoring and discovery
-    network_mode: host
+    pid: "host"
     restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/portracker:/data
       - /var/run/docker.sock:/var/run/docker.sock:ro
