@@ -4875,6 +4875,8 @@ services:
       homepage.icon: sh-portracker.svg
       homepage.description: Real-time port monitoring and discovery
     pid: "host"
+    ports:
+      - 4999:4999
     restart: unless-stopped
     security_opt:
       - apparmor:unconfined
