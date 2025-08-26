@@ -4303,11 +4303,11 @@ services:
         condition: service_started
         required: true
     environment:
-      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_BASE_URLS: http://ollama:11434;http://192.168.1.252:11434
       WEBUI_AUTH: false
       ENABLE_IMAGE_GENERATION: "true"
       AUTOMATIC1111_BASE_URL: http://stable-diffusion-webui:7860
-      IMAGE_SIZE: "64x64"
+      IMAGE_SIZE: "1024x1024"
       IMAGE_STEPS: "3"
       ENABLE_OTEL: true
       ENABLE_OTEL_METRICS: true
