@@ -1,10 +1,13 @@
 name: Auto-Unseal for Vault
+
 on:
   workflow_dispatch:
   schedule:
     - cron: '30 5 * * *'
+
 env:
   HC_VAULT_VERSION: '1.20.0'
+
 jobs:
   auto-unseal:
     name: Unseal Vault
@@ -22,22 +25,26 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: HC Vault @ Rinoa'
           notification_message: 'Hashicorp Vault unsealing started... 🔐'
+
       - name: Cache Vault install
         id: cache-vault
         uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
           key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
+
       - name: Install Vault (only if not cached)
         if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
+
       - name: Unseal Vault
         run: |
           for vault_shard in $VAULT_SHARDS; do
             vault operator unseal -address="${VAULT_ADDR}" -non-interactive "${vault_shard}"
           done
+
       - name: Vault Unseal Completion
         uses: eikendev/gotify-action@master
         with:

@@ -1,4 +1,5 @@
 name: Gitea Branch PR, Cloudflare DNS, README generation, & Docker Deployment
+
 on:
   workflow_dispatch:
   push:
@@ -8,10 +9,12 @@ on:
       - '**/docker-compose.yml'
       - '**/pr-cloudflare-docker-deploy.yml'
       - '!ansible/**.yml'
+
 env:
   FLARECTL_VERSION: '0.115.0'
   HC_VAULT_VERSION: '1.20.0'
   TEA_VERSION: '0.10.1'
+
 jobs:
   check-and-create-pr:
     if: github.ref != 'refs/heads/main'
@@ -22,18 +25,21 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 1
+
       - name: Cache tea CLI
         id: cache-tea
         uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/tea/${{ env.TEA_VERSION }}/x64
           key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
+
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
           uri: https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64
           name: tea
           version: ${{ env.TEA_VERSION }}
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -41,6 +47,7 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: PR Check'
           notification_message: 'Checking for existing PR... 🔍'
+
       - name: Check if open PR exists
         id: check-opened-pr-step
         continue-on-error: true
@@ -48,6 +55,7 @@ jobs:
           tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
           pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep '\[DOCKER\].*${{ github.ref_name }}' | tail -1 | wc -l)
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
+
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
@@ -55,6 +63,7 @@ jobs:
           pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | sed -e 's|"||g' | egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
           pr_index_new=$(expr ${pr_index_old} + 1)
           tea pr c -r ${{ github.repository }} -t "[DOCKER] Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }} -L "Docker Compose"
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -62,6 +71,7 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: PR Check'
           notification_message: 'PR Created 🎟️'
+
   generate-service-list:
     name: Generate list of added/modified/deleted services
     runs-on: ubuntu-latest
@@ -69,11 +79,14 @@ jobs:
     outputs:
       svc_deploy_list: ${{ steps.detect_services.outputs.docker_svc_list }}
     steps:
+
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Fetch base branch
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -81,10 +94,12 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Services TBD'
           notification_message: 'Generating list of services to deploy...'
+
       - name: Save both versions of docker-compose.yml
         run: |
           git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
           cp docker-compose.yml docker-compose-head.yml
+
       - name: Detect added, deleted, and modified services
         id: detect_services
         run: |
@@ -114,9 +129,11 @@ jobs:
           echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
           echo "$mod_svcs" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
+
       - name: List of Services for (Re)Deployment
         run: |
           echo -e "${{ steps.detect_services.outputs.docker_svc_list }}"
+
   docker-compose-dry-run:
     name: Docker Compose Dry Run
     needs: [generate-service-list]
@@ -130,20 +147,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Login to Gitea Container Registry
         run: |
           docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
+
       - name: Cache Vault install
         id: cache-vault
         uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
           key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
+
       - name: Install Vault (only if not cached)
         if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -151,10 +172,12 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
           notification_message: 'Starting Docker Compose dry run...'
+
       - name: Generate .env file for Docker Compose
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
           echo ${DOCKER_SVC_LIST}
+
       - name: Docker Compose Dry Run
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
@@ -165,6 +188,7 @@ jobs:
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
           compose-flags: --dry-run
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -172,6 +196,7 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
           notification_message: 'Docker Compose dry run completed successfully.'
+
   cloudflare-dns-setup:
     name: Cloudflare DNS Setup
     needs: [docker-compose-dry-run]
@@ -181,17 +206,20 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 1
+
       - name: Cache flarectl CLI
         uses: actions/cache@v4
         with:
           path: ~/.flarectl
           key: flarectl-${{ runner.os }}-${{ env.FLARECTL_VERSION }}-${{ hashFiles('workflow-config.yml') }}
+
       - name: Install flarectl
         uses: supplypike/setup-bin@v4
         with:
           uri: https://github.com/cloudflare/cloudflare-go/releases/download/v${{ env.FLARECTL_VERSION }}/flarectl_${{ env.FLARECTL_VERSION }}_linux_amd64.tar.gz
           name: flarectl
           version: ${{ env.FLARECTL_VERSION }}
+
       - name: Cache Subdomain Files
         uses: actions/cache@v4
         with:
@@ -199,6 +227,7 @@ jobs:
             compose_subdomains.txt
             cloudflare_subdomains.txt
           key: ${{ runner.os }}-subdomains-${{ hashFiles('docker-compose.yml') }}
+
       - name: Grab Subdomains from Docker Compose & Cloudflare
         id: grab-subdomains
         env:
@@ -214,6 +243,7 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
           notification_message: 'Starting Cloudflare DNS setup...'
+
       - name: Compare Subdomains
         id: compare-subdomains
         uses: LouisBrunner/diff-action@v2.2.0
@@ -223,6 +253,7 @@ jobs:
           mode: addition
           tolerance: mixed-better
           output: domain_compare.txt
+
       - name: Create Subdomains
         if: steps.compare-subdomains.outputs.output != ''
         continue-on-error: true
@@ -234,6 +265,7 @@ jobs:
             echo "Creating $subdomain.trez.wtf..."
             flarectl dns create --zone "trez.wtf" --name "${subdomain}" --type=CNAME --content "trez.wtf" --proxy true
           done
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -241,6 +273,7 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
           notification_message: 'Cloudflare DNS setup completed successfully.'
+
   regenerate-readme-modified-services:
     name: Update README & Generate List of Modified Services
     runs-on: ubuntu-latest
@@ -248,8 +281,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Install yq
         uses: dcarbone/install-yq-action@v1
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -257,25 +292,30 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: README Update'
           notification_message: 'Updating README...'
+
       - name: Generate service list
         run: |
           yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
+
       - name: Generate Markdown Table
         uses: gazab/create-markdown-table@v1
         id: service-table
         with:
           file: ./services.yml
+
       - name: Regenerate README
         run: |
           echo "# List of Services" > README.md
           echo -e "\n\n" >> README.md
           echo "${{ steps.service-table.outputs.table }}" >> README.md
+
       - name: Add/Commit README.md
         id: commit-readme
         uses: EndBug/add-and-commit@v9
         with:
           message: "chore: Update README"
           add: "README.md"
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -283,6 +323,7 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: README Update'
           notification_message: 'README updated'
+
   pr-merge:
     name: PR Merge
     needs: [regenerate-readme-modified-services]
@@ -290,18 +331,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Cache tea CLI
         id: cache-tea
         uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/tea/${{ env.TEA_VERSION }}/x64
           key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
+
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
           uri: https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64
           name: tea
           version: ${{ env.TEA_VERSION }}
+
       - name: PR Merge
         id: pr_merge
         run: |
@@ -311,6 +355,7 @@ jobs:
           pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
           tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" ${pr_index}
           echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -318,6 +363,7 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: PR Merge Successful'
           notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
+
   docker-compose-deploy:
     name: Docker Compose Deployment
     runs-on: ubuntu-latest
@@ -333,20 +379,24 @@ jobs:
         uses: actions/checkout@v5
         with:
           ref: main
+
       - name: Cache Vault install
         id: cache-vault
         uses: actions/cache@v4
         with:
           path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
           key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
+
       - name: Install Vault (only if not cached)
         if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
+
       - name: Login to Gitea Container Registry
         run: |
           docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -354,10 +404,12 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: Docker Compose Deployment @ Rinoa'
           notification_message: 'Starting Docker Compose run...'
+
       - name: Generate .env file for deployment
         run: |
            vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
            echo ${DOCKER_SVC_LIST}
+
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
@@ -367,6 +419,7 @@ jobs:
             ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans
           down-flags: --dry-run
+
       - name: Docker Compose Healthcheck
         uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
         with:
@@ -375,6 +428,7 @@ jobs:
           compose-file: "docker-compose.yml"
           skip-exited: "true"
           skip-no-healthcheck: "true"
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
