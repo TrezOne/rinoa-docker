@@ -198,6 +198,7 @@ services:
       homepage.description: Web interface for blocking ads and paywalls
     ports:
       - 10633:5000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   actual_server:
     container_name: actualbudget
@@ -228,6 +229,7 @@ services:
       homepage.description: Privacy-focused app for managing finances
     ports:
       - 5006:5006
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/actual-budget:/data
@@ -271,6 +273,7 @@ services:
     #   - "192.168.1.254:853:853/tcp"
     #   - 67:67
     #   - 688:68
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -299,6 +302,7 @@ services:
       homepage.description: Multi-channel notification API
     ports:
       - 54995:8000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/apprise/config:/etc/apprise
@@ -333,6 +337,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 21324:8000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/archivebox:/data
@@ -367,6 +372,7 @@ services:
       homepage.description: Software release monitoring and notifications
     ports:
       - 9857:8080
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/argus/config.yml:/app/config.yml
@@ -411,6 +417,7 @@ services:
     ports:
       - 4000:4000
       - 4002:4002
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - asciinema-data:/var/opt/asciinema
@@ -428,6 +435,7 @@ services:
       timeout: 5s
       retries: 10
     image: postgres:14-alpine
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - asciinema-pg-data:/var/lib/postgresql/data
@@ -464,6 +472,7 @@ services:
       default: null
     ports:
       - 13378:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     user: 1000:1000
     volumes:
@@ -530,6 +539,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/authelia/
@@ -548,6 +558,7 @@ services:
     image: postgres:16-alpine
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: authelia-pg-db
@@ -591,6 +602,7 @@ services:
       default: null
     ports:
       - 6767:6767
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -637,6 +649,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 22220:8090
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/beszel:/beszel_data
@@ -652,6 +665,7 @@ services:
       - 45876
     image: henrygd/beszel-agent:latest
     network_mode: host
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -694,6 +708,7 @@ services:
     ports:
       - 3012:3012
       - 8013:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -745,6 +760,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - type: bind
@@ -775,6 +791,7 @@ services:
       swag_url: browse.${MY_TLD}
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   bytestash:
     container_name: bytestash
@@ -805,6 +822,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 62139:5000
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/bytestash:/data/snippets
@@ -854,6 +872,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - castopod-media:/var/www/castopod/public/media
@@ -900,6 +919,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 15827:5000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - changedetection-data:/datastore
@@ -913,6 +933,7 @@ services:
       SCREEN_HEIGHT: 1024
       SCREEN_DEPTH: 16
       MAX_CONCURRENT_CHROME_PROCESSES: 10
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   chrome:
     container_name: chrome
@@ -924,6 +945,7 @@ services:
       - --remote-debugging-port=9222
       - --hide-scrollbars
     image: gcr.io/zenika-hub/alpine-chrome:123
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   clipcascade:
     container_name: clipcascade
@@ -951,6 +973,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 64048:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/clipcascade:/database  # Persistent storage for user data
@@ -974,6 +997,7 @@ services:
     image: ghcr.io/hotio/cloudflareddns:latest
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -1015,6 +1039,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 38946:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/convertx:/app/data
@@ -1054,6 +1079,7 @@ services:
       default: null
     ports:
       - 8101:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
@@ -1101,6 +1127,7 @@ services:
       default: null
     ports:
       - 8908:3000
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - crowdsec-db:/data/
@@ -1125,6 +1152,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 20992:8000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   czkawka:
     container_name: czkawka
@@ -1157,6 +1185,7 @@ services:
     ports:
       - 5800:5800
     privileged: true
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/czkawka
@@ -1200,6 +1229,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 31037:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/dagu/:/dagu
@@ -1284,6 +1314,7 @@ services:
       start_period: 30s
       timeout: 10s
     image: postgis/postgis:17-3.5-alpine
+    profiles: ["rinoa-apps"]
     restart: always
     shm_size: 1G
     volumes:
@@ -1398,6 +1429,7 @@ services:
     ports:
       - 2375:2375
     privileged: true
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -1461,6 +1493,7 @@ services:
       # - "cloudflare.tunnel.originsrvname=internal.service.local"
     ports:
       - 20756:5000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -1493,6 +1526,7 @@ services:
       default: null
     ports:
       - 8282:8200
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -1563,6 +1597,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 8362:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     # volumes:
     #   - easyappointments:/var/www/html
@@ -1586,6 +1621,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 53721:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   explo:
     container_name: explo
@@ -1593,6 +1629,7 @@ services:
       CRON_SCHEDULE: 0 8 * * 2
       TZ: ${TZ}
     image: ghcr.io/lumepart/explo:latest
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/explo/local.env:/opt/explo/.env
@@ -1621,6 +1658,7 @@ services:
       default: null
     ports:
       - 8105:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: fastenhealth-cache
@@ -1647,6 +1685,7 @@ services:
       default: null
     ports:
       - 8191:8191
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
@@ -1670,6 +1709,7 @@ services:
       - 3901:3901
       - 3902:3902
       - 3903:3903
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/garage/garage.toml:/etc/garage.toml
@@ -1693,6 +1733,7 @@ services:
       homepage.description: S3-compatible storage backend
     ports:
       - 3909:3909
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/garage/garage.toml:/etc/garage.toml:ro
@@ -1737,6 +1778,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 2368:2368
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/ghost:/var/lib/ghost/content
@@ -1788,6 +1830,7 @@ services:
     ports:
       - 3013:3000
       - 222:22
+    profiles: ["rinoa-infra"]
     restart: always
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gitea
@@ -1822,6 +1865,7 @@ services:
     image: postgres:14
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - source: gitea-pg-db
@@ -1841,7 +1885,7 @@ services:
     image: gitea/act_runner:latest
     ports:
       - 63604:63604
-    profiles: ["ci-exclude"]
+    profiles: ["rinoa-infra"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/act-runner/config.yaml:/config.yaml
@@ -1859,6 +1903,7 @@ services:
       GITEA_SQ_BOT_CONFIG_PATH: /home/bot/config/config.yaml
     ports:
       - 58525:58525
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/sonarqube-bot/:/home/bot/config/
@@ -1882,6 +1927,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 14822:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   gluetun:
     cap_add:
@@ -1902,6 +1948,7 @@ services:
       - 5030:5030
       - 5031:5031
       - 50300:50300
+    profiles: ["rinoa-apps"]
     restart: always
   gotify:
     container_name: gotify
@@ -1949,6 +1996,7 @@ services:
       default: null
     ports:
       - 8097:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/gotify
@@ -2069,6 +2117,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 62173:8080
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/guacamole/:/config
@@ -2089,6 +2138,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 3004:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/homepage:/app/config
@@ -2117,6 +2167,7 @@ services:
       homepage.description: Static site
     ports:
       - 1313:1313
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/hugo/:/src
@@ -2178,6 +2229,7 @@ services:
       homepage.widget.version: 2
     ports:
       - 2283:2283
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
@@ -2188,6 +2240,7 @@ services:
     healthcheck:
       disable: false
     image: ghcr.io/immich-app/immich-machine-learning:release
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - immich-model-cache:/cache
@@ -2218,6 +2271,7 @@ services:
       start_interval: 30s
       start_period: 5m
     image: tensorchord/pgvecto-rs:pg14-v0.2.1
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/immich/db:/var/lib/postgresql/data
@@ -2252,6 +2306,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
+    profiles: ["rinoa-apps"]
     restart: always
   immich-power-tools:
     container_name: immich-power-tools
@@ -2267,6 +2322,7 @@ services:
     image: ghcr.io/varun-raj/immich-power-tools:latest
     ports:
       - 54018:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   immich-valkey:
     container_name: immich-valkey
@@ -2298,6 +2354,7 @@ services:
       homepage.description: Scalable datastore for metrics, events, and real-time analytics
     ports:
       - 8086:8086
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - influxdb2-data:/var/lib/influxdb2
@@ -2336,6 +2393,7 @@ services:
       default: null
     ports:
       - 3007:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/invidious/config.yml:/config.yml
@@ -2350,6 +2408,7 @@ services:
       RUST_LOG: info
     expose:
       - 12999
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     read_only: true
     security_opt:
@@ -2367,6 +2426,7 @@ services:
     image: docker.io/library/postgres:14
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: invidious-postgres
@@ -2422,6 +2482,7 @@ services:
     expose:
       - 9000
     image: invoiceninja/invoiceninja-debian:5
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/invoice-ninja.env:/var/www/html/.env
@@ -2481,6 +2542,7 @@ services:
       homepage.description: Simple invoicing, multiple payment options, expense and vendor management, and more!
     ports:
       - 8005:80
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/nginx:/etc/nginx/conf.d:ro
@@ -2508,6 +2570,7 @@ services:
       default: null
     ports:
       - 8104:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   jellyfin:
     container_name: jellyfin
@@ -2542,6 +2605,7 @@ services:
       - 8487:8096
       - 7359:7359
       - 1900:1900
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/jellyfin:/config
@@ -2562,6 +2626,7 @@ services:
     image: etherpad/etherpad:1.8.6
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   jitsi-jibri:
     cap_add:
@@ -2619,6 +2684,7 @@ services:
     image: jitsi/jibri:${JITSI_IMAGE_VERSION:-stable}
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     shm_size: 2gb
     volumes:
@@ -2694,6 +2760,7 @@ services:
       default: null
     ports:
       - 8889:8888
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -2755,6 +2822,7 @@ services:
       default: null
     ports:
       - 20000-20050:20000-20050/udp
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -2815,6 +2883,7 @@ services:
     ports:
       - 10000:10000/udp
       - 8091:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -2920,6 +2989,7 @@ services:
     image: jitsi/prosody:${JITSI_IMAGE_VERSION:-stable}
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -3102,6 +3172,7 @@ services:
     ports:
       - 8001:80
       - 8002:443
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -3133,6 +3204,7 @@ services:
     image: postgres:17-alpine
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: joplin_data
@@ -3180,6 +3252,7 @@ services:
       default: null
     ports:
       - 22300:22300
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   karakeep:
     container_name: karakeep
@@ -3214,6 +3287,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 24977:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - karakeep-data:/data
@@ -3226,6 +3300,7 @@ services:
     expose:
       - 8010
     image: elestio/languagetool:latest
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/languagetool/:/opt/languagetool/langModel
@@ -3253,6 +3328,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 5000:5000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -3288,6 +3364,7 @@ services:
       default: null
     ports:
       - 8686:8686
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -3336,6 +3413,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/lidify
@@ -3382,6 +3460,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 8190:443
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - linkstack_data:/htdocs
@@ -3415,6 +3494,7 @@ services:
       default: null
     ports:
       - 17170:17170
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/lldap
@@ -3425,6 +3505,7 @@ services:
   loggifly:
     image: ghcr.io/clemcer/loggifly:latest
     container_name: loggifly
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -3467,6 +3548,7 @@ services:
       default: null
     ports:
       - 42010:42010
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/maloja/config
@@ -3510,6 +3592,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
     ports:
       - 3214:3214
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/manyfold/config:/config
@@ -3537,6 +3620,7 @@ services:
       default: null
     ports:
       - 3306:3306
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -3607,6 +3691,7 @@ services:
     ports:
       - 9044:80
       - 3444:443
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/mastodon:/config
@@ -3625,6 +3710,7 @@ services:
       interval: 10s
       retries: 5
     image: postgres:17-alpine
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - mastodon-pg-db:/var/lib/postgresql/data
@@ -3645,6 +3731,7 @@ services:
     mem_limit: 2g   # Set a 2GB memory limit
     ports:
       - 8369:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     security_opt:
       - seccomp=unconfined  # This might help with browser sandbox issues
@@ -3679,6 +3766,7 @@ services:
       homepage.description: No-code web data extraction platform
     ports:
       - 5173:5173
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   maxun-pg-db:
     container_name: maxun-pg-db
@@ -3694,6 +3782,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - maxun-pg-data:/var/lib/postgresql/data
@@ -3711,6 +3800,7 @@ services:
     image: getmeili/meilisearch:v1.15
     ports:
       - 7700:7700
+    profiles: ["rinoa-apps"]
     restart: always
     user: ${PUID}:${PGID}
     volumes:
@@ -3741,6 +3831,7 @@ services:
       homepage.description: Meme search engine built with Python and Ruby
     ports:
       - 14058:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/memes/:/rails/public/memes
@@ -3755,6 +3846,7 @@ services:
       APP_PORT: 3000
     expose:
       - 8000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/memes/:/app/public/memes
@@ -3774,6 +3866,7 @@ services:
       timeout: 5s
       retries: 5
     image: pgvector/pgvector:pg17
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/meme-search-db:/var/lib/postgresql/data
@@ -3799,6 +3892,7 @@ services:
       homepage.description: Scan and generate customized QR codes easily
     ports:
       - 14815:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   minio:
     command: server --console-address ":9090" /mnt/data
@@ -3831,6 +3925,7 @@ services:
     ports:
       - 9001:9000
       - 9092:9090
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/minio/data
@@ -3882,6 +3977,7 @@ services:
       homepage.description: Multi-channel social media manager
     ports:
       - 61757:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
         - mixpost-storage:/var/www/html/storage/app
@@ -3906,6 +4002,7 @@ services:
     image: bitnami/mongodb:7.0
     ports:
       - 27017:27017
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - mongodb_data:/data/db
@@ -3947,6 +4044,7 @@ services:
       default: null
     ports:
       - 9078:9078
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/multi-scrobbler
@@ -3982,6 +4080,7 @@ services:
       homepage.description: Extendable workflow automation tool to easily automate tasks
     ports:
       - 5678:5678
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - n8n-data:/home/node/.n8n
@@ -4034,6 +4133,7 @@ services:
       default: null
     ports:
       - 4533:4533
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     user: 1000:1000
     volumes:
@@ -4068,6 +4168,7 @@ services:
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
     network_mode: host
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/netalertx/config:/app/config
@@ -4111,6 +4212,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 56713:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -4156,6 +4258,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 8946:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - nocodb_data:/usr/app/data
@@ -4173,6 +4276,7 @@ services:
       test: "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""
       timeout: 2s
     image: postgres:16-alpine
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - nocodb_pg_data:/var/lib/postgresql/data
@@ -4186,6 +4290,7 @@ services:
     image: ollama/ollama:latest
     ports:
       - 11434:11434
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ollama:/root/.ollama
@@ -4217,6 +4322,7 @@ services:
       default: null
     ports:
       - 3579:3579
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -4254,6 +4360,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 23693:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   omnipoly:
     container_name: omnipoly
@@ -4288,6 +4395,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 3734:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   open-webui:
     container_name: open-webui
@@ -4351,6 +4459,7 @@ services:
       swag.uptime-kuma.monitor.type: https
     ports:
       - 3080:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - open-webui-data:/app/backend/data
@@ -4401,6 +4510,7 @@ services:
       default: null
     ports:
       - 8004:8000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: paperless-ngx-data
@@ -4452,6 +4562,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 17503:8080
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - penpot-assets:/opt/data/assets
@@ -4483,6 +4594,7 @@ services:
       PENPOT_SMTP_TLS: false
       PENPOT_SMTP_SSL: false
     image: penpotapp/backend:latest
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - penpot-assets:/opt/data/assets
@@ -4495,6 +4607,7 @@ services:
       PENPOT_PUBLIC_URI: http://penpot-frontend:8080
       PENPOT_REDIS_URI: redis://penpot-redis/0
     image: penpotapp/exporter:latest
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   penpot-pg-db:
     container_name: penpot-pg-db
@@ -4512,6 +4625,7 @@ services:
       retries: 5
       start_period: 2s
     image: postgres:15-alpine
+    profiles: ["rinoa-apps"]
     restart: always
     stop_signal: SIGINT
     volumes:
@@ -4525,6 +4639,7 @@ services:
       timeout: 3s
       retries: 5
       start_period: 3s
+    profiles: ["rinoa-apps"]
     restart: always
   planka:
     container_name: planka
@@ -4598,6 +4713,7 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:16-alpine
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - planka-db-data:/var/lib/postgresql/data
@@ -4669,6 +4785,7 @@ services:
     ports:
       - 64067:8080
       - 3460:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/plant-it:/upload-dir
@@ -4682,6 +4799,7 @@ services:
     expose:
       - 8080
     image: 'plantuml/plantuml-server:jetty'
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   portainer:
     container_name: portainer
@@ -4713,6 +4831,7 @@ services:
       homepage.widget.url: http://portainer:9000
       homepage.widget.env: 7
       homepage.widget.key: ${PORTAINER_HOMEPAGE_TOKEN}
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
         - portainer-data:/data
@@ -4753,6 +4872,7 @@ services:
       homepage.description: Service delivery platform for containerized applications
     ports:
       - 31131:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   portchecker-api:
     container_name: portchecker-api
@@ -4767,6 +4887,7 @@ services:
     image: ghcr.io/dsgnr/portcheckerio-api:latest
     ports:
       - 36102:8000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   portracker:
     cap_add:
@@ -4799,6 +4920,7 @@ services:
     pid: "host"
     ports:
       - 4999:4999
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     security_opt:
       - apparmor:unconfined
@@ -4815,6 +4937,7 @@ services:
       default: null
     ports:
       - 25:25
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/postal:/config
@@ -4844,6 +4967,7 @@ services:
       default: null
     ports:
       - 5001:5000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/postal
@@ -4859,6 +4983,7 @@ services:
     image: ghcr.io/postalserver/postal:latest
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/postal
@@ -4898,6 +5023,7 @@ services:
       default: null
     ports:
       - 9696:9696
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -5011,6 +5137,7 @@ services:
       - 9118:9118
       - 38927:8080
     privileged: true
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     sysctls:
       net.ipv4.conf.all.src_valid_mark: 1
@@ -5061,6 +5188,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_STORAGE}/Movies
@@ -5107,6 +5235,7 @@ services:
       default: null
     ports:
       - 7878:7878
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -5167,6 +5296,7 @@ services:
       default: null
     ports:
       - 3011:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   reactive-resume-pg:
     container_name: reactive-resume-pg
@@ -5180,6 +5310,7 @@ services:
     image: postgres:16-alpine
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - reactive-resume-pg:/var/lib/postgresql/data
@@ -5212,6 +5343,7 @@ services:
       default: null
     ports:
       - 8787:8787
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -5266,6 +5398,7 @@ services:
     ports:
       - 8103:8080
     read_only: true
+    profiles: ["rinoa-apps"]
     restart: always
     security_opt:
       - no-new-privileges=true
@@ -5307,6 +5440,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
+    profiles: ["rinoa-apps"]
     restart: always
   romm:
     container_name: romm
@@ -5373,6 +5507,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 30229:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - romm_resources:/romm/resources # Resources fetched from IGDB (covers, screenshots, etc.)
@@ -5433,6 +5568,7 @@ services:
       - 8090:8090
       - 8119:8118
     privileged: true
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     sysctls:
       net.ipv4.conf.all.src_valid_mark: "1"
@@ -5471,6 +5607,7 @@ services:
     image: sablierapp/sablier:latest
     ports:
       - 19311:10000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/sablier/state:/opt/sablier/state
@@ -5498,6 +5635,7 @@ services:
     image: ghcr.io/thecfu/scraparr:latest
     ports:
       - 7100:7100
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   scrutiny:
     cap_add:
@@ -5536,6 +5674,7 @@ services:
     ports:
       - 8909:8080
       - 8910:8086
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -5591,6 +5730,7 @@ services:
     ports:
       - 8095:8080
     privileged: true
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/searxng
@@ -5639,6 +5779,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 3015:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - semaphore_config:/etc/semaphore
@@ -5739,6 +5880,7 @@ services:
       ENV: prod
       SIGNOZ_LOG_ENDPOINT: http://signoz-otel-collector:8082
     image: pavanputhra/logspout-signoz
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -5849,6 +5991,7 @@ services:
     ports:
       - 9003:9000
     read_only: true
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   sonarqube-pg-db:
     container_name: sonarqube-pg-db
@@ -5862,6 +6005,7 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:17-alpine
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - sonarqube-db:/var/lib/postgresql
@@ -5895,6 +6039,7 @@ services:
       default: null
     ports:
       - 8989:8989
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -5941,6 +6086,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_STORAGE}/TV_Shows
@@ -5972,6 +6118,7 @@ services:
       SCRIPT_INTERVAL: 300
     image: mrusse08/soularr:latest
     network_mode: service:gluetun
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       #"You can set /downloads to whatever you want but will then need to change the Slskd download dir in your config file"
@@ -6006,6 +6153,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 18364:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/soularr/dashboard:/app
@@ -6039,6 +6187,7 @@ services:
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
     network_mode: service:gluetun
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/soulseek:/app
@@ -6074,6 +6223,7 @@ services:
     ports:
         - 47512:80
         - 62777:443
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
         - ${DOCKER_VOLUME_CONFIG}/speedtest-tracker:/config
@@ -6087,6 +6237,7 @@ services:
       SD_WEBUI_VARIANT: "default"
     ports:
       - 7860:7860
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/stable-diffusion-webui/data:/data
@@ -6118,6 +6269,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 58931:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/stirling-pdf/training-data:/usr/share/tessdata # Required for extra OCR languages
@@ -6176,6 +6328,7 @@ services:
       - 443:443
       - 80:80
       - 81:81
+    profiles: ["rinoa-infra"]
     restart: unless-stopped
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -6227,6 +6380,7 @@ services:
       default: null
     ports:
       - 8106:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/tandoor/static
@@ -6250,6 +6404,7 @@ services:
     image: postgres:16-alpine
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: always
     volumes:
       - source: tandoor-pg
@@ -6291,6 +6446,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 17382:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   umami-pg-db:
     container_name: umami-pg-db
@@ -6308,6 +6464,7 @@ services:
     image: postgres:15-alpine
     volumes:
       - umami-db-data:/var/lib/postgresql/data
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   unmanic:
     container_name: unmanic
@@ -6336,6 +6493,7 @@ services:
       default: null
     ports:
       - 8911:8888
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - source: ${DOCKER_VOLUME_CONFIG}/unmanic
@@ -6383,6 +6541,7 @@ services:
       default: null
     ports:
       - 3003:3001
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -6430,6 +6589,7 @@ services:
     ports:
       - 8200:8200
       - 8250:8250
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/hashicorp-vault/config/:/vault/config
@@ -6460,6 +6620,7 @@ services:
       default: null
     ports:
       - 8283:80
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - wallos-db:/var/www/html/db
@@ -6498,6 +6659,7 @@ services:
       homepage.widget.key: ${WATCHTOWER_HTTP_API_TOKEN}
     networks:
       default: null
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
@@ -6539,6 +6701,7 @@ services:
       default: null
     ports:
       - 3010:3000
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
   whodb:
     container_name: whodb
@@ -6701,6 +6864,7 @@ services:
       swag.uptime-kuma.monitor.interval: 300
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/uptimekuma/:/db
@@ -6731,6 +6895,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 5690:5690
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/wizarr/database:/data/database
@@ -6765,6 +6930,7 @@ services:
       default: null
     ports:
       - 8089:8080
+    profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - bind:
