@@ -117,6 +117,7 @@ x-valkey-params: &valkey-params
     VALKEY_DATABASE: 0
   expose:
     - 6379
+  profiles: ["rinoa-apps"]
   restart: unless-stopped
 x-zammad:
   zammad-service: &zammad-service
@@ -285,6 +286,38 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/adguard/work:/opt/adguardhome/work
       - ${DOCKER_VOLUME_CONFIG}/adguard/conf:/opt/adguardhome/conf
       - ${DOCKER_VOLUME_CONFIG}/swag/etc/letsencrypt/:/opt/adguardhome/certs
+  apcupsd-cgi:
+    container_name: apcupsd-cgi
+    environment:
+      UPSHOSTS: 192.168.1.254
+      UPSNAMES: Rinoa
+      TZ: ${TZ}
+      DASHBOARD_PROVISION: false
+    image: bnhf/apcupsd-cgi:latest
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_url: apc.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.parent: Rinoa
+      swag.uptime-kuma.name: APC UPS Web
+      swag.uptime-kuma.monitor.url: https://apc.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+      homepage.group: Infrastructure/App Performance Monitoring
+      homepage.name: APC UPS Web
+      homepage.icon: apc.svg
+      homepage.href: https://apc.${MY_TLD}
+      homepage.description: Web interface for apcupsd
+      homepage.widget.type: apcups
+      homepage.widget.url: tcp://192.168.1.254:3551
+    ports:
+      - 3552:80
+    profiles: ["rinoa-apps"]
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_CONFIG}/apcupsd:/etc/apcupsd
   apprise-api:
     container_name: apprise-api
     environment:
@@ -7107,6 +7140,7 @@ services:
     command: memcached -m 256M
     container_name: zammad-memcached
     image: memcached:${MEMCACHE_VERSION:-1.6.38-alpine}
+    profiles: ["rinoa-apps"]
     restart: ${RESTART:-always}
   zammad-nginx:
     <<: *zammad-service
@@ -7142,6 +7176,7 @@ services:
       POSTGRES_USER: ${ZAMMAD_POSTGRES_USER:-zammad}
       POSTGRES_PASSWORD: ${ZAMMAD_POSTGRES_PASS:-zammad}
     image: postgres:${ZAMMAD_POSTGRES_VERSION:-17.5-alpine}
+    profiles: ["rinoa-apps"]
     restart: ${RESTART:-always}
     volumes:
       - zammad-postgresql-data:/var/lib/postgresql/data
@@ -7152,6 +7187,7 @@ services:
   zammad-redis:
     container_name: zammad-redis
     image: redis:${REDIS_VERSION:-7.4.2-alpine}
+    profiles: ["rinoa-apps"]
     restart: ${RESTART:-always}
     volumes:
       - zammad-redis-data:/data
