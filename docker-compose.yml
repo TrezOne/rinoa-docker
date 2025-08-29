@@ -1096,7 +1096,7 @@ services:
       default: null
     ports:
       - 8101:8080
-    profiles: ["rinoa-apps"]
+    profiles: ["rinoa-infra"]
     restart: unless-stopped
     security_opt:
       - no-new-privileges=true
