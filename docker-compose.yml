@@ -337,13 +337,12 @@ services:
       homepage.widget.type: customapi
       homepage.widget.url: http://apprise:8000/status
       homepage.widget.method: GET
-      homepage.widget.mappings:
-      homepage.widget.mappings.label: Status
-      homepage.widget.mappings.format: text
+      homepage.widget.mappings[0].label: Status
+      homepage.widget.mappings[0].format: text
       swag: enable
       swag_proto: http
       swag_auth: authelia
-      swag_auth_bypass: /notify,/details,/metrics
+      swag_auth_bypass: /notify,/details,/metrics,/status
       swag_url: apprise.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -4957,10 +4956,14 @@ services:
       homepage.href: https://portainer.${MY_TLD}
       homepage.icon: portainer.svg
       homepage.description: Service delivery platform for containerized applications
-      homepage.widget.type: portainer
-      homepage.widget.url: http://portainer:9000
-      homepage.widget.env: 7
-      homepage.widget.key: ${PORTAINER_HOMEPAGE_TOKEN}
+      homepage.widget[0].type: portainer
+      homepage.widget[0].url: http://portainer:9000
+      homepage.widget[0].env: 7
+      homepage.widget[0].key: ${PORTAINER_HOMEPAGE_TOKEN}
+      homepage.widget[1].type: portainer
+      homepage.widget[1].url: http://portainer:9000
+      homepage.widget[1].env: 12
+      homepage.widget[1].key: ${PORTAINER_HOMEPAGE_TOKEN}
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
