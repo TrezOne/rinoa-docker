@@ -5937,14 +5937,20 @@ services:
     command:
       - --config=/root/config/prometheus.yml
     environment:
-       SIGNOZ_ALERTMANAGER_PROVIDER: signoz
-       SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN: tcp://signoz-clickhouse:9000
-       SIGNOZ_SQLSTORE_SQLITE_PATH: /var/lib/signoz/signoz.db
-       DASHBOARDS_PATH: /root/config/dashboards
-       STORAGE: clickhouse
-       GODEBUG: netdns=go
-       TELEMETRY_ENABLED: true
-       DEPLOYMENT_TYPE: docker-standalone-amd
+      SIGNOZ_ALERTMANAGER_PROVIDER: signoz
+      SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN: tcp://signoz-clickhouse:9000
+      SIGNOZ_SQLSTORE_SQLITE_PATH: /var/lib/signoz/signoz.db
+      SIGNOZ_ALERTMANAGER_SIGNOZ_EXTERNAL__URL: https://apm.${MY_TLD}
+      SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__FROM: noreply@${MY_TLD}
+      SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__SMARTHOST: postal-smtp:25
+      SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__AUTH__USERNAME: ${POSTAL_SMTP_AUTH_USER}
+      SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__AUTH__PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
+      SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__REQUIRE__TLS: false
+      DASHBOARDS_PATH: /root/config/dashboards
+      STORAGE: clickhouse
+      GODEBUG: netdns=go
+      TELEMETRY_ENABLED: true
+      DEPLOYMENT_TYPE: docker-standalone-amd
     healthcheck:
       test:
         - CMD
