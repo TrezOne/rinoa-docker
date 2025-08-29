@@ -1935,7 +1935,7 @@ services:
       GITEA_SQ_BOT_CONFIG_PATH: /home/bot/config/config.yaml
     ports:
       - 58525:58525
-    profiles: ["rinoa-apps"]
+    profiles: ["rinoa-infra"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/gitea/sonarqube-bot/:/home/bot/config/
@@ -6085,7 +6085,7 @@ services:
     ports:
       - 9003:9000
     read_only: true
-    profiles: ["rinoa-apps"]
+    profiles: ["rinoa-infra"]
     restart: unless-stopped
   sonarqube-pg-db:
     container_name: sonarqube-pg-db
@@ -6099,7 +6099,7 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:17-alpine
-    profiles: ["rinoa-apps"]
+    profiles: ["rinoa-infra"]
     restart: unless-stopped
     volumes:
       - sonarqube-db:/var/lib/postgresql
