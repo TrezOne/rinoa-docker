@@ -1145,7 +1145,7 @@ services:
       default: null
     ports:
       - 8908:3000
-    profiles: ["rinoa-apps"]
+    profiles: ["rinoa-infra"]
     restart: always
     volumes:
       - crowdsec-db:/data/
