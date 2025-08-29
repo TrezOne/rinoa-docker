@@ -329,28 +329,21 @@ services:
       APPRISE_STATEFUL_MODE: simple
     image: lscr.io/linuxserver/apprise-api:latest
     labels:
+      cloudflare.tunnel.enable: true
+      cloudflare.tunnel.hostname: apprise.${MY_TLD}
+      cloudflare.tunnel.service: http://apprise:8000
+      cloudflare.tunnel.zonename: ${MY_TLD}
+      cloudflare.tunnel.no_tls_verify: true
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Apprise
       homepage.icon: apprise.png
-      homepage.href: https://apprise.${MY_TLD}
+      homepage.href: http://192.168.1.254:54995
       homepage.description: Multi-channel notification API
       homepage.widget.type: customapi
       homepage.widget.url: http://apprise-api:8000/status
       homepage.widget.method: GET
       homepage.widget.mappings[0].label: Status
       homepage.widget.mappings[0].format: text
-      swag: enable
-      swag_proto: http
-      swag_auth: authelia
-      swag_auth_bypass: /notify,/details,/metrics,/status
-      swag_url: apprise.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.parent: Rinoa
-      swag.uptime-kuma.name: Apprise-API
-      swag.uptime-kuma.monitor.url: https://apprise.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 54995:8000
     profiles: ["rinoa-apps"]
