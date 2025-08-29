@@ -54,6 +54,7 @@ x-penpot-body-size: &penpot-http-body-size
   # Max multipart body size (350MiB)
   PENPOT_HTTP_SERVER_MAX_MULTIPART_BODY_SIZE: 367001600
 x-signoz-common: &signoz-common
+  profiles: ["rinoa-apps"]
   restart: unless-stopped
 x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
   <<: *signoz-common
@@ -1317,6 +1318,7 @@ services:
     ports:
       - 63561:3000
       - 9394:9394 # Prometheus exporter, uncomment if needed
+    profiles: ["rinoa-apps"]
     restart: on-failure
     stdin_open: true
     tty: true
@@ -2097,6 +2099,7 @@ services:
       #- 10000:10000/udp # Custom UDP port
       - 13301:13301/tcp # Forwarder data
       - 13302:13302/tcp # Forwarder config
+    profiles: ["rinoa-apps"]
     restart: on-failure
     volumes:
       - graylog-data:/usr/share/graylog/data/data
@@ -2119,6 +2122,7 @@ services:
       - 8999:8999
       - 9200:9200
       - 9300:9300
+    profiles: ["rinoa-apps"]
     restart: on-failure
     ulimits:
       memlock:
@@ -4768,6 +4772,7 @@ services:
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
       - 54476:1337
+    profiles: ["rinoa-apps"]
     restart: on-failure
     volumes:
       - planka-favicons:/app/public/favicons
@@ -6015,6 +6020,7 @@ services:
       - async
       - --dsn=tcp://signoz-clickhouse:9000
       - --up=
+    profiles: ["rinoa-apps"]
     restart: on-failure
   signoz-schema-migrator-sync:
     <<: *signoz-common
@@ -6027,6 +6033,7 @@ services:
     depends_on:
       signoz-clickhouse:
         condition: service_healthy
+    profiles: ["rinoa-apps"]
     restart: on-failure
   signoz-zookeeper-1:
     <<: *signoz-zookeeper-defaults
