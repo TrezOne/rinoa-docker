@@ -332,10 +332,10 @@ services:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Apprise
       homepage.icon: apprise.png
-      homepage.href: http://192.168.1.254:54995
+      homepage.href: https://apprise.${MY_TLD}
       homepage.description: Multi-channel notification API
       homepage.widget.type: customapi
-      homepage.widget.url: http://apprise:8000/status
+      homepage.widget.url: http://apprise-api:8000/status
       homepage.widget.method: GET
       homepage.widget.mappings[0].label: Status
       homepage.widget.mappings[0].format: text
