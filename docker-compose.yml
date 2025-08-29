@@ -169,6 +169,7 @@ x-zammad:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-15}
+    profiles: ["rinoa-apps"]
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -1387,6 +1388,7 @@ services:
       start_period: 30s
       timeout: 10s
     image: freikin/dawarich:latest
+    profiles: ["rinoa-apps"]
     restart: on-failure
     stdin_open: true
     tty: true
