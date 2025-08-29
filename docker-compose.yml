@@ -1897,7 +1897,7 @@ services:
     image: postgres:14
     networks:
       default: null
-    profiles: ["rinoa-apps"]
+    profiles: ["rinoa-infra"]
     restart: always
     volumes:
       - source: gitea-pg-db
