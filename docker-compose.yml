@@ -5157,7 +5157,8 @@ services:
       QBT_WIDTH: 100
     ports:
       - 5965:8080
-    restart: on-failure:2
+    profiles: ["rinoa-apps"]
+    restart: on-failure
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/qbittorrent/qbit_manage/:/config:rw
       - ${DOCKER_VOLUME_STORAGE}/downloads/:/downloads:rw
