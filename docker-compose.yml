@@ -6647,7 +6647,7 @@ services:
       default: null
     ports:
       - 3003:3001
-    profiles: ["rinoa-apps"]
+    profiles: ["rinoa-infra"]
     restart: unless-stopped
     volumes:
       - bind:
