@@ -5116,6 +5116,15 @@ services:
         type: bind
         bind:
           create_host_path: true
+  protonmail-bridge:
+    container_name: protonmail-bridge
+    image: shenxn/protonmail-bridge
+    ports:
+      - 1025:25/tcp
+      - 1143:143/tcp
+    restart: unless-stopped
+    volumes:
+      - protonmail-data:/root
   prowlarr:
     container_name: prowlarr
     environment:
@@ -7357,6 +7366,8 @@ volumes:
     name: portainer-data
   portnote-db-data:
     name: portnote-db-data
+  protonmail-data:
+    name: protonmail-data
   reactive-resume-pg:
     name: reactive-resume-pg
   romm_resources:
