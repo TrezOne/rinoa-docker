@@ -149,6 +149,7 @@
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
+| protonmail-bridge | shenxn/protonmail-bridge |
 | prowlarr | lscr.io/linuxserver/prowlarr:latest |
 | qbit-manage | ghcr.io/stuffanthings/qbit_manage:latest |
 | qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:latest |
