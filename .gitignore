@@ -1,4 +1,2 @@
 **/.cache_ggshield
-ansible/collections/ansible_collections/
 **/.env
-**/netbird_openid-configuration.json.j2
