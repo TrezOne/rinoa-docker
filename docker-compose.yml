@@ -5545,6 +5545,44 @@ services:
     security_opt:
       - no-new-privileges=true
     user: nobody
+  renovate:
+    container_name: renovate
+    environment:
+      # --- Authentication & platform ---
+      RENOVATE_TOKEN: "${RENOVATE_GITEA_TOKEN}"                 # Gitea personal access token for renovate-bot
+      RENOVATE_PLATFORM: "gitea"
+      RENOVATE_ENDPOINT: "https://git.${MY_TLD}/api/v1"  # your Gitea URL
+      RENOVATE_USERNAME: "renovate-bot"
+      RENOVATE_GIT_AUTHOR: "Renovate Bot <it-services@trez.wtf>"
+
+      # --- Behavior ---
+      RENOVATE_AUTODISCOVER: "true"        # discover all repos renovate-bot has access to
+      RENOVATE_ONBOARDING: "true"          # create onboarding PR if repo not configured
+      RENOVATE_REQUIRE_CONFIG: "optional"  # run even if no renovate config exists
+      RENOVATE_REDIS_URL: redis://renovate-valkey:6379
+
+      LOG_LEVEL: "info"
+
+      # --- Enable dependency dashboard ---
+      RENOVATE_EXTENDS: "config:base,:dependencyDashboard"
+
+      # --- Example package rules ---
+      RENOVATE_PACKAGE_RULES: |
+        [
+          { "matchUpdateTypes": ["minor","patch"], "automerge": true },
+          { "matchManagers": ["dockerfile"], "groupName": "docker base images" }
+        ]
+
+      # --- Scheduling ---
+      # Renovate will only process PRs/updates in this time window
+      RENOVATE_SCHEDULE: '["after 2am and before 6am"]'
+    image: renovate/renovate:latest
+    restart: unless-stopped
+  renovate-valkey:
+    container_name: renovate-valkey
+    << : *valkey-params
+    volumes:
+      - renovate-valkey-data:/data/valkey
   rocketchat:
     container_name: rocketchat
     depends_on:
@@ -7366,6 +7404,8 @@ volumes:
     name: protonmail-data
   reactive-resume-pg:
     name: reactive-resume-pg
+  renovate-valkey-data:
+    name: renovate-valkey-data
   romm_resources:
     name: romm_resources
   romm-valkey-data:

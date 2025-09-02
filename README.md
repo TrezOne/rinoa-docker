@@ -159,6 +159,8 @@
 | reactive-resume-pg | postgres:16-alpine |
 | readarr | lscr.io/linuxserver/readarr:develop |
 | redlib | quay.io/redlib/redlib:latest |
+| renovate | renovate/renovate:latest |
+| renovate-valkey | docker.io/bitnami/valkey:latest |
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest |
 | romm | rommapp/romm:latest |
 | romm-valkey | docker.io/bitnami/valkey:latest |
