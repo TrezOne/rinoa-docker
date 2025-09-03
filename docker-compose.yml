@@ -7283,6 +7283,11 @@ volumes:
     name: umami-db-data
   unmanic-cache:
     name: unmanic-cache
+  wallos-db:
+    name: wallos-db
+  wallos-logos:
+    name: wallos-logos
+    name: wallos-logos
   zammad-backup:
     name: zammad-backup
   zammad-storage:
