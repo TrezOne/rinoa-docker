@@ -7,8 +7,6 @@ on:
       - 'main'
     paths:
       - '**/docker-compose.yml'
-      - '**/pr-cloudflare-docker-deploy.yml'
-      - '!ansible/**.yml'
 
 env:
   FLARECTL_VERSION: '0.115.0'
@@ -17,7 +15,7 @@ env:
 
 jobs:
   check-and-create-pr:
-    if: github.ref != 'refs/heads/main'
+    if: github.ref != 'refs/heads/main' && !startsWith(github.ref_name, 'renovate/') && github.actor != 'renovate-bot'
     name: Check and Create PR
     runs-on: ubuntu-latest
     steps:
@@ -52,17 +50,39 @@ jobs:
         id: check-opened-pr-step
         continue-on-error: true
         run: |
-          tea login add --name gitea-rinoa --url "${{ secrets.RINOA_GITEA_URL }}" --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
-          pr_exists=$(tea pr list --repo ${{ github.repository }} --state open --fields index,title,head | egrep '\[DOCKER\].*${{ github.ref_name }}' | tail -1 | wc -l)
+          tea login add \
+            --name gitea-rinoa \
+            --url "${{ secrets.RINOA_GITEA_URL }}" \
+            --user gitea-sonarqube-bot \
+            --password "${{ secrets.BOT_GITEA_PASSWORD }}" \
+            --token ${{ secrets.BOT_GITEA_TOKEN }}
+
+          pr_exists=$(tea pr list \
+            --repo ${{ github.repository }} \
+            --state open \
+            --fields index,title,head \
+            | egrep '\[DOCKER\].*${{ github.ref_name }}' | tail -1 | wc -l)
+
           echo "exists=$pr_exists" >> $GITHUB_OUTPUT
 
       - name: Create PR
         if: ${{ steps.check-opened-pr-step.outputs.exists == '0' }}
         run: |
           tea login default gitea-rinoa
-          pr_index_old=$(tea pr ls --repo ${{ github.repository }} --state all --fields index,title,head --output csv | sed -e 's|"||g' | egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
+
+          pr_index_old=$(tea pr ls \
+            --repo ${{ github.repository }} \
+            --state all --fields index,title,head \
+            --output csv | sed -e 's|"||g' | \
+            egrep '^[0-9]' | head -1 | awk -F"," '{print $1}')
+
           pr_index_new=$(expr ${pr_index_old} + 1)
-          tea pr c -r ${{ github.repository }} -t "[DOCKER] Automated PR for ${{ github.ref_name }} - #${pr_index_new}" -d "Automatically created PR for branch: ${{ github.ref_name }}" -a ${{ github.actor }} -L "Docker Compose"
+
+          tea pr c -r ${{ github.repository }} \
+            -t "[DOCKER] Automated PR for ${{ github.ref_name }} - #${pr_index_new}" \
+            -d "Automatically created PR for branch: ${{ github.ref_name }}" \
+            -a ${{ github.actor }} \
+            -L "Docker Compose"
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -75,7 +95,6 @@ jobs:
   generate-service-list:
     name: Generate list of added/modified/deleted services
     runs-on: ubuntu-latest
-    needs: [check-and-create-pr]
     outputs:
       svc_deploy_list: ${{ steps.detect_services.outputs.docker_svc_list }}
     steps:
@@ -234,8 +253,19 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          yq '.services[].labels.swag_url' docker-compose.yml | egrep -v 'null' | sed -e 's|"||g' | awk -F'.' '{print $1}' | sort > compose_subdomains.txt
-          flarectl --json dns list --zone "trez.wtf" --type=CNAME --content "trez.wtf" | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | sort > cloudflare_subdomains.txt
+          yq '.services[].labels.swag_url' docker-compose.yml | \
+            egrep -v 'null' | \
+            sed -e 's|"||g' | \
+            awk -F'.' '{print $1}' | \
+            sort > compose_subdomains.txt
+
+          flarectl --json dns list \
+            --zone "trez.wtf" \
+            --type=CNAME \
+            --content "trez.wtf" \
+            | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | \
+            sort > cloudflare_subdomains.txt
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
@@ -327,6 +357,7 @@ jobs:
   pr-merge:
     name: PR Merge
     needs: [regenerate-readme-modified-services]
+    if: github.ref != 'refs/heads/main' && !startsWith(github.ref_name, 'renovate/') && github.actor != 'renovate-bot'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -349,11 +380,28 @@ jobs:
       - name: PR Merge
         id: pr_merge
         run: |
-          tea login add --name gitea-rinoa --url ${{ secrets.RINOA_GITEA_URL }} --user gitea-sonarqube-bot --password "${{ secrets.BOT_GITEA_PASSWORD }}" --token ${{ secrets.BOT_GITEA_TOKEN }}
+          tea login add \
+            --name gitea-rinoa \
+            --url "${{ secrets.RINOA_GITEA_URL }}" \
+            --user gitea-sonarqube-bot \
+            --password "${{ secrets.BOT_GITEA_PASSWORD }}" \
+            --token ${{ secrets.BOT_GITEA_TOKEN }}
+
           tea login default gitea-rinoa
+
           echo "Merging PR..."
-          pr_index=$(tea pr ls --repo ${{ github.repository }} --state open --fields index,title,head,state --output csv | egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
-          tea pr m --repo ${{ github.repository }} --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" --message "Merged by ${{ github.actor }}" ${pr_index}
+
+          pr_index=$(tea pr ls \
+            --repo ${{ github.repository }} \
+            --state open --fields index,title,head,state \
+            --output csv | \
+            egrep ${{ github.ref_name }} | awk -F"," '{print $1}' | sed -e 's|"||g')
+
+          tea pr m \
+            --repo ${{ github.repository }} \
+            --title "Auto Merge of PR ${pr_index} - ${{ github.ref_name }}" \
+            --message "Merged by ${{ github.actor }}" ${pr_index}
+
           echo "pr_index=${pr_index}" >> $GITHUB_OUTPUT
 
       - name: Gotify Notification
@@ -367,7 +415,7 @@ jobs:
   docker-compose-deploy:
     name: Docker Compose Deployment
     runs-on: ubuntu-latest
-    needs: [generate-service-list, docker-compose-dry-run, pr-merge]
+    needs: [generate-service-list, docker-compose-dry-run]
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
@@ -395,7 +443,9 @@ jobs:
 
       - name: Login to Gitea Container Registry
         run: |
-          docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
+          docker login -u gitea-sonarqube-bot \
+            -p ${RINOA_REGISTRY_PASSWORD} \
+            git.trez.wtf
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master

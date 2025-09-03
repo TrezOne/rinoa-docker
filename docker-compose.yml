@@ -387,42 +387,6 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/archivebox:/data
       # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
-  argus:
-    container_name: argus
-    environment:
-      ARGUS_UID: ${PUID}
-      ARGUS_GID: ${PGID}
-    healthcheck:
-      test: ["CMD", "/healthcheck", "http://localhost:8080/api/v1/healthcheck"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-    image: quay.io/argus-io/argus:latest
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 8080
-      swag_url: argus.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.parent: Rinoa
-      swag.uptime-kuma.name: Argus
-      swag.uptime-kuma.monitor.url: https://argus.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
-      homepage.group: System Administration
-      homepage.name: Argus
-      homepage.icon: release-argus.png
-      homepage.href: https://argus.${MY_TLD}
-      homepage.description: Software release monitoring and notifications
-    ports:
-      - 9857:8080
-    profiles: ["rinoa-apps"]
-    restart: always
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/argus/config.yml:/app/config.yml
-      - ${DOCKER_VOLUME_CONFIG}/argus/:/app/data/
   asciinema:
     container_name: asciinema
     depends_on:
@@ -2081,97 +2045,6 @@ services:
         type: bind
         bind:
           create_host_path: true
-  graylog:
-    container_name: graylog
-    hostname: graylog
-    image: graylog/graylog:6.1
-    depends_on:
-      graylog-datanode:
-        condition: service_started
-        required: true
-      mongodb:
-        condition: service_started
-        required: true
-    entrypoint: /usr/bin/tini --  /docker-entrypoint.sh
-    environment:
-      GRAYLOG_NODE_ID_FILE: /usr/share/graylog/data/data/node-id
-      GRAYLOG_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
-      GRAYLOG_ROOT_PASSWORD_SHA2: ${GRAYLOG_ROOT_PASSWORD_SHA2}
-      GRAYLOG_HTTP_BIND_ADDRESS: 0.0.0.0:9000
-      GRAYLOG_HTTP_EXTERNAL_URI: http://localhost:9000/
-      GRAYLOG_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet=rinoa
-      GRAYLOG_ROOT_EMAIL: charish.patel@${MY_TLD}
-      GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
-      GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME: ${POSTAL_SMTP_AUTH_USER}
-      GRAYLOG_TRANSPORT_EMAIL_ENABLED: true
-      GRAYLOG_TRANSPORT_EMAIL_FROM_EMAIL: noreply@${MY_TLD}
-      GRAYLOG_TRANSPORT_EMAIL_HOSTNAME: postal-smtp
-      GRAYLOG_TRANSPORT_EMAIL_PORT: 25
-      GRAYLOG_TRANSPORT_EMAIL_USE_AUTH: true
-    labels:
-      homepage.group: Infrastructure/App Performance Monitoring
-      homepage.name: Graylog
-      homepage.href: https://logs.${MY_TLD}
-      homepage.icon: sh-graylog.svg
-      homepage.description: Log Management
-      swag: enable
-      swag_port: 9000
-      swag_url: logs.${MY_TLD}
-      swag_proto: http
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.parent: Rinoa
-      swag.uptime-kuma.name: Graylog
-      swag.uptime-kuma.monitor.url: https://logs.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
-    ports:
-      - 5044:5044/tcp   # Beats
-      - 5140:5140/udp   # Syslog
-      - 5140:5140/tcp   # Syslog
-      - 5555:5555/tcp   # RAW TCP
-      - 5555:5555/udp   # RAW UDP
-      - 13457:9000/tcp   # Server API
-      - 12201:12201/tcp # GELF TCP
-      - 12201:12201/udp # GELF UDP
-      #- 10000:10000/tcp # Custom TCP port
-      #- 10000:10000/udp # Custom UDP port
-      - 13301:13301/tcp # Forwarder data
-      - 13302:13302/tcp # Forwarder config
-    profiles: ["rinoa-apps"]
-    restart: on-failure
-    volumes:
-      - graylog-data:/usr/share/graylog/data/data
-  graylog-datanode:
-    container_name: graylog-datanode
-    hostname: graylog-datanode
-    image: graylog/graylog-datanode:6.1
-    environment:
-      GRAYLOG_NODE_NAME: graylog-datanode
-      GRAYLOG_DATANODE_PASSWORD_SECRET: ${GRAYLOG_PASSWORD_SECRET}
-      GRAYLOG_DATANODE_MONGODB_URI: mongodb://graylog:${GRAYLOG_MONGODB_PASSWORD}@mongodb:27017/graylog?replicaSet=rinoa
-      GRAYLOG_PATH_REPO: graylog
-      GRAYLOG_S3_CLIENT_DEFAULT_ACCESS_KEY: ${GRAYLOG_S3_ACCESS_KEY}
-      GRAYLOG_S3_CLIENT_DEFAULT_ENDPOINT: minio:9000
-      GRAYLOG_S3_CLIENT_DEFAULT_PATH_STYLE_ACCESS: 1
-      GRAYLOG_S3_CLIENT_DEFAULT_PROTOCOL: http
-      GRAYLOG_S3_CLIENT_DEFAULT_REGION: us-east-fh-pln
-      GRAYLOG_S3_CLIENT_DEFAULT_SECRET_KEY: ${GRAYLOG_S3_SECRET_KEY}
-    ports:
-      - 8999:8999
-      - 9200:9200
-      - 9300:9300
-    profiles: ["rinoa-apps"]
-    restart: on-failure
-    ulimits:
-      memlock:
-        hard: -1
-        soft: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    volumes:
-      - graylog-datanode:/var/lib/graylog-datanode
   guacamole:
     container_name: guacamole
     environment:
@@ -5560,7 +5433,7 @@ services:
       RENOVATE_ONBOARDING: "true"          # create onboarding PR if repo not configured
       RENOVATE_REQUIRE_CONFIG: "optional"  # run even if no renovate config exists
       RENOVATE_REDIS_URL: redis://renovate-valkey:6379
-
+      LIBRECHAT_GITHUB_TOKEN: $LIBRECHAT_GITHUB_TOKEN}
       LOG_LEVEL: "info"
 
       # --- Enable dependency dashboard ---
@@ -5796,30 +5669,6 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/sablier/state:/opt/sablier/state
       - ${DOCKER_VOLUME_CONFIG}/sablier/custom_themes:/opt/sablier/custom_themes
       - /var/run/docker.sock:/var/run/docker.sock
-  scraparr:
-    container_name: scraparr
-    depends_on:
-      - bazarr
-      - prowlarr
-      - radarr
-      - readarr
-      - sonarr
-    environment:
-      BAZARR_API_KEY: ${BAZARR_API_KEY}
-      BAZARR_URL: http://bazarr:6767
-      PROWLARR_API_KEY: ${PROWLARR_API_KEY}
-      PROWLARR_URL: http://prowlarr:9696
-      RADARR_API_KEY: ${RADARR_API_KEY}
-      RADARR_URL: http://radarr:7878
-      READARR_API_KEY: ${READARR_API_KEY}
-      READARR_URL: http://readarr:8787
-      SONARR_API_KEY: ${SONARR_API_KEY}
-      SONARR_URL: http://sonarr:8989
-    image: ghcr.io/thecfu/scraparr:latest
-    ports:
-      - 7100:7100
-    profiles: ["rinoa-apps"]
-    restart: unless-stopped
   scrutiny:
     cap_add:
       - SYS_RAWIO
@@ -7296,10 +7145,6 @@ volumes:
     name: fastenhealth-db
   gitea-pg-db:
     name: gitea-pg-db
-  graylog-data:
-    name: graylog-data
-  graylog-datanode:
-    name: graylog-datanode
   immich-model-cache:
     name: immich-model-cache
   immich-valkey-data:
@@ -7382,8 +7227,6 @@ volumes:
     name: penpot-assets
   penpot-pg-data:
     name: penpot-pg-data
-  pgbackweb-data:
-    name: pgbackweb-data
   planka-favicons:
     name: planka-favicons
   planka-user-avatars:
@@ -7398,8 +7241,6 @@ volumes:
     name: plant-it-valkey-data
   portainer-data:
     name: portainer-data
-  portnote-db-data:
-    name: portnote-db-data
   protonmail-data:
     name: protonmail-data
   reactive-resume-pg:
