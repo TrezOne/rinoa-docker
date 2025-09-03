@@ -59,8 +59,6 @@
 | gitignore-io | guog/gitignore.io:latest |
 | gluetun | qmcgaw/gluetun:latest |
 | gotify | gotify/server |
-| graylog | graylog/graylog:6.1 |
-| graylog-datanode | graylog/graylog-datanode:6.1 |
 | guacamole | flcontainers/guacamole:latest |
 | homepage | ghcr.io/gethomepage/homepage:latest |
 | hugo | hugomods/hugo:exts |
@@ -165,7 +163,6 @@
 | romm-valkey | docker.io/bitnami/valkey:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | sablier | sablierapp/sablier:latest |
-| scraparr | ghcr.io/thecfu/scraparr:latest |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
 | searxng-valkey | docker.io/bitnami/valkey:latest |
