@@ -1,3 +1,51 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 5,
+  "dependencyDashboard": true,
+  "labels": ["dependencies", "renovate"],
+  "schedule": ["before 6am on monday"],
+
+  "docker": {
+    "enabled": true
+  },
+
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["clickhouse/clickhouse-server"],
+      "enabled": false
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": [".*-alpine$"],
+      "allowedVersions": "/.*-alpine$/"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackagePatterns": ["^.*:latest$"],
+      "enabled": false
+    }
+  ],
+
+  "regexManagers": [],
+
+  "packageFiles": [
+    {
+      "fileMatch": ["docker-compose\\.ya?ml$"],
+      "manager": "regex",
+      "extractVersion": "custom",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "{{service | split(\"/\") | last}}/{{depName}}",
+      "versioningTemplate": "docker",
+      "extractor": "file:extract-docker-images.js"
+    }
+  ],
+
+  "branchNameStrict": true,
+  "branchPrefix": "renovate/",
+  "commitMessageAction": "Update",
+  "commitMessageTopic": "{{service | split(\"/\") | last}}/{{depName}}",
+  "prTitle": "Update {{service | split(\"/\") | last}}/{{depName}}: {{currentValue}} → {{newVersion}}"
 }
