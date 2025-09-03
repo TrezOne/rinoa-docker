@@ -1,48 +1,54 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
   "dependencyDashboard": true,
-  "labels": ["dependencies", "renovate"],
-  "schedule": ["before 6am on monday"],
-
-  "docker": {
-    "enabled": true
-  },
-
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "schedule": [
+    "before 6am on monday"
+  ],
   "packageRules": [
     {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["clickhouse/clickhouse-server"],
+      "matchCategories": [
+        "docker"
+      ],
+      "enabled": true
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "clickhouse/clickhouse-server"
+      ],
       "enabled": false
     },
     {
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": [".*-alpine$"],
-      "allowedVersions": "/.*-alpine$/"
+      "matchDatasources": [
+        "docker"
+      ],
+      "allowedVersions": "/.*-alpine$/",
+      "matchPackageNames": [
+        "/.*-alpine$/"
+      ]
     },
     {
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["^.*:latest$"],
-      "enabled": false
+      "matchDatasources": [
+        "docker"
+      ],
+      "enabled": false,
+      "matchPackageNames": [
+        "/^.*:latest$/"
+      ]
     }
   ],
-
-  "regexManagers": [],
-
-  "packageFiles": [
-    {
-      "fileMatch": ["docker-compose\\.ya?ml$"],
-      "manager": "regex",
-      "extractVersion": "custom",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "{{service}}/{{depName}}",
-      "versioningTemplate": "docker",
-      "extractor": "file:extract-docker-images.js"
-    }
-  ],
-
+  "customManagers": [],
   "branchNameStrict": true,
   "branchPrefix": "renovate/",
   "branchTopic": "{{service}}/{{depName}}",
