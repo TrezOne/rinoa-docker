@@ -7287,7 +7287,6 @@ volumes:
     name: wallos-db
   wallos-logos:
     name: wallos-logos
-    name: wallos-logos
   zammad-backup:
     name: zammad-backup
   zammad-storage:
