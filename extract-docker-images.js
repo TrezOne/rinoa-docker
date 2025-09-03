@@ -1,57 +1,41 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 
-/**
- * Recursively traverse the object and extract all image entries.
- * @param {object} obj - The YAML object to traverse.
- * @param {Array<string>} path - Key path for generating service names.
- * @returns {Array} - List of {depName, currentValue, service}.
- */
-function extractImages(obj, path = []) {
+module.exports = function extractDockerImages(fileContent) {
   const result = [];
 
-  if (typeof obj !== 'object' || obj === null) return result;
+  try {
+    const doc = yaml.load(fileContent, { schema: yaml.DEFAULT_SCHEMA });
 
-  // Resolve merged objects (anchors or << merges)
-  let mergedObj = {};
-  if (obj['<<']) {
-    const merge = obj['<<'];
-    if (Array.isArray(merge)) {
-      merge.forEach(m => Object.assign(mergedObj, m));
-    } else if (typeof merge === 'object') {
-      Object.assign(mergedObj, merge);
+    if (!doc.services) return [];
+
+    for (const [serviceName, serviceDef] of Object.entries(doc.services)) {
+      let image = serviceDef.image;
+
+      // Resolve anchors/merges if image is not directly present
+      if (!image && serviceDef['<<']) {
+        const merge = serviceDef['<<'];
+        if (Array.isArray(merge)) {
+          merge.forEach(m => {
+            if (m.image) image = m.image;
+          });
+        } else if (merge.image) {
+          image = merge.image;
+        }
+      }
+
+      if (image) {
+        const [depName, currentValue] = image.split(':');
+        result.push({
+          depName: depName,
+          currentValue: currentValue || 'latest',
+          service: serviceName // <- added for Renovate PR title
+        });
+      }
     }
-  }
-  // Merge top-level keys last to override anchor defaults
-  Object.assign(mergedObj, obj);
-
-  // If an image key exists, capture it
-  if (mergedObj.image) {
-    const [depName, currentValue] = mergedObj.image.split(':');
-    result.push({
-      depName: depName,
-      currentValue: currentValue || 'latest',
-      service: path.join('/') || 'root'
-    });
-  }
-
-  // Recursively traverse all keys
-  for (const [key, value] of Object.entries(mergedObj)) {
-    // Skip the << key since we've already processed it
-    if (key === '<<') continue;
-    result.push(...extractImages(value, [...path, key]));
+  } catch (err) {
+    console.error('Failed parsing docker-compose.yml:', err);
   }
 
   return result;
-};
-
-module.exports = function extractDockerImages(fileContent) {
-  try {
-    // Parse YAML with anchors preserved
-    const doc = yaml.load(fileContent, { schema: yaml.DEFAULT_FULL_SCHEMA });
-    return extractImages(doc);
-  } catch (err) {
-    console.error('Failed parsing docker-compose.yml:', err);
-    return [];
-  }
 };
