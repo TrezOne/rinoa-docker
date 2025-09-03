@@ -26,6 +26,10 @@
       "matchDatasources": ["docker"],
       "matchPackagePatterns": ["^.*:latest$"],
       "enabled": false
+    },
+    {
+      "matchDatasources": ["docker"],
+      "description": "Docker image used by service {{service}} ({{depName}})"
     }
   ],
 
@@ -37,7 +41,7 @@
       "manager": "regex",
       "extractVersion": "custom",
       "datasourceTemplate": "docker",
-      "depNameTemplate": "{{service | split(\"/\") | last}}/{{depName}}",
+      "depNameTemplate": "{{service}}/{{depName}}",
       "versioningTemplate": "docker",
       "extractor": "file:extract-docker-images.js"
     }
@@ -45,7 +49,9 @@
 
   "branchNameStrict": true,
   "branchPrefix": "renovate/",
+  "branchName": "{{service}}/{{depName}}-{{newVersion}}",
+
   "commitMessageAction": "Update",
-  "commitMessageTopic": "{{service | split(\"/\") | last}}/{{depName}}",
-  "prTitle": "Update {{service | split(\"/\") | last}}/{{depName}}: {{currentValue}} → {{newVersion}}"
+  "commitMessageTopic": "{{service}}/{{depName}}",
+  "commitMessageExtra": "{{currentValue}} → {{newVersion}}"
 }
