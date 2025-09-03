@@ -26,10 +26,6 @@
       "matchDatasources": ["docker"],
       "matchPackagePatterns": ["^.*:latest$"],
       "enabled": false
-    },
-    {
-      "matchDatasources": ["docker"],
-      "description": "Docker image used by service {{service}} ({{depName}})"
     }
   ],
 
@@ -49,9 +45,7 @@
 
   "branchNameStrict": true,
   "branchPrefix": "renovate/",
-  "branchName": "{{service}}/{{depName}}-{{newVersion}}",
-
+  "branchTopic": "{{service}}/{{depName}}",
   "commitMessageAction": "Update",
-  "commitMessageTopic": "{{service}}/{{depName}}",
-  "commitMessageExtra": "{{currentValue}} → {{newVersion}}"
+  "commitMessageTopic": "{{service}}/{{depName}}"
 }
