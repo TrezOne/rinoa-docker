@@ -14,14 +14,12 @@ module.exports = function extractDockerImages(fileContent) {
 
       // Resolve anchors/merges if image is not directly present
       if (!image && serviceDef['<<']) {
-        const merge = serviceDef['<<'];
-        if (Array.isArray(merge)) {
-          merge.forEach(m => {
-            if (m.image) image = m.image;
-          });
-        } else if (merge.image) {
-          image = merge.image;
-        }
+        const merge = Array.isArray(serviceDef['<<']) ? serviceDef['<<'] : [serviceDef['<<']];
+        merge.forEach(m => {
+          if (m && m.image && !image) {
+            image = m.image;
+          }
+        });
       }
 
       if (image) {
@@ -29,7 +27,7 @@ module.exports = function extractDockerImages(fileContent) {
         result.push({
           depName: depName,
           currentValue: currentValue || 'latest',
-          service: serviceName // <- added for Renovate PR title
+          service: serviceName // For Renovate PR titles
         });
       }
     }
