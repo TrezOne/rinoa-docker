@@ -10,7 +10,6 @@
 | apcupsd-cgi | bnhf/apcupsd-cgi:latest |
 | apprise-api | lscr.io/linuxserver/apprise-api:latest |
 | archivebox | archivebox/archivebox:latest |
-| argus | quay.io/argus-io/argus:latest |
 | asciinema | ghcr.io/asciinema/asciinema-server:latest |
 | asciinema-pg-db | postgres:14-alpine |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest |
