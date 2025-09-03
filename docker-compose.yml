@@ -387,42 +387,6 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/archivebox:/data
       # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
-  argus:
-    container_name: argus
-    environment:
-      ARGUS_UID: ${PUID}
-      ARGUS_GID: ${PGID}
-    healthcheck:
-      test: ["CMD", "/healthcheck", "http://localhost:8080/api/v1/healthcheck"]
-      interval: 1m
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-    image: quay.io/argus-io/argus:latest
-    labels:
-      swag: enable
-      swag_proto: http
-      swag_port: 8080
-      swag_url: argus.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.parent: Rinoa
-      swag.uptime-kuma.name: Argus
-      swag.uptime-kuma.monitor.url: https://argus.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
-      homepage.group: System Administration
-      homepage.name: Argus
-      homepage.icon: release-argus.png
-      homepage.href: https://argus.${MY_TLD}
-      homepage.description: Software release monitoring and notifications
-    ports:
-      - 9857:8080
-    profiles: ["rinoa-apps"]
-    restart: always
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/argus/config.yml:/app/config.yml
-      - ${DOCKER_VOLUME_CONFIG}/argus/:/app/data/
   asciinema:
     container_name: asciinema
     depends_on:
