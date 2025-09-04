@@ -5698,7 +5698,7 @@ services:
       READARR_URL: http://readarr:8787
       SONARR_API_KEY: ${SONARR_API_KEY}
       SONARR_URL: http://sonarr:8989
-    image: ghcr.io/thecfu/scraparr:2.2.4
+    image: ghcr.io/thecfu/scraparr:2
     ports:
       - 7100:7100
     profiles: ["rinoa-apps"]
