@@ -1542,6 +1542,7 @@ services:
       SECRET_KEY: ${DOCKPEEK_SECRET_KEY}
       USERNAME: admin
       PASSWORD: ${DOCKPEEK_PASSWORD}
+      DOCKER_HOST: tcp://dockerproxy:2375
       DOCKER_HOST_NAME: Rinoa
       DOCKER_HOST_PUBLIC_HOSTNAME: 192.168.1.254
       DOCKER_HOST_1_URL: tcp://192.168.1.250:2375
@@ -1549,7 +1550,7 @@ services:
       DOCKER_HOST_1_PUBLIC_NAME: 192.168.1.250
       DOCKER_HOST_2_URL: tcp://192.168.1.252:2375
       DOCKER_HOST_2_NAME: Rikku
-      DOCKER_HOST_3_PUBLIC_NAME: 192.168.1.252
+      DOCKER_HOST_2_PUBLIC_NAME: 192.168.1.252
     labels:
       swag: enable
       swag_proto: http
@@ -1571,8 +1572,6 @@ services:
       - 3420:8000
     profiles: ["rinoa-apps"]
     restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
   duplicati:
     container_name: duplicati
     environment:
