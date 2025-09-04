@@ -1531,6 +1531,47 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - dockflare_data:/app/data
+  dockpeek:
+    container_name: dockpeek
+    image: ghcr.io/dockpeek/dockpeek:v1.5.7
+    depends_on:
+      docker-socket-proxy:
+        condition: service_started
+        required: true
+    environment:
+      SECRET_KEY: ${DOCKPEEK_SECRET_KEY}
+      USERNAME: admin
+      PASSWORD: ${DOCKPEEK_PASSWORD}
+      DOCKER_HOST_1_URL: tcp://dockerproxy:2375
+      DOCKER_HOST_1_NAME: Rinoa
+      DOCKER_HOST_1_PUBLIC_NAME:
+      DOCKER_HOST_2_URL: tcp://192.168.1.250:2375
+      DOCKER_HOST_2_NAME: Benedikta
+      DOCKER_HOST_2_PUBLIC_NAME:
+      DOCKER_HOST_3_URL: tcp://192.168.1.252:2375
+      DOCKER_HOST_3_NAME: Rikku
+      DOCKER_HOST_3_PUBLIC_NAME:
+    labels:
+      swag: enable
+      swag_proto: http
+      swag_port: 8000
+      swag_url: ports.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.parent: Rinoa
+      swag.uptime-kuma.name: Dockpeek
+      swag.uptime-kuma.monitor.url: https://ports.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+      homepage.group: System Administration
+      homepage.name: Dockpeek
+      homepage.href: https://ports.${MY_TLD}
+      homepage.icon: sh-dockpeek.svg
+      homepage.description: Real-time port monitoring and discovery
+    ports:
+      - 3420:8000
+    profiles: ["rinoa-apps"]
+    restart: unless-stopped
   duplicati:
     container_name: duplicati
     environment:
@@ -4885,45 +4926,6 @@ services:
       - 36102:8000
     profiles: ["rinoa-apps"]
     restart: unless-stopped
-  portracker:
-    cap_add:
-      - SYS_PTRACE
-      - SYS_ADMIN
-    container_name: portracker
-    environment:
-      DATABASE_PATH: /data/portracker.db
-      DEBUG: false
-      PORT: 4999
-    image: mostafawahied/portracker:latest
-    labels:
-      swag: enable
-      swag_auth: authelia
-      swag_proto: http
-      swag_port: 4999
-      swag_url: ports.${MY_TLD}
-      swag_address: 192.168.1.254
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.monitor.parent: Rinoa
-      swag.uptime-kuma.name: Portracker
-      swag.uptime-kuma.monitor.url: https://ports.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
-      homepage.group: System Administration
-      homepage.name: Portracker
-      homepage.href: https://ports.${MY_TLD}
-      homepage.icon: sh-portracker.svg
-      homepage.description: Real-time port monitoring and discovery
-    pid: "host"
-    ports:
-      - 4999:4999
-    profiles: ["rinoa-apps"]
-    restart: unless-stopped
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - ${DOCKER_VOLUME_CONFIG}/portracker:/data
-      - /var/run/docker.sock:/var/run/docker.sock:ro
   postal-smtp:
     cap_add:
       - NET_BIND_SERVICE
