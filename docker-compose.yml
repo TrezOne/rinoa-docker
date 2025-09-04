@@ -6216,7 +6216,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-    image: git.trez.wtf/trez.one/soularr-dashboard:v0.1
+    image: ghcr.io/mrusse/soularr:main
     labels:
       homepage.name: Soularr
       homepage.group: Downloaders

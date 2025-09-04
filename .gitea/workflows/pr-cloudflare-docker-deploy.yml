@@ -370,7 +370,6 @@ jobs:
           key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
 
       - name: Install tea
-        if: steps.cache-tea.outputs.cache-hit != 'true'
         uses: supplypike/setup-bin@v4
         with:
           uri: https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64
