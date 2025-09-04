@@ -9,7 +9,8 @@ jobs:
   deploy:
     name: Deploy Updated Services With Dependencies
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'Renovate')
+    # Only run if commit author name contains "renovate" (case-insensitive)
+    if: ${{ contains(toLower(github.event.head_commit.author.name), 'renovate') }}
 
     steps:
       - name: Checkout repository
@@ -36,7 +37,7 @@ jobs:
 
           echo "Changed services: $CHANGED_SERVICES"
 
-          # Recursively collect dependencies, handling both array and mapping style
+          # Recursively collect dependencies
           declare -A VISITED
           ALL_DEPLOY=()
 
