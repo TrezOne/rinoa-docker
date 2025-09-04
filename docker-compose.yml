@@ -5672,11 +5672,21 @@ services:
   scraparr:
     container_name: scraparr
     depends_on:
-      - bazarr
-      - prowlarr
-      - radarr
-      - readarr
-      - sonarr
+      bazarr:
+        condition: service_started
+        required: true
+      prowlarr:
+        condition: service_started
+        required: true
+      radarr:
+        condition: service_started
+        required: true
+      readarr:
+        condition: service_started
+        required: true
+      sonarr:
+        condition: service_started
+        required: true
     environment:
       BAZARR_API_KEY: ${BAZARR_API_KEY}
       BAZARR_URL: http://bazarr:6767
