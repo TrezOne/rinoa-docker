@@ -5669,6 +5669,40 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/sablier/state:/opt/sablier/state
       - ${DOCKER_VOLUME_CONFIG}/sablier/custom_themes:/opt/sablier/custom_themes
       - /var/run/docker.sock:/var/run/docker.sock
+  scraparr:
+    container_name: scraparr
+    depends_on:
+      bazarr:
+        condition: service_started
+        required: true
+      prowlarr:
+        condition: service_started
+        required: true
+      radarr:
+        condition: service_started
+        required: true
+      readarr:
+        condition: service_started
+        required: true
+      sonarr:
+        condition: service_started
+        required: true
+    environment:
+      BAZARR_API_KEY: ${BAZARR_API_KEY}
+      BAZARR_URL: http://bazarr:6767
+      PROWLARR_API_KEY: ${PROWLARR_API_KEY}
+      PROWLARR_URL: http://prowlarr:9696
+      RADARR_API_KEY: ${RADARR_API_KEY}
+      RADARR_URL: http://radarr:7878
+      READARR_API_KEY: ${READARR_API_KEY}
+      READARR_URL: http://readarr:8787
+      SONARR_API_KEY: ${SONARR_API_KEY}
+      SONARR_URL: http://sonarr:8989
+    image: ghcr.io/thecfu/scraparr:2
+    ports:
+      - 7100:7100
+    profiles: ["rinoa-apps"]
+    restart: unless-stopped
   scrutiny:
     cap_add:
       - SYS_RAWIO
@@ -6182,7 +6216,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-    image: git.trez.wtf/trez.one/soularr-dashboard:v0.1
+    image: ghcr.io/mrusse/soularr:main
     labels:
       homepage.name: Soularr
       homepage.group: Downloaders

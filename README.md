@@ -163,6 +163,7 @@
 | romm-valkey | docker.io/bitnami/valkey:latest |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest |
 | sablier | sablierapp/sablier:latest |
+| scraparr | ghcr.io/thecfu/scraparr:2 |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus |
 | searxng | searxng/searxng:latest |
 | searxng-valkey | docker.io/bitnami/valkey:latest |
@@ -180,7 +181,7 @@
 | sonarr | lscr.io/linuxserver/sonarr:latest |
 | sonashow | thewicklowwolf/sonashow:latest |
 | soularr | mrusse08/soularr:latest |
-| soularr-dashboard | git.trez.wtf/trez.one/soularr-dashboard:v0.1 |
+| soularr-dashboard | ghcr.io/mrusse/soularr:main |
 | soulseek | slskd/slskd |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | stable-diffusion-webui | ghcr.io/neggles/sd-webui-docker:latest |

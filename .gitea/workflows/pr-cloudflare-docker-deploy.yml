@@ -10,12 +10,11 @@ on:
 
 env:
   FLARECTL_VERSION: '0.115.0'
-  HC_VAULT_VERSION: '1.20.0'
+  HC_VAULT_VERSION: '1.18.0'
   TEA_VERSION: '0.10.1'
 
 jobs:
   check-and-create-pr:
-    if: github.ref != 'refs/heads/main' && !startsWith(github.ref_name, 'renovate/') && github.actor != 'renovate-bot'
     name: Check and Create PR
     runs-on: ubuntu-latest
     steps:
@@ -325,7 +324,7 @@ jobs:
 
       - name: Generate service list
         run: |
-          yq '.services|to_entries|map({service:.key,image:.value.image,description:(.value.labels."homepage.description"//null)})' docker-compose.yml
+          yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
 
       - name: Generate Markdown Table
         uses: gazab/create-markdown-table@v1
@@ -357,7 +356,7 @@ jobs:
   pr-merge:
     name: PR Merge
     needs: [regenerate-readme-modified-services]
-    if: github.ref != 'refs/heads/main' && !startsWith(github.ref_name, 'renovate/') && github.actor != 'renovate-bot'
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -415,7 +414,7 @@ jobs:
   docker-compose-deploy:
     name: Docker Compose Deployment
     runs-on: ubuntu-latest
-    needs: [generate-service-list, docker-compose-dry-run]
+    needs: [generate-service-list, docker-compose-dry-run, pr-merge]
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
@@ -436,7 +435,6 @@ jobs:
           key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
 
       - name: Install Vault (only if not cached)
-        if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
