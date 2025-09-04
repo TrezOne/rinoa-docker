@@ -5,17 +5,17 @@ on:
   push:
     branches-ignore:
       - 'main'
+      - 'renovate/**'
     paths:
       - '**/docker-compose.yml'
 
 env:
   FLARECTL_VERSION: '0.115.0'
-  HC_VAULT_VERSION: '1.20.0'
+  HC_VAULT_VERSION: '1.18.0'
   TEA_VERSION: '0.10.1'
 
 jobs:
   check-and-create-pr:
-    if: github.ref != 'refs/heads/main' && !startsWith(github.ref_name, 'renovate/') && github.actor != 'renovate-bot'
     name: Check and Create PR
     runs-on: ubuntu-latest
     steps:
@@ -32,6 +32,7 @@ jobs:
           key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
 
       - name: Install tea
+        if: steps.cache-tea.outputs.cache-hit != 'true'
         uses: supplypike/setup-bin@v4
         with:
           uri: https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64
@@ -357,7 +358,7 @@ jobs:
   pr-merge:
     name: PR Merge
     needs: [regenerate-readme-modified-services]
-    if: github.ref != 'refs/heads/main' && !startsWith(github.ref_name, 'renovate/') && github.actor != 'renovate-bot'
+    if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -371,6 +372,7 @@ jobs:
           key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
 
       - name: Install tea
+        if: steps.cache-tea.outputs.cache-hit != 'true'
         uses: supplypike/setup-bin@v4
         with:
           uri: https://gitea.com/gitea/tea/releases/download/v${{ env.TEA_VERSION }}/tea-${{ env.TEA_VERSION }}-linux-amd64
@@ -415,7 +417,7 @@ jobs:
   docker-compose-deploy:
     name: Docker Compose Deployment
     runs-on: ubuntu-latest
-    needs: [generate-service-list, docker-compose-dry-run]
+    needs: [generate-service-list, docker-compose-dry-run, pr-merge]
     env:
       VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
