@@ -43,6 +43,7 @@
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |
 | dockflare | alplat/dockflare:stable |
+| dockpeek | ghcr.io/dockpeek/dockpeek:v1.5.7 |
 | duplicati | lscr.io/linuxserver/duplicati:latest |
 | easyappointments | alextselegidis/easyappointments:1.5.1 |
 | excalidraw | excalidraw/excalidraw:latest |
@@ -142,7 +143,6 @@
 | portainer | portainer/portainer-ce:alpine |
 | portchecker-web | ghcr.io/dsgnr/portcheckerio-web:latest |
 | portchecker-api | ghcr.io/dsgnr/portcheckerio-api:latest |
-| portracker | mostafawahied/portracker:latest |
 | postal-smtp | ghcr.io/postalserver/postal:latest |
 | postal-web | ghcr.io/postalserver/postal:latest |
 | postal-worker | ghcr.io/postalserver/postal:latest |
