@@ -1544,12 +1544,13 @@ services:
       PASSWORD: ${DOCKPEEK_PASSWORD}
       DOCKER_HOST: tcp://dockerproxy:2375
       DOCKER_HOST_NAME: Rinoa
-      DOCKER_HOST_2_URL: tcp://192.168.1.250:2375
-      DOCKER_HOST_2_NAME: Benedikta
-      DOCKER_HOST_2_PUBLIC_NAME:
-      DOCKER_HOST_3_URL: tcp://192.168.1.252:2375
-      DOCKER_HOST_3_NAME: Rikku
-      DOCKER_HOST_3_PUBLIC_NAME:
+      DOCKER_HOST_PUBLIC_HOSTNAME: 192.168.1.254
+      DOCKER_HOST_1_URL: tcp://192.168.1.250:2375
+      DOCKER_HOST_1_NAME: Benedikta
+      DOCKER_HOST_1_PUBLIC_NAME: 192.168.1.250
+      DOCKER_HOST_2_URL: tcp://192.168.1.252:2375
+      DOCKER_HOST_2_NAME: Rikku
+      DOCKER_HOST_3_PUBLIC_NAME: 192.168.1.252
     labels:
       swag: enable
       swag_proto: http
