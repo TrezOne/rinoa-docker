@@ -1542,9 +1542,8 @@ services:
       SECRET_KEY: ${DOCKPEEK_SECRET_KEY}
       USERNAME: admin
       PASSWORD: ${DOCKPEEK_PASSWORD}
-      DOCKER_HOST_1_URL: tcp://192.168.1.254:2375
-      DOCKER_HOST_1_NAME: Rinoa
-      DOCKER_HOST_1_PUBLIC_NAME:
+      DOCKER_HOST: tcp://dockerproxy:2375
+      DOCKER_HOST_NAME: Rinoa
       DOCKER_HOST_2_URL: tcp://192.168.1.250:2375
       DOCKER_HOST_2_NAME: Benedikta
       DOCKER_HOST_2_PUBLIC_NAME:
@@ -1572,6 +1571,8 @@ services:
       - 3420:8000
     profiles: ["rinoa-apps"]
     restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock::ro
   duplicati:
     container_name: duplicati
     environment:
