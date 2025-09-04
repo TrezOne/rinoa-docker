@@ -181,7 +181,7 @@
 | sonarr | lscr.io/linuxserver/sonarr:latest |
 | sonashow | thewicklowwolf/sonashow:latest |
 | soularr | mrusse08/soularr:latest |
-| soularr-dashboard | git.trez.wtf/trez.one/soularr-dashboard:v0.1 |
+| soularr-dashboard | ghcr.io/mrusse/soularr:main |
 | soulseek | slskd/slskd |
 | speedtest-tracker | lscr.io/linuxserver/speedtest-tracker:latest |
 | stable-diffusion-webui | ghcr.io/neggles/sd-webui-docker:latest |
