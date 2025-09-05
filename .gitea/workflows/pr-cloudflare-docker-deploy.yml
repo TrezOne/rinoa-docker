@@ -5,6 +5,7 @@ on:
   push:
     branches-ignore:
       - 'main'
+      - 'renovate/**'
     paths:
       - '**/docker-compose.yml'
 
