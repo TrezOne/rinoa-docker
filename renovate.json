@@ -25,7 +25,7 @@
       "description": "Allow only Alpine tag upgrades for all Alpine-based images",
       "matchDatasources": ["docker"],
       "packagePatterns": [".*alpine.*"],
-      "allowedVersions": ".*alpine.*",
+      "allowedVersions": "*alpine*",
       "groupName": "alpine-upgrades",
       "semanticCommitScope": "{{depName}}"
     },
