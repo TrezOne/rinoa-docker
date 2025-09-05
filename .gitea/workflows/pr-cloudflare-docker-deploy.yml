@@ -324,7 +324,7 @@ jobs:
 
       - name: Generate service list
         run: |
-          yq '.services | to_entries | map({"service": .key, "image": .value.image})' docker-compose.yml > services.yml
+          yq '.services | to_entries | map({"service": .key, "image": .value.image, "description": (.value.labels."homepage.description" // "")})' docker-compose.yml > services.yml
 
       - name: Generate Markdown Table
         uses: gazab/create-markdown-table@v1
