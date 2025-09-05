@@ -15,37 +15,43 @@
   ],
   "packageRules": [
     {
-      "matchCategories": [
-        "docker"
-      ],
-      "enabled": true
+      "description": "Pin ClickHouse to the exact version used by Signoz",
+      "matchPackageNames": ["clickhouse/clickhouse-server"],
+      "allowedVersions": "^24\\.1\\.2-alpine$",
+      "groupName": "signoz-clickhouse",
+      "semanticCommitScope": "signoz-clickhouse"
     },
     {
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchPackageNames": [
-        "clickhouse/clickhouse-server"
-      ],
-      "enabled": false
+      "description": "Allow only Alpine tag upgrades for all Alpine-based images",
+      "matchDatasources": ["docker"],
+      "packagePatterns": [".*alpine.*"],
+      "allowedVersions": ".*alpine.*",
+      "groupName": "alpine-upgrades",
+      "semanticCommitScope": "{{depName}}"
     },
     {
-      "matchDatasources": [
-        "docker"
-      ],
-      "allowedVersions": "/.*-alpine$/",
-      "matchPackageNames": [
-        "/.*-alpine$/"
-      ]
+      "description": "Pin postgres image – never upgrade",
+      "matchPackageNames": ["postgres"],
+      "pin": true,
+      "semanticCommitScope": "postgres"
     },
     {
-      "matchDatasources": [
-        "docker"
-      ],
-      "enabled": false,
-      "matchPackageNames": [
-        "/^.*:latest$/"
-      ]
+      "description": "Pin pgvector image – never upgrade",
+      "matchPackageNames": ["pgvector/pgvector"],
+      "pin": true,
+      "semanticCommitScope": "pgvector"
+    },
+    {
+      "description": "Pin pgvecto‑rs image – never upgrade",
+      "matchPackageNames": ["pgvecto-rs/pgvecto-rs"],
+      "pin": true,
+      "semanticCommitScope": "pgvecto-rs"
+    },
+    {
+      "description": "Default rule for all remaining Docker images",
+      "matchDatasources": ["docker"],
+      "groupName": "docker-images",
+      "semanticCommitScope": "{{depName}}"
     }
   ],
   "customManagers": [],
