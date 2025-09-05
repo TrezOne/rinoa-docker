@@ -1636,7 +1636,7 @@ services:
       mariadb:
         condition: service_healthy
         required: true
-    image: alextselegidis/easyappointments:1.5.1
+    image: alextselegidis/easyappointments:1.5.2
     environment:
       BASE_URL: http://localhost
       DEBUG_MODE: TRUE
