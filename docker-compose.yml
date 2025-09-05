@@ -5452,6 +5452,7 @@ services:
       # Renovate will only process PRs/updates in this time window
       RENOVATE_SCHEDULE: '["after 2am and before 6am"]'
       OTEL_EXPORTER_OTLP_ENDPOINT: http://signoz-otel-collector:4318
+      OTEL_SERVICE_NAME: renovate
       OTEL_SERVICE_NAMESPACE: renovate.${MY_TLD}
     image: renovate/renovate:latest
     restart: unless-stopped
