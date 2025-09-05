@@ -17,15 +17,13 @@
     {
       "description": "Pin ClickHouse to the exact version used by Signoz",
       "matchPackageNames": ["clickhouse/clickhouse-server"],
-      "allowedVersions": "/24\\.1\\.2-alpine/",
-      "groupName": "signoz-clickhouse",
+      "pin": true,
       "semanticCommitScope": "signoz-clickhouse"
     },
     {
       "description": "Pin Zookeeper to the exact version used by Signoz",
-      "matchPackageNames": ["clickhouse/clickhouse-server"],
-      "allowedVersions": "/3\\.7\\.1/",
-      "groupName": "signoz-clickhouse",
+      "matchPackageNames": ["bitnami/zookeeper"],
+      "pin": true,
       "semanticCommitScope": "signoz-zookeeper-1"
     },
     {
