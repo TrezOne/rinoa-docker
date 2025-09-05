@@ -1,23 +1,34 @@
 name: Deploy Renovate Updates
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Check Renovate Updates"]
+    types:
+      - completed
 
 jobs:
   deploy:
-    name: Deploy Updated Services With Dependencies
     runs-on: ubuntu-latest
-    # Only run if commit author name contains "renovate" (case-insensitive)
-    if: ${{ contains(toLower(github.event.head_commit.author.name), 'renovate') }}
+    if: >
+      ${{
+        github.event.workflow_run.conclusion == 'success' &&
+        contains(toLower(github.event.workflow_run.head_commit.author.name), 'renovate')
+      }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # we need full history to compute merge-base
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker (if needed)
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Install yq
         run: |
@@ -29,15 +40,18 @@ jobs:
         run: |
           echo "Finding modified services in docker-compose.yml..."
 
-          # All services
-          ALL_SERVICES=$(yq e '.services | keys | .[]' docker-compose.yml)
+          # Find merge-base with previous main commit
+          BASE_COMMIT=$(git merge-base HEAD HEAD~1)
 
-          # Services changed in last commit
-          CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD docker-compose.yml | xargs -I{} yq e '.services | keys | .[]' {})
+          # Extract changed services between merge-base and HEAD
+          CHANGED_SERVICES=$(git diff --name-only $BASE_COMMIT HEAD -- docker-compose.yml \
+            | xargs -r -I{} yq e '.services | keys | .[]' {})
 
-          echo "Changed services: $CHANGED_SERVICES"
+          if [ -z "$CHANGED_SERVICES" ]; then
+            echo "No services changed, skipping."
+            exit 0
+          fi
 
-          # Recursively collect dependencies
           declare -A VISITED
           ALL_DEPLOY=()
 
