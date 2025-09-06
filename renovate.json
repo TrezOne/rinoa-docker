@@ -1,53 +1,53 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["config:base"],
-    "enabledManagers": ["docker-compose"],
-    "schedule": [
-      "* 3-9 * * 5",
-      "* 3-9 * * 6",
-      "* 3-9 * * 0"
-    ],
-    "prConcurrentLimit": 5,
-    "branchPrefix": "renovate/",
-    "rebaseWhen": "behind-base-branch",
-    "packageRules": [
-      {
-        "description": "Pin ClickHouse, Zookeeper, Postgres, pgvector, and pgvecto-rs images",
-        "matchDatasources": ["docker"],
-        "matchManagers": ["docker-compose"],
-        "matchPackageNames": [
-          "signoz-clickhouse-server",
-          "signoz-zookeeper-1",
-          "postgres",
-          "pgvector",
-          "pgvecto-rs"
-        ],
-        "pinDigests": true,
-        "allowedVersions": "digest"
-      },
-      {
-        "description": "Alpine-based images only update to Alpine-based versions",
-        "matchDatasources": ["docker"],
-        "matchManagers": ["docker-compose"],
-        "matchPackagePatterns": [".*"],
-        "allowedVersions": "/alpine/i"
-      },
-      {
-        "description": "Automerge patch updates for semver tags",
-        "matchDatasources": ["docker"],
-        "matchManagers": ["docker-compose"],
-        "matchUpdateTypes": ["patch"],
-        "automerge": true
-      },
-      {
-        "description": "Require approval for major and minor updates",
-        "matchDatasources": ["docker"],
-        "matchManagers": ["docker-compose"],
-        "matchUpdateTypes": ["minor", "major"],
-        "automerge": false,
-        "requiredStatusChecks": null
-      }
-    ],
-    "branchNameStrict": true,
-    "branchTopic": "{{{depNameSanitized}}}-{{{newVersion}}}"
-  }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "enabledManagers": ["docker-compose"],
+  "schedule": [
+    "* 3-9 * * 5",
+    "* 3-9 * * 6",
+    "* 3-9 * * 0"
+  ],
+  "prConcurrentLimit": 5,
+  "branchPrefix": "renovate/",
+  "rebaseWhen": "behind-base-branch",
+  "packageRules": [
+    {
+      "description": "Pin ClickHouse, Zookeeper, Postgres, pgvector, and pgvecto-rs images",
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchPackageNames": [
+        "signoz-clickhouse-server",
+        "signoz-zookeeper-1",
+        "postgres",
+        "pgvector",
+        "pgvecto-rs"
+      ],
+      "pinDigests": true,
+      "allowedVersions": "digest"
+    },
+    {
+      "description": "Alpine-based images only update to Alpine-based versions",
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchPackagePatterns": [".*"],
+      "allowedVersions": "/alpine/i"
+    },
+    {
+      "description": "Automerge patch updates for semver tags",
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Require approval for major and minor updates",
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchUpdateTypes": ["minor", "major"],
+      "automerge": false,
+      "requiredStatusChecks": null
+    }
+  ],
+  "branchNameStrict": true,
+  "branchTopic": "{{{depNameSanitized}}}-{{{newVersion}}}"
+}
