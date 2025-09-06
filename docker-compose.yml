@@ -245,7 +245,7 @@ services:
     container_name: adguard
     environment:
       TZ: ${TZ}
-    image: adguard/adguardhome:latest
+    image: adguard/adguardhome:v0.107.65
     labels:
       swag: enable
       swag_proto: http
@@ -5429,6 +5429,7 @@ services:
       RENOVATE_ENDPOINT: "https://git.${MY_TLD}/api/v1"  # your Gitea URL
       RENOVATE_USERNAME: "renovate-bot"
       RENOVATE_GIT_AUTHOR: "Renovate Bot <it-services@trez.wtf>"
+      RENOVATE_GITHUB_COM_TOKEN: ${LIBRECHAT_GITHUB_TOKEN}
 
       # --- Behavior ---
       RENOVATE_AUTODISCOVER: "true"        # discover all repos renovate-bot has access to
