@@ -16,45 +16,71 @@
   "packageRules": [
     {
       "description": "Pin ClickHouse to the exact version used by Signoz",
-      "matchPackageNames": ["clickhouse/clickhouse-server"],
-      "pin": true,
+      "matchPackageNames": [
+        "clickhouse/clickhouse-server"
+      ],
+      "pin": {
+        "enabled": true
+      },
       "semanticCommitScope": "signoz-clickhouse"
     },
     {
       "description": "Pin Zookeeper to the exact version used by Signoz",
-      "matchPackageNames": ["bitnami/zookeeper"],
-      "pin": true,
+      "matchPackageNames": [
+        "bitnami/zookeeper"
+      ],
+      "pin": {
+        "enabled": true
+      },
       "semanticCommitScope": "signoz-zookeeper-1"
     },
     {
       "description": "Allow only Alpine tag upgrades for all Alpine-based images",
-      "matchDatasources": ["docker"],
-      "packagePatterns": [".*alpine.*"],
+      "matchDatasources": [
+        "docker"
+      ],
       "allowedVersions": "/.*alpine.*/",
       "groupName": "alpine-upgrades",
-      "semanticCommitScope": "{{depName}}"
+      "semanticCommitScope": "{{depName}}",
+      "matchPackageNames": [
+        "/.*alpine.*/"
+      ]
     },
     {
       "description": "Pin postgres image – never upgrade",
-      "matchPackageNames": ["postgres"],
-      "pin": true,
+      "matchPackageNames": [
+        "postgres"
+      ],
+      "pin": {
+        "enabled": true
+      },
       "semanticCommitScope": "postgres"
     },
     {
       "description": "Pin pgvector image – never upgrade",
-      "matchPackageNames": ["pgvector/pgvector"],
-      "pin": true,
+      "matchPackageNames": [
+        "pgvector/pgvector"
+      ],
+      "pin": {
+        "enabled": true
+      },
       "semanticCommitScope": "pgvector"
     },
     {
       "description": "Pin pgvecto‑rs image – never upgrade",
-      "matchPackageNames": ["pgvecto-rs/pgvecto-rs"],
-      "pin": true,
+      "matchPackageNames": [
+        "pgvecto-rs/pgvecto-rs"
+      ],
+      "pin": {
+        "enabled": true
+      },
       "semanticCommitScope": "pgvecto-rs"
     },
     {
       "description": "Default rule for all remaining Docker images",
-      "matchDatasources": ["docker"],
+      "matchDatasources": [
+        "docker"
+      ],
       "groupName": "docker-images",
       "semanticCommitScope": "{{depName}}"
     }
