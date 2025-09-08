@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | 13ft | ghcr.io/wasi-master/13ft:latest | Web interface for blocking ads and paywalls |
 | actual_server | docker.io/actualbudget/actual-server:latest | Privacy-focused app for managing finances |
-| adguard | adguard/adguardhome:latest | Ad-blocking/DNS |
+| adguard | adguard/adguardhome:v0.107.65 | Ad-blocking/DNS |
 | apcupsd-cgi | bnhf/apcupsd-cgi:latest | Web interface for apcupsd |
 | apprise-api | lscr.io/linuxserver/apprise-api:latest | Multi-channel notification API |
 | archivebox | archivebox/archivebox:latest | Open-source and self-hosted web archiving |
@@ -43,9 +43,9 @@
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |  |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |  |
 | dockflare | alplat/dockflare:stable | Cloudflare Tunnel controller |
-| dockpeek | ghcr.io/dockpeek/dockpeek:v1.5.7 | Real-time port monitoring and discovery |
+| dockpeek | ghcr.io/dockpeek/dockpeek:v1.5.8 | Real-time port monitoring and discovery |
 | duplicati | lscr.io/linuxserver/duplicati:latest | Data backup |
-| easyappointments | alextselegidis/easyappointments:1.5.1 | Highly customizable appointment scheduler |
+| easyappointments | alextselegidis/easyappointments:1.5.2 | Highly customizable appointment scheduler |
 | excalidraw | excalidraw/excalidraw:latest | Virtual whiteboard for sketching hand-drawn like diagrams |
 | explo | ghcr.io/lumepart/explo:latest |  |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main | Open-source, self-hosted, personal/family electronic medical record aggregator |
@@ -77,7 +77,7 @@
 | invoice-ninja_proxy | nginx | Simple invoicing, multiple payment options, expense and vendor management, and more! |
 | it-tools | ghcr.io/corentinth/it-tools:latest | Useful tools for developers and people working in IT |
 | jellyfin | jellyfin/jellyfin | Movie/TV Streaming |
-| jitsi-etherpad | etherpad/etherpad:1.8.6 |  |
+| jitsi-etherpad | etherpad/etherpad:1.9.7 |  |
 | jitsi-jibri | jitsi/jibri:stable |  |
 | jitsi-jicofo | jitsi/jicofo:stable |  |
 | jitsi-jigasi | jitsi/jigasi:stable |  |
@@ -135,6 +135,8 @@
 | penpot-exporter | penpotapp/exporter:latest |  |
 | penpot-pg-db | postgres:15-alpine |  |
 | penpot-redis | redis:7.2 |  |
+| pgbackweb | eduardolat/pgbackweb:latest | Backups for PostgreSQL |
+| pgbackweb-db | postgres:17-alpine |  |
 | planka | ghcr.io/plankanban/planka:2.0.0-rc.3 | Kanban board |
 | planka-pg-db | postgres:16-alpine |  |
 | plant-it | msdeluise/plant-it-server:latest | 🪴 Self-hosted, open source gardening companion app |
@@ -156,7 +158,7 @@
 | reactive-resume-pg | postgres:16-alpine |  |
 | readarr | lscr.io/linuxserver/readarr:develop | eBook/Audiobook Automation |
 | redlib | quay.io/redlib/redlib:latest | Redlib is a private front-end like Invidious but for Reddit |
-| renovate | renovate/renovate:latest |  |
+| renovate | renovate/renovate:41.97.7-full |  |
 | renovate-valkey | docker.io/bitnami/valkey:latest |  |
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest | Fully customizable communications platform with high standards of data protection |
 | romm | rommapp/romm:latest | Beautiful, powerful, self-hosted ROM manager |
