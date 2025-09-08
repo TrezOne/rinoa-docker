@@ -4721,6 +4721,7 @@ services:
     restart: unless-stopped
     volumes:
       - pgbackweb-data:/var/lib/postgresql/data
+      - ${DOCKER_VOLUME_STORAGE}/backups/dbs/postgresql:/backups
   planka:
     container_name: planka
     depends_on:
