@@ -5483,7 +5483,6 @@ services:
       RENOVATE_ONBOARDING: "true"          # create onboarding PR if repo not configured
       RENOVATE_REQUIRE_CONFIG: "optional"  # run even if no renovate config exists
       RENOVATE_REDIS_URL: redis://renovate-valkey:6379
-      LIBRECHAT_GITHUB_TOKEN: $LIBRECHAT_GITHUB_TOKEN}
       LOG_LEVEL: "info"
 
       # --- Enable dependency dashboard ---
