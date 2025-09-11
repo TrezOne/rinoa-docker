@@ -4704,6 +4704,8 @@ services:
     ports:
       - "8085:8085" # Access the web interface at http://localhost:8085
     restart: unless-stopped
+    volumes:
+      - ${DOCKER_VOLUME_STORAGE}/backups/dbs/postgresql:/backups
   pgbackweb-db:
     container_name: pgbackweb-db
     environment:
@@ -4721,7 +4723,6 @@ services:
     restart: unless-stopped
     volumes:
       - pgbackweb-data:/var/lib/postgresql/data
-      - ${DOCKER_VOLUME_STORAGE}/backups/dbs/postgresql:/backups
   planka:
     container_name: planka
     depends_on:
