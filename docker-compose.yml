@@ -1487,7 +1487,7 @@ services:
       TUNNEL_NAME: dockflared-tunnel
       TZ: ${TZ}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/ping"]
+      test: ["CMD-SHELL", "wget -qO- --server-response http://localhost:5000/ping 2>&1 | awk '/^  HTTP/{code=$2} /^[^{]/{next} {print; fflush()} END{exit (code>=400 || code==0)}' >/dev/null"]
       interval: 1m30s
       timeout: 30s
       retries: 5
