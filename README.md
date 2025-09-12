@@ -103,7 +103,7 @@
 | mastodon-valkey | docker.io/bitnami/valkey:latest |  |
 | maxun-backend | getmaxun/maxun-backend:latest |  |
 | maxun-frontend | getmaxun/maxun-frontend:latest | No-code web data extraction platform |
-| maxun-pg-db | postgres:13-alpine |  |
+| maxun-pg-db | postgres:17-alpine |  |
 | maxun-valkey | docker.io/bitnami/valkey:latest |  |
 | meilisearch | getmeili/meilisearch:v1.15 |  |
 | meme-search-pro | ghcr.io/neonwatty/meme_search_pro:latest | Meme search engine built with Python and Ruby |
