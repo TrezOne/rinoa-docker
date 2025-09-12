@@ -4714,7 +4714,7 @@ services:
       - "8085:8085" # Access the web interface at http://localhost:8085
     restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUME_STORAGE}/backups/dbs/postgresql:/backups
+      - ${DOCKER_VOLUME_STORAGE}/backups/dbs/:/backups
   pgbackweb-db:
     container_name: pgbackweb-db
     environment:
