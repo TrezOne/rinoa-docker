@@ -1486,19 +1486,24 @@ services:
       TUNNEL_DNS_SCAN_ZONE_NAMES:
       TUNNEL_NAME: dockflared-tunnel
       TZ: ${TZ}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/ping"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     image: alplat/dockflare:stable # Or :unstable for the latest features
     labels:
       homepage.group: Privacy/Security
       homepage.name: DockFlare
       homepage.href: https://cftunn.${MY_TLD}
-      homepage.icon: /icons/dockflare.png
+      homepage.icon: sh-dockflare.svg
       homepage.description: Cloudflare Tunnel controller
       homepage.widget.type: cloudflared
       homepage.widget.accountid: ${CLOUDFLARE_ACCOUNT_ID}
       homepage.widget.tunnelid: ${DOCKFLARE_CLOUDFLARE_TUNNEL_ID}
       homepage.widget.key: ${CLOUDFLAREDDNS_ENVIRONMENT_APITOKEN}
       swag: enable
-      swag_auth: authelia
       swag_proto: http
       swag_url: cftunn.${MY_TLD}
       swag.uptime-kuma.enabled: true
