@@ -33,9 +33,9 @@ x-maxun: &maxun-env
     REDIS_PORT: 6379
     BACKEND_PORT: 8080
     FRONTEND_PORT: 5173
-    BACKEND_URL: https://scrape.${MY_TLD}/api
+    BACKEND_URL: https://scrape.${MY_TLD}
     PUBLIC_URL: https://scrape.${MY_TLD}
-    VITE_BACKEND_URL: https://scrape.${MY_TLD}/api
+    VITE_BACKEND_URL: https://scrape.${MY_TLD}
     VITE_PUBLIC_URL: https://scrape.${MY_TLD}
     MAXUN_TELEMETRY: true
     PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
@@ -3739,8 +3739,12 @@ services:
   maxun-backend:
     container_name: maxun-backend
     depends_on:
-      - maxun-pg-db
-      - minio
+      maxun-pg-db:
+        condition: service_healthy
+        required: true
+      minio:
+        condition: service_started
+        required: true
     <<: *maxun-env
     expose:
       - 8080
@@ -3767,7 +3771,7 @@ services:
       swag_port: 5173
       swag_url: scrape.${MY_TLD}
       swag_server_custom_directive:
-        location /api {
+        location ~ ^/(auth|storage|record|workflow|robot|proxy|api-docs|api|webhook|socket.io)(/|$) {
               proxy_pass http://maxun-backend:8080;
         }
       swag.uptime-kuma.enabled: true
@@ -3788,7 +3792,7 @@ services:
     restart: unless-stopped
   maxun-pg-db:
     container_name: maxun-pg-db
-    image: postgres:13-alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: maxun
       POSTGRES_PASSWORD: ${MAXUN_DB_PASSWORD}
