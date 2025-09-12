@@ -2460,7 +2460,7 @@ services:
       APP_DEBUG: true
       APP_KEY: ${IN_APP_KEY}
       APP_URL: http://invoice_ninja:8003
-      APP_ENV: /var/www/html/.env
+      APP_ENV: production
       DB_DATABASE: invoice_ninja
       DB_HOST: mariadb
       DB_PASSWORD: ${IN_MYSQL_PASSWORD}
@@ -2468,6 +2468,7 @@ services:
       DB_USERNAME: ininja
       IN_PASSWORD: ${IN_PASSWORD}
       IN_USER_EMAIL: charish.patel@${MY_TLD}
+      IS_DOCKER: true
       MAIL_ENCRYPTION: null
       MAIL_FROM_ADDRESS: noreply@${MY_TLD}
       MAIL_FROM_NAME: null
@@ -2489,9 +2490,8 @@ services:
       - 9000
     image: invoiceninja/invoiceninja-debian:5
     profiles: ["rinoa-apps"]
-    restart: always
+    restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/invoice-ninja/invoice-ninja.env:/var/www/html/.env
       - invoice-ninja_cache:/var/www/html/bootstrap/cache
       - invoice-ninja_public:/var/www/html/public
       - invoice-ninja_storage:/var/www/html/storage
