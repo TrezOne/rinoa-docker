@@ -2459,7 +2459,7 @@ services:
     environment:
       APP_DEBUG: true
       APP_KEY: ${IN_APP_KEY}
-      APP_URL: http://invoice_ninja:8003
+      APP_URL: http://invoice-ninja:8005
       APP_ENV: production
       DB_DATABASE: invoice_ninja
       DB_HOST: mariadb
@@ -2505,7 +2505,7 @@ services:
     environment:
       APP_DEBUG: true
       APP_KEY: ${IN_APP_KEY}
-      APP_URL: http://invoice_ninja:9000
+      APP_URL: http://invoice-ninja:9000
       DB_DATABASE: invoice_ninja
       DB_HOST: mariadb
       DB_PASSWORD: ${IN_MYSQL_PASSWORD}
