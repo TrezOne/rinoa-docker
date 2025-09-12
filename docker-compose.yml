@@ -1497,7 +1497,7 @@ services:
       homepage.group: Privacy/Security
       homepage.name: DockFlare
       homepage.href: https://cftunn.${MY_TLD}
-      homepage.icon: /icons/dockflare.png
+      homepage.icon: sh-dockflare.svg
       homepage.description: Cloudflare Tunnel controller
       homepage.widget.type: cloudflared
       homepage.widget.accountid: ${CLOUDFLARE_ACCOUNT_ID}
