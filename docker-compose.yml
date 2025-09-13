@@ -1259,6 +1259,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/dagu/:/dagu
+      - ${DOCKER_VOLUME_STORAGE}/backups/:/backups
       - /var/run/docker.sock:/var/run/docker.sock
   dawarich-app:
     command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
