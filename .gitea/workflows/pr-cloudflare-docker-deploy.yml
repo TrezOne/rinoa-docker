@@ -24,13 +24,6 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Cache tea CLI
-        id: cache-tea
-        uses: actions/cache@v4
-        with:
-          path: /opt/hostedtoolcache/tea/${{ env.TEA_VERSION }}/x64
-          key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
-
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
@@ -227,26 +220,12 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Cache flarectl CLI
-        uses: actions/cache@v4
-        with:
-          path: ~/.flarectl
-          key: flarectl-${{ runner.os }}-${{ env.FLARECTL_VERSION }}-${{ hashFiles('workflow-config.yml') }}
-
       - name: Install flarectl
         uses: supplypike/setup-bin@v4
         with:
           uri: https://github.com/cloudflare/cloudflare-go/releases/download/v${{ env.FLARECTL_VERSION }}/flarectl_${{ env.FLARECTL_VERSION }}_linux_amd64.tar.gz
           name: flarectl
           version: ${{ env.FLARECTL_VERSION }}
-
-      - name: Cache Subdomain Files
-        uses: actions/cache@v4
-        with:
-          path: |
-            compose_subdomains.txt
-            cloudflare_subdomains.txt
-          key: ${{ runner.os }}-subdomains-${{ hashFiles('docker-compose.yml') }}
 
       - name: Grab Subdomains from Docker Compose & Cloudflare
         id: grab-subdomains
@@ -364,13 +343,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache tea CLI
-        id: cache-tea
-        uses: actions/cache@v4
-        with:
-          path: /opt/hostedtoolcache/tea/${{ env.TEA_VERSION }}/x64
-          key: tea-${{ runner.os }}-${{ env.TEA_VERSION }}
-
       - name: Install tea
         uses: supplypike/setup-bin@v4
         with:
@@ -433,7 +405,7 @@ jobs:
         id: cache-vault
         uses: actions/cache@v4
         with:
-          path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
+          path: /root/.vault/vault
           key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
 
       - name: Install Vault (only if not cached)
