@@ -114,6 +114,7 @@
 | mixpost | inovector/mixpost:latest | Multi-channel social media manager |
 | mixpost-valkey | docker.io/bitnami/valkey:latest |  |
 | mongodb | bitnami/mongodb:7.0 |  |
+| mongo-backup | jaaywags/automated-mongo-backup:latest | Backups for MongoDB |
 | multi-scrobbler | foxxmd/multi-scrobbler | JS App for scrobbling/recording play history from/to multiple sources |
 | n8n | docker.n8n.io/n8nio/n8n | Extendable workflow automation tool to easily automate tasks |
 | navidrome | deluan/navidrome:latest | Music Streaming |
