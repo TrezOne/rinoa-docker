@@ -169,7 +169,7 @@ jobs:
         id: cache-vault
         uses: actions/cache@v4
         with:
-          path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
+          path: /root/.vault/vault
           key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
 
       - name: Install Vault (only if not cached)
