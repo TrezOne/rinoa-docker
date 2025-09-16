@@ -4043,14 +4043,14 @@ services:
     container_name: automated-mongo-backup
     environment:
       MONGO_CONNECTION_STRING: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
-      DAILY_BACKUP_INTERVAL_MINUTES: ${DAILY_BACKUP_INTERVAL_MINUTES}
-      MAX_DAILY_BACKUPS: ${MAX_DAILY_BACKUPS}
-      NUMBER_OF_WEEKLY_BACKUPS: ${NUMBER_OF_WEEKLY_BACKUPS}
-      MAX_AGE_OF_WEEKLY_BACKUPS: ${MAX_AGE_OF_WEEKLY_BACKUPS}
-      NUMBER_OF_MONTHLY_BACKUPS: ${NUMBER_OF_MONTHLY_BACKUPS}
-      MAX_AGE_OF_MONTHLY_BACKUPS: ${MAX_AGE_OF_MONTHLY_BACKUPS}
-      NUMBER_OF_YEARLY_BACKUPS: ${NUMBER_OF_YEARLY_BACKUPS}
-      MAX_AGE_OF_YEARLY_BACKUPS: ${MAX_AGE_OF_YEARLY_BACKUPS}
+      DAILY_BACKUP_INTERVAL_MINUTES: 60
+      MAX_DAILY_BACKUPS: 24
+      NUMBER_OF_WEEKLY_BACKUPS: 6
+      MAX_AGE_OF_WEEKLY_BACKUPS: 1
+      NUMBER_OF_MONTHLY_BACKUPS: 3
+      MAX_AGE_OF_MONTHLY_BACKUPS: 1
+      NUMBER_OF_YEARLY_BACKUPS: 1
+      MAX_AGE_OF_YEARLY_BACKUPS: 1
       BACKUP_PATH: /backups
       WEB_UI_PORT: 3000
       TIMEZONE: ${TZ}
@@ -4058,7 +4058,7 @@ services:
     labels:
       homepage.group: System Administration
       homepage.name: Automated Mongo Backup
-      homepage.href: https://amdbb.${MY_TLD}
+      homepage.href: https://amb.${MY_TLD}
       homepage.icon: /icons/auto-mongodb-bkup.png
       homepage.description: Backups for MongoDB
       swag: enable
@@ -4067,7 +4067,7 @@ services:
       swag_url: amdb.${MY_TLD}
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.name: Automated Mongo Backup
-      swag.uptime-kuma.monitor.url: https://amdb.${MY_TLD}
+      swag.uptime-kuma.monitor.url: https://amb.${MY_TLD}
       swag.uptime-kuma.monitor.interval: 300
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
