@@ -165,15 +165,7 @@ jobs:
         run: |
           docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
 
-      - name: Cache Vault install
-        id: cache-vault
-        uses: actions/cache@v4
-        with:
-          path: /opt/hostedtoolcache/vault/${{ env.HC_VAULT_VERSION }}/x64
-          key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
-
       - name: Install Vault (only if not cached)
-        if: steps.cache-vault.outputs.cache-hit != 'true'
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
@@ -401,14 +393,7 @@ jobs:
         with:
           ref: main
 
-      - name: Cache Vault install
-        id: cache-vault
-        uses: actions/cache@v4
-        with:
-          path: /root/.vault/vault
-          key: vault-${{ runner.os }}-${{ env.HC_VAULT_VERSION }}
-
-      - name: Install Vault (only if not cached)
+      - name: Install Vault
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
