@@ -4019,6 +4019,17 @@ services:
     << : *valkey-params
     volumes:
       - mixpost-valkey-data:/data/valkey
+  mgob:
+    command: '-LogLevel=info'
+    container_name: mgob
+    image: stefanprodan/mgob
+    ports:
+      - 48606:8090
+    volumes:
+      - mgob-data:/data
+      - mgob-tmp:/tmp
+      - ${DOCKER_VOLUME_STORAGE}/backups/dbs/mongodb:/storage
+      - /mgob/config:/config
   mongodb:
     container_name: mongodb
     environment:
@@ -7328,6 +7339,10 @@ volumes:
     name: mixpost-logs
   mixpost-valkey-data:
     name: mixpost-valkey-data
+  mgob-data:
+    name: mgob-data
+  mgob-tmp:
+    name: mgob-tmp
   mongodb_config:
     name: mongodb_config
   mongodb_data:
