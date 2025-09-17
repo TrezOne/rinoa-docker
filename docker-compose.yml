@@ -325,7 +325,9 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      APPRISE_ATTACH_DIR: /attach
       APPRISE_ATTACH_SIZE: 500
+      APPRISE_CONFIG_DIR: /config
       APPRISE_STATEFUL_MODE: simple
     image: lscr.io/linuxserver/apprise-api:latest
     labels:
@@ -350,8 +352,8 @@ services:
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/apprise/config:/etc/apprise
-      - ${DOCKER_VOLUME_CONFIG}/apprise/attachments:/attachments #optional
+      - ${DOCKER_VOLUME_CONFIG}/apprise/conf:/config
+      - ${DOCKER_VOLUME_CONFIG}/apprise/attachments:/attach #optional
   archivebox:
     container_name: archivebox
     environment:
