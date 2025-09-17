@@ -4023,8 +4023,20 @@ services:
     command: '-LogLevel=info'
     container_name: mgob
     image: stefanprodan/mgob
+    labels:
+      homepage.group: System Administration
+      homepage.name: mgob
+      homepage.icon: mongodb.svg
+      homepage.description: Headless Automated MongoDB Backups
+      homepage.widget.type: customapi
+      homepage.widget.url: http://mgob:8090/status
+      homepage.widget.mappings[0].label: Plan Name
+      homepage.widget.mappings[0].field.status: plan
+      homepage.widget.mappings[1].label: Last Run Status
+      homepage.widget.mappings[1].field.status: last_run_status
     ports:
       - 48606:8090
+    restart: unless-stopped
     volumes:
       - mgob-data:/data
       - mgob-tmp:/tmp
