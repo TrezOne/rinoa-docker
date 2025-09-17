@@ -340,10 +340,11 @@ services:
       homepage.href: http://192.168.1.254:54995
       homepage.description: Multi-channel notification API
       homepage.widget.type: customapi
+      homepage.widget.headers.accept: application/json
       homepage.widget.url: http://apprise-api:8000/status
       homepage.widget.method: GET
       homepage.widget.mappings[0].label: Status
-      homepage.widget.mappings[0].format: text
+      homepage.widget.mappings[0].field.status: status.details
     ports:
       - 54995:8000
     profiles: ["rinoa-apps"]
@@ -4982,10 +4983,18 @@ services:
       homepage.href: https://portainer.${MY_TLD}
       homepage.icon: portainer.svg
       homepage.description: Service delivery platform for containerized applications
-      homepage.widget.type: portainer
-      homepage.widget.url: http://portainer:9000
-      homepage.widget.env: 7
-      homepage.widget.key: ${PORTAINER_HOMEPAGE_TOKEN}
+      homepage.widgets[0].type: portainer
+      homepage.widgets[0].url: http://portainer:9000
+      homepage.widgets[0].env: 7
+      homepage.widgets[0.key: ${PORTAINER_HOMEPAGE_TOKEN}
+      homepage.widgets[1].type: portainer
+      homepage.widgets[1].url: http://portainer:9000
+      homepage.widgets[1].env: 12
+      homepage.widgets[1.key: ${PORTAINER_HOMEPAGE_TOKEN}
+      homepage.widgets[2].type: portainer
+      homepage.widgets[2].url: http://portainer:9000
+      homepage.widgets[2].env: 13
+      homepage.widgets[2].key: ${PORTAINER_HOMEPAGE_TOKEN}
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
