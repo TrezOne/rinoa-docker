@@ -113,7 +113,7 @@
 | minio | minio/minio:RELEASE.2025-04-22T22-12-26Z | S3-compatible storage backend |
 | mixpost | inovector/mixpost:latest | Multi-channel social media manager |
 | mixpost-valkey | docker.io/bitnami/valkey:latest |  |
-| mgob | stefanprodan/mgob |  |
+| mgob | stefanprodan/mgob | Headless Automated MongoDB Backups |
 | mongodb | bitnami/mongodb:7.0 |  |
 | mongo-backup | jaaywags/automated-mongo-backup:latest | Backups for MongoDB |
 | multi-scrobbler | foxxmd/multi-scrobbler | JS App for scrobbling/recording play history from/to multiple sources |
