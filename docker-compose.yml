@@ -4029,7 +4029,7 @@ services:
       - mgob-data:/data
       - mgob-tmp:/tmp
       - ${DOCKER_VOLUME_STORAGE}/backups/dbs/mongodb:/storage
-      - /mgob/config:/config
+      - ${DOCKER_VOLUME_CONFIG}/mgob/config:/config
   mongodb:
     container_name: mongodb
     environment:
