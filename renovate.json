@@ -8,12 +8,8 @@
   "packageRules": [
     {
       "description": "Freeze ClickHouse and Zookeeper",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
       "matchPackageNames": [
         "clickhouse/clickhouse-server",
         "bitnami/zookeeper"
@@ -22,19 +18,14 @@
     },
     {
       "description": "Pin Postgres, pgvector, and pgvecto-rs images",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
       "matchPackageNames": [
         "postgres",
         "pgvector",
         "pgvecto-rs"
       ],
-      "pinDigests": true,
-      "allowedVersions": "digest"
+      "pinDigests": true
     },
     {
       "description": "Alpine-based images only update to Alpine-based versions",
@@ -45,29 +36,16 @@
     },
     {
       "description": "Automerge patch updates for semver tags",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "matchUpdateTypes": [
-        "patch"
-      ],
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchUpdateTypes": ["patch"],
       "automerge": true
     },
     {
       "description": "Require approval for major and minor updates",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "major"
-      ],
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchUpdateTypes": ["minor", "major"],
       "automerge": false,
       "ignoreTests": true
     }
