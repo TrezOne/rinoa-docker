@@ -4065,44 +4065,6 @@ services:
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
-  mongo-backup:
-    container_name: automated-mongo-backup
-    environment:
-      MONGO_CONNECTION_STRING: mongodb://root:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/admin?replicaSet=rinoa
-      DAILY_BACKUP_INTERVAL_MINUTES: 60
-      MAX_DAILY_BACKUPS: 24
-      NUMBER_OF_WEEKLY_BACKUPS: 6
-      MAX_AGE_OF_WEEKLY_BACKUPS: 1
-      NUMBER_OF_MONTHLY_BACKUPS: 3
-      MAX_AGE_OF_MONTHLY_BACKUPS: 1
-      NUMBER_OF_YEARLY_BACKUPS: 1
-      MAX_AGE_OF_YEARLY_BACKUPS: 1
-      BACKUP_PATH: /backups
-      WEB_UI_PORT: 3000
-      TIMEZONE: ${TZ}
-    image: jaaywags/automated-mongo-backup:latest
-    labels:
-      homepage.group: System Administration
-      homepage.name: Automated Mongo Backup
-      homepage.href: https://amb.${MY_TLD}
-      homepage.icon: /icons/auto-mongodb-bkup.png
-      homepage.description: Backups for MongoDB
-      swag: enable
-      swag_auth: authelia
-      swag_proto: http
-      swag_port: 3000
-      swag_url: amdb.${MY_TLD}
-      swag.uptime-kuma.enabled: true
-      swag.uptime-kuma.name: Automated Mongo Backup
-      swag.uptime-kuma.monitor.url: https://amb.${MY_TLD}
-      swag.uptime-kuma.monitor.interval: 300
-      swag.uptime-kuma.monitor.retryInterval: 60
-      swag.uptime-kuma.monitor.maxretries: 5
-    ports:
-      - 9693:3000
-    restart: unless-stopped
-    volumes:
-      - ${DOCKER_VOLUME_STORAGE}/backups/dbs/mongodb:/backups
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
