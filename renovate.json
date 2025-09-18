@@ -25,8 +25,7 @@
         "pgvector",
         "pgvecto-rs"
       ],
-      "pinDigests": true,
-      "allowedVersions": "digest"
+      "pinDigests": true
     },
     {
       "description": "Alpine-based images only update to Alpine-based versions",
