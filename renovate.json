@@ -2,11 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "enabledManagers": ["docker-compose"],
-  "schedule": [
-    "* 3-9 * * 5",
-    "* 3-9 * * 6",
-    "* 3-9 * * 0"
-  ],
+  "schedule": ["3-9 * * 5,6,0"],
   "prConcurrentLimit": 5,
   "branchPrefix": "renovate/",
   "rebaseWhen": "behind-base-branch",
@@ -16,8 +12,8 @@
       "matchDatasources": ["docker"],
       "matchManagers": ["docker-compose"],
       "matchPackageNames": [
-        "signoz-clickhouse-server",
-        "signoz-zookeeper-1"
+        "clickhouse/clickhouse-server",
+        "bitnami/zookeeper"
       ],
       "enabled": false
     },
