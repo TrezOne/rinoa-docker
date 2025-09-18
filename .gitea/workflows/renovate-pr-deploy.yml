@@ -1,0 +1,107 @@
+name: Deploy Changed Services
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: |
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.user.login == 'renovate-bot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Detect Renovate update type
+        id: detect-update
+        run: |
+          body="${{ github.event.pull_request.body }}"
+          echo "PR body: $body"
+
+          if echo "$body" | grep -qE 'Update\s+(patch|minor|major|digest)'; then
+            echo "update=true" >> $GITHUB_OUTPUT
+          else
+            echo "update=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if update not patch/minor/major/digest
+        if: steps.detect-update.outputs.update != 'true'
+        run: |
+          echo "::warning::This PR does not involve patch/minor/major/digest update. Skipping deployment."
+          exit 0
+
+      - name: Get changed services from docker-compose.yml
+        id: services
+        run: |
+          # Fetch previous commit to compare
+          git fetch origin ${{ github.event.before }} --depth=1
+
+          # Get all image names added/changed in docker-compose.yml
+          images=$(git diff ${{ github.event.before }} ${{ github.sha }} -- docker-compose.yml \
+            | grep -E '^\+.*image:' \
+            | sed -E 's/.*image:[[:space:]]*//g' \
+            | awk -F: '{print $1}' \
+            | sort -u)
+
+          # Map images to service names using yq
+          services=""
+          for img in $images; do
+            svc=$(yq e ".services | with_entries(select(.value.image | startswith(\"$img\"))) | keys | .[]" docker-compose.yml)
+            services="$services $svc"
+          done
+
+          # Deduplicate and trim
+          services=$(echo $services | tr ' ' '\n' | sort -u | xargs)
+          echo "services=$services" >> $GITHUB_OUTPUT
+
+      - name: Pull images for modified services
+        if: steps.services.outputs.services != ''
+        run: |
+          services="${{ steps.services.outputs.services }}"
+          echo "Pulling images for services: $services"
+          for svc in $services; do
+            docker compose pull $svc || echo "Failed to pull $svc, continuing..."
+          done
+
+      - name: Docker Compose Deployment
+        uses: hoverkraft-tech/compose-action@v2.2.0
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
+        with:
+          services: |
+            ${{ steps.services.outputs.services }}
+          up-flags: -d --remove-orphans
+          compose-flags: --profile rinoa-apps
+
+      - name: Docker Compose Healthcheck
+        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
+        with:
+          max-retries: 30
+          retry-interval: 10
+          compose-file: "docker-compose.yml"
+          skip-exited: "true"
+          skip-no-healthcheck: "true"
+        continue-on-error: true
+        id: health
+
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "### 🚀 Renovate Patch Deployment Summary" >> $GITHUB_STEP_SUMMARY
+
+          if [[ -z "${{ steps.services.outputs.services }}" ]]; then
+            echo "- No services changed in this patch update." >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          echo "- Updated services: \`${{ steps.services.outputs.services }}\`" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ steps.health.outcome }}" == "success" ]]; then
+            echo "- ✅ All services passed health checks." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⚠️ Some services failed health checks. Check logs above for details." >> $GITHUB_STEP_SUMMARY
+          fi
