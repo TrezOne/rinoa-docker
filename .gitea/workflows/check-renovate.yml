@@ -18,3 +18,12 @@ jobs:
 
       - name: Validate docker-compose.yml
         run: docker compose config
+
+      - name: Trigger Tar Valon Ansible Deploy
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.BOT_GITEA_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            "https://git.trez.wtf/api/v1/repos/Trez/rinoa-docker/actions/workflows/renovate-pr-deploy.yml/dispatches" \
+            -d "{\"ref\":\"${BRANCH}\"}"

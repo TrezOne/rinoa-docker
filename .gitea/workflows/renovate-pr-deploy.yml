@@ -1,20 +1,15 @@
 name: Deploy Renovate Updates
 
 on:
-  workflow_run:
-    workflows: ["Check Renovate Updates"]
-    types:
-      - completed
+  workflow_dispatch:
+  # workflow_run:
+  #   workflows: ["Check Renovate Updates"]
+  #   types:
+  #     - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: >
-      ${{
-        github.event.workflow_run.conclusion == 'success' &&
-        contains(toLower(github.event.workflow_run.head_commit.author.name), 'renovate')
-      }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
