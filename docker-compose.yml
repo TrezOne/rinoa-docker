@@ -5943,7 +5943,7 @@ services:
       SEMAPHORE_EMAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       SEMAPHORE_EMAIL_SECURE: false
       SEMAPHORE_USE_REMOTE_RUNNER: true
-    image: semaphoreui/semaphore:v2.12.14
+    image: semaphoreui/semaphore:v2.16.31
     labels:
       homepage.group: Code/DevOps
       homepage.name: Semaphore UI
