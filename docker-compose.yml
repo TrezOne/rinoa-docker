@@ -341,19 +341,19 @@ services:
       homepage.icon: apprise.png
       homepage.href: http://192.168.1.254:54995
       homepage.description: Multi-channel notification API
-      homepage.widget[0].type: customapi
-      homepage.widget[0].headers: 'Accept: application/json'
-      homepage.widget[0].url: http://apprise-api:8000/status
-      homepage.widget[0].method: GET
-      homepage.widget[0].mappings[0].label: Status
-      homepage.widget[0].mappings[0].field: status.details
-      homepage.widget[1].type: customapi
-      homepage.widget[1].headers: 'Accept: application/json'
-      homepage.widget[1].url: http://apprise-api:8111/json/urls/apprise?privacy=1
-      homepage.widget[1].method: GET
-      homepage.widget[1].mappings[0].label: URLS
-      homepage.widget[1].mappings[0].field: urls
-      homepage.widget[1].mappings[0].format: size
+      homepage.widget.type: customapi
+      homepage.widget.headers: 'Accept: application/json'
+      homepage.widget.url: http://apprise-api:8000/status
+      homepage.widget.method: GET
+      homepage.widget.mappings[0].label: Status
+      homepage.widget.mappings[0].field: status.details
+      # homepage.widget[1].type: customapi
+      # homepage.widget[1].headers: 'Accept: application/json'
+      # homepage.widget[1].url: http://apprise-api:8111/json/urls/apprise?privacy=1
+      # homepage.widget[1].method: GET
+      # homepage.widget[1].mappings[0].label: URLS
+      # homepage.widget[1].mappings[0].field: urls
+      # homepage.widget[1].mappings[0].format: size
     ports:
       - 54995:8000
     profiles: ["rinoa-apps"]
@@ -1252,19 +1252,12 @@ services:
       homepage.href: https://cron.${MY_TLD}
       homepage.icon: sh-dagu.svg
       homepage.description: Cron alternative with a web UI
-      homepage.widget[0].type: customapi
-      homepage.widget[0].headers: 'Authorization: Bearer ${DAGU_AUTH_TOKEN}'
-      homepage.widget[0].url: http://dagu:8080/api/v2/health
-      homepage.widget[0].method: GET
-      homepage.widget[0].mappings[0].label: Status
-      homepage.widget[0].mappings[0].field: status
-      homepage.widget[1].type: customapi
-      homepage.widget[1].headers: 'Accept: application/json'
-      homepage.widget[1].url: http://dagu:8080/api/v2/dags
-      homepage.widget[1].method: GET
-      homepage.widget[1].mappings[0].label: DAGs
-      homepage.widget[1].mappings[0].field: dags
-      homepage.widget[1].mappings[0].format: size
+      homepage.widget.type: customapi
+      homepage.widget.headers: 'Authorization: Bearer ${DAGU_AUTH_TOKEN}'
+      homepage.widget.url: http://dagu:8080/api/v2/health
+      homepage.widget.method: GET
+      homepage.widget.mappings[0].label: Status
+      homepage.widget.mappings[0].field: status
       swag: enable
       swag_port: 8080
       swag_proto: http
@@ -1732,8 +1725,13 @@ services:
   explo:
     container_name: explo
     environment:
-      CRON_SCHEDULE: 0 8 * * 2
       TZ: ${TZ}
+      WEEKLY_EXPLORATION_SCHEDULE: 0 8 * * 2
+      WEEKLY_EXPLORATION_FLAGS:
+      WEEKLY_JAMS_SCHEDULE: 30 00 * * 1
+      WEEKLY_JAMS_FLAGS: --playlist=weekly-jams --download-mode=skip
+      DAILY_JAMS_SCHEDULE: 30 2 * * *
+      DAILY_JAMS_FLAGS: --playlist=daily-jams --download-mode=skip
     image: ghcr.io/lumepart/explo:latest
     profiles: ["rinoa-apps"]
     restart: unless-stopped
@@ -4055,10 +4053,8 @@ services:
       homepage.widget.url: http://mgob:8090/status
       homepage.widget.mappings[0].label: Plan Name
       homepage.widget.mappings[0].field: plan
-      homepage.widget.mappings[0].format: text
       homepage.widget.mappings[1].label: Last Run Status
       homepage.widget.mappings[1].field: last_run_status
-      homepage.widget.mappings[1].format: date
     ports:
       - 48606:8090
     restart: unless-stopped
