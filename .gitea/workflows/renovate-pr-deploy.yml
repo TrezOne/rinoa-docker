@@ -18,11 +18,12 @@ jobs:
 
       - name: Detect Renovate update type
         id: detect-update
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          body="${{ github.event.pull_request.body }}"
-          echo "PR body: $body"
+          echo "PR body: $PR_BODY"
 
-          if echo "$body" | grep -qE 'Update\s+(patch|minor|major|digest)'; then
+          if echo "$PR_BODY" | grep -qE 'Update\s+(patch|minor|major|digest)'; then
             echo "update=true" >> $GITHUB_OUTPUT
           else
             echo "update=false" >> $GITHUB_OUTPUT
