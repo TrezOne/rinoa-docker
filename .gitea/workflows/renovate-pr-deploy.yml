@@ -1,93 +1,107 @@
-name: Deploy Renovate Updates
+name: Deploy Changed Services
 
 on:
-  workflow_dispatch:
-  # workflow_run:
-  #   workflows: ["Check Renovate Updates"]
-  #   types:
-  #     - completed
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
 jobs:
   deploy:
+    if: |
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.user.login == 'renovate-bot'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Check out code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # we need full history to compute merge-base
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker (if needed)
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Install yq
+      - name: Detect Renovate update type
+        id: detect-update
         run: |
-          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
-          sudo chmod +x /usr/bin/yq
+          body="${{ github.event.pull_request.body }}"
+          echo "PR body: $body"
 
-      - name: Get modified services including dependencies
-        id: modified_services
-        run: |
-          echo "Finding modified services in docker-compose.yml..."
-
-          # Find merge-base with previous main commit
-          BASE_COMMIT=$(git merge-base HEAD HEAD~1)
-
-          # Extract changed services between merge-base and HEAD
-          CHANGED_SERVICES=$(git diff --name-only $BASE_COMMIT HEAD -- docker-compose.yml \
-            | xargs -r -I{} yq e '.services | keys | .[]' {})
-
-          if [ -z "$CHANGED_SERVICES" ]; then
-            echo "No services changed, skipping."
-            exit 0
+          if echo "$body" | grep -qE 'Update\s+(patch|minor|major|digest)'; then
+            echo "update=true" >> $GITHUB_OUTPUT
+          else
+            echo "update=false" >> $GITHUB_OUTPUT
           fi
 
-          declare -A VISITED
-          ALL_DEPLOY=()
+      - name: Stop if update not patch/minor/major/digest
+        if: steps.detect-update.outputs.update != 'true'
+        run: |
+          echo "::warning::This PR does not involve patch/minor/major/digest update. Skipping deployment."
+          exit 0
 
-          get_deps() {
-            local service=$1
-            if [[ -n "${VISITED[$service]}" ]]; then
-              return
-            fi
-            VISITED[$service]=1
-            ALL_DEPLOY+=("$service")
+      - name: Get changed services from docker-compose.yml
+        id: services
+        run: |
+          # Fetch previous commit to compare
+          git fetch origin ${{ github.event.before }} --depth=1
 
-            # Array style depends_on
-            deps=$(yq e ".services.\"$service\".depends_on[]?" docker-compose.yml 2>/dev/null)
-            for dep in $deps; do
-              get_deps "$dep"
-            done
+          # Get all image names added/changed in docker-compose.yml
+          images=$(git diff ${{ github.event.before }} ${{ github.sha }} -- docker-compose.yml \
+            | grep -E '^\+.*image:' \
+            | sed -E 's/.*image:[[:space:]]*//g' \
+            | awk -F: '{print $1}' \
+            | sort -u)
 
-            # Mapping style depends_on (with condition)
-            deps_map=$(yq e ".services.\"$service\".depends_on | keys[]" docker-compose.yml 2>/dev/null)
-            for dep in $deps_map; do
-              get_deps "$dep"
-            done
-          }
-
-          for svc in $CHANGED_SERVICES; do
-            get_deps "$svc"
+          # Map images to service names using yq
+          services=""
+          for img in $images; do
+            svc=$(yq e ".services | with_entries(select(.value.image | startswith(\"$img\"))) | keys | .[]" docker-compose.yml)
+            services="$services $svc"
           done
 
-          echo "Services to deploy: ${ALL_DEPLOY[@]}"
-          echo "modified_services=${ALL_DEPLOY[@]}" >> $GITHUB_ENV
+          # Deduplicate and trim
+          services=$(echo $services | tr ' ' '\n' | sort -u | xargs)
+          echo "services=$services" >> $GITHUB_OUTPUT
 
       - name: Pull images for modified services
-        if: env.modified_services != ''
+        if: steps.services.outputs.services != ''
         run: |
-          echo "Pulling images for services: $modified_services"
-          for svc in $modified_services; do
+          services="${{ steps.services.outputs.services }}"
+          echo "Pulling images for services: $services"
+          for svc in $services; do
             docker compose pull $svc || echo "Failed to pull $svc, continuing..."
           done
 
-      - name: Deploy updated services
-        if: env.modified_services != ''
+      - name: Docker Compose Deployment
+        uses: hoverkraft-tech/compose-action@v2.2.0
+        env:
+          DOCKER_HOST: tcp://dockerproxy:2375
+        with:
+          services: |
+            ${{ steps.services.outputs.services }}
+          up-flags: -d --remove-orphans
+          compose-flags: --profile rinoa-apps
+
+      - name: Docker Compose Healthcheck
+        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
+        with:
+          max-retries: 30
+          retry-interval: 10
+          compose-file: "docker-compose.yml"
+          skip-exited: "true"
+          skip-no-healthcheck: "true"
+        continue-on-error: true
+        id: health
+
+      - name: Deployment Summary
+        if: always()
         run: |
-          echo "Deploying services: $modified_services"
-          docker compose up -d $modified_services
+          echo "### 🚀 Renovate Patch Deployment Summary" >> $GITHUB_STEP_SUMMARY
+
+          if [[ -z "${{ steps.services.outputs.services }}" ]]; then
+            echo "- No services changed in this patch update." >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+
+          echo "- Updated services: \`${{ steps.services.outputs.services }}\`" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ steps.health.outcome }}" == "success" ]]; then
+            echo "- ✅ All services passed health checks." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ⚠️ Some services failed health checks. Check logs above for details." >> $GITHUB_STEP_SUMMARY
+          fi
