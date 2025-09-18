@@ -775,7 +775,7 @@ services:
       LOG_ENABLED: true
     expose:
       - 3000
-    image: code.modernleft.org/gravityfargo/bluesky-pds:v0.4.98
+    image: code.modernleft.org/gravityfargo/bluesky-pds:v0.4.158
     labels:
       swag: enable
       swag_port: 3000
