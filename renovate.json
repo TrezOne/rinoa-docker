@@ -1,8 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:base", "schedule:nonOfficeHours"],
   "enabledManagers": ["docker-compose"],
-  "schedule": ["3-9 * * 5,6,0"],
   "prConcurrentLimit": 5,
   "branchPrefix": "renovate/",
   "rebaseWhen": "behind-base-branch",
@@ -39,16 +38,10 @@
     },
     {
       "description": "Alpine-based images only update to Alpine-based versions",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "allowedVersions": "/alpine/i",
-      "matchPackageNames": [
-        "/.*/"
-      ]
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchPackageNames": [".*"],
+      "allowedVersions": "/alpine/i"
     },
     {
       "description": "Automerge patch updates for semver tags",
