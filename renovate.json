@@ -1,8 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:base", "schedule:nonOfficeHours"],
   "enabledManagers": ["docker-compose"],
-  "schedule": "schedule:nonOfficeHours",
   "prConcurrentLimit": 5,
   "branchPrefix": "renovate/",
   "rebaseWhen": "behind-base-branch",
