@@ -1555,7 +1555,7 @@ services:
       - dockflare_data:/app/data
   dockpeek:
     container_name: dockpeek
-    image: ghcr.io/dockpeek/dockpeek:v1.5.8
+    image: ghcr.io/dockpeek/dockpeek:v1.6.2
     depends_on:
       docker-socket-proxy:
         condition: service_started
