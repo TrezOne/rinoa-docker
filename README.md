@@ -6,21 +6,21 @@
 | --- | --- | --- |
 | 13ft | ghcr.io/wasi-master/13ft:latest | Web interface for blocking ads and paywalls |
 | actual_server | docker.io/actualbudget/actual-server:latest | Privacy-focused app for managing finances |
-| adguard | adguard/adguardhome:v0.107.65 | Ad-blocking/DNS |
+| adguard | adguard/adguardhome:v0.107.66 | Ad-blocking/DNS |
 | apcupsd-cgi | bnhf/apcupsd-cgi:latest | Web interface for apcupsd |
 | apprise-api | lscr.io/linuxserver/apprise-api:latest | Multi-channel notification API |
 | archivebox | archivebox/archivebox:latest | Open-source and self-hosted web archiving |
 | asciinema | ghcr.io/asciinema/asciinema-server:latest | Platform for hosting and sharing terminal session recordings |
-| asciinema-pg-db | postgres:14-alpine |  |
+| asciinema-pg-db | postgres:14-alpine@sha256:95dae26f72fcd8ade5c2f9c6ce491e2e24de768a34e73b971edf3b9e8e08a5e5 |  |
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest | Podcasts, eBooks, & Audiobooks |
 | authelia | authelia/authelia:master | Authentication/authorization server with MFA & SSO |
-| authelia-pg | postgres:16-alpine |  |
+| authelia-pg | postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09 |  |
 | authelia-valkey | docker.io/bitnami/valkey:latest |  |
 | bazarr | lscr.io/linuxserver/bazarr:latest | Subtitle automation for TV shows/movies |
 | beszel | henrygd/beszel:latest | Lightweight server monitoring hub |
 | beszel-agent | henrygd/beszel-agent:latest |  |
 | bitwarden | vaultwarden/server:latest | Credential/Information Vault |
-| bluesky-pds | code.modernleft.org/gravityfargo/bluesky-pds:v0.4.98 |  |
+| bluesky-pds | code.modernleft.org/gravityfargo/bluesky-pds:v0.4.158 |  |
 | browserless | ghcr.io/browserless/chromium:latest |  |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest | Code Gists/Snippets |
 | castopod | castopod/castopod:latest | Podcast self-hosting |
@@ -53,8 +53,8 @@
 | garage | dxflrs/garage:v2.0.0 |  |
 | garage-webui | khairul169/garage-webui:latest | S3-compatible storage backend |
 | ghost | ghost:latest | Personal blog |
-| gitea | gitea/gitea:1.24.5 | Private Code Repo |
-| gitea-db | postgres:14 |  |
+| gitea | gitea/gitea:1.24.6 | Private Code Repo |
+| gitea-db | postgres:14@sha256:e84397672fce21223933cd4f9b09fdea0c1c72daa834c57a613121c927b2ba61 |  |
 | gitea-runner | gitea/act_runner:latest |  |
 | gitea-sonarqube-bot | justusbunsi/gitea-sonarqube-bot:v0.4.0 |  |
 | gitignore-io | guog/gitignore.io:latest | .gitignore generator |
@@ -84,7 +84,7 @@
 | jitsi-jvb | jitsi/jvb:stable |  |
 | jitsi-prosody | jitsi/prosody:stable |  |
 | jitsi-web | jitsi/web:stable | Web Conferencing |
-| joplin-db | postgres:17-alpine |  |
+| joplin-db | postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f |  |
 | joplin | joplin/server:latest | Open-source note taking & to-do |
 | karakeep | ghcr.io/karakeep-app/karakeep:release | Self-hosted bookmark-everything app with a touch of AI for data hoarders |
 | languagetool | elestio/languagetool:latest |  |
@@ -99,11 +99,11 @@
 | manyfold-valkey | docker.io/bitnami/valkey:latest |  |
 | mariadb | linuxserver/mariadb |  |
 | mastodon | lscr.io/linuxserver/mastodon:latest | Open-source social network |
-| mastodon-pg-db | postgres:17-alpine |  |
+| mastodon-pg-db | postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f |  |
 | mastodon-valkey | docker.io/bitnami/valkey:latest |  |
 | maxun-backend | getmaxun/maxun-backend:latest |  |
 | maxun-frontend | getmaxun/maxun-frontend:latest | No-code web data extraction platform |
-| maxun-pg-db | postgres:17-alpine |  |
+| maxun-pg-db | postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f |  |
 | maxun-valkey | docker.io/bitnami/valkey:latest |  |
 | meilisearch | getmeili/meilisearch:v1.15 |  |
 | meme-search-pro | ghcr.io/neonwatty/meme_search_pro:latest | Meme search engine built with Python and Ruby |
@@ -121,7 +121,7 @@
 | netalertx | jokobsk/netalertx:latest | Network Monitoring |
 | nextcloud | nextcloud/all-in-one:latest | Private Cloud |
 | nocodb | nocodb/nocodb:latest | Turn any SQL-based database into a smart spreadsheet |
-| nocodb-pg-db | postgres:16-alpine |  |
+| nocodb-pg-db | postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09 |  |
 | nocodb-valkey | docker.io/bitnami/valkey:latest |  |
 | ollama | ollama/ollama:latest |  |
 | ombi | lscr.io/linuxserver/ombi:latest | Media Requests |
@@ -134,12 +134,12 @@
 | penpot-frontend | penpotapp/frontend:latest | Open-source design and prototyping platform |
 | penpot-backend | penpotapp/backend:latest |  |
 | penpot-exporter | penpotapp/exporter:latest |  |
-| penpot-pg-db | postgres:15-alpine |  |
+| penpot-pg-db | postgres:15-alpine@sha256:dfcf0459185089e88a43197975780f5a3078acd5ece84824a14c9d6fbbab02d0 |  |
 | penpot-redis | redis:7.2 |  |
 | pgbackweb | eduardolat/pgbackweb:latest | Backups for PostgreSQL |
-| pgbackweb-db | postgres:17-alpine |  |
+| pgbackweb-db | postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f |  |
 | planka | ghcr.io/plankanban/planka:2.0.0-rc.3 | Kanban board |
-| planka-pg-db | postgres:16-alpine |  |
+| planka-pg-db | postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09 |  |
 | plant-it | msdeluise/plant-it-server:latest | 🪴 Self-hosted, open source gardening companion app |
 | plant-it-valkey | docker.io/bitnami/valkey:latest |  |
 | plantuml-server | plantuml/plantuml-server:jetty |  |
@@ -156,7 +156,7 @@
 | radarec | thewicklowwolf/radarec:latest | Movie discovery based on library/tastes |
 | radarr | lscr.io/linuxserver/radarr:latest | Movie Automation |
 | reactive-resume | amruthpillai/reactive-resume:latest | Open-source resume builder |
-| reactive-resume-pg | postgres:16-alpine |  |
+| reactive-resume-pg | postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09 |  |
 | readarr | lscr.io/linuxserver/readarr:develop | eBook/Audiobook Automation |
 | redlib | quay.io/redlib/redlib:latest | Redlib is a private front-end like Invidious but for Reddit |
 | renovate | renovate/renovate:41.97.7-full |  |
@@ -170,7 +170,7 @@
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus | WebUI for smartd S.M.A.R.T monitoring |
 | searxng | searxng/searxng:latest | Anonymized Meta-Search Engine |
 | searxng-valkey | docker.io/bitnami/valkey:latest |  |
-| semaphore-ui | semaphoreui/semaphore:v2.12.14 | Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools |
+| semaphore-ui | semaphoreui/semaphore:v2.16.31 | Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools |
 | signoz-app | signoz/signoz:v0.92.2 | Logs, metrics, and traces in a single pane |
 | signoz-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |  |
 | signoz-init-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |  |
@@ -180,7 +180,7 @@
 | signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.129.0 |  |
 | signoz-zookeeper-1 | bitnami/zookeeper:3.7.1 |  |
 | sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts | Code/DevOps quality/security |
-| sonarqube-pg-db | postgres:17-alpine |  |
+| sonarqube-pg-db | postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f |  |
 | sonarr | lscr.io/linuxserver/sonarr:latest | TV Show Automation |
 | sonashow | thewicklowwolf/sonashow:latest | TV show discovery based on library/tastes |
 | soularr | mrusse08/soularr:latest |  |
@@ -191,9 +191,9 @@
 | stirling-pdf | docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest | PDF Operations |
 | swag | lscr.io/linuxserver/swag:latest | SWAG Dashboard for proxies |
 | tandoor | vabene1111/recipes | Recipes, cookbooks, meal-planning, & grocery lists |
-| tandoor-pg | postgres:16-alpine |  |
+| tandoor-pg | postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09 |  |
 | umami | ghcr.io/umami-software/umami:postgresql-latest | Simple, fast, privacy-focused alternative to Google Analytics |
-| umami-pg-db | postgres:15-alpine |  |
+| umami-pg-db | postgres:15-alpine@sha256:dfcf0459185089e88a43197975780f5a3078acd5ece84824a14c9d6fbbab02d0 |  |
 | unmanic | josh5/unmanic:latest | Library Optimizer |
 | uptimekuma | louislam/uptime-kuma:latest | HTTP Endpoint Monitoring |
 | vault | hashicorp/vault:latest | HashiCorp Vault for secrets, key/value stores, etc. |
