@@ -1,4 +1,4 @@
-name: Deploy Changed Services
+name: Renovate PR Deployment
 
 on:
   pull_request:
