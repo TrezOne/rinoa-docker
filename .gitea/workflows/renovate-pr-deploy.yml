@@ -1,6 +1,7 @@
 name: Renovate PR Deployment
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [closed]
     branches:
