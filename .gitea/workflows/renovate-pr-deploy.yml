@@ -59,6 +59,14 @@ jobs:
           services=$(echo $services | tr ' ' '\n' | sort -u | xargs)
           echo "services=$services" >> $GITHUB_OUTPUT
 
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa'
+          notification_message: 'Starting Docker Compose run...'
+
       - name: Pull images for modified services
         if: steps.services.outputs.services != ''
         run: |
@@ -79,6 +87,8 @@ jobs:
           compose-flags: --profile rinoa-apps
 
       - name: Docker Compose Healthcheck
+        continue-on-error: true
+        id: health
         uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
         with:
           max-retries: 30
@@ -86,8 +96,14 @@ jobs:
           compose-file: "docker-compose.yml"
           skip-exited: "true"
           skip-no-healthcheck: "true"
-        continue-on-error: true
-        id: health
+
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
+          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
+          notification_title: 'GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa'
+          notification_message: 'Deployment completed successfully.'
 
       - name: Deployment Summary
         if: always()
