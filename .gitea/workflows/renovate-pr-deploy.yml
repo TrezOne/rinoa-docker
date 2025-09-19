@@ -38,11 +38,14 @@ jobs:
       - name: Get changed services from docker-compose.yml
         id: services
         run: |
-          # Fetch previous commit to compare
-          git fetch origin ${{ github.event.before }} --depth=1
+          # Ensure we have main branch available
+          git fetch origin main --depth=1
 
-          # Get all image names added/changed in docker-compose.yml
-          images=$(git diff ${{ github.event.before }} ${{ github.sha }} -- docker-compose.yml \
+          # Find the common ancestor (merge-base) between PR branch and main
+          base=$(git merge-base origin/main ${{ github.sha }})
+
+          # Get all image names added/changed in docker-compose.yml since base
+          images=$(git diff $base ${{ github.sha }} -- docker-compose.yml \
             | grep -E '^\+.*image:' \
             | sed -E 's/.*image:[[:space:]]*//g' \
             | awk -F: '{print $1}' \
