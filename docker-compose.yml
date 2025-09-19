@@ -5552,11 +5552,8 @@ services:
       RENOVATE_EXTENDS: "config:base,:dependencyDashboard"
 
       # --- Example package rules ---
-      RENOVATE_PACKAGE_RULES: |
-        [
-          { "matchUpdateTypes": ["minor","patch"], "automerge": true },
-          { "matchManagers": ["dockerfile"], "groupName": "docker base images" }
-        ]
+      RENOVATE_PRUNE_BRANCH_AFTER_AUTOMERG: false
+      RENOVATE_PRUNE_STALE_BRANCHES: true
 
       # --- Scheduling ---
       # Renovate will only process PRs/updates in this time window
