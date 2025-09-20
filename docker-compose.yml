@@ -59,7 +59,7 @@ x-signoz-common: &signoz-common
 x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
   <<: *signoz-common
   # adding non LTS version due to this fix https://github.com/ClickHouse/ClickHouse/commit/32caf8716352f45c1b617274c7508c86b7d1afab
-  image: clickhouse/clickhouse-server:24.1.2-alpine
+  image: clickhouse/clickhouse-server:25.5.6-alpine
   tty: true
   labels:
     signoz.io/scrape: "true"
@@ -6054,7 +6054,7 @@ services:
         wget -O histogram-quantile.tar.gz "https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F$${version}/histogram-quantile_$${node_os}_$${node_arch}.tar.gz"
         tar -xvzf histogram-quantile.tar.gz
         mv histogram-quantile /var/lib/clickhouse/user_scripts/histogramQuantile
-    image: clickhouse/clickhouse-server:24.1.2-alpine
+    image: clickhouse/clickhouse-server:25.5.6-alpine
     restart: on-failure
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/signoz/common/clickhouse/user_scripts/:/var/lib/clickhouse/user_scripts/
