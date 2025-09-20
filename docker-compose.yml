@@ -4075,7 +4075,7 @@ services:
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_REPLICA_SET_NAME: rinoa
       MONGODB_REPLICA_SET_KEY: ${MONGODB_REPLICA_SET_KEY}
-    image: bitnami/mongodb:7.0
+    image: bitnami/mongodb:8.0
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
