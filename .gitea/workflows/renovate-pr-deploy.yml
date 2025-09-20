@@ -39,29 +39,39 @@ jobs:
       - name: Get changed services from docker-compose.yml
         id: services
         run: |
-          # Ensure we have main branch available
-          git fetch origin main --depth=1
+          git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
+          cp docker-compose.yml docker-compose-head.yml
 
-          # Find the common ancestor (merge-base) between PR branch and main
-          base=$(git merge-base origin/main ${{ github.sha }})
+          echo "Getting services from main and ${{ github.ref_name }}"
+          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
+          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
 
-          # Get all image names added/changed in docker-compose.yml since base
-          images=$(git diff $base ${{ github.sha }} -- docker-compose.yml \
-            | grep -E '^\+.*image:' \
-            | sed -E 's/.*image:[[:space:]]*//g' \
-            | awk -F: '{print $1}' \
-            | sort -u)
+          echo "Creating list of modified services..."
+          touch service_changes.txt
 
-          # Map images to service names using yq
-          services=""
-          for img in $images; do
-            svc=$(yq e ".services | with_entries(select(.value.image | startswith(\"$img\"))) | keys | .[]" docker-compose.yml)
-            services="$services $svc"
+          comm -13 services_main.txt services_head.txt | while read service; do
+            echo "$service: added" >> service_changes.txt
           done
 
-          # Deduplicate and trim
-          services=$(echo $services | tr ' ' '\n' | sort -u | xargs)
-          echo "services=$services" >> $GITHUB_OUTPUT
+          comm -12 services_main.txt services_head.txt | while read service; do
+            yq ".services[\"$service\"]" docker-compose-main.yml > tmp_main.yml
+            yq ".services[\"$service\"]" docker-compose-head.yml > tmp_head.yml
+            if ! diff -q tmp_main.yml tmp_head.yml > /dev/null; then
+              echo "$service: modified" >> service_changes.txt
+            fi
+          done
+
+          echo "Detected service changes:"
+          cat service_changes.txt
+
+          mod_svcs=$(cut -d':' -f1 service_changes.txt | sort | uniq)
+          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$mod_svcs" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: List of Services for (Re)Deployment
+        run: |
+          echo -e "${{ steps.services.outputs.docker_svc_list }}"
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -71,15 +81,6 @@ jobs:
           notification_title: 'GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa'
           notification_message: 'Starting Docker Compose run...'
 
-      - name: Pull images for modified services
-        if: steps.services.outputs.services != ''
-        run: |
-          services="${{ steps.services.outputs.services }}"
-          echo "Pulling images for services: $services"
-          for svc in $services; do
-            docker compose pull $svc || echo "Failed to pull $svc, continuing..."
-          done
-
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@v2.2.0
         env:
@@ -87,7 +88,7 @@ jobs:
         with:
           services: |
             ${{ steps.services.outputs.services }}
-          up-flags: -d --remove-orphans
+          up-flags: -d --remove-orphans --pull always
           compose-flags: --profile rinoa-apps
 
       - name: Docker Compose Healthcheck
@@ -109,20 +110,20 @@ jobs:
           notification_title: 'GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
 
-      - name: Deployment Summary
-        if: always()
-        run: |
-          echo "### 🚀 Renovate Patch Deployment Summary" >> $GITHUB_STEP_SUMMARY
+      # - name: Deployment Summary
+      #   if: always()
+      #   run: |
+      #     echo "### 🚀 Renovate Patch Deployment Summary" >> $GITHUB_STEP_SUMMARY
 
-          if [[ -z "${{ steps.services.outputs.services }}" ]]; then
-            echo "- No services changed in this patch update." >> $GITHUB_STEP_SUMMARY
-            exit 0
-          fi
+      #     if [[ -z "${{ steps.services.outputs.services }}" ]]; then
+      #       echo "- No services changed in this patch update." >> $GITHUB_STEP_SUMMARY
+      #       exit 0
+      #     fi
 
-          echo "- Updated services: \`${{ steps.services.outputs.services }}\`" >> $GITHUB_STEP_SUMMARY
+      #     echo "- Updated services: \`${{ steps.services.outputs.services }}\`" >> $GITHUB_STEP_SUMMARY
 
-          if [[ "${{ steps.health.outcome }}" == "success" ]]; then
-            echo "- ✅ All services passed health checks." >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⚠️ Some services failed health checks. Check logs above for details." >> $GITHUB_STEP_SUMMARY
-          fi
+      #     if [[ "${{ steps.health.outcome }}" == "success" ]]; then
+      #       echo "- ✅ All services passed health checks." >> $GITHUB_STEP_SUMMARY
+      #     else
+      #       echo "- ⚠️ Some services failed health checks. Check logs above for details." >> $GITHUB_STEP_SUMMARY
+      #     fi
