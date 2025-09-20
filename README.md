@@ -43,14 +43,14 @@
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |  |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |  |
 | dockflare | alplat/dockflare:stable | Cloudflare Tunnel controller |
-| dockpeek | ghcr.io/dockpeek/dockpeek:v1.5.8 | Real-time port monitoring and discovery |
+| dockpeek | ghcr.io/dockpeek/dockpeek:v1.6.2 | Real-time port monitoring and discovery |
 | duplicati | lscr.io/linuxserver/duplicati:latest | Data backup |
 | easyappointments | alextselegidis/easyappointments:1.5.2 | Highly customizable appointment scheduler |
 | excalidraw | excalidraw/excalidraw:latest | Virtual whiteboard for sketching hand-drawn like diagrams |
 | explo | ghcr.io/lumepart/explo:latest |  |
 | fastenhealth | ghcr.io/fastenhealth/fasten-onprem:main | Open-source, self-hosted, personal/family electronic medical record aggregator |
 | flaresolverr | ghcr.io/flaresolverr/flaresolverr:latest |  |
-| garage | dxflrs/garage:v2.0.0 |  |
+| garage | dxflrs/garage:v2.1.0 |  |
 | garage-webui | khairul169/garage-webui:latest | S3-compatible storage backend |
 | ghost | ghost:latest | Personal blog |
 | gitea | gitea/gitea:1.24.6 | Private Code Repo |
@@ -172,8 +172,8 @@
 | searxng-valkey | docker.io/bitnami/valkey:latest |  |
 | semaphore-ui | semaphoreui/semaphore:v2.16.31 | Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools |
 | signoz-app | signoz/signoz:v0.92.2 | Logs, metrics, and traces in a single pane |
-| signoz-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |  |
-| signoz-init-clickhouse | clickhouse/clickhouse-server:24.1.2-alpine |  |
+| signoz-clickhouse | clickhouse/clickhouse-server:25.5.6-alpine |  |
+| signoz-init-clickhouse | clickhouse/clickhouse-server:25.5.6-alpine |  |
 | signoz-logspout | pavanputhra/logspout-signoz |  |
 | signoz-otel-collector | signoz/signoz-otel-collector:v0.129.0 |  |
 | signoz-schema-migrator-async | signoz/signoz-schema-migrator:v0.129.0 |  |
