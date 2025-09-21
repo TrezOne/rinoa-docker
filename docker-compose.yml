@@ -5974,6 +5974,7 @@ services:
     environment:
       SIGNOZ_ALERTMANAGER_PROVIDER: signoz
       SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN: tcp://signoz-clickhouse:9000
+      SIGNOZ_TELEMETRYSTORE_PROVIDER: clickhouse
       SIGNOZ_SQLSTORE_SQLITE_PATH: /var/lib/signoz/signoz.db
       SIGNOZ_ALERTMANAGER_SIGNOZ_EXTERNAL__URL: https://apm.${MY_TLD}
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__FROM: noreply@${MY_TLD}
@@ -5983,7 +5984,6 @@ services:
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__REQUIRE__TLS: true
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__TLS__CONFIG_INSECURE__SKIP__VERIFY: true
       DASHBOARDS_PATH: /root/config/dashboards
-      STORAGE: clickhouse
       GODEBUG: netdns=go
       TELEMETRY_ENABLED: true
       DEPLOYMENT_TYPE: docker-standalone-amd
