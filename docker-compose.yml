@@ -6093,7 +6093,7 @@ services:
       NGINX_ERROR_LOG_FILE: /swag/log/nginx/error.log
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
-    image: signoz/signoz-otel-collector:v0.129.5
+    image: signoz/signoz-otel-collector:v0.129.6
     ports:
       # - "1777:1777"     # pprof extension
       - "4317:4317" # OTLP gRPC receiver
