@@ -171,13 +171,13 @@
 | searxng | searxng/searxng:latest | Anonymized Meta-Search Engine |
 | searxng-valkey | docker.io/bitnami/valkey:latest |  |
 | semaphore-ui | semaphoreui/semaphore:v2.16.31 | Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools |
-| signoz-app | signoz/signoz:v0.92.2 | Logs, metrics, and traces in a single pane |
+| signoz-app | signoz/signoz:v0.95.1 | Logs, metrics, and traces in a single pane |
 | signoz-clickhouse | clickhouse/clickhouse-server:25.5.6-alpine |  |
 | signoz-init-clickhouse | clickhouse/clickhouse-server:25.5.6-alpine |  |
 | signoz-logspout | pavanputhra/logspout-signoz |  |
-| signoz-otel-collector | signoz/signoz-otel-collector:v0.129.0 |  |
-| signoz-schema-migrator-async | signoz/signoz-schema-migrator:v0.129.0 |  |
-| signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.129.0 |  |
+| signoz-otel-collector | signoz/signoz-otel-collector:v0.129.5 |  |
+| signoz-schema-migrator-async | signoz/signoz-schema-migrator:v0.129.5 |  |
+| signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.129.5 |  |
 | signoz-zookeeper-1 | bitnami/zookeeper:3.7.1 |  |
 | sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts | Code/DevOps quality/security |
 | sonarqube-pg-db | postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f |  |

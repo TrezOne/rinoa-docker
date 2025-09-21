@@ -5971,11 +5971,13 @@ services:
   signoz-app:
     <<: *signoz-db-depend
     container_name: signoz-app
-    command:
-      - --config=/root/config/prometheus.yml
     environment:
       SIGNOZ_ALERTMANAGER_PROVIDER: signoz
+      SIGNOZ_ANALYTICS_ENABLED: true
+      SIGNOZ_JWT_SECRET: ${SIGNOZ_JWT_SECRET}
       SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN: tcp://signoz-clickhouse:9000
+      SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_CLUSTER: cluser
+      SIGNOZ_QUERIER_FLUX__INTERVAL: 5m
       SIGNOZ_TELEMETRYSTORE_PROVIDER: clickhouse
       SIGNOZ_SQLSTORE_SQLITE_PATH: /var/lib/signoz/signoz.db
       SIGNOZ_ALERTMANAGER_SIGNOZ_EXTERNAL__URL: https://apm.${MY_TLD}
@@ -5985,9 +5987,9 @@ services:
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__AUTH__PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__REQUIRE__TLS: true
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__TLS__CONFIG_INSECURE__SKIP__VERIFY: true
+      SIGNOZ_PROMETHEUS_CONFIG: /root/config/prometheus.yml
       DASHBOARDS_PATH: /root/config/dashboards
       GODEBUG: netdns=go
-      TELEMETRY_ENABLED: true
       DEPLOYMENT_TYPE: docker-standalone-amd
     healthcheck:
       test:
