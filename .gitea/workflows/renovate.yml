@@ -1,0 +1,26 @@
+name: Renovate
+
+on:
+  schedule:
+    - cron: '0/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+
+      - name: Renovate
+        uses: renovatebot/github-action@v43.0.11
+        with:
+          configurationFile: renovate.json
+          renovate-version: 41.97.7-full
+          token: ${{ secrets.RENOVATE_TOKEN }}
+        env:
+          LOG_LEVEL: debug
