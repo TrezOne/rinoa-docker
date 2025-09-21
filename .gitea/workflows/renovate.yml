@@ -19,7 +19,7 @@ jobs:
       - name: Renovate
         uses: renovatebot/github-action@v43.0.11
         with:
-          configurationFile: renovate.json
+          configurationFile: ./renovate.json
           renovate-version: 41.97.7-full
           token: ${{ secrets.RENOVATE_BOT_TOKEN }}
         env:
