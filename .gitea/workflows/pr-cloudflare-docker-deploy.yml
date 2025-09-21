@@ -301,7 +301,7 @@ jobs:
           yq '.services | to_entries | map({"service": .key, "image": .value.image, "description": (.value.labels."homepage.description" // "")})' docker-compose.yml > services.yml
 
       - name: Generate Markdown Table
-        uses: gazab/create-markdown-table@v1
+        uses: gazab/create-markdown-table@6686233d7008e8d8b9d4bbdbfd1fb1ae510019f0 # v1.0.7
         id: service-table
         with:
           file: ./services.yml
