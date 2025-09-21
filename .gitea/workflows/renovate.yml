@@ -21,6 +21,6 @@ jobs:
         with:
           configurationFile: renovate.json
           renovate-version: 41.97.7-full
-          token: ${{ secrets.RENOVATE_TOKEN }}
+          token: ${{ secrets.RENOVATE_BOT_TOKEN }}
         env:
           LOG_LEVEL: debug
