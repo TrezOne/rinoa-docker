@@ -85,6 +85,8 @@ x-signoz-clickhouse-defaults: &signoz-clickhouse-defaults
     nofile:
       soft: 262144
       hard: 262144
+  environment:
+    - CLICKHOUSE_SKIP_USER_SETUP=1
 x-signoz-zookeeper-defaults: &signoz-zookeeper-defaults
   <<: *signoz-common
   image: bitnami/zookeeper:3.7.1
