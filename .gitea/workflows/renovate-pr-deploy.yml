@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "PR body: $PR_BODY"
 
-          if echo "$PR_BODY" | grep -qE 'Update\s+(patch|minor|major|digest)'; then
+          if echo "$PR_BODY" | grep -qE 'Update Type: (patch|minor|major|digest)'; then
             echo "update=true" >> $GITHUB_OUTPUT
           else
             echo "update=false" >> $GITHUB_OUTPUT
@@ -93,7 +93,6 @@ jobs:
           compose-flags: --profile rinoa-apps
 
       - name: Docker Compose Healthcheck
-        continue-on-error: true
         id: health
         uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
         with:
@@ -110,21 +109,3 @@ jobs:
           gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
           notification_title: 'GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa'
           notification_message: 'Deployment completed successfully.'
-
-      # - name: Deployment Summary
-      #   if: always()
-      #   run: |
-      #     echo "### 🚀 Renovate Patch Deployment Summary" >> $GITHUB_STEP_SUMMARY
-
-      #     if [[ -z "${{ steps.services.outputs.services }}" ]]; then
-      #       echo "- No services changed in this patch update." >> $GITHUB_STEP_SUMMARY
-      #       exit 0
-      #     fi
-
-      #     echo "- Updated services: \`${{ steps.services.outputs.services }}\`" >> $GITHUB_STEP_SUMMARY
-
-      #     if [[ "${{ steps.health.outcome }}" == "success" ]]; then
-      #       echo "- ✅ All services passed health checks." >> $GITHUB_STEP_SUMMARY
-      #     else
-      #       echo "- ⚠️ Some services failed health checks. Check logs above for details." >> $GITHUB_STEP_SUMMARY
-      #     fi
