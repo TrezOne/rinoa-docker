@@ -184,7 +184,7 @@ jobs:
           echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Dry Run
-        uses: hoverkraft-tech/compose-action@v2.2.0
+        uses: hoverkraft-tech/compose-action@v2.3.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
@@ -193,6 +193,7 @@ jobs:
           up-flags: -d --remove-orphans --dry-run
           down-flags: --dry-run
           compose-flags: --dry-run --profile rinoa-apps
+          services-log-level: debug
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -418,7 +419,7 @@ jobs:
            echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Deployment
-        uses: hoverkraft-tech/compose-action@v2.2.0
+        uses: hoverkraft-tech/compose-action@v2.3.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
@@ -427,6 +428,7 @@ jobs:
           up-flags: -d --remove-orphans
           down-flags: --dry-run
           compose-flags: --profile rinoa-apps
+          services-log-level: debug
 
       - name: Docker Compose Healthcheck
         uses: jaracogmbh/docker-compose-health-check-action@v1.0.0

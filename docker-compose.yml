@@ -5974,6 +5974,7 @@ services:
     environment:
       SIGNOZ_ALERTMANAGER_PROVIDER: signoz
       SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN: tcp://signoz-clickhouse:9000
+      SIGNOZ_TELEMETRYSTORE_PROVIDER: clickhouse
       SIGNOZ_SQLSTORE_SQLITE_PATH: /var/lib/signoz/signoz.db
       SIGNOZ_ALERTMANAGER_SIGNOZ_EXTERNAL__URL: https://apm.${MY_TLD}
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__FROM: noreply@${MY_TLD}
@@ -5983,7 +5984,6 @@ services:
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__REQUIRE__TLS: true
       SIGNOZ_ALERTMANAGER_SIGNOZ_GLOBAL_SMTP__TLS__CONFIG_INSECURE__SKIP__VERIFY: true
       DASHBOARDS_PATH: /root/config/dashboards
-      STORAGE: clickhouse
       GODEBUG: netdns=go
       TELEMETRY_ENABLED: true
       DEPLOYMENT_TYPE: docker-standalone-amd
@@ -6089,7 +6089,7 @@ services:
       NGINX_ERROR_LOG_FILE: /swag/log/nginx/error.log
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
-    image: signoz/signoz-otel-collector:${SIGNOZ_OTELCOL_TAG:-v0.129.0}
+    image: signoz/signoz-otel-collector:v0.129.5
     ports:
       # - "1777:1777"     # pprof extension
       - "4317:4317" # OTLP gRPC receiver
@@ -6102,7 +6102,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx/error.log:/swag/log/nginx/error.log:ro
   signoz-schema-migrator-async:
     <<: *signoz-db-depend
-    image: signoz/signoz-schema-migrator:${SIGNOZ_OTELCOL_TAG:-v0.129.0}
+    image: signoz/signoz-schema-migrator:v0.129.5
     container_name: signoz-schema-migrator-async
     command:
       - async
@@ -6112,7 +6112,7 @@ services:
     restart: on-failure
   signoz-schema-migrator-sync:
     <<: *signoz-common
-    image: signoz/signoz-schema-migrator:${SIGNOZ_OTELCOL_TAG:-v0.129.0}
+    image: signoz/signoz-schema-migrator:v0.129.5
     container_name: signoz-schema-migrator-sync
     command:
       - sync
