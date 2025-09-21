@@ -2,14 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "schedule:nonOfficeHours"
+    "local>trez/renovate-config"
   ],
-  "enabledManagers": [
-    "docker-compose"
-  ],
-  "prConcurrentLimit": 5,
-  "branchPrefix": "renovate/",
-  "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
       "description": "Freeze ClickHouse and Zookeeper",
@@ -39,49 +33,6 @@
         "pgvecto-rs"
       ],
       "pinDigests": true
-    },
-    {
-      "description": "Alpine-based images only update to Alpine-based versions",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "matchPackageNames": [
-        ".*"
-      ],
-      "allowedVersions": "/alpine/i"
-    },
-    {
-      "description": "Automerge patch updates for semver tags",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "matchUpdateTypes": [
-        "patch"
-      ],
-      "automerge": true
-    },
-    {
-      "description": "Require approval for major and minor updates",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "major"
-      ],
-      "automerge": false,
-      "ignoreTests": true
     }
-  ],
-  "branchNameStrict": true,
-  "branchTopic": "{{{depNameSanitized}}}-{{{newVersion}}}"
+  ]
 }
