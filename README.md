@@ -43,7 +43,7 @@
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest |  |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest |  |
 | dockflare | alplat/dockflare:stable | Cloudflare Tunnel controller |
-| dockpeek | ghcr.io/dockpeek/dockpeek:v1.6.2 | Real-time port monitoring and discovery |
+| dockpeek | ghcr.io/dockpeek/dockpeek:v1.6.3@sha256:c8985e6aaf1c88bbece6c25932b443d9c182b455ef1ee2c33bf5651f95f92988 | Real-time port monitoring and discovery |
 | duplicati | lscr.io/linuxserver/duplicati:latest | Data backup |
 | easyappointments | alextselegidis/easyappointments:1.5.2 | Highly customizable appointment scheduler |
 | excalidraw | excalidraw/excalidraw:latest | Virtual whiteboard for sketching hand-drawn like diagrams |
@@ -159,7 +159,7 @@
 | reactive-resume-pg | postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09 |  |
 | readarr | lscr.io/linuxserver/readarr:develop | eBook/Audiobook Automation |
 | redlib | quay.io/redlib/redlib:latest | Redlib is a private front-end like Invidious but for Reddit |
-| renovate | renovate/renovate:41.97.7-full |  |
+| renovate | renovate/renovate:41.97.12-full@sha256:e20639264151d9dce8f0fc3b1219748f4844a76cc157263551d8e7e061daa60e |  |
 | renovate-valkey | docker.io/bitnami/valkey:latest |  |
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest | Fully customizable communications platform with high standards of data protection |
 | romm | rommapp/romm:latest | Beautiful, powerful, self-hosted ROM manager |
@@ -175,9 +175,9 @@
 | signoz-clickhouse | clickhouse/clickhouse-server:25.5.6-alpine |  |
 | signoz-init-clickhouse | clickhouse/clickhouse-server:25.5.6-alpine |  |
 | signoz-logspout | pavanputhra/logspout-signoz |  |
-| signoz-otel-collector | signoz/signoz-otel-collector:v0.129.5 |  |
-| signoz-schema-migrator-async | signoz/signoz-schema-migrator:v0.129.5 |  |
-| signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.129.5 |  |
+| signoz-otel-collector | signoz/signoz-otel-collector:v0.129.6 |  |
+| signoz-schema-migrator-async | signoz/signoz-schema-migrator:v0.129.6 |  |
+| signoz-schema-migrator-sync | signoz/signoz-schema-migrator:v0.129.6 |  |
 | signoz-zookeeper-1 | bitnami/zookeeper:3.7.1 |  |
 | sonarqube | mc1arke/sonarqube-with-community-branch-plugin:lts | Code/DevOps quality/security |
 | sonarqube-pg-db | postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f |  |
@@ -198,7 +198,6 @@
 | uptimekuma | louislam/uptime-kuma:latest | HTTP Endpoint Monitoring |
 | vault | hashicorp/vault:latest | HashiCorp Vault for secrets, key/value stores, etc. |
 | wallos | bellamy/wallos:latest | Subscription Tracking |
-| watchtower | ghcr.io/containrrr/watchtower:latest | Container-based solution for automating Docker container base image updates |
 | web-check | lissy93/web-check | Site scanner for attack vectors, architecture, security configs, and more |
 | whodb | clidey/whodb | Lightweight next-gen database explorer |
 | wizarr | ghcr.io/wizarrrr/wizarr | User invitation management system for Jellyfin, Plex, and Emby |
