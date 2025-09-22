@@ -18,6 +18,6 @@ jobs:
         run: renovate
         env:
           LOG_LEVEL: "debug"
-          RENOVATE_CONFIG_FILE: ${GITHUB_WORKSPACE}/renovate.json
+          RENOVATE_CONFIG_FILE: "/workspace/Trez.One/rinoa-docker/renovate.json"
           RENOVATE_TOKEN: ${{ secrets.RENOVATE_BOT_TOKEN }}
           RENOVATE_GITHUB_COM_TOKEN: ${{ secrets.RENOVATE_GITHUB_COM_TOKEN }}
