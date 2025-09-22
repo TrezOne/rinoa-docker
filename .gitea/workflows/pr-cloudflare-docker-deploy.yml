@@ -314,7 +314,7 @@ jobs:
 
       - name: Add/Commit README.md
         id: commit-readme
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@998652d28d7702d095d40f52ae42982a80ae8c7d # v9.0.1
         with:
           message: "chore: Update README"
           add: "README.md"
