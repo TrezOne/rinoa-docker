@@ -5563,7 +5563,7 @@ services:
       OTEL_EXPORTER_OTLP_ENDPOINT: http://signoz-otel-collector:4318
       OTEL_SERVICE_NAME: renovate
       OTEL_SERVICE_NAMESPACE: renovate.${MY_TLD}
-    image: renovate/renovate:41.97.7-full
+    image: renovate/renovate:41.97.12-full@sha256:e20639264151d9dce8f0fc3b1219748f4844a76cc157263551d8e7e061daa60e
     restart: unless-stopped
   renovate-valkey:
     container_name: renovate-valkey
