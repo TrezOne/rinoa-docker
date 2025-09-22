@@ -11,6 +11,8 @@ on:
 
 env:
   HC_VAULT_VERSION: "1.18.0"
+  VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+  VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}1
 
 jobs:
   deploy:
