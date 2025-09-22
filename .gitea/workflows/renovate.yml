@@ -13,13 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
-
       - name: Renovate
         uses: https://git.trez.wtf/Trez.One/renovate-github-action@gitea-compatible
         with:
-          configurationFile: ${GITHUB_WORKSPACE}/renovate.json
+          configurationFile: ./renovate.json
           docker-volumes-from: ${{ env.JOB_CONTAINER_NAME }}
           renovate-version: 41.97.7-full
           token: ${{ secrets.RENOVATE_BOT_TOKEN }}
