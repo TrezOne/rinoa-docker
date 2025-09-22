@@ -99,7 +99,7 @@ jobs:
           notification_message: "Starting Docker Compose run..."
 
       - name: Docker Compose Deployment
-        uses: hoverkraft-tech/compose-action@v2.2.0
+        uses: hoverkraft-tech/compose-action@40041ff1b97dbf152cd2361138c2b03fa29139df # v2.3.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
