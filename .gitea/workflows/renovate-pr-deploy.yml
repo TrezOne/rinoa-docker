@@ -7,15 +7,24 @@ on:
     branches:
       - main
 
+env:
+  HC_VAULT_VERSION: "1.18.0"
+
 jobs:
   deploy:
     if: |
       github.event.pull_request.merged == true &&
-      github.event.pull_request.user.login == 'renovate-bot'
+      github.event.pull_request.user.login == 'renovate-bot' &&
+      startsWith(github.event.pull_request.head.ref, 'renovate/docker-compose')
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+
+      - name: Install Vault
+        uses: cpanato/vault-installer@main
+        with:
+          version: ${{ env.HC_VAULT_VERSION }}
 
       - name: Detect Renovate update type
         id: detect-update
@@ -74,13 +83,17 @@ jobs:
         run: |
           echo -e "${{ steps.services.outputs.docker_svc_list }}"
 
+      - name: Generate .env file for Docker Compose
+        run: |
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa'
-          notification_message: 'Starting Docker Compose run...'
+          gotify_api_base: "${{ secrets.RINOA_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa"
+          notification_message: "Starting Docker Compose run..."
 
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@v2.2.0
@@ -105,7 +118,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa'
-          notification_message: 'Deployment completed successfully.'
+          gotify_api_base: "${{ secrets.RINOA_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa"
+          notification_message: "Deployment completed successfully."
