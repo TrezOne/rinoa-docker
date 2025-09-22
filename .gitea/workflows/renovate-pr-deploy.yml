@@ -6,6 +6,8 @@ on:
     types: [closed]
     branches:
       - main
+    paths:
+      - "**/docker-compose.yml"
 
 env:
   HC_VAULT_VERSION: "1.18.0"
@@ -14,8 +16,7 @@ jobs:
   deploy:
     if: |
       github.event.pull_request.merged == true &&
-      github.event.pull_request.user.login == 'renovate-bot' &&
-      startsWith(github.event.pull_request.head.ref, 'renovate/docker-compose')
+      github.event.pull_request.user.login == 'renovate-bot'
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
