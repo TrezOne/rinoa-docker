@@ -19,7 +19,9 @@ jobs:
       - name: Renovate
         uses: renovatebot/github-action@9ba84f1ade243f8c2ce5b223df61cf23dc094584 # v43.0.13
         with:
-          configurationFile: ./renovate.json
+          configurationFile: renovate.json
+          mount-docker-socket: true
+          docker-socket-host-path: /var/run/docker.sock
           renovate-version: 41.97.7-full
           token: ${{ secrets.RENOVATE_BOT_TOKEN }}
         env:
