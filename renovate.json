@@ -1,18 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    "local>trez/renovate-config"
-  ],
+  "extends": ["config:recommended", "local>trez/renovate-config"],
   "packageRules": [
     {
       "description": "Freeze ClickHouse and Zookeeper",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
       "matchPackageNames": [
         "clickhouse/clickhouse-server",
         "bitnami/zookeeper"
@@ -21,17 +14,9 @@
     },
     {
       "description": "Pin Postgres, pgvector, and pgvecto-rs images",
-      "matchDatasources": [
-        "docker"
-      ],
-      "matchManagers": [
-        "docker-compose"
-      ],
-      "matchPackageNames": [
-        "postgres",
-        "pgvector",
-        "pgvecto-rs"
-      ],
+      "matchDatasources": ["docker"],
+      "matchManagers": ["docker-compose"],
+      "matchPackageNames": ["postgres", "pgvector", "pgvecto-rs"],
       "pinDigests": true
     }
   ]
