@@ -40,7 +40,7 @@ x-maxun: &maxun-env
     MAXUN_TELEMETRY: true
     PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
-    CHROMIUM_FLAGS: '--disable-gpu --no-sandbox --headless=new'
+    CHROMIUM_FLAGS: "--disable-gpu --no-sandbox --headless=new"
     #DEBUG: pw:api
     #PWDEBUG: 1
 x-penpot-flags: &penpot-flags
@@ -344,7 +344,7 @@ services:
       homepage.href: http://192.168.1.254:54995
       homepage.description: Multi-channel notification API
       homepage.widget.type: customapi
-      homepage.widget.headers: 'Accept: application/json'
+      homepage.widget.headers: "Accept: application/json"
       homepage.widget.url: http://apprise-api:8000/status
       homepage.widget.method: GET
       homepage.widget.mappings[0].label: Status
@@ -366,14 +366,14 @@ services:
   archivebox:
     container_name: archivebox
     environment:
-      ADMIN_USERNAME: admin            # creates an admin user on first run with the given user/pass combo
+      ADMIN_USERNAME: admin # creates an admin user on first run with the given user/pass combo
       ADMIN_PASSWORD: ${ARCHIVEBOX_ADMIN_PASSWORD}
-      ALLOWED_HOSTS: '*'                   # set this to the hostname(s) you're going to serve the site from!
-      CSRF_TRUSTED_ORIGINS: http://localhost:8000  # you MUST set this to the server's URL for admin login and the REST API to work
-      PUBLIC_INDEX: false                 # set to False to prevent anonymous users from viewing snapshot list
-      PUBLIC_SNAPSHOTS: false             # set to False to prevent anonymous users from viewing snapshot content
-      PUBLIC_ADD_VIEW: false             # set to True to allow anonymous users to submit new URLs to archive
-      SEARCH_BACKEND_ENGINE: ripgrep       # tells ArchiveBox to use sonic container below for fast full-text search
+      ALLOWED_HOSTS: "*" # set this to the hostname(s) you're going to serve the site from!
+      CSRF_TRUSTED_ORIGINS: http://localhost:8000 # you MUST set this to the server's URL for admin login and the REST API to work
+      PUBLIC_INDEX: false # set to False to prevent anonymous users from viewing snapshot list
+      PUBLIC_SNAPSHOTS: false # set to False to prevent anonymous users from viewing snapshot content
+      PUBLIC_ADD_VIEW: false # set to True to allow anonymous users to submit new URLs to archive
+      SEARCH_BACKEND_ENGINE: ripgrep # tells ArchiveBox to use sonic container below for fast full-text search
     image: archivebox/archivebox:latest
     labels:
       homepage.group: Personal Tools
@@ -453,7 +453,7 @@ services:
     expose:
       - 5432
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U asciinema']
+      test: ["CMD-SHELL", "pg_isready -U asciinema"]
       interval: 2s
       timeout: 5s
       retries: 10
@@ -593,7 +593,7 @@ services:
           create_host_path: true
   authelia-valkey:
     container_name: authelia-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - authelia-valkey-data:/data/valkey
   bazarr:
@@ -687,7 +687,7 @@ services:
     environment:
       PORT: 45876
       # Do not remove quotes around the key
-      KEY: '${BESZEL_RINOA_AGENT_KEY}'
+      KEY: "${BESZEL_RINOA_AGENT_KEY}"
     expose:
       - 45876
     image: henrygd/beszel-agent:latest
@@ -909,7 +909,7 @@ services:
       - castopod-media:/var/www/castopod/public/media
   castopod-valkey:
     container_name: castopod-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - castopod-valkey-data:/data/valkey
   changedetection:
@@ -982,10 +982,10 @@ services:
   clipcascade:
     container_name: clipcascade
     environment:
-      CC_MAX_MESSAGE_SIZE_IN_MiB: 25   # Maximum message size in MiB (ignored if P2P mode is enabled)
-      CC_P2P_ENABLED: false  # Enables or disables peer-to-peer(P2P) mode
+      CC_MAX_MESSAGE_SIZE_IN_MiB: 25 # Maximum message size in MiB (ignored if P2P mode is enabled)
+      CC_P2P_ENABLED: false # Enables or disables peer-to-peer(P2P) mode
       # CC_ALLOWED_ORIGINS: https://clipcascade.example.com  # Defines allowed CORS origins for security
-      CC_SIGNUP_ENABLED: false  # Enables or disables user self-registration
+      CC_SIGNUP_ENABLED: false # Enables or disables user self-registration
     image: sathvikrao/clipcascade:latest
     labels:
       homepage.group: Personal Tools
@@ -1009,7 +1009,7 @@ services:
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
-      - ${DOCKER_VOLUME_CONFIG}/clipcascade:/database  # Persistent storage for user data
+      - ${DOCKER_VOLUME_CONFIG}/clipcascade:/database # Persistent storage for user data
   cloudflareddns:
     container_name: cloudflareddns
     environment:
@@ -1137,7 +1137,6 @@ services:
       MGID: ${GID-1000}
     image: metabase/metabase
     labels:
-      com.centurylinklabs.watchtower.enable: false
       homepage.group: Privacy/Security
       homepage.name: CrowdSec Dashboard
       homepage.href: https://csec.${MY_TLD}
@@ -1255,7 +1254,7 @@ services:
       homepage.icon: sh-dagu.svg
       homepage.description: Cron alternative with a web UI
       homepage.widget.type: customapi
-      homepage.widget.headers: 'Authorization: Bearer ${DAGU_AUTH_TOKEN}'
+      homepage.widget.headers: "Authorization: Bearer ${DAGU_AUTH_TOKEN}"
       homepage.widget.url: http://dagu:8080/api/v2/health
       homepage.widget.method: GET
       homepage.widget.mappings[0].label: Status
@@ -1280,7 +1279,7 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/backups/:/backups
       - /var/run/docker.sock:/var/run/docker.sock
   dawarich-app:
-    command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
+    command: ["bin/rails", "server", "-p", "3000", "-b", "::"]
     container_name: dawarich-app
     depends_on:
       dawarich-pg-db:
@@ -1292,8 +1291,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.50'    # Limit CPU usage to 50% of one core
-          memory: '4G'    # Limit memory usage to 4GB
+          cpus: "0.50" # Limit CPU usage to 50% of one core
+          memory: "4G" # Limit memory usage to 4GB
     entrypoint: web-entrypoint.sh
     environment:
       RAILS_ENV: production
@@ -1314,7 +1313,11 @@ services:
       ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
       SELF_HOSTED: true
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'",
+        ]
       interval: 10s
       retries: 30
       start_period: 30s
@@ -1355,7 +1358,7 @@ services:
       POSTGRES_USER: dawarich
       POSTGRES_PASSWORD: ${DAWARICH_PG_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U dawarich -d dawarich" ]
+      test: ["CMD-SHELL", "pg_isready -U dawarich -d dawarich"]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -1368,7 +1371,7 @@ services:
       - dawarich_db_data:/var/lib/postgresql/data
       - dawarich_shared:/var/shared
   dawarich-sidekiq:
-    command: ['sidekiq']
+    command: ["sidekiq"]
     container_name: dawarich-sidekiq
     depends_on:
       dawarich-app:
@@ -1383,8 +1386,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.50'    # Limit CPU usage to 50% of one core
-          memory: '4G'    # Limit memory usage to 4GB
+          cpus: "0.50" # Limit CPU usage to 50% of one core
+          memory: "4G" # Limit memory usage to 4GB
     entrypoint: sidekiq-entrypoint.sh
     environment:
       APPLICATION_HOSTS: localhost,loc.${MY_TLD}
@@ -1406,7 +1409,7 @@ services:
       SELF_HOSTED: true
       STORE_GEODATA: true
     healthcheck:
-      test: [ "CMD-SHELL", "pgrep -f sidekiq" ]
+      test: ["CMD-SHELL", "pgrep -f sidekiq"]
       interval: 10s
       retries: 30
       start_period: 30s
@@ -1422,7 +1425,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/dawarich/sidekiq-entrypoint.sh:/usr/local/bin/sidekiq-entrypoint.sh
   dawarich-valkey:
     container_name: dawarich-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - dawarich-valkey-data:/data/valkey
   dead-man-hand:
@@ -1506,7 +1509,11 @@ services:
       TUNNEL_NAME: dockflared-tunnel
       TZ: ${TZ}
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- --server-response http://localhost:5000/ping 2>&1 | awk '/^  HTTP/{code=$2} /^[^{]/{next} {print; fflush()} END{exit (code>=400 || code==0)}' >/dev/null"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- --server-response http://localhost:5000/ping 2>&1 | awk '/^  HTTP/{code=$2} /^[^{]/{next} {print; fflush()} END{exit (code>=400 || code==0)}' >/dev/null",
+        ]
       interval: 1m30s
       timeout: 30s
       retries: 5
@@ -1677,7 +1684,7 @@ services:
       MAIL_SMTP_CRYPTO: tls
       MAIL_SMTP_PORT: 25
       MAIL_FROM_ADDRESS: noreply@${MY_TLD}
-      MAIL_FROM_NAME: 'Trez'
+      MAIL_FROM_NAME: "Trez"
       MAIL_REPLY_TO_ADDRESS: it-services@${MY_TLD}
     labels:
       homepage.group: Professional Services
@@ -1703,7 +1710,7 @@ services:
     #   - easyappointments:/var/www/html
   excalidraw:
     container_name: excalidraw
-    image: 'excalidraw/excalidraw:latest'
+    image: "excalidraw/excalidraw:latest"
     labels:
       homepage.group: Personal Tools
       homepage.name: Excalidraw
@@ -2119,7 +2126,7 @@ services:
     container_name: guacamole
     environment:
       DOCKER_HOST: tcp://dockerproxy:2375
-      EXTENSIONS: 'auth-totp'
+      EXTENSIONS: "auth-totp"
       TZ: ${TZ}
     image: flcontainers/guacamole:latest
     labels:
@@ -2231,12 +2238,11 @@ services:
       swag_proto: http
       swag_port: 2283
       swag_url: pics.${MY_TLD}
-      swag_server_custom_directive:
-        location /share {
-              proxy_pass http://immich-public-proxy:3000;
+      swag_server_custom_directive: location /share {
+        proxy_pass http://immich-public-proxy:3000;
         }
         location /tools {
-              proxy_pass http://immich-power-tools:3000;
+        proxy_pass http://immich-power-tools:3000;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -2354,7 +2360,7 @@ services:
     restart: unless-stopped
   immich-valkey:
     container_name: immich-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - immich-valkey-data:/data/valkey
   influxdb2:
@@ -3252,7 +3258,7 @@ services:
       APP_PORT: ${JOPLIN_APP_PORT}
       APP_BASE_URL: ${JOPLIN_APP_BASE_URL}
       DB_CLIENT: pg
-      INSTANCE_NAME: 'Joplin @ Rinoa'
+      INSTANCE_NAME: "Joplin @ Rinoa"
       IS_ADMIN_INSTANCE: true
       MAILER_ENABLED: 1
       MAILER_HOST: postal-SMTP
@@ -3345,7 +3351,7 @@ services:
     environment:
       LT_UPDATE_MODELS: true
     healthcheck:
-      test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
+      test: ["CMD-SHELL", "./venv/bin/python scripts/healthcheck.py"]
     image: libretranslate/libretranslate
     labels:
       homepage.group: Personal Tools
@@ -3550,7 +3556,7 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${DOCKER_VOLUME_CONFIG}/loggifly/config.yaml:/app/config.yaml  # Path to your config file (ignore if you are only using environment variables)
+      - ${DOCKER_VOLUME_CONFIG}/loggifly/config.yaml:/app/config.yaml # Path to your config file (ignore if you are only using environment variables)
   maloja:
     container_name: maloja
     environment:
@@ -3644,7 +3650,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/manyfold/library:/libraries #optional
   manyfold-valkey:
     container_name: manyfold-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - manyfold-valkey-data:/data/valkey
   mariadb:
@@ -3655,7 +3661,11 @@ services:
       PUID: ${PUID}
       TZ: ${TZ}
     healthcheck:
-      test: [ "CMD-SHELL", "mariadb-admin ping -h localhost -p${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}|| exit 1" ]
+      test:
+        [
+          "CMD-SHELL",
+          "mariadb-admin ping -h localhost -p${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}|| exit 1",
+        ]
       interval: 1m30s
       timeout: 10s
       retries: 5
@@ -3762,7 +3772,7 @@ services:
       - mastodon-pg-db:/var/lib/postgresql/data
   mastodon-valkey:
     container_name: mastodon-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - mastodon-valkey-data:/data/valkey
   maxun-backend:
@@ -3778,14 +3788,14 @@ services:
     expose:
       - 8080
     image: getmaxun/maxun-backend:latest
-    mem_limit: 2g   # Set a 2GB memory limit
+    mem_limit: 2g # Set a 2GB memory limit
     ports:
       - 8369:8080
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     security_opt:
-      - seccomp=unconfined  # This might help with browser sandbox issues
-    shm_size: '2gb' # Increase shared memory size for Chromium
+      - seccomp=unconfined # This might help with browser sandbox issues
+    shm_size: "2gb" # Increase shared memory size for Chromium
     volumes:
       - /var/run/dbus:/var/run/dbus
   maxun-frontend:
@@ -3801,7 +3811,7 @@ services:
       swag_url: scrape.${MY_TLD}
       swag_server_custom_directive:
         location ~ ^/(auth|storage|record|workflow|robot|proxy|api-docs|api|webhook|socket.io)(/|$) {
-              proxy_pass http://maxun-backend:8080;
+        proxy_pass http://maxun-backend:8080;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -3839,7 +3849,7 @@ services:
       - maxun-pg-data:/var/lib/postgresql/data
   maxun-valkey:
     container_name: maxun-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - maxun-valkey-data:/data/valkey
   meilisearch:
@@ -4035,15 +4045,15 @@ services:
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
-        - mixpost-storage:/var/www/html/storage/app
-        - mixpost-logs:/var/www/html/storage/logs
+      - mixpost-storage:/var/www/html/storage/app
+      - mixpost-logs:/var/www/html/storage/logs
   mixpost-valkey:
     container_name: mixpost-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - mixpost-valkey-data:/data/valkey
   mgob:
-    command: '-LogLevel=info'
+    command: "-LogLevel=info"
     container_name: mgob
     image: stefanprodan/mgob
     labels:
@@ -4170,7 +4180,7 @@ services:
       ND_AUTOIMPORTPLAYLISTS: true
       ND_BASEURL: ""
       ND_BACKUP_PATH: /backups
-      ND_BACKUP_SCHEDULE: '@every 6h'
+      ND_BACKUP_SCHEDULE: "@every 6h"
       ND_BACKUP_COUNT: 7
       ND_ENABLEGRAVATAR: true
       ND_ENABLESHARING: true
@@ -4182,7 +4192,7 @@ services:
       ND_MUSICFOLDER: /music
       ND_PLAYLISTPATH: /playlists
       ND_SCANNER_GROUPALBUMRELEASES: true
-      ND_SCANSCHEDULE: '@every 6h'
+      ND_SCANSCHEDULE: "@every 6h"
       ND_SESSIONTIMEOUT: 24h
       ND_SPOTIFY_ID: ${YOUR_SPOTIFY_ID}
       ND_SPOTIFY_SECRET: ${YOUR_SPOTIFY_SECRET}
@@ -4357,7 +4367,7 @@ services:
     healthcheck:
       interval: 10s
       retries: 10
-      test: "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""
+      test: 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
       timeout: 2s
     image: postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09
     profiles: ["rinoa-apps"]
@@ -4366,7 +4376,7 @@ services:
       - nocodb_pg_data:/var/lib/postgresql/data
   nocodb-valkey:
     container_name: nocodb-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - nocodb_valkey_data:/data/valkey
   ollama:
@@ -4462,7 +4472,7 @@ services:
       LIBRETRANSLATE: http://libretranslate:5000
       OLLAMA: http://ollama:11434
       OLLAMA_MODEL: smollm2:1.7b
-      THEME: 'pole'
+      THEME: "pole"
       DISABLE_DICTIONARY: false
     image: kweg/omnipoly:latest
     labels:
@@ -4553,7 +4563,7 @@ services:
       - open-webui-data:/app/backend/data
   open-webui-valkey:
     container_name: open-webui-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - open-webui-valkey-data:/data/valkey
   paperless-ngx:
@@ -4622,7 +4632,7 @@ services:
           create_host_path: true
   paperless-valkey:
     container_name: paperless-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - paperless-valkey-data:/data/valkey
   penpot-frontend:
@@ -4632,7 +4642,7 @@ services:
       - penpot-exporter
     image: penpotapp/frontend:latest
     environment:
-      << : [*penpot-flags, *penpot-http-body-size]
+      <<: [*penpot-flags, *penpot-http-body-size]
     labels:
       homepage.group: Professional Services
       homepage.name: Penpot
@@ -4664,7 +4674,7 @@ services:
       penpot-redis:
         condition: service_healthy
     environment:
-      << : [*penpot-flags, *penpot-public-uri, *penpot-http-body-size]
+      <<: [*penpot-flags, *penpot-public-uri, *penpot-http-body-size]
       PENPOT_SECRET_KEY: ${PENPOT_SECRET_KEY}
       PENPOT_PREPL_HOST: 0.0.0.0
       PENPOT_DATABASE_URI: postgresql://penpot-pg-db/penpot
@@ -4879,7 +4889,7 @@ services:
       API_PORT: 8080
       FLORACODEX_URL: https://api.floracodex.com
       FLORACODEX_KEY: ${PLANTIT_FLORACODEX_APP_KEY}
-      ALLOWED_ORIGINS: '*' # CORS allowed origins (comma separated list)
+      ALLOWED_ORIGINS: "*" # CORS allowed origins (comma separated list)
       LOG_LEVEL: DEBUG # could be: DEBUG, INFO, WARN, ERROR
       CONTACT_MAIL: noreply@${MY_TLD} # address used as "contact" for template email
       REMINDER_NOTIFY_CHECK: 0 30 7 * * * # 6-values crontab expression to set the check time for reminders
@@ -4902,9 +4912,8 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: plants.${MY_TLD}
-      swag_server_custom_directive:
-        location /api {
-            proxy_pass http://plant-it:8080;
+      swag_server_custom_directive: location /api {
+        proxy_pass http://plant-it:8080;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -4930,14 +4939,14 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/plant-it:/upload-dir
   plant-it-valkey:
     container_name: plant-it-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - plant-it-valkey-data:/data/valkey
   plantuml-server:
     container_name: plantuml-server
     expose:
       - 8080
-    image: 'plantuml/plantuml-server:jetty'
+    image: "plantuml/plantuml-server:jetty"
     profiles: ["rinoa-apps"]
     restart: unless-stopped
   portainer:
@@ -4982,8 +4991,8 @@ services:
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
-        - portainer-data:/data
-        - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
   portchecker-web:
     container_name: portchecker-web
     depends_on:
@@ -4991,9 +5000,9 @@ services:
         required: true
         condition: service_healthy
     environment:
-      DEFAULT_HOST:   # Optional, Populates a default host address value to be populataed in the in the UI input. Defaults to external/WAN IP.
-      DEFAULT_PORT: 443  # Optional, Populates a default port value to be populataed in the in the UI input
-      API_URL: http://portchecker-api:8000  # Optional, the URL of the API service. The scheme and port is required. Defaults to http://api:8000 if not set.
+      DEFAULT_HOST: # Optional, Populates a default host address value to be populataed in the in the UI input. Defaults to external/WAN IP.
+      DEFAULT_PORT: 443 # Optional, Populates a default port value to be populataed in the in the UI input
+      API_URL: http://portchecker-api:8000 # Optional, the URL of the API service. The scheme and port is required. Defaults to http://api:8000 if not set.
       # GOOGLE_ANALYTICS:   # Optional, set for Google Analytics integration
     healthcheck:
       test: ["CMD", "wget", "--spider", "-S", "http://127.0.0.1"]
@@ -5026,7 +5035,7 @@ services:
   portchecker-api:
     container_name: portchecker-api
     environment:
-      ALLOW_PRIVATE: true  # Prevent usage of private IP addresses
+      ALLOW_PRIVATE: true # Prevent usage of private IP addresses
     healthcheck:
       test: ["CMD", "wget", "--spider", "-S", "http://127.0.0.1:8000/healthz"]
       interval: 30s
@@ -5173,8 +5182,8 @@ services:
     image: ghcr.io/stuffanthings/qbit_manage:latest
     environment:
       # Web API Configuration
-      QBT_WEB_SERVER: true    # Set to true to enable web API
-      QBT_PORT: 8080           # Web API port (default: 8080)
+      QBT_WEB_SERVER: true # Set to true to enable web API
+      QBT_PORT: 8080 # Web API port (default: 8080)
       # Scheduler Configuration
       QBT_RUN: false
       QBT_SCHEDULE: 1440
@@ -5193,7 +5202,7 @@ services:
       QBT_DRY_RUN: false
       # Logging Configuration
       QBT_LOG_LEVEL: INFO
-      QBT_DIVIDER: '='
+      QBT_DIVIDER: "="
       QBT_WIDTH: 100
     ports:
       - 5965:8080
@@ -5240,9 +5249,8 @@ services:
       homepage.widget.user: admin
       homepage.widget.password: "${DELUGEVPN_PASSWORD}"
       swag: enable
-      swag_server_custom_directive:
-        location /mgmt {
-              proxy_pass http://qbit-manage:8080;
+      swag_server_custom_directive: location /mgmt {
+        proxy_pass http://qbit-manage:8080;
         }
       swag_port: 8080
       swag_proto: http
@@ -5536,17 +5544,17 @@ services:
     container_name: renovate
     environment:
       # --- Authentication & platform ---
-      RENOVATE_TOKEN: "${RENOVATE_GITEA_TOKEN}"                 # Gitea personal access token for renovate-bot
+      RENOVATE_TOKEN: "${RENOVATE_GITEA_TOKEN}" # Gitea personal access token for renovate-bot
       RENOVATE_PLATFORM: "gitea"
-      RENOVATE_ENDPOINT: "https://git.${MY_TLD}/api/v1"  # your Gitea URL
+      RENOVATE_ENDPOINT: "https://git.${MY_TLD}/api/v1" # your Gitea URL
       RENOVATE_USERNAME: "renovate-bot"
       RENOVATE_GIT_AUTHOR: "Renovate Bot <it-services@trez.wtf>"
       RENOVATE_GITHUB_COM_TOKEN: ${LIBRECHAT_GITHUB_TOKEN}
 
       # --- Behavior ---
-      RENOVATE_AUTODISCOVER: "true"        # discover all repos renovate-bot has access to
-      RENOVATE_ONBOARDING: "true"          # create onboarding PR if repo not configured
-      RENOVATE_REQUIRE_CONFIG: "optional"  # run even if no renovate config exists
+      RENOVATE_AUTODISCOVER: "true" # discover all repos renovate-bot has access to
+      RENOVATE_ONBOARDING: "true" # create onboarding PR if repo not configured
+      RENOVATE_REQUIRE_CONFIG: "optional" # run even if no renovate config exists
       RENOVATE_REDIS_URL: redis://renovate-valkey:6379
       LOG_LEVEL: "info"
 
@@ -5567,7 +5575,7 @@ services:
     restart: unless-stopped
   renovate-valkey:
     container_name: renovate-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - renovate-valkey-data:/data/valkey
   rocketchat:
@@ -5650,9 +5658,9 @@ services:
       SCHEDULED_UPDATE_SWITCH_TITLEDB_CRON: 0 4 * * * # Cron expression for the scheduled update (default: 0 4 * * * At 4:00 AM every day)
       ENABLE_SCHEDULED_UPDATE_MAME_XML: true # Updates the MAME XML database at a given time
       SCHEDULED_UPDATE_MAME_XML_CRON: 0 5 * * * # Cron expression for the scheduled update (default: 0 5 * * * At 5:00 AM every day)
-      IGDB_CLIENT_ID:  ${ROMM_IGDB_CLIENT_ID} # Generate an ID and SECRET in IGDB
+      IGDB_CLIENT_ID: ${ROMM_IGDB_CLIENT_ID} # Generate an ID and SECRET in IGDB
       IGDB_CLIENT_SECRET: ${ROMM_IGDB_CLIENT_SECRET} # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#igdb
-      MOBYGAMES_API_KEY:  # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#mobygames
+      MOBYGAMES_API_KEY: # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#mobygames
       STEAMGRIDDB_API_KEY: ${ROMM_STEAMGRIDDB_API_KEY} # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#steamgriddb
       SCREENSCRAPER_USER: ${ROMM_SCREENSCRAPER_USERNAME} # Use your ScreenScraper username and password
       SCREENSCRAPER_PASSWORD: ${ROMM_SCREENSCRAPER_PASSWORD} # https://docs.romm.app/latest/Getting-Started/Generate-API-Keys/#screenscraper
@@ -5685,7 +5693,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/romm:/romm/config # Path where config.yml is stored
   romm-valkey:
     container_name: romm-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - romm-valkey-data:/data/valkey
   sabnzbdvpn:
@@ -5922,7 +5930,7 @@ services:
           create_host_path: true
   searxng-valkey:
     container_name: searxng-valkey
-    << : *valkey-params
+    <<: *valkey-params
     volumes:
       - searxng-valkey-data:/data/valkey
   semaphore-ui:
@@ -6032,7 +6040,7 @@ services:
     expose:
       - 9000
     ports:
-    #   - "9000:9000"
+      #   - "9000:9000"
       - "8123:8123"
       - "9181:9181"
     volumes:
@@ -6398,11 +6406,11 @@ services:
     container_name: speedtest-tracker
     image: lscr.io/linuxserver/speedtest-tracker:latest
     environment:
-        PUID: ${PUID}
-        PGID: ${PGID}
-        APP_KEY: ${SPEEDTEST_TRACKER_APP_KEY}
-        DB_CONNECTION: sqlite
-        SPEEDTEST_SCHEDULE: 15 */3 * * *
+      PUID: ${PUID}
+      PGID: ${PGID}
+      APP_KEY: ${SPEEDTEST_TRACKER_APP_KEY}
+      DB_CONNECTION: sqlite
+      SPEEDTEST_SCHEDULE: 15 */3 * * *
     labels:
       homepage.name: Speedtest Tracker
       homepage.group: Infrastructure/App Performance Monitoring
@@ -6422,12 +6430,12 @@ services:
       swag.uptime-kuma.monitor.retryInterval: 60
       swag.uptime-kuma.monitor.maxretries: 5
     ports:
-        - 47512:80
-        - 62777:443
+      - 47512:80
+      - 62777:443
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
-        - ${DOCKER_VOLUME_CONFIG}/speedtest-tracker:/config
+      - ${DOCKER_VOLUME_CONFIG}/speedtest-tracker:/config
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
     image: ghcr.io/neggles/sd-webui-docker:latest
@@ -6835,55 +6843,6 @@ services:
     volumes:
       - wallos-db:/var/www/html/db
       - wallos-logos:/var/www/html/images/uploads/logos
-  watchtower:
-    container_name: watchtower
-    environment:
-      REPO_PASS:
-      REPO_USER:
-      TZ: ${TZ}
-      WATCHTOWER_CLEANUP: true
-      WATCHTOWER_INCLUDE_STOPPED: false
-      WATCHTOWER_MONITOR_ONLY: false
-      WATCHTOWER_NOTIFICATIONS_LEVEL: info
-      WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Message}}{{println}}{{end}}'
-      WATCHTOWER_NOTIFICATION_URL: "gotify://gotify/${WATCHTOWER_NOTIFICATION_GOTIFY_TOKEN}?disabletls=true"
-      WATCHTOWER_SCHEDULE: 0 0 4 * * *
-      WATCHTOWER_TIMEOUT: 30s
-      WATCHTOWER_HTTP_API_METRICS: true
-      WATCHTOWER_HTTP_API_TOKEN: ${WATCHTOWER_HTTP_API_TOKEN}
-    expose:
-      - 8080
-    hostname: Rinoa
-    image: ghcr.io/containrrr/watchtower:latest
-    labels:
-      homepage.group: Automation
-      homepage.name: Watchtower
-      homepage.icon: watchtower.svg
-      homepage.description: Container-based solution for automating Docker container base image updates
-      homepage.widget.type: watchtower
-      homepage.widget.url: http://watchtower:8080
-      homepage.widget.key: ${WATCHTOWER_HTTP_API_TOKEN}
-    networks:
-      default: null
-    profiles: ["rinoa-apps"]
-    restart: unless-stopped
-    volumes:
-      - bind:
-          create_host_path: true
-        read_only: true
-        source: /etc/localtime
-        target: /etc/localtime
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /rinoa-storage
-        target: /storage
-        type: bind
-      - bind:
-          create_host_path: true
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
-        type: bind
   web-check:
     container_name: web-check
     image: lissy93/web-check
@@ -6915,138 +6874,138 @@ services:
     image: clidey/whodb
     environment:
       WHODB_CLICKHOUSE_1: '{
-            "host": "signoz-clickhouse"
-          }'
+        "host": "signoz-clickhouse"
+        }'
       WHODB_MARIADB_1: '{
-          "host": "mariadb",
-          "user": "root",
-          "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
+        "host": "mariadb",
+        "user": "root",
+        "password": "${MARIADB_ENVIRONMENT_MYSQL_ROOT_PASSWORD}"
         }'
       WHODB_MONGODB_1: '{
-          "host": "mongodb:27017/admin?replicaSet=rinoa",
-          "user": "root",
-          "password": "${MONGO_INITDB_ROOT_PASSWORD}"
+        "host": "mongodb:27017/admin?replicaSet=rinoa",
+        "user": "root",
+        "password": "${MONGO_INITDB_ROOT_PASSWORD}"
         }'
       WHODB_POSTGRES_1: '{
-            "host": "authelia-pg",
-            "user": "authelia",
-            "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
-            "database": "authelia"
-          }'
+        "host": "authelia-pg",
+        "user": "authelia",
+        "password": "${AUTHELIA_STORAGE_POSTGRES_PASSWORD}",
+        "database": "authelia"
+        }'
       WHODB_POSTGRES_2: '{
-            "host": "dawarich-pg-db",
-            "user": "dawarich",
-            "password": "${DAWARICH_PG_PASSWORD}",
-            "database": "authelia"
-          }'
+        "host": "dawarich-pg-db",
+        "user": "dawarich",
+        "password": "${DAWARICH_PG_PASSWORD}",
+        "database": "authelia"
+        }'
       WHODB_POSTGRES_3: '{
-            "host": "gitea-db",
-            "user": "gitea",
-            "password": "${GITEA_PG_DB_PASSWORD}",
-            "database": "gitea"
-          }'
+        "host": "gitea-db",
+        "user": "gitea",
+        "password": "${GITEA_PG_DB_PASSWORD}",
+        "database": "gitea"
+        }'
       WHODB_POSTGRES_4: '{
-            "host": "immich-pg-db",
-            "user": "immich",
-            "password": "${IMMICH_DB_PASSWORD}",
-            "database": "immich"
-          }'
+        "host": "immich-pg-db",
+        "user": "immich",
+        "password": "${IMMICH_DB_PASSWORD}",
+        "database": "immich"
+        }'
       WHODB_POSTGRES_5: '{
-            "host": "invidious-db",
-            "user": "kemal",
-            "password": "${INVID_PG_DB_PASSWORD}",
-            "database": "invidious"
-          }'
+        "host": "invidious-db",
+        "user": "kemal",
+        "password": "${INVID_PG_DB_PASSWORD}",
+        "database": "invidious"
+        }'
       WHODB_POSTGRES_6: '{
-            "host": "joplin-db",
-            "user": "joplin",
-            "password": "${JOPLIN_POSTGRES_PASSWORD}",
-            "database": "joplin"
-          }'
+        "host": "joplin-db",
+        "user": "joplin",
+        "password": "${JOPLIN_POSTGRES_PASSWORD}",
+        "database": "joplin"
+        }'
       WHODB_POSTGRES_7: '{
-            "host": "librechat-vectordb",
-            "user": "librechat",
-            "password": "${LIBRECHAT_PG_DB_PASSWD}",
-            "database": "librechat"
-          }'
+        "host": "librechat-vectordb",
+        "user": "librechat",
+        "password": "${LIBRECHAT_PG_DB_PASSWD}",
+        "database": "librechat"
+        }'
       WHODB_POSTGRES_8: '{
-            "host": "mastodon-pg-db",
-            "user": "mastodon",
-            "password": "${MASTODON_PG_DB_PASSWORD}",
-            "database": "mastodon"
-          }'
+        "host": "mastodon-pg-db",
+        "user": "mastodon",
+        "password": "${MASTODON_PG_DB_PASSWORD}",
+        "database": "mastodon"
+        }'
       WHODB_POSTGRES_9: '{
-            "host": "penpot-pg-db",
-            "user": "penpot",
-            "password": "${PENPOT_PG_DB_PASSWORD}",
-            "database": "penpot"
-          }'
+        "host": "penpot-pg-db",
+        "user": "penpot",
+        "password": "${PENPOT_PG_DB_PASSWORD}",
+        "database": "penpot"
+        }'
       WHODB_POSTGRES_10: '{
-            "host": "planka-pg-db",
-            "user": "planka",
-            "password": "${PLANKA_PG_PASSWORD}",
-            "database": "planka"
-          }'
+        "host": "planka-pg-db",
+        "user": "planka",
+        "password": "${PLANKA_PG_PASSWORD}",
+        "database": "planka"
+        }'
       WHODB_POSTGRES_11: '{
-            "host": "portnote-pg-db",
-            "user": "portnote",
-            "password": "${PORTNOTE_POSTGRES_PASSWORD}",
-            "database": "portnote"
-          }'
+        "host": "portnote-pg-db",
+        "user": "portnote",
+        "password": "${PORTNOTE_POSTGRES_PASSWORD}",
+        "database": "portnote"
+        }'
       WHODB_POSTGRES_12: '{
-            "host": "reactive-resume-pg",
-            "user": "reactiveresume",
-            "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
-            "database": "reactiveresume"
-          }'
+        "host": "reactive-resume-pg",
+        "user": "reactiveresume",
+        "password": "${REACTIVE_RESUME_PGSQL_PASSWORD}",
+        "database": "reactiveresume"
+        }'
       WHODB_POSTGRES_13: '{
-            "host": "sonarqube-pg-db",
-            "user": "sonar",
-            "password": "${SONARQUBE_POSTGRES_PASSWORD}",
-            "database": "sonar"
-          }'
+        "host": "sonarqube-pg-db",
+        "user": "sonar",
+        "password": "${SONARQUBE_POSTGRES_PASSWORD}",
+        "database": "sonar"
+        }'
       WHODB_POSTGRES_14: '{
-            "host": "tandoor-pg",
-            "user": "tandoor",
-            "password": "${TANDOOR_POSTGRES_PASSWORD}",
-            "database": "tandoor"
-          }'
+        "host": "tandoor-pg",
+        "user": "tandoor",
+        "password": "${TANDOOR_POSTGRES_PASSWORD}",
+        "database": "tandoor"
+        }'
       WHODB_POSTGRES_15: '{
-            "host": "asciinema-pg-db",
-            "user": "asciinema",
-            "password": "${ASCIINEMA_PG_DB_PASSWORD}",
-            "database": "asciinema"
-          }'
+        "host": "asciinema-pg-db",
+        "user": "asciinema",
+        "password": "${ASCIINEMA_PG_DB_PASSWORD}",
+        "database": "asciinema"
+        }'
       WHODB_REDIS_1: '{
-            "host": "castopod-valkey"
-          }'
+        "host": "castopod-valkey"
+        }'
       WHODB_REDIS_2: '{
-            "host": "dawarich-valkey"
-          }'
+        "host": "dawarich-valkey"
+        }'
       WHODB_REDIS_3: '{
-            "host": "immich-valkey"
-          }'
+        "host": "immich-valkey"
+        }'
       WHODB_REDIS_4: '{
-            "host": "librechat-valkey"
-          }'
+        "host": "librechat-valkey"
+        }'
       WHODB_REDIS_5: '{
-            "host": "manyfold-valkey"
-          }'
+        "host": "manyfold-valkey"
+        }'
       WHODB_REDIS_6: '{
-            "host": "mastodon-valkey"
-          }'
+        "host": "mastodon-valkey"
+        }'
       WHODB_REDIS_7: '{
-            "host": "maxun-valkey"
-          }'
+        "host": "maxun-valkey"
+        }'
       WHODB_REDIS_8: '{
-            "host": "mixpost-valkey"
-          }'
+        "host": "mixpost-valkey"
+        }'
       WHODB_REDIS_9: '{
-            "host": "paperless-valkey"
-          }'
+        "host": "paperless-valkey"
+        }'
       WHODB_REDIS_10: '{
-            "host": "plant-it-valkey"
-          }'
+        "host": "plant-it-valkey"
+        }'
       WHODB_SQLITE3_1: '{"database":"kuma.db"}'
       WHODB_OLLAMA_HOST: ollama
       WHODB_OLLAMA_PORT: 11434
@@ -7178,9 +7137,9 @@ services:
     environment:
       # Enable authorization without HTTPS. For external access with
       #   SSL termination, use solutions like nginx-proxy-manager.
-      ELASTICSEARCH_ENABLE_SECURITY: 'true'
-      ELASTICSEARCH_SKIP_TRANSPORT_TLS: 'true'
-      ELASTICSEARCH_ENABLE_REST_TLS: 'false'
+      ELASTICSEARCH_ENABLE_SECURITY: "true"
+      ELASTICSEARCH_SKIP_TRANSPORT_TLS: "true"
+      ELASTICSEARCH_ENABLE_REST_TLS: "false"
       # ELASTICSEARCH_USER is hardcoded to 'elastic' in the container.
       ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASS:-zammad}
   zammad-init:
