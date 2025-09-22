@@ -22,6 +22,6 @@ jobs:
             -e LOG_LEVEL=debug \
             -e RENOVATE_GITHUB_COM_TOKEN=${{ secrets.RENOVATE_GITHUB_TOKEN }} \
             -e RENOVATE_CONFIG_FILE=renovate.json \
-            --volumes-from ${{ env.JOB_CONTAINER_NAME }}
+            --volumes-from ${{ env.JOB_CONTAINER_NAME }} \
             -w ${GITHUB_WORKSPACE} \
             renovate/renovate:41.97.7-full
