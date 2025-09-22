@@ -1,73 +1,23 @@
-# .gitea/workflows/renovate.yml
-name: Run Renovate
+name: Renovate
 
 on:
   schedule:
-    - cron: "0 2 * * *" # daily at 2 AM
+    - cron: "0/30 * * * *"
   workflow_dispatch:
 
 jobs:
   renovate:
     runs-on: ubuntu-latest
-
+    container: renovate/renovate:41.97.7-full
+    timeout-minutes: 5
     steps:
-      # 1️⃣ Checkout rinoa-docker repository
-      - name: Checkout rinoa-docker
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # 2️⃣ Checkout your forked renovatebot action into a subdir
-      - name: Checkout renovate-github-action fork
-        uses: actions/checkout@v4
-        with:
-          repository: "Trez.One/renovate-github-action"
-          ref: gitea-compatible
-          path: renovate-action
-
-      # 3️⃣ Setup Node.js (mirroring action.yml)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: "pnpm"
-
-      # 4️⃣ Install pnpm dependencies
-      - name: Install dependencies
-        run: pnpm install
-        working-directory: renovate-action
-
-      # 5️⃣ Build TypeScript
-      - name: Build renovate action
-        run: pnpm build
-        working-directory: renovate-action
-
-      # 6️⃣ Run Renovate with retry handling
-      - name: Run Renovate
-        working-directory: renovate-action
-        run: |
-          set -e
-          max_attempts=3
-          attempt=1
-
-          until [ $attempt -gt $max_attempts ]; do
-            echo "Running Renovate (attempt $attempt/$max_attempts)..."
-            if node dist/index.js; then
-              echo "Renovate completed successfully."
-              break
-            else
-              echo "Renovate failed on attempt $attempt."
-              attempt=$((attempt + 1))
-              if [ $attempt -le $max_attempts ]; then
-                echo "Retrying in 10 seconds..."
-                sleep 10
-              else
-                echo "All $max_attempts attempts failed."
-                exit 1
-              fi
-            fi
-          done
+      - name: Renovate Run
+        run: renovate
         env:
-          LOG_LEVEL: debug
-          RENOVATE_TOKEN: ${{ secrets.RENOVATE_BOT_TOKEN }}
-        with:
-          configurationFile: ../renovate.json
-          docker-volumes-from: ${{ env.JOB_CONTAINER_NAME }}
+          LOG_LEVEL: "debug"
+          RENOVATE_CONFIG_FILE: "${GITHUB_WORKSPACE}/renovate.json"
+          RENOVATE_TOKEN: ${ { secrets.RENOVATE_BOT_TOKEN }}
+          RENOVATE_GITHUB_COM_TOKEN: ${{ secrets.RENOVATE_GITHUB_COM_TOKEN }}
