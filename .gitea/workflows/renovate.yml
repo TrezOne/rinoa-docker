@@ -16,12 +16,11 @@ jobs:
       - name: Renovate Run
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
-          R_GITHUB_COM_TOKEN: ${{ secrets.RENOVATE_GITHUB_TOKEN }}
         run: |
           docker run --rm \
             -e RENOVATE_TOKEN=${{ secrets.RENOVATE_BOT_TOKEN }} \
             -e LOG_LEVEL=debug \
-            -e RENOVATE_GITHUB_COM_TOKEN=${R_GITHUB_COM_TOKEN} \
+            -e RENOVATE_GITHUB_COM_TOKEN=${{ secrets.RENOVATE_GITHUB_TOKEN }} \
             -e RENOVATE_CONFIG_FILE=renovate.json \
             --volumes-from ${{ env.JOB_CONTAINER_NAME }} \
             -w ${GITHUB_WORKSPACE} \
