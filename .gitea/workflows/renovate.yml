@@ -15,9 +15,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Renovate Run
-        run: renovate
-        env:
-          LOG_LEVEL: "debug"
-          RENOVATE_CONFIG_FILE: "/workspace/Trez.One/rinoa-docker/renovate.json"
-          RENOVATE_TOKEN: ${{ secrets.RENOVATE_BOT_TOKEN }}
-          RENOVATE_GITHUB_COM_TOKEN: ${{ secrets.RENOVATE_GITHUB_COM_TOKEN }}
+        run: |
+          docker run --rm \
+            -e RENOVATE_TOKEN=${{ secrets.RENOVATE_BOT_TOKEN }} \
+            -e LOG_LEVEL=debug \
+            -e RENOVATE_GITHUB_COM_TOKEN=${{ secrets.RENOVATE_GITHUB_TOKEN }}
+            -e RENOVATE_CONFIG_FILE=/workspace/renovate.json
+            -v ${GITHUB_WORKSPACE}:/workspace \
+            -w /workspace \
+            renovate/renovate:41.97.7-full
