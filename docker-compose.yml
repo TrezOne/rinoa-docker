@@ -1978,7 +1978,7 @@ services:
       interval: 10s
       start_period: 20s
       test: ["CMD-SHELL", "pg_isready -U gitea -d gitea"]
-    image: postgres:14@sha256:e84397672fce21223933cd4f9b09fdea0c1c72daa834c57a613121c927b2ba61
+    image: postgres:14@sha256:63b0c41b926b98e4a3944d74fb761943ca1cb5375c28f179edf35c77b8f63360
     networks:
       default: null
     profiles: ["rinoa-infra"]
