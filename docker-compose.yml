@@ -5,7 +5,7 @@ networks:
   nextcloud-aio:
     external: true
 x-jitsi-admin: &jitsi_admin_app
-  image: h2invent/jitsi-admin-main:latest
+  image: h2invent/jitsi-admin-main:latest@sha256:3d6d025178bc7a0c51da011052763d3ffddb97a1ab54f451c22e9aee14a0faad
   #build: .
   environment:
     APACHE_DOCUMENT_ROOT: "public/"
@@ -112,7 +112,7 @@ x-signoz-db-depend: &signoz-db-depend
 x-valkey-params: &valkey-params
   healthcheck:
     test: redis-cli ping || exit 1
-  image: docker.io/bitnami/valkey:latest
+  image: docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a
   environment:
     ALLOW_EMPTY_PASSWORD: yes
     VALKEY_DATA_DIR: /data/valkey
@@ -184,7 +184,7 @@ x-zammad:
 services:
   13ft:
     container_name: 13ft
-    image: ghcr.io/wasi-master/13ft:latest
+    image: ghcr.io/wasi-master/13ft:latest@sha256:563ce7794a7173250c25c9162495bf2f510dd714067d74363c9ab2bd0e5a994f
     labels:
       swag: enable
       swag_port: 5000
@@ -216,7 +216,7 @@ services:
       # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=20
       # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
       # !! If you are not using any of these options, remove the 'environment:' tag entirely.
-    image: docker.io/actualbudget/actual-server:latest
+    image: docker.io/actualbudget/actual-server:latest@sha256:a96e38821a56843a5473204cbd3773ffee816c49c23e0a9187fb80498bd3e154
     labels:
       swag: enable
       swag_port: 5006
@@ -247,7 +247,7 @@ services:
     container_name: adguard
     environment:
       TZ: ${TZ}
-    image: adguard/adguardhome:v0.107.66
+    image: adguard/adguardhome:v0.107.66@sha256:cc8757742e547c722bb0bd9a3b11fce22771a75a5b0e07ce9a789ad62a2bfd37
     labels:
       swag: enable
       swag_proto: http
@@ -295,7 +295,7 @@ services:
       UPSNAMES: Rinoa
       TZ: ${TZ}
       DASHBOARD_PROVISION: false
-    image: bnhf/apcupsd-cgi:latest
+    image: bnhf/apcupsd-cgi:latest@sha256:e8733930739719aca608fd97aecfb0aa5f53aaf7681bf4bbccd49dbf67132bf8
     labels:
       swag: enable
       swag_proto: http
@@ -331,7 +331,7 @@ services:
       APPRISE_ATTACH_SIZE: 500
       APPRISE_CONFIG_DIR: /config
       APPRISE_STATEFUL_MODE: simple
-    image: lscr.io/linuxserver/apprise-api:latest
+    image: lscr.io/linuxserver/apprise-api:latest@sha256:7d3b8154f396e687f3a44c6ccebb5150ad8e3a2e055ef2027965ec96116d64c5
     labels:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: apprise.${MY_TLD}
@@ -374,7 +374,7 @@ services:
       PUBLIC_SNAPSHOTS: false # set to False to prevent anonymous users from viewing snapshot content
       PUBLIC_ADD_VIEW: false # set to True to allow anonymous users to submit new URLs to archive
       SEARCH_BACKEND_ENGINE: ripgrep # tells ArchiveBox to use sonic container below for fast full-text search
-    image: archivebox/archivebox:latest
+    image: archivebox/archivebox:latest@sha256:fdf2936192aa1e909b0c3f286f60174efa24078555be4b6b90a07f2cef1d4909
     labels:
       homepage.group: Personal Tools
       homepage.name: ArchiveBox
@@ -419,7 +419,7 @@ services:
       URL_HOST: asciinema.trez.wtf
       URL_PORT: 4000
       URL_SCHEME: https
-    image: ghcr.io/asciinema/asciinema-server:latest
+    image: ghcr.io/asciinema/asciinema-server:latest@sha256:8da830a6eb0b6715becf31b2495877aa5d661674f29c52a3a3363110847c5598
     labels:
       homepage.group: Code/DevOps
       homepage.name: Asciinema
@@ -471,7 +471,7 @@ services:
       METADATA_PATH: /metadata
       TZ: America/New_York
     hostname: Rinoa
-    image: ghcr.io/advplyr/audiobookshelf:latest
+    image: ghcr.io/advplyr/audiobookshelf:latest@sha256:dd4a3079d26bfe9f0ea63de3e3eff483dfa25fef05ef850a5a9d121dca3794b2
     labels:
       homepage.group: Media Library
       homepage.name: Audiobookshelf
@@ -544,7 +544,7 @@ services:
       X_AUTHELIA_CONFIG_FILTERS: template
     expose:
       - 9091
-    image: authelia/authelia:master
+    image: authelia/authelia:master@sha256:3cc34ce22dc5c4742edde2087a04d9a49a63b75625e94f831df12829ca230635
     labels:
       homepage.group: Privacy/Security
       homepage.name: Authelia
@@ -604,7 +604,7 @@ services:
       TZ: ${TZ}
       DOCKER_MODS: ghcr.io/gilbn/theme.park:bazarr
     hostname: Rinoa
-    image: lscr.io/linuxserver/bazarr:latest
+    image: lscr.io/linuxserver/bazarr:latest@sha256:e424330f048ff1401f22413e34ee11c25ac2de79b6213c6ead3f593b44626c55
     labels:
       homepage.group: Servarr Stack
       homepage.name: Bazarr
@@ -651,7 +651,7 @@ services:
     container_name: beszel
     extra_hosts:
       - host.docker.internal:host-gateway
-    image: henrygd/beszel:latest
+    image: henrygd/beszel:latest@sha256:6282f2da6e94ffd1650db9f1504a443c1b86082ecb011861a53cc3fb90fb4c29
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Beszel
@@ -690,7 +690,7 @@ services:
       KEY: "${BESZEL_RINOA_AGENT_KEY}"
     expose:
       - 45876
-    image: henrygd/beszel-agent:latest
+    image: henrygd/beszel-agent:latest@sha256:206822f20bd46ac2205249c356d5321139eddc5b155bba07e4aac9254e6c176c
     network_mode: host
     profiles: ["rinoa-apps"]
     restart: unless-stopped
@@ -713,7 +713,7 @@ services:
       TZ: America/New_York
       WEBSOCKET_ENABLED: "true"
     hostname: Rinoa
-    image: vaultwarden/server:latest
+    image: vaultwarden/server:latest@sha256:84fd8a47f58d79a1ad824c27be0a9492750c0fa5216b35c749863093bfa3c3d7
     labels:
       homepage.group: Privacy/Security
       homepage.name: Vaultwarden
@@ -777,7 +777,7 @@ services:
       LOG_ENABLED: true
     expose:
       - 3000
-    image: code.modernleft.org/gravityfargo/bluesky-pds:v0.4.158
+    image: code.modernleft.org/gravityfargo/bluesky-pds:v0.4.158@sha256:44810dc5cf9c78135d20dfd60e0999e2db0dfc5fd56dc7e45e8844d1b57c54bd
     labels:
       swag: enable
       swag_port: 3000
@@ -812,7 +812,7 @@ services:
       - 3000
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    image: ghcr.io/browserless/chromium:latest
+    image: ghcr.io/browserless/chromium:latest@sha256:f9a7d5c33bc3d9c911040a3e7f5107ac2b9ce0a9e636df9a17e3db12d56155ce
     labels:
       swag: enable
       swag_proto: http
@@ -832,7 +832,7 @@ services:
       DEBUG: true
       DISABLE_ACCOUNTS: false
       DISABLE_INTERNAL_ACCOUNTS: false
-    image: ghcr.io/jordan-dalby/bytestash:latest
+    image: ghcr.io/jordan-dalby/bytestash:latest@sha256:f57d694a727bfbe1daf72acd3d98620b2ff9b1e4f4aafbacc5cda89c31da3512
     labels:
       homepage.description: Code Gists/Snippets
       homepage.group: Code/DevOps
@@ -885,7 +885,7 @@ services:
       CP_EMAIL_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
     expose:
       - 8000
-    image: castopod/castopod:latest
+    image: castopod/castopod:latest@sha256:e59262a89b035d1cb7decd7dcc387670c5ba81e31b67c7e0e89ef827d7f58ea9
     labels:
       homepage.group: Social
       homepage.name: Castopod
@@ -928,7 +928,7 @@ services:
       TZ: ${TZ}
       LC_ALL: en_US.UTF-8
       LISTEN_HOST: 0.0.0.0
-    image: ghcr.io/dgtlmoon/changedetection.io
+    image: ghcr.io/dgtlmoon/changedetection.io@sha256:d8113bf66f47895d29c6935000bbac4c0f33d79588ae37d9ed6000ed328c5833
     labels:
       homepage.description: Page change monitoring with alerts
       homepage.group: System Administration
@@ -959,7 +959,7 @@ services:
     cap_add:
       - SYS_ADMIN
     container_name: changedetection-chrome
-    image: dgtlmoon/sockpuppetbrowser:latest
+    image: dgtlmoon/sockpuppetbrowser:latest@sha256:9f2df6791a4cd9b2c3138cb62b5a8de7f27953cab84729fe09d28cbd341a8973
     environment:
       SCREEN_WIDTH: 1920
       SCREEN_HEIGHT: 1024
@@ -976,7 +976,7 @@ services:
       - --remote-debugging-address=0.0.0.0
       - --remote-debugging-port=9222
       - --hide-scrollbars
-    image: gcr.io/zenika-hub/alpine-chrome:123
+    image: gcr.io/zenika-hub/alpine-chrome:123@sha256:e38563d4475a3d791e986500a2e4125c9afd13798067138881cf770b1f6f3980
     profiles: ["rinoa-apps"]
     restart: unless-stopped
   clipcascade:
@@ -986,7 +986,7 @@ services:
       CC_P2P_ENABLED: false # Enables or disables peer-to-peer(P2P) mode
       # CC_ALLOWED_ORIGINS: https://clipcascade.example.com  # Defines allowed CORS origins for security
       CC_SIGNUP_ENABLED: false # Enables or disables user self-registration
-    image: sathvikrao/clipcascade:latest
+    image: sathvikrao/clipcascade:latest@sha256:0f7aadec03af6b22a157466ade3ed1730dfd3b390d2989e55c0180e1d12d736f
     labels:
       homepage.group: Personal Tools
       homepage.name: ClipCascade
@@ -1027,7 +1027,7 @@ services:
       PUID: "1000"
       TZ: America/New_York
     hostname: Rinoa
-    image: ghcr.io/hotio/cloudflareddns:latest
+    image: ghcr.io/hotio/cloudflareddns:latest@sha256:fc2b38cc61e62269a4251e973342f8598ce32085b261b4264f3a89d2039a216e
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -1053,7 +1053,7 @@ services:
     container_name: convertx
     environment:
       JWT_SECRET: ${CONVERTX_JWT_SECRET}
-    image: ghcr.io/c4illin/convertx
+    image: ghcr.io/c4illin/convertx@sha256:346589f154332997329fdc888417d4b24c49cc9140eab80e637a68cfbdd8041b
     labels:
       homepage.group: System Administration
       homepage.name: ConvertX
@@ -1108,7 +1108,7 @@ services:
         timokoessler/mongodb
         timokoessler/uptime-kuma
         xs539/joplin-server
-    image: crowdsecurity/crowdsec:latest
+    image: crowdsecurity/crowdsec:latest@sha256:26841bec239f53c74f5ac35ca89166b0566c511a449c4852d3187c8a62faf4ed
     networks:
       default: null
     ports:
@@ -1135,7 +1135,7 @@ services:
     environment:
       MB_DB_FILE: /data/metabase.db
       MGID: ${GID-1000}
-    image: metabase/metabase
+    image: metabase/metabase@sha256:55cd5d71b4304b30e575862e25b82013ac81d48beaf6c371241e1c83894f3db2
     labels:
       homepage.group: Privacy/Security
       homepage.name: CrowdSec Dashboard
@@ -1167,7 +1167,7 @@ services:
       - crowdsec-db:/data/
   cyber-chef:
     container_name: cyber-chef
-    image: mpepping/cyberchef:latest
+    image: mpepping/cyberchef:latest@sha256:1772a04fd261f971da89cf6212147afe55a37b4a93421db928a78e01de3d65ea
     labels:
       homepage.description: Web app for encryption, encoding, compression, and data analysis
       homepage.group: Privacy/Security
@@ -1198,7 +1198,7 @@ services:
       TZ: ${TZ}
       UMASK: 1
       WEB_LISTENING_PORT: 5800
-    image: jlesage/czkawka
+    image: jlesage/czkawka@sha256:03109f40d1bc41ebe24c2fd3ee81429950338591bbb64c4cf39ec6160fee75a4
     labels:
       homepage.group: System Administration
       homepage.name: Czkawka
@@ -1246,7 +1246,7 @@ services:
       DAGU_AUTH_TOKEN: ${DAGU_AUTH_TOKEN}
       PUID: ${PUID}
       PGID: ${PGID}
-    image: ghcr.io/dagu-org/dagu:alpine
+    image: ghcr.io/dagu-org/dagu:alpine@sha256:5e22516bd4c211f55449b576d45052712dcb84652bcfb316f0a53a0b53c7ed35
     labels:
       homepage.group: Automation
       homepage.name: Dagu
@@ -1322,7 +1322,7 @@ services:
       retries: 30
       start_period: 30s
       timeout: 10s
-    image: freikin/dawarich:latest
+    image: freikin/dawarich:latest@sha256:4cb9bd4e05dbea4cf5176c2d07c613c10bff231e487e2a95ab978fd7e3e7c174
     labels:
       homepage.group: Privacy/Security
       homepage.name: Dawarich
@@ -1363,7 +1363,7 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-    image: postgis/postgis:17-3.5-alpine
+    image: postgis/postgis:17-3.5-alpine@sha256:73b3b9f4b5e743cf4bfc121d8b924589231f1c3af7245d54875183a5e972714d
     profiles: ["rinoa-apps"]
     restart: always
     shm_size: 1G
@@ -1414,7 +1414,7 @@ services:
       retries: 30
       start_period: 30s
       timeout: 10s
-    image: freikin/dawarich:latest
+    image: freikin/dawarich:latest@sha256:4cb9bd4e05dbea4cf5176c2d07c613c10bff231e487e2a95ab978fd7e3e7c174
     profiles: ["rinoa-apps"]
     restart: on-failure
     stdin_open: true
@@ -1430,7 +1430,7 @@ services:
       - dawarich-valkey-data:/data/valkey
   dead-man-hand:
     container_name: dead-man-hand
-    image: ghcr.io/bkupidura/dead-man-hand:latest
+    image: ghcr.io/bkupidura/dead-man-hand:latest@sha256:e5ef8e79f1263c2ba8ae196ebd03e7f240d8d6a44af39e0042981ce3f8a33a17
     environment:
       DMH_CONFIG_FILE: /data/config.yaml
     labels:
@@ -1477,7 +1477,7 @@ services:
       TASKS: 1
       VOLUMES: 1
       LOG_LEVEL: debug
-    image: ghcr.io/tecnativa/docker-socket-proxy:latest
+    image: ghcr.io/tecnativa/docker-socket-proxy:latest@sha256:3400c429c5f9e1b21d62130fb93b16e2e772d4fb7695bd52fc2b743800b9fe9e
     networks:
       default: null
     ports:
@@ -1518,7 +1518,7 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
-    image: alplat/dockflare:stable # Or :unstable for the latest features
+    image: alplat/dockflare:stable@sha256:e1f6aa1179c1e0f5003b3986e6ae5c15ae5605cbb5c38819fa3520feada6d078 # Or :unstable for the latest features
     labels:
       homepage.group: Privacy/Security
       homepage.name: DockFlare
@@ -1610,7 +1610,7 @@ services:
       PUID: ${PUID}
       TZ: ${TZ}
     hostname: Rinoa
-    image: lscr.io/linuxserver/duplicati:latest
+    image: lscr.io/linuxserver/duplicati:latest@sha256:87f31056a1941650c58c4da5086aa3ff8b15c300f06729eec1eee2bb9813faf4
     labels:
       swag: enable
       swag_port: 8200
@@ -1667,7 +1667,7 @@ services:
       mariadb:
         condition: service_healthy
         required: true
-    image: alextselegidis/easyappointments:1.5.2
+    image: alextselegidis/easyappointments:1.5.2@sha256:484f183a7f5bcc9c0486674de4af01c785ab73fc2ee962dc35db7d0ba69d2825
     environment:
       BASE_URL: http://localhost
       DEBUG_MODE: TRUE
@@ -1710,7 +1710,7 @@ services:
     #   - easyappointments:/var/www/html
   excalidraw:
     container_name: excalidraw
-    image: "excalidraw/excalidraw:latest"
+    image: "excalidraw/excalidraw:latest@sha256:30e429c5784611b378bbaf72f20ca55c90707de40533939a3beb8098821121ee"
     labels:
       homepage.group: Personal Tools
       homepage.name: Excalidraw
@@ -1741,7 +1741,7 @@ services:
       WEEKLY_JAMS_FLAGS: --playlist=weekly-jams --download-mode=skip
       DAILY_JAMS_SCHEDULE: 30 2 * * *
       DAILY_JAMS_FLAGS: --playlist=daily-jams --download-mode=skip
-    image: ghcr.io/lumepart/explo:latest
+    image: ghcr.io/lumepart/explo:latest@sha256:2c6fe1e5fbe0ceb17c653191001e7cb96eff0ae82539b44f61b024caa0fbfd14
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -1750,7 +1750,7 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/Audio/Playlists:/playlists
   fastenhealth:
     container_name: fastenhealth
-    image: ghcr.io/fastenhealth/fasten-onprem:main
+    image: ghcr.io/fastenhealth/fasten-onprem:main@sha256:992a3fe0096500475cc29f5a83234481a6079652d064bc6e2c4e660860af7fba
     labels:
       homepage.group: Lifestyle
       homepage.name: Fasten Health
@@ -1794,7 +1794,7 @@ services:
       BROWSER_TIMEOUT: 40000
       TEST_URL: https://duckduckgo.com
     hostname: Rinoa
-    image: ghcr.io/flaresolverr/flaresolverr:latest
+    image: ghcr.io/flaresolverr/flaresolverr:latest@sha256:5379a9209c86870558d77c8cdf7efdf300aecf0447617a05dc77e0491d53f34c
     networks:
       default: null
     ports:
@@ -1817,7 +1817,7 @@ services:
         type: bind
   garage:
     container_name: garage
-    image: dxflrs/garage:v2.1.0
+    image: dxflrs/garage:v2.1.0@sha256:4c9b34c113e61358466e83fd6e7d66e6d18657ede14b776eb78a93ee8da7cf6a
     ports:
       - 3900:3900
       - 3901:3901
@@ -1838,7 +1838,7 @@ services:
     environment:
       API_BASE_URL: http://garage:3903
       S3_ENDPOINT_URL: http://garage:3900
-    image: khairul169/garage-webui:latest
+    image: khairul169/garage-webui:latest@sha256:17c793551873155065bf9a022dabcde874de808a1f26e648d4b82e168806439c
     labels:
       homepage.group: System Administration
       homepage.name: Garage
@@ -1873,7 +1873,7 @@ services:
       mail__options__auth__pass: ${POSTAL_SMTP_AUTH_PASSWORD}
       mail__from: "'Ghost @ Rinoa' <noreply@${MY_TLD}>"
       url: https://blog.${MY_TLD}
-    image: ghost:latest
+    image: ghost:latest@sha256:b0590c901e9e0b9664f8bc5323bd9fba783949056b3401c966933c127b473ca7
     labels:
       homepage.group: Lifestyle
       homepage.name: Ghost
@@ -1918,7 +1918,7 @@ services:
       GITEA__mailer__SMTP_PORT: 25
       GITEA__mailer__USER: ${POSTAL_SMTP_AUTH_USER}
       GITEA__mailer__PASSWD: ${POSTAL_SMTP_AUTH_PASSWORD}
-    image: gitea/gitea:1.24.6
+    image: gitea/gitea:1.24.6@sha256:2edc102cbb636ae1ddac5fa0c715aa5b03079dee13ac6800b2cef6d4e912e718
     labels:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: git-ssh.${MY_TLD}
@@ -1998,7 +1998,7 @@ services:
       GITEA_INSTANCE_URL: http://gitea:3000
       GITEA_RUNNER_REGISTRATION_TOKEN: "${GITEA_RUNNER_REGISTRATION_TOKEN}"
       GITEA_RUNNER_NAME: "gitea-runner-1"
-    image: gitea/act_runner:latest
+    image: gitea/act_runner:latest@sha256:8477d5b61b655caad4449888bae39f1f34bebd27db56cb15a62dccb3dcf3a944
     ports:
       - 63604:63604
     profiles: ["rinoa-infra"]
@@ -2013,7 +2013,7 @@ services:
         condition: service_started
       sonarqube:
         condition: service_started
-    image: justusbunsi/gitea-sonarqube-bot:v0.4.0
+    image: justusbunsi/gitea-sonarqube-bot:v0.4.0@sha256:18dd43b470d9a470e27d5999dd7dcbb44423d5c4466ae56dd7c1722f23115673
     environment:
       GITEA_SQ_BOT_PORT: 58525
       GITEA_SQ_BOT_CONFIG_PATH: /home/bot/config/config.yaml
@@ -2025,7 +2025,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/gitea/sonarqube-bot/:/home/bot/config/
   gitignore-io:
     container_name: gitignore-io
-    image: guog/gitignore.io:latest
+    image: guog/gitignore.io:latest@sha256:27b0bc3e9eb81adaee39fb6f77169ea9cbef164bcab049d29bcab68d154013ad
     labels:
       homepage.group: Code/DevOps
       homepage.name: gitignore-io
@@ -2058,7 +2058,7 @@ services:
       VPN_SERVICE_PROVIDER: private internet access
     expose:
       - 8000
-    image: qmcgaw/gluetun:latest
+    image: qmcgaw/gluetun:latest@sha256:b62c5223abba6540632d7b808d3bf46d0e844becef5bcde825f9126e328be516
     ports:
       - 3333:3333
       - 3334:3334
@@ -2091,7 +2091,7 @@ services:
       GOTIFY_UPLOADEDIMAGESDIR: data/images
       GOTIFY_PLUGINSDIR: data/plugins
       GOTIFY_REGISTRATION: false
-    image: gotify/server
+    image: gotify/server@sha256:2ae0e4e689f183137c8247884382fcb174d5a72253ce1897e7e5267090093fc8
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Gotify
@@ -2128,7 +2128,7 @@ services:
       DOCKER_HOST: tcp://dockerproxy:2375
       EXTENSIONS: "auth-totp"
       TZ: ${TZ}
-    image: flcontainers/guacamole:latest
+    image: flcontainers/guacamole:latest@sha256:81a420f386ef8cbb4697208e13ea90f6a10a54619981241bed672e4a41b5f77f
     labels:
       homepage.group: System Administration
       homepage.name: Guacamole
@@ -2159,7 +2159,7 @@ services:
       HOMEPAGE_ALLOWED_HOSTS: ${MY_TLD}
       PUID: ${PUID}
       PGID: ${PGID}
-    image: ghcr.io/gethomepage/homepage:latest
+    image: ghcr.io/gethomepage/homepage:latest@sha256:e7fc26f914cf5e7dcd6c566e24ca218addb879aa76478ad4a553b1f9ae48b1d7
     labels:
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -2180,7 +2180,7 @@ services:
   hugo:
     command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/ --configDir=/src/config/ -e production --logLevel debug
     container_name: hugo
-    image: hugomods/hugo:exts
+    image: hugomods/hugo:exts@sha256:13386acc7748fcaa3caab9fd93600adb8135323db8783d7f12483bccd57cee5f
     labels:
       swag: enable
       swag_proto: http
@@ -2232,7 +2232,7 @@ services:
       REDIS_DBINDEX: 0
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-server:release
+    image: ghcr.io/immich-app/immich-server:release@sha256:a5935f03b93137952c38b14a47148525023f4c36a2db174d8266a9d3b37e7e3b
     labels:
       swag: enable
       swag_proto: http
@@ -2272,7 +2272,7 @@ services:
     container_name: immich-machine-learning
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:release
+    image: ghcr.io/immich-app/immich-machine-learning:release@sha256:cc94659771d7e394d6406ebb0664069f2523062fda4f934def31648e903c4de2
     profiles: ["rinoa-apps"]
     restart: always
     volumes:
@@ -2303,7 +2303,7 @@ services:
       interval: 5m
       start_interval: 30s
       start_period: 5m
-    image: tensorchord/pgvecto-rs:pg14-v0.2.1
+    image: tensorchord/pgvecto-rs:pg14-v0.2.1@sha256:9172feae86a211bc502db4ec2d3309a57329060b031d91796d39f45d1d698ef3
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -2322,7 +2322,7 @@ services:
       test: wget -q --spider http://localhost:3000/share/healthcheck || exit 1
       start_period: 10s
       timeout: 5s
-    image: alangrainger/immich-public-proxy:latest
+    image: alangrainger/immich-public-proxy:latest@sha256:bf9ae2b60f9cd69867789a2a492510443aa61cf01ab085475a08496ef35e67d0
     labels:
       homepage.group: Lifestyle
       homepage.name: Immich Public Proxy
@@ -2353,7 +2353,7 @@ services:
       EXTERNAL_IMMICH_URL: https://pics.${MY_TLD}
       IMMICH_API_KEY: ${IMMICH_POWER_TOOLS_KEY}
       IMMICH_URL: http://immich-server:2283
-    image: ghcr.io/varun-raj/immich-power-tools:latest
+    image: ghcr.io/varun-raj/immich-power-tools:latest@sha256:abfe87c08d6c08575649d7f4af04bd61ab2e5d3d54bdba693700595f70c92d0a
     ports:
       - 54018:3000
     profiles: ["rinoa-apps"]
@@ -2372,7 +2372,7 @@ services:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: /run/secrets/influxdb2-admin-token
       DOCKER_INFLUXDB_INIT_ORG: rinoa
       DOCKER_INFLUXDB_INIT_BUCKET: rinoa
-    image: influxdb:2-alpine
+    image: influxdb:2-alpine@sha256:d948cd7aa274696d76ccc3f7ef732180d9f9a4229aace3cf68ae008693665137
     labels:
       swag: enable
       swag_proto: http
@@ -2407,7 +2407,7 @@ services:
       retries: 2
       test: wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/trending || exit 1
       timeout: 5s
-    image: quay.io/invidious/invidious:latest
+    image: quay.io/invidious/invidious:latest@sha256:2836b5b8226a53a9cc2afdbd5f5fe6bccdd200f2e17cd92a828b4dc8d8b5cc06
     labels:
       swag: enable
       swag_proto: http
@@ -2438,7 +2438,7 @@ services:
       - ALL
     command: ["--tcp", "0.0.0.0:12999"]
     container_name: invidious-sig-helper
-    image: quay.io/invidious/inv-sig-helper:latest
+    image: quay.io/invidious/inv-sig-helper:latest@sha256:39fee87693ef3d71c212d9511f2adb3230783753342321489deab17caa87c42f
     init: true
     environment:
       RUST_LOG: info
@@ -2459,7 +2459,7 @@ services:
       test:
         - CMD-SHELL
         - pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
-    image: docker.io/library/postgres:14
+    image: docker.io/library/postgres:14@sha256:f7b28597c837f7b83adf763cdb128a0e7f5ddcfe87ad154f69967b1f92781e04
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -2518,7 +2518,7 @@ services:
       TRUSTED_PROXIES: 172.18.0.0/16
     expose:
       - 9000
-    image: invoiceninja/invoiceninja-debian:5
+    image: invoiceninja/invoiceninja-debian:5@sha256:581a94fab5a4f6f307e3954dd2f79508efd5a912acfab7a94663ad6df492981a
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -2560,7 +2560,7 @@ services:
       QUEUE_CONNECTION: database
       REQUIRE_HTTPS: false
       TRUSTED_PROXIES: 172.18.0.0/16
-    image: nginx
+    image: nginx@sha256:d5f28ef21aabddd098f3dbc21fe5b7a7d7a184720bc07da0b6c9b9820e97f25e
     labels:
       swag: enable
       swag_proto: http
@@ -2587,7 +2587,7 @@ services:
       - invoice-ninja_storage:/var/www/html/storage
   it-tools:
     container_name: it-tools
-    image: ghcr.io/corentinth/it-tools:latest
+    image: ghcr.io/corentinth/it-tools:latest@sha256:8b8128748339583ca951af03dfe02a9a4d7363f61a216226fc28030731a5a61f
     labels:
       swag: enable
       swag_proto: http
@@ -2614,7 +2614,7 @@ services:
     container_name: jellyfin
     environment:
       JELLYFIN_PublishedServerUrl: https://jf.${MY_TLD}
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin@sha256:7ae36aab93ef9b6aaff02b37f8bb23df84bb2d7a3f6054ec8fc466072a648ce2
     labels:
       homepage.group: Media Library
       homepage.name: Jellyfin
@@ -2662,7 +2662,7 @@ services:
       SKIN_VARIANTS: ${JITSI__ETHERPAD_SKIN_VARIANTS}
       SUPPRESS_ERRORS_IN_PAD_TEXT: true
     hostname: etherpad.meet.jitsi
-    image: etherpad/etherpad:1.9.7
+    image: etherpad/etherpad:1.9.7@sha256:d1d6a772dd49e2d920fda874cdae2d4a43f24ba5713a1e330b6342fbab3eb5ec
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -3273,7 +3273,7 @@ services:
       POSTGRES_USER: ${JOPLIN_POSTGRES_USER}
       POSTGRES_PORT: 5432
       POSTGRES_HOST: joplin-db
-    image: joplin/server:latest
+    image: joplin/server:latest@sha256:95b67dc6a4e77a974ac2bcc86818cbbfe5495e7b62d06a66f848a877878dce53
     labels:
       homepage.group: Personal Tools
       homepage.name: Joplin
@@ -3297,7 +3297,7 @@ services:
     restart: unless-stopped
   karakeep:
     container_name: karakeep
-    image: ghcr.io/karakeep-app/karakeep:release
+    image: ghcr.io/karakeep-app/karakeep:release@sha256:abd7d6b11b1b8fa3593d1971f886a74850ba8d6a99291218b150207d5a60378e
     environment:
       BROWSER_WEB_URL: http://chrome:9222
       DATA_DIR: /data
@@ -3341,7 +3341,7 @@ services:
       Java_Xmx: 1g
     expose:
       - 8010
-    image: elestio/languagetool:latest
+    image: elestio/languagetool:latest@sha256:85a32bdef9e7d87125977a201bfe7aa4310e67cab8abfa370157a9fc67cda4cd
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -3352,7 +3352,7 @@ services:
       LT_UPDATE_MODELS: true
     healthcheck:
       test: ["CMD-SHELL", "./venv/bin/python scripts/healthcheck.py"]
-    image: libretranslate/libretranslate
+    image: libretranslate/libretranslate@sha256:3727db3ce8224fb6afddd5227739ac6e58f060bcc59f12ae24a351dba47dd4f6
     labels:
       homepage.group: Personal Tools
       homepage.name: LibreTranslate
@@ -3386,7 +3386,7 @@ services:
       TZ: America/New_York
       DOCKER_MODS: ghcr.io/gilbn/theme.park:lidarr
     hostname: Rinoa
-    image: lscr.io/linuxserver/lidarr:latest
+    image: lscr.io/linuxserver/lidarr:latest@sha256:f8d8ea187c97c893175cf74d6f22ce7d32820e94136b466a16dd06fedd765e30
     labels:
       homepage.group: Servarr Stack
       homepage.name: Lidarr
@@ -3437,7 +3437,7 @@ services:
       spotify_client_secret: ${YOUR_SPOTIFY_SECRET}
     expose:
       - 5000
-    image: thewicklowwolf/lidify:latest
+    image: thewicklowwolf/lidify:latest@sha256:958eaddeef8195470b974ee03512d9a5c31ad2af3167f7824448fb026fa9c94a
     labels:
       homepage.group: Servarr Stack
       homepage.name: Lidify
@@ -3479,7 +3479,7 @@ services:
         type: bind
   linkstack:
     container_name: linkstack
-    image: linkstackorg/linkstack:latest
+    image: linkstackorg/linkstack:latest@sha256:abd691b4293b020a317de8794737671e0315159efcb868e8a4124d6f0611f7ae
     environment:
       TZ: ${TZ}
       SERVER_ADMIN: noreply@${MY_TLD}
@@ -3519,7 +3519,7 @@ services:
       LLDAP_JWT_SECRET: ${LLDAP_JWT_SECRET}
       LLDAP_KEY_SEED: ${LLDAP_KEY_SEED}
       LLDAP_LDAP_BASE_DN: dc=trez,dc=wtf
-    image: lldap/lldap:stable
+    image: lldap/lldap:stable@sha256:9e605a66c02514bfcffd1b67cafb1e98d50992216bb2871d7ae44622047dd09d
     labels:
       homepage.group: Privacy/Security
       homepage.name: LLDAP
@@ -3550,7 +3550,7 @@ services:
         bind:
           create_host_path: true
   loggifly:
-    image: ghcr.io/clemcer/loggifly:latest
+    image: ghcr.io/clemcer/loggifly:latest@sha256:6c36ab59b4679d4dbd10a606bd949b1c5128ef29735d2feb3d3f6bc5ce200148
     container_name: loggifly
     profiles: ["rinoa-apps"]
     restart: unless-stopped
@@ -3574,7 +3574,7 @@ services:
       MALOJA_SPOTIFY_API_ID: ${YOUR_SPOTIFY_ID}
       MALOJA_SPOTIFY_API_SECRET: ${YOUR_SPOTIFY_SECRET}
       MALOJA_TIMEZONE: ${TZ}
-    image: krateng/maloja:latest
+    image: krateng/maloja:latest@sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95
     labels:
       homepage.group: Media Library
       homepage.name: Maloja
@@ -3624,7 +3624,7 @@ services:
       REDIS_URL: redis://manyfold-valkey:6379/2
       SECRET_KEY_BASE: ${MANYFOLD_SECRET_KEY_BASE}
       MUTLIUSER: enabled
-    image: lscr.io/linuxserver/manyfold:latest
+    image: lscr.io/linuxserver/manyfold:latest@sha256:609ac6458c382c7fe35b145c056ea0661051f3b137b7aed9ed84fc50591bd320
     labels:
       homepage.group: Lifestyle
       homepage.name: Manyfold
@@ -3670,7 +3670,7 @@ services:
       timeout: 10s
       retries: 5
     hostname: Rinoa
-    image: linuxserver/mariadb
+    image: linuxserver/mariadb@sha256:64cdbbec61e9bf26521fb73fa8546b3eeb45fb104290ddb4cda9c81cec467a51
     networks:
       default: null
     ports:
@@ -3724,7 +3724,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${MASTODON_MINIO_SECRET_KEY}
     expose:
       - 3000
-    image: lscr.io/linuxserver/mastodon:latest
+    image: lscr.io/linuxserver/mastodon:latest@sha256:fe623cf8dd20be78a678c87774ee2e9a3f7b96080a08e76f45753abd5f399fcb
     labels:
       swag: enable
       swag_proto: http
@@ -3787,7 +3787,7 @@ services:
     <<: *maxun-env
     expose:
       - 8080
-    image: getmaxun/maxun-backend:latest
+    image: getmaxun/maxun-backend:latest@sha256:fd95b998604648c1b2b781e29397ffa25e42cf6ea7a1954e373b2eebbbd0500f
     mem_limit: 2g # Set a 2GB memory limit
     ports:
       - 8369:8080
@@ -3803,7 +3803,7 @@ services:
     depends_on:
       - maxun-backend
     <<: *maxun-env
-    image: getmaxun/maxun-frontend:latest
+    image: getmaxun/maxun-frontend:latest@sha256:cc9368aa44279f908ef42e7fe577fb6dc0f5f39491dd3265a037f3b2d993185a
     labels:
       swag: enable
       swag_proto: http
@@ -3873,7 +3873,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgres://meme-search:${MEME_SEARCH_PG_PASSWORD}@meme-search-db:5432/meme-search
-    image: ghcr.io/neonwatty/meme_search_pro:latest
+    image: ghcr.io/neonwatty/meme_search_pro:latest@sha256:bf3c20a6a0407ffa594d3e2fe8611073c0499659c90f44a28decd5e701e9e1f6
     labels:
       swag: enable
       swag_proto: http
@@ -3898,7 +3898,7 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/memes/:/rails/public/memes
   meme-search-pro-img2txt-gen:
-    image: ghcr.io/neonwatty/image_to_text_generator:latest
+    image: ghcr.io/neonwatty/image_to_text_generator:latest@sha256:e8445afab38e2eae1fcb95101dd26cf66708ef72127b291cab748050b4700cb8
     container_name: meme-search-pro-img2txt-gen
     deploy:
       resources:
@@ -3927,14 +3927,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: pgvector/pgvector:pg17
+    image: pgvector/pgvector:pg17@sha256:9ae02a756ba16a2d69dd78058e25915e36e189bb36ddf01ceae86390d7ed786a
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/meme-search-db:/var/lib/postgresql/data
   mini-qr:
     container_name: mini-qr
-    image: ghcr.io/lyqht/mini-qr:latest
+    image: ghcr.io/lyqht/mini-qr:latest@sha256:2c4c4f7ad81f10a17da626108d98599dc980198511f3c0e29ffed40ae5b7afe8
     labels:
       swag: enable
       swag_auth: authelia
@@ -3966,7 +3966,7 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_MIMIR_STORAGE_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_MIMIR_STORAGE_SECRET_KEY}
     hostname: minio
-    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z@sha256:a1ea29fa28355559ef137d71fc570e508a214ec84ff8083e39bc5428980b015e
     labels:
       swag: enable
       swag_proto: http
@@ -4004,7 +4004,7 @@ services:
           create_host_path: true
   mixpost:
     container_name: mixpost
-    image: inovector/mixpost:latest
+    image: inovector/mixpost:latest@sha256:088a0eed84289e9a408294acea969c1eebf80dff803d165629fe20c3442b0f8c
     depends_on:
       mariadb:
         condition: service_healthy
@@ -4055,7 +4055,7 @@ services:
   mgob:
     command: "-LogLevel=info"
     container_name: mgob
-    image: stefanprodan/mgob
+    image: stefanprodan/mgob@sha256:d089c6d105d7d0f9db5222786cb93d85b1bf61e28b21ad717cea90f92570c8f3
     labels:
       homepage.group: System Administration
       homepage.name: mgob
@@ -4087,7 +4087,7 @@ services:
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_REPLICA_SET_NAME: rinoa
       MONGODB_REPLICA_SET_KEY: ${MONGODB_REPLICA_SET_KEY}
-    image: bitnami/mongodb:7.0
+    image: bitnami/mongodb:7.0@sha256:16a57fa081f18e7acd1b4de1cd74f3e294cc6de861007e6fe3a418eb61db8a54
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
@@ -4110,7 +4110,7 @@ services:
       LZ_TOKEN: ${MALOJA_LISTENBRAINZ_TOKEN}
       SPOTIFY_CLIENT_ID: ${YOUR_SPOTIFY_ID}
       SPOTIFY_CLIENT_SECRET: ${YOUR_SPOTIFY_SECRET}
-    image: foxxmd/multi-scrobbler
+    image: foxxmd/multi-scrobbler@sha256:e23ddda129ea2a8e9a009ef73d62af910ac25e6213c833680886b7002c5bb6fa
     labels:
       homepage.group: Media Library
       homepage.name: Multi-Scrobbler
@@ -4150,7 +4150,7 @@ services:
       NODE_ENV: production
       WEBHOOK_URL: https://n8n.${MY_TLD}/
       GENERIC_TIMEZONE: ${TZ}
-    image: docker.n8n.io/n8nio/n8n
+    image: docker.n8n.io/n8nio/n8n@sha256:746f90a251005a1bdbe2b7ebbce7d14eba6eb634739d157e4f9778d61f07dae3
     labels:
       swag: enable
       swag_proto: http
@@ -4197,7 +4197,7 @@ services:
       ND_SPOTIFY_ID: ${YOUR_SPOTIFY_ID}
       ND_SPOTIFY_SECRET: ${YOUR_SPOTIFY_SECRET}
       ND_SUBSONICARTISTPARTICIPATIONS: true
-    image: deluan/navidrome:latest
+    image: deluan/navidrome:latest@sha256:2ae037d464de9f802d047165a13b1c9dc2bdbb14920a317ae4aef1233adc0a3c
     labels:
       homepage.group: Media Library
       homepage.name: Navidrome
@@ -4237,7 +4237,7 @@ services:
     environment:
       TZ: ${TZ}
       PORT: 20211
-    image: jokobsk/netalertx:latest
+    image: jokobsk/netalertx:latest@sha256:9a5f44f1fd65aa5962e7872d012cc332cabc24ce40768f18f4f76524e083b697
     labels:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: net.${MY_TLD}
@@ -4281,7 +4281,7 @@ services:
       APACHE_PORT: 11000
     expose:
       - 11000
-    image: nextcloud/all-in-one:latest
+    image: nextcloud/all-in-one:latest@sha256:2e0d2eaa187e3139f1d7d7676cf1369a20ff7e4f70df3ecd516fdb0fd8d5dc5a
     labels:
       homepage.group: Privacy/Security
       homepage.name: NextCloud
@@ -4332,7 +4332,7 @@ services:
       NC_SMTP_USERNAME: ${POSTAL_SMTP_AUTH_USER}
       NC_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       NC_SMTP_FROM: noreply@${MY_TLD}
-    image: "nocodb/nocodb:latest"
+    image: "nocodb/nocodb:latest@sha256:71d5b23640a9f5068bab26cf5b4c6a733709677a2c78664b132beaf24d766246"
     labels:
       homepage.group: Code/DevOps
       homepage.name: NocoDB
@@ -4381,7 +4381,7 @@ services:
       - nocodb_valkey_data:/data/valkey
   ollama:
     container_name: ollama
-    image: ollama/ollama:latest
+    image: ollama/ollama:latest@sha256:5aed793ab336d1aac9b132f4b46fddfcfa13b8911def3d275937c8acbd1763e8
     ports:
       - 11434:11434
     profiles: ["rinoa-apps"]
@@ -4395,7 +4395,7 @@ services:
       PUID: ${PUID}
       TZ: America/New_York
     hostname: Rinoa
-    image: lscr.io/linuxserver/ombi:latest
+    image: lscr.io/linuxserver/ombi:latest@sha256:58e53eadbec4a9bf370727be711d0d3ee238fb12db8a9cfe531ecf04eb21f6f7
     labels:
       homepage.group: Media Library
       homepage.name: Ombi
@@ -4438,7 +4438,7 @@ services:
         type: bind
   omnitools:
     container_name: omnitools
-    image: iib0011/omni-tools:latest
+    image: iib0011/omni-tools:latest@sha256:47747ad48020859ddff110b92b14799b034fc7a5f8f86160fbb8e4f1f5cf0f37
     labels:
       homepage.group: Personal Tools
       homepage.name: OmniTools
@@ -4474,7 +4474,7 @@ services:
       OLLAMA_MODEL: smollm2:1.7b
       THEME: "pole"
       DISABLE_DICTIONARY: false
-    image: kweg/omnipoly:latest
+    image: kweg/omnipoly:latest@sha256:6739c1b665859493bbdc49269e39ff6c8e9a7de8e8a884e44e6579512adf5bcd
     labels:
       homepage.group: Personal Tools
       homepage.name: OmniPoly
@@ -4535,7 +4535,7 @@ services:
       WEBSOCKET_MANAGER: redis
       WEBSOCKET_REDIS_URL: redis://open-webui-valkey:6379/0
       REDIS_KEY_PREFIX: open-webui
-    image: ghcr.io/open-webui/open-webui:main
+    image: ghcr.io/open-webui/open-webui:main@sha256:05aaa81eb4094038a16f0ae056342e3515d1912a30e41b828bfd3731fbe36a6c
     labels:
       homepage.group: Personal Tools
       homepage.name: Open WebUI
@@ -4587,7 +4587,7 @@ services:
       PAPERLESS_URL: https://docs.${MY_TLD}
       USERMAP_GID: ${PGID}
       USERMAP_UID: ${PUID}
-    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest@sha256:3421ebe06ed27662d014046cf5089e612de853aae0c676a2bc72f73b38080e57
     labels:
       swag: enable
       swag_proto: http
@@ -4640,7 +4640,7 @@ services:
     depends_on:
       - penpot-backend
       - penpot-exporter
-    image: penpotapp/frontend:latest
+    image: penpotapp/frontend:latest@sha256:d4eff4cbb9eca82d9505bccd420635c74d02cc8a9a2287371204b441691edbbd
     environment:
       <<: [*penpot-flags, *penpot-http-body-size]
     labels:
@@ -4693,7 +4693,7 @@ services:
       PENPOT_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       PENPOT_SMTP_TLS: false
       PENPOT_SMTP_SSL: false
-    image: penpotapp/backend:latest
+    image: penpotapp/backend:latest@sha256:1bb38953e74386bf4786aa3aa2874b2ffe24af2df5dfb519a61fe8559d37942c
     profiles: ["rinoa-apps"]
     restart: always
     volumes:
@@ -4706,7 +4706,7 @@ services:
     environment:
       PENPOT_PUBLIC_URI: http://penpot-frontend:8080
       PENPOT_REDIS_URI: redis://penpot-redis/0
-    image: penpotapp/exporter:latest
+    image: penpotapp/exporter:latest@sha256:885b9ad4383895e51d1b0384b95b7127de52a5fa046d9bea665f1236a32fb2c8
     profiles: ["rinoa-apps"]
     restart: unless-stopped
   penpot-pg-db:
@@ -4750,7 +4750,7 @@ services:
       PBW_ENCRYPTION_KEY: ${PGBACKWEB_ENCRYPTION_KEY}
       PBW_POSTGRES_CONN_STRING: "postgresql://pgbackweb:${PGBACKWEB_PG_DB_PASSWD}@pgbackweb-db:5432/pgbackweb?sslmode=disable"
       TZ: ${TZ}
-    image: eduardolat/pgbackweb:latest
+    image: eduardolat/pgbackweb:latest@sha256:e568691203b92e37c5a0977c9979006960f3de5e66530743fdd1805e1cbcaa23
     labels:
       homepage.group: System Administration
       homepage.name: PG Back Web
@@ -4821,7 +4821,7 @@ services:
       SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       SMTP_FROM: '"Planka @ Rinoa" <noreply@${MY_TLD}>'
       SMTP_TLS_REJECT_UNAUTHORIZED: false
-    image: ghcr.io/plankanban/planka:2.0.0-rc.3
+    image: ghcr.io/plankanban/planka:2.0.0-rc.3@sha256:5a2a69ec7159a2f9c6679c31698e4b5b17ccf254d5bfc6e9be43e411b6de0c3d
     labels:
       homepage.group: Professional Services
       homepage.name: Planka
@@ -4906,7 +4906,7 @@ services:
       SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       SMTP_AUTH: true
       SMTP_START_TTL: false
-    image: msdeluise/plant-it-server:latest
+    image: msdeluise/plant-it-server:latest@sha256:23ddf8660087d6b9f5dbdca2ca09817b84db45cb2d9d6e2e0176e70f514629e7
     labels:
       swag: enable
       swag_proto: http
@@ -4946,7 +4946,7 @@ services:
     container_name: plantuml-server
     expose:
       - 8080
-    image: "plantuml/plantuml-server:jetty"
+    image: "plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426"
     profiles: ["rinoa-apps"]
     restart: unless-stopped
   portainer:
@@ -4958,7 +4958,7 @@ services:
     expose:
       - 9000
       - 9443
-    image: portainer/portainer-ce:alpine
+    image: portainer/portainer-ce:alpine@sha256:38f6d57dad1d47ad095f9d052f4dbae8551ece9358c6c0b9696770c42327d66d
     labels:
       swag: enable
       swag_proto: http
@@ -5010,7 +5010,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 5s
-    image: ghcr.io/dsgnr/portcheckerio-web:latest
+    image: ghcr.io/dsgnr/portcheckerio-web:latest@sha256:8bea203e8785541c0acac7860de9f70849b05806e0c6db1d83dfc1b8407a6077
     labels:
       swag: enable
       swag_auth: authelia
@@ -5042,7 +5042,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 5s
-    image: ghcr.io/dsgnr/portcheckerio-api:latest
+    image: ghcr.io/dsgnr/portcheckerio-api:latest@sha256:7783796d791c3e10aedba9d5f7fc2b934bb0e7afa75bc89054b70b886ed39e5c
     ports:
       - 36102:8000
     profiles: ["rinoa-apps"]
@@ -5052,7 +5052,7 @@ services:
       - NET_BIND_SERVICE
     command: postal smtp-server
     container_name: postal-smtp
-    image: ghcr.io/postalserver/postal:latest
+    image: ghcr.io/postalserver/postal:latest@sha256:86a5d7ce1f5293cfa612b58d43d4dda26ac8e12dc52b1f07b5fd7dedf699f7ba
     networks:
       default: null
     ports:
@@ -5065,7 +5065,7 @@ services:
   postal-web:
     command: postal web-server
     container_name: postal-web
-    image: ghcr.io/postalserver/postal:latest
+    image: ghcr.io/postalserver/postal:latest@sha256:86a5d7ce1f5293cfa612b58d43d4dda26ac8e12dc52b1f07b5fd7dedf699f7ba
     labels:
       swag: enable
       swag_proto: http
@@ -5101,7 +5101,7 @@ services:
     container_name: postal-worker
     environment:
       LOG_LEVEL: debug
-    image: ghcr.io/postalserver/postal:latest
+    image: ghcr.io/postalserver/postal:latest@sha256:86a5d7ce1f5293cfa612b58d43d4dda26ac8e12dc52b1f07b5fd7dedf699f7ba
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -5114,7 +5114,7 @@ services:
           create_host_path: true
   protonmail-bridge:
     container_name: protonmail-bridge
-    image: shenxn/protonmail-bridge
+    image: shenxn/protonmail-bridge@sha256:3717b4441130675dc9131196de9f9c5287d2ea21b138d83b0486429e1737638a
     ports:
       - 1025:25/tcp
       - 1143:143/tcp
@@ -5132,7 +5132,7 @@ services:
       TP_COMMUNITY_THEME: false
       TP_THEME: space-gray
     hostname: Rinoa
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: lscr.io/linuxserver/prowlarr:latest@sha256:856c93bab72a6a41a23ff60bab48554135c044a456f40909307011dea8ddeafb
     labels:
       homepage.group: Servarr Stack
       homepage.name: Prowlarr
@@ -5179,7 +5179,7 @@ services:
       qbittorrentvpn:
         required: true
         condition: service_started
-    image: ghcr.io/stuffanthings/qbit_manage:latest
+    image: ghcr.io/stuffanthings/qbit_manage:latest@sha256:64f749b97604d607747fc8b790821cf0317d8107385ea111afe1ed1c9d1d5b11
     environment:
       # Web API Configuration
       QBT_WEB_SERVER: true # Set to true to enable web API
@@ -5237,7 +5237,7 @@ services:
       VPN_PASS: ${DELUGEVPN_ENVIRONMENT_VPN_PASS}
       VPN_PROV: pia
       WEBUI_PORT: 8080
-    image: ghcr.io/binhex/arch-qbittorrentvpn:latest
+    image: ghcr.io/binhex/arch-qbittorrentvpn:latest@sha256:e6556875ffa483ff603c0ed76c0c10122efad1edee2d9f5e4a94244accd5b3a3
     labels:
       homepage.group: Downloaders
       homepage.name: qBittorrent
@@ -5300,7 +5300,7 @@ services:
       tmdb_api_key: ${TMDB_API_KEY}
     expose:
       - 5000
-    image: thewicklowwolf/radarec:latest
+    image: thewicklowwolf/radarec:latest@sha256:df726f35e3a1ef2f0cd482a6cf993bac8782804efd38ee8004c8694f7e8f526e
     labels:
       homepage.group: Servarr Stack
       homepage.name: RadaRec
@@ -5347,7 +5347,7 @@ services:
       PUID: ${PUID}
       TZ: ${TZ}
     hostname: Rinoa
-    image: lscr.io/linuxserver/radarr:latest
+    image: lscr.io/linuxserver/radarr:latest@sha256:19474a623b278f558c9696a19b84640ad4aff3b2959f08904a77ffbad73ed7bd
     labels:
       homepage.group: Servarr Stack
       homepage.name: Radarr
@@ -5409,7 +5409,7 @@ services:
       STORAGE_URL: https://s3.${MY_TLD}/reactive-resume
       STORAGE_USE_SSL: false
       TZ: ${TZ}
-    image: amruthpillai/reactive-resume:latest
+    image: amruthpillai/reactive-resume:latest@sha256:53ce201e15d79535494d278fd13658f57d0331f2b5eba12163bf38b879366c65
     labels:
       homepage.group: Professional Services
       homepage.name: Reactive Resume
@@ -5457,7 +5457,7 @@ services:
       TZ: America/New_York
       DOCKER_MODS: ghcr.io/gilbn/theme.park:readnarr
     hostname: Rinoa
-    image: lscr.io/linuxserver/readarr:develop
+    image: lscr.io/linuxserver/readarr:develop@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb
     labels:
       homepage.group: Servarr Stack
       homepage.name: Readarr
@@ -5511,7 +5511,7 @@ services:
       REDLIB_DEFAULT_DISABLE_VISIT_REDDIT_CONFIRMATION: off
       REDLIB_DEFAULT_HIDE_SCORE: off
       REDLIB_DEFAULT_FIXED_NAVBAR: on
-    image: quay.io/redlib/redlib:latest
+    image: quay.io/redlib/redlib:latest@sha256:c1fcda90dca9447d4aa7e18fd3ef85cc2044c29263490159e1ae4b472d0f285c
     labels:
       homepage.group: Social
       homepage.name: Redlib
@@ -5587,7 +5587,7 @@ services:
         condition: service_healthy
         required: true
         restart: true
-    image: rommapp/romm:latest
+    image: rommapp/romm:latest@sha256:7750c09db727c0b4d9225fea518dcef94142e7d2b2dbcfb451e904e66a05f8ec
     environment:
       ROMM_DB_DRIVER: mariadb # mariadb | sqlite (default: sqlite)
       ROMM_HOST: https://localhost:3000 # [Optional] your host ip or domain name (including http(s)://, subdomain and port if needed). Being used only for webRcade feed for now.
@@ -5680,7 +5680,7 @@ services:
       VPN_USER: ${SABNZBDVPN_ENVIRONMENT_VPN_USER}
       DEBUG: true
     hostname: Rinoa
-    image: ghcr.io/binhex/arch-sabnzbdvpn:latest
+    image: ghcr.io/binhex/arch-sabnzbdvpn:latest@sha256:bbd64cb8343589f027a69e6174ab96f1bf31f4328fd75351b44330aa146cd7fd
     labels:
       homepage.group: Downloaders
       homepage.name: SABnzbd
@@ -5744,7 +5744,7 @@ services:
       STRATEGY_DYNAMIC_DEFAULT_THEME: hacker-terminal
       STRATEGY_DYNAMIC_DEFAULT_REFRESH_FREQUENCY: 5s
       STRATEGY_BLOCKING_DEFAULT_TIMEOUT: 1m
-    image: sablierapp/sablier:latest
+    image: sablierapp/sablier:latest@sha256:4d4096b59a6e1496bd3106c1a90a7fdd161aafb73d58539b8c749c69380dedae
     ports:
       - 19311:10000
     profiles: ["rinoa-apps"]
@@ -5782,7 +5782,7 @@ services:
       READARR_URL: http://readarr:8787
       SONARR_API_KEY: ${SONARR_API_KEY}
       SONARR_URL: http://sonarr:8989
-    image: ghcr.io/thecfu/scraparr:2
+    image: ghcr.io/thecfu/scraparr:2@sha256:4aa7e22f7a632082dbfe6e4be694068b08e5764b83c95339220ff2b33bf43be2
     ports:
       - 7100:7100
     profiles: ["rinoa-apps"]
@@ -5799,7 +5799,7 @@ services:
       - "/dev/sdd:/dev/sdd:rwm"
       - "/dev/sde:/dev/sde:rwm"
       - "/dev/sdf:/dev/sdf:rwm"
-    image: ghcr.io/analogj/scrutiny:master-omnibus
+    image: ghcr.io/analogj/scrutiny:master-omnibus@sha256:cc88f7babededd75ec01a631bf53671d8be0acbe0c8a80f7ba4d41454a5fc52b
     labels:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: smartd.${MY_TLD}
@@ -5854,7 +5854,7 @@ services:
     container_name: searxng
     environment:
       SEARXNG_BASE_URL: https://search.${MY_TLD}
-    image: searxng/searxng:latest
+    image: searxng/searxng:latest@sha256:d3704a384057ed95e8bf61556277af356d18f809b9f2350f9b99ecb2da75d427
     labels:
       homepage.group: Privacy/Security
       homepage.name: SearxNG
@@ -5912,7 +5912,7 @@ services:
       SEMAPHORE_EMAIL_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       SEMAPHORE_EMAIL_SECURE: false
       SEMAPHORE_USE_REMOTE_RUNNER: true
-    image: semaphoreui/semaphore:v2.16.31
+    image: semaphoreui/semaphore:v2.16.31@sha256:7c9617ecd6233a019c85f52b122108c1113458c3cf91554145f3c56d4dbc25b3
     labels:
       homepage.group: Code/DevOps
       homepage.name: Semaphore UI
@@ -5971,7 +5971,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    image: signoz/signoz:v0.95.1
+    image: signoz/signoz:v0.95.1@sha256:b650b0c52a9abc0a3458cb2d0cc64251e29f2ca3ba72b156a4c30c6be854d27e
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Signoz
@@ -6042,7 +6042,7 @@ services:
     environment:
       ENV: prod
       SIGNOZ_LOG_ENDPOINT: http://signoz-otel-collector:8082
-    image: pavanputhra/logspout-signoz
+    image: pavanputhra/logspout-signoz@sha256:6da8ce12279a5262de8b2d5c083ce82d4c878c4eab702b4d328afe147ed7553b
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -6063,7 +6063,7 @@ services:
       NGINX_ERROR_LOG_FILE: /swag/log/nginx/error.log
       OTEL_RESOURCE_ATTRIBUTES: host.name=signoz-host,os.type=linux
       LOW_CARDINAL_EXCEPTION_GROUPING: false
-    image: signoz/signoz-otel-collector:v0.129.6
+    image: signoz/signoz-otel-collector:v0.129.6@sha256:0c347c007f581eee92b323df0f7df138d53d17411f32f8e0456ecc517a864c75
     ports:
       # - "1777:1777"     # pprof extension
       - "4317:4317" # OTLP gRPC receiver
@@ -6076,7 +6076,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx/error.log:/swag/log/nginx/error.log:ro
   signoz-schema-migrator-async:
     <<: *signoz-db-depend
-    image: signoz/signoz-schema-migrator:v0.129.6
+    image: signoz/signoz-schema-migrator:v0.129.6@sha256:0ef03a850163df3488b22a0ec43d960a3ba10b69996918cb5638e565db43184f
     container_name: signoz-schema-migrator-async
     command:
       - async
@@ -6086,7 +6086,7 @@ services:
     restart: on-failure
   signoz-schema-migrator-sync:
     <<: *signoz-common
-    image: signoz/signoz-schema-migrator:v0.129.6
+    image: signoz/signoz-schema-migrator:v0.129.6@sha256:0ef03a850163df3488b22a0ec43d960a3ba10b69996918cb5638e565db43184f
     container_name: signoz-schema-migrator-sync
     command:
       - sync
@@ -6131,7 +6131,7 @@ services:
       LDAP_USER_REALNAMEATTRIBUTE: cn
       LDAP_USER_EMAILATTRIBUTE: mail
     hostname: sonarqube
-    image: mc1arke/sonarqube-with-community-branch-plugin:lts
+    image: mc1arke/sonarqube-with-community-branch-plugin:lts@sha256:70b055c294a2a751357ee65d5d55139c93f87faed436d0075034da38b2edafa1
     labels:
       homepage.group: Code/DevOps
       homepage.name: SonarQube
@@ -6184,7 +6184,7 @@ services:
       TZ: ${TZ}
       DOCKER_MODS: ghcr.io/gilbn/theme.park:sonarr
     hostname: Rinoa
-    image: lscr.io/linuxserver/sonarr:latest
+    image: lscr.io/linuxserver/sonarr:latest@sha256:bb50bac26881613af15deb4df891e4a7cb09e3333aec20a0522cb188fb22b11d
     labels:
       homepage.group: Servarr Stack
       homepage.name: Sonarr
@@ -6233,7 +6233,7 @@ services:
       tmdb_api_key: ${TMDB_API_KEY}
     expose:
       - 5000
-    image: thewicklowwolf/sonashow:latest
+    image: thewicklowwolf/sonashow:latest@sha256:4b40df407bf31577668bfb3191e007ac78c349d81bfde7463ec8433d417ebd3d
     labels:
       homepage.group: Servarr Stack
       homepage.name: SonaShow
@@ -6284,7 +6284,7 @@ services:
       TZ: ${TZ}
       #Script interval in seconds
       SCRIPT_INTERVAL: 300
-    image: mrusse08/soularr:latest
+    image: mrusse08/soularr:latest@sha256:894210817cd89dd410fa603be2744ca81c593b9eaa542639a7894f2df008a788
     network_mode: service:gluetun
     profiles: ["rinoa-apps"]
     restart: unless-stopped
@@ -6302,7 +6302,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-    image: ghcr.io/mrusse/soularr:main
+    image: ghcr.io/mrusse/soularr:main@sha256:ff20e8b7537da7f06036b8c2aada56c00195405692a80e44ab11048fe519a1e0
     labels:
       homepage.name: Soularr
       homepage.group: Downloaders
@@ -6337,7 +6337,7 @@ services:
         condition: service_started
         required: true
         restart: true
-    image: slskd/slskd
+    image: slskd/slskd@sha256:28df5325f301537ea8669b2ef90112a30cc9f2efd3eb714c9a778460b5dc6288
     labels:
       homepage.name: Soulseek
       homepage.group: Downloaders
@@ -6366,7 +6366,7 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/downloads/incomplete/slsk:/app/incomplete
   speedtest-tracker:
     container_name: speedtest-tracker
-    image: lscr.io/linuxserver/speedtest-tracker:latest
+    image: lscr.io/linuxserver/speedtest-tracker:latest@sha256:5df987aa60bef6b438b9e7eafada2258518928e2dcc42505bfcc45e410b6e902
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
@@ -6400,7 +6400,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/speedtest-tracker:/config
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
-    image: ghcr.io/neggles/sd-webui-docker:latest
+    image: ghcr.io/neggles/sd-webui-docker:latest@sha256:1795fe796e1dad0d8d3baa9ef7c38a255b69c0878b76869feecc617bfd015e53
     environment:
       CLI_ARGS: "--api --use-cpu all --precision full --no-half --skip-torch-cuda-test --ckpt /empty.pt --do-not-download-clip --disable-nan-check --disable-opt-split-attention"
       PYTHONUNBUFFERED: "1"
@@ -6421,7 +6421,7 @@ services:
       SECURITY_ENABLE_LOGIN: true
       SYSTEM_SHOW_UPDATE: false
       SYSTEM_SHOW_UPDATE_ONLY_ADMIN: true
-    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest@sha256:ae74a9f00f374e628c484c2f4bb96c08406a3e8b8cb3825ea821df9dd8a7fdd7
     labels:
       homepage.name: Stirling-PDF
       homepage.group: Professional Services
@@ -6473,7 +6473,7 @@ services:
       UPTIME_KUMA_URL: http://uptimekuma:3001
       UPTIME_KUMA_USERNAME: ${UPTIME_KUMA_USERNAME}
     hostname: Rinoa
-    image: lscr.io/linuxserver/swag:latest
+    image: lscr.io/linuxserver/swag:latest@sha256:273b430dbd43b6ef72a5897feeb2a041a7dde4ac153a8afc270a444932e3eacc
     labels:
       swag: enable
       swag_proto: http
@@ -6529,7 +6529,7 @@ services:
       SECRET_KEY: ${TANDOOR_SECRET_KEY}
       TZ: ${TZ}
       UID: 1000
-    image: vabene1111/recipes
+    image: vabene1111/recipes@sha256:7407993444839441071be5214f7876c75d33b04f7b9c17ab7d263d7c98c98fe0
     labels:
       homepage.group: Lifestyle
       homepage.name: Tandoor Recipes
@@ -6600,7 +6600,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    image: ghcr.io/umami-software/umami:postgresql-latest
+    image: ghcr.io/umami-software/umami:postgresql-latest@sha256:77264ce6951c6b131a91d99f1cfd720d9efac1eaaa12e104f21cf49408dd77e0
     init: true
     labels:
       homepage.group: Professional Services
@@ -6648,7 +6648,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       LOGS_TO_STDOUT: /config/.unmanic/logs/unmanic.log
-    image: josh5/unmanic:latest
+    image: josh5/unmanic:latest@sha256:ac323a810e5fbe45c73edbad241359214821747f1b707786f69d3b20f5e7c1fa
     labels:
       homepage.group: Media Library
       homepage.name: Unmanic
@@ -6702,7 +6702,7 @@ services:
       UPTIME_KUMA_PASSWORD: ${UPTIME_KUMA_PASSWORD}
       DOCKER_HOST: tcp://dockerproxy:2375
     hostname: Rinoa
-    image: louislam/uptime-kuma:latest
+    image: louislam/uptime-kuma:latest@sha256:431fee3be822b04861cf0e35daf4beef6b7cb37391c5f26c3ad6e12ce280fe18
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Uptime Kuma
@@ -6747,7 +6747,7 @@ services:
     environment:
       AWS_ACCESS_KEY_ID: ${VAULT_HASHICORP_AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${VAULT_HASHICORP_AWS_SECRET_ACCESS_KEY}
-    image: hashicorp/vault:latest
+    image: hashicorp/vault:latest@sha256:268bb80aa9c6d13d65fcfa05c0c268caca068952240a8087291a6ce0b66e3a10
     labels:
       homepage.group: Code/DevOps
       homepage.name: HashiCorp Vault
@@ -6777,7 +6777,7 @@ services:
     container_name: wallos
     environment:
       TZ: ${TZ}
-    image: bellamy/wallos:latest
+    image: bellamy/wallos:latest@sha256:f7489083991465b8b24a919b87f5c325d9ec57f7208fa40746578efadde3db3f
     labels:
       homepage.group: Lifestyle
       homepage.name: wallos
@@ -6807,7 +6807,7 @@ services:
       - wallos-logos:/var/www/html/images/uploads/logos
   web-check:
     container_name: web-check
-    image: lissy93/web-check
+    image: lissy93/web-check@sha256:f2d1dc726958c1d79ac459cac84eb26eb4f203a4d27447f336695a8c1884f1e3
     labels:
       homepage.group: Privacy/Security
       homepage.name: Web-Check
@@ -6833,7 +6833,7 @@ services:
     restart: unless-stopped
   whodb:
     container_name: whodb
-    image: clidey/whodb
+    image: clidey/whodb@sha256:ee5324a4bf95a6d8cfe62cc949c5f39a7f8b66f905b05681ce7a367298fe329b
     environment:
       WHODB_CLICKHOUSE_1: '{
         "host": "signoz-clickhouse"
@@ -7008,7 +7008,7 @@ services:
       PGID: ${PGID}
       DISABLE_BUILTIN_AUTH: true
       TZ: ${TZ}
-    image: ghcr.io/wizarrrr/wizarr
+    image: ghcr.io/wizarrrr/wizarr@sha256:acbefe4060064266a3d7f55bfe078441edb8fcdc3f21ccde3c7004e7cae97cf8
     labels:
       homepage.group: Servarr Stack
       homepage.name: Wizarr
@@ -7039,7 +7039,7 @@ services:
       YDL_CONFIG_PATH: /youtube-dl/config.yml
       YDL_DEBUG: "false"
     hostname: Rinoa
-    image: nbr23/youtube-dl-server:latest
+    image: nbr23/youtube-dl-server:latest@sha256:6072cdae4938b48e298ea84ff2092c8930597345cafa447cc33a8370aae6dbca
     labels:
       homepage.group: Downloaders
       homepage.name: YoutubeDL
