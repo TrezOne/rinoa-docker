@@ -11,7 +11,7 @@ on:
 
 env:
   HC_VAULT_VERSION: "1.18.0"
-  VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+  VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
 jobs:
@@ -93,8 +93,8 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: "${{ secrets.RINOA_GOTIFY_URL }}"
-          gotify_app_token: "${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}"
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
           notification_title: "GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa"
           notification_message: "Starting Docker Compose run..."
 
@@ -121,7 +121,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: "${{ secrets.RINOA_GOTIFY_URL }}"
-          gotify_app_token: "${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}"
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
           notification_title: "GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa"
           notification_message: "Deployment completed successfully."

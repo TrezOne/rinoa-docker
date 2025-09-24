@@ -4,15 +4,15 @@ on:
   workflow_dispatch:
   push:
     branches-ignore:
-      - 'main'
-      - 'renovate/**'
+      - "main"
+      - "renovate/**"
     paths:
-      - '**/docker-compose.yml'
+      - "**/docker-compose.yml"
 
 env:
-  FLARECTL_VERSION: '0.115.0'
-  HC_VAULT_VERSION: '1.18.0'
-  TEA_VERSION: '0.10.1'
+  FLARECTL_VERSION: "0.115.0"
+  HC_VAULT_VERSION: "1.18.0"
+  TEA_VERSION: "0.10.1"
 
 jobs:
   check-and-create-pr:
@@ -34,10 +34,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: PR Check'
-          notification_message: 'Checking for existing PR... 🔍'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: PR Check"
+          notification_message: "Checking for existing PR... 🔍"
 
       - name: Check if open PR exists
         id: check-opened-pr-step
@@ -80,10 +80,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: PR Check'
-          notification_message: 'PR Created 🎟️'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: PR Check"
+          notification_message: "PR Created 🎟️"
 
   generate-service-list:
     name: Generate list of added/modified/deleted services
@@ -92,7 +92,6 @@ jobs:
     outputs:
       svc_deploy_list: ${{ steps.detect_services.outputs.docker_svc_list }}
     steps:
-
       - name: Checkout
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
@@ -103,10 +102,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Services TBD'
-          notification_message: 'Generating list of services to deploy...'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Services TBD"
+          notification_message: "Generating list of services to deploy..."
 
       - name: Save both versions of docker-compose.yml
         run: |
@@ -152,7 +151,7 @@ jobs:
     needs: [generate-service-list]
     runs-on: ubuntu-latest
     env:
-      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+      VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       VAULT_NAMESPACE: ""
       RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
@@ -165,6 +164,16 @@ jobs:
         run: |
           docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
 
+      - name: Login to registries
+        uses: docker/login-action@v3
+        with:
+          registry-auth: |
+            - username: ${{ vars.DOCKERHUB_USERNAME }}
+              password: ${{ secrets.DOCKERHUB_TOKEN }}
+            - registry: ghcr.io
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install Vault (only if not cached)
         uses: cpanato/vault-installer@main
         with:
@@ -173,10 +182,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
-          notification_message: 'Starting Docker Compose dry run...'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Docker Compose Dry Run @ Rinoa"
+          notification_message: "Starting Docker Compose dry run..."
 
       - name: Generate .env file for Docker Compose
         run: |
@@ -198,10 +207,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Docker Compose Dry Run @ Rinoa'
-          notification_message: 'Docker Compose dry run completed successfully.'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Docker Compose Dry Run @ Rinoa"
+          notification_message: "Docker Compose dry run completed successfully."
 
   cloudflare-dns-setup:
     name: Cloudflare DNS Setup
@@ -242,10 +251,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
-          notification_message: 'Starting Cloudflare DNS setup...'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Cloudflare Setup @ Rinoa"
+          notification_message: "Starting Cloudflare DNS setup..."
 
       - name: Compare Subdomains
         id: compare-subdomains
@@ -272,10 +281,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Cloudflare Setup @ Rinoa'
-          notification_message: 'Cloudflare DNS setup completed successfully.'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Cloudflare Setup @ Rinoa"
+          notification_message: "Cloudflare DNS setup completed successfully."
 
   regenerate-readme-modified-services:
     name: Update README & Generate List of Modified Services
@@ -291,10 +300,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: README Update'
-          notification_message: 'Updating README...'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: README Update"
+          notification_message: "Updating README..."
 
       - name: Generate service list
         run: |
@@ -322,10 +331,10 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: README Update'
-          notification_message: 'README updated'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: README Update"
+          notification_message: "README updated"
 
   pr-merge:
     name: PR Merge
@@ -373,17 +382,17 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: PR Merge Successful'
-          notification_message: 'PR #${{ steps.pr_merge.outputs.pr_index }} merged.'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: PR Merge Successful"
+          notification_message: "PR #${{ steps.pr_merge.outputs.pr_index }} merged."
 
   docker-compose-deploy:
     name: Docker Compose Deployment
     runs-on: ubuntu-latest
     needs: [generate-service-list, docker-compose-dry-run, pr-merge]
     env:
-      VAULT_ADDR: ${{ secrets.RINOA_VAULT_ADDR }}
+      VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
       VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
       DOCKER_HOST: tcp://dockerproxy:2375
       RINOA_REGISTRY_PASSWORD: ${{ secrets.BOT_GITEA_PASSWORD }}
@@ -408,15 +417,15 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Docker Compose Deployment @ Rinoa'
-          notification_message: 'Starting Docker Compose run...'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Docker Compose Deployment @ Rinoa"
+          notification_message: "Starting Docker Compose run..."
 
       - name: Generate .env file for deployment
         run: |
-           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-           echo ${DOCKER_SVC_LIST}
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@v2.3.0
@@ -442,7 +451,7 @@ jobs:
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
-          gotify_api_base: '${{ secrets.RINOA_GOTIFY_URL }}'
-          gotify_app_token: '${{ secrets.RINOA_RUNNER_GOTIFY_TOKEN }}'
-          notification_title: 'GITEA: Docker Compose Deployment @ Rinoa'
-          notification_message: 'Deployment completed successfully.'
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Docker Compose Deployment @ Rinoa"
+          notification_message: "Deployment completed successfully."
