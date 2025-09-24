@@ -106,7 +106,7 @@ jobs:
               password: ${{ secrets.DOCKERHUB_PASSWORD }}
             - registry: ghcr.io
               username: ${{ secrets.GHCR_USER }}
-              password: ${{ secrets.GITHUB_LOGIN_TOKEN }}
+              password: ${{ secrets.GHCR_LOGIN_TOKEN }}
             - registry: git.trez.wtf
               username: ${{ secrets.BOT_GITEA_USER }}
               password: ${{ secrets.BOT_GITEA_PASSWORD }}
