@@ -130,7 +130,7 @@ jobs:
 
       - name: Docker Compose Healthcheck
         id: health
-        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
+        uses: jaracogmbh/docker-compose-health-check-action@973fbdccf7c8e396b652d3501984c8e530a9fa80 # v1.0.0
         with:
           max-retries: 30
           retry-interval: 10

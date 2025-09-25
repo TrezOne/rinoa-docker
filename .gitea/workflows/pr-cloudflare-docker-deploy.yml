@@ -203,7 +203,7 @@ jobs:
           echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Dry Run
-        uses: hoverkraft-tech/compose-action@v2.3.0
+        uses: hoverkraft-tech/compose-action@40041ff1b97dbf152cd2361138c2b03fa29139df # v2.3.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
@@ -268,7 +268,7 @@ jobs:
 
       - name: Compare Subdomains
         id: compare-subdomains
-        uses: LouisBrunner/diff-action@v2.2.0
+        uses: LouisBrunner/diff-action@9ea7b75986aa27143ad4928974c98a5a1bd92170 # v2.2.0
         with:
           old: compose_subdomains.txt
           new: cloudflare_subdomains.txt
@@ -458,7 +458,7 @@ jobs:
           echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Deployment
-        uses: hoverkraft-tech/compose-action@v2.3.0
+        uses: hoverkraft-tech/compose-action@40041ff1b97dbf152cd2361138c2b03fa29139df # v2.3.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
@@ -470,7 +470,7 @@ jobs:
           services-log-level: debug
 
       - name: Docker Compose Healthcheck
-        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
+        uses: jaracogmbh/docker-compose-health-check-action@973fbdccf7c8e396b652d3501984c8e530a9fa80 # v1.0.0
         with:
           max-retries: 30
           retry-interval: 10
