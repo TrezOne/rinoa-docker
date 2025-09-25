@@ -2372,7 +2372,7 @@ services:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: /run/secrets/influxdb2-admin-token
       DOCKER_INFLUXDB_INIT_ORG: rinoa
       DOCKER_INFLUXDB_INIT_BUCKET: rinoa
-    image: influxdb:2-alpine@sha256:d948cd7aa274696d76ccc3f7ef732180d9f9a4229aace3cf68ae008693665137
+    image: influxdb:2-alpine@sha256:fa166d3bdf6beeecf57791b70e558f6ef54e1e6cea95fb7728b45314bc48543b
     labels:
       swag: enable
       swag_proto: http
