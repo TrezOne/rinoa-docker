@@ -690,7 +690,7 @@ services:
       KEY: "${BESZEL_RINOA_AGENT_KEY}"
     expose:
       - 45876
-    image: henrygd/beszel-agent:latest@sha256:206822f20bd46ac2205249c356d5321139eddc5b155bba07e4aac9254e6c176c
+    image: henrygd/beszel-agent:latest@sha256:0830d9eb7866d3dfe810d8a8ed4fc3dad2c51b3bc855e3558a9aa4e8886c99be
     network_mode: host
     profiles: ["rinoa-apps"]
     restart: unless-stopped
