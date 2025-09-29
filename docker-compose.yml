@@ -6473,7 +6473,7 @@ services:
       UPTIME_KUMA_URL: http://uptimekuma:3001
       UPTIME_KUMA_USERNAME: ${UPTIME_KUMA_USERNAME}
     hostname: Rinoa
-    image: lscr.io/linuxserver/swag:latest@sha256:273b430dbd43b6ef72a5897feeb2a041a7dde4ac153a8afc270a444932e3eacc
+    image: lscr.io/linuxserver/swag:latest@sha256:5f4f148eac1e5682db56186681dd296767013957f071d900d770040811738394
     labels:
       swag: enable
       swag_proto: http
