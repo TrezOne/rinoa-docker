@@ -1363,7 +1363,7 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-    image: postgis/postgis:17-3.5-alpine@sha256:73b3b9f4b5e743cf4bfc121d8b924589231f1c3af7245d54875183a5e972714d
+    image: postgis/postgis:17-3.5-alpine@sha256:6ebb2b32a6d5315c8fc2b00427356eebd4778bfaf7211d4b28eac481f3d194ec
     profiles: ["rinoa-apps"]
     restart: always
     shm_size: 1G
