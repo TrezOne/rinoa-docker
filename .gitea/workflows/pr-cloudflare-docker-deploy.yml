@@ -11,7 +11,7 @@ on:
 
 env:
   FLARECTL_VERSION: "0.115.0"
-  HC_VAULT_VERSION: "1.18.0"
+  HC_VAULT_VERSION: "1.20.4"
   TEA_VERSION: "0.10.1"
 
 jobs:
