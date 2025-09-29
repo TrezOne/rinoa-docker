@@ -19,5 +19,25 @@
       "matchPackageNames": ["postgres", "pgvector", "pgvecto-rs"],
       "pinDigests": true
     }
+  ],
+  "customManagers": [
+    {
+      "fileMatch": [
+        ".github/workflows/.*\\.ya?ml$",
+        ".gitea/workflows/.*\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "(FLARECTL_VERSION|HC_VAULT_VERSION|TEA_VERSION|RENOVATE_VERSION):\\s*\"(?<currentValue>.*?)\""
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "{{depName}}",
+      "versioningTemplate": "semver",
+      "depNameTemplates": {
+        "FLARECTL_VERSION": "cloudflare/cloudflare-go",
+        "HC_VAULT_VERSION": "hashicorp/vault",
+        "TEA_VERSION": "go-gitea/tea",
+        "RENOVATE_VERSION": "renovatebot/renovate"
+      }
+    }
   ]
 }
