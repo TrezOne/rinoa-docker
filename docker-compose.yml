@@ -5854,7 +5854,7 @@ services:
     container_name: searxng
     environment:
       SEARXNG_BASE_URL: https://search.${MY_TLD}
-    image: searxng/searxng:latest@sha256:d3704a384057ed95e8bf61556277af356d18f809b9f2350f9b99ecb2da75d427
+    image: searxng/searxng:latest@sha256:8dfb85d6eb15eaf5bf4284cf5149676b18af2a4e0d02df144e5e4066f025db0d
     labels:
       homepage.group: Privacy/Security
       homepage.name: SearxNG
