@@ -6648,7 +6648,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       LOGS_TO_STDOUT: /config/.unmanic/logs/unmanic.log
-    image: josh5/unmanic:latest@sha256:ac323a810e5fbe45c73edbad241359214821747f1b707786f69d3b20f5e7c1fa
+    image: josh5/unmanic:latest@sha256:a072511fb4250237e6edabd1e97ab8fe693d5db5efff7280dffff3f41e8171d0
     labels:
       homepage.group: Media Library
       homepage.name: Unmanic
