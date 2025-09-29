@@ -3724,7 +3724,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${MASTODON_MINIO_SECRET_KEY}
     expose:
       - 3000
-    image: lscr.io/linuxserver/mastodon:latest@sha256:fe623cf8dd20be78a678c87774ee2e9a3f7b96080a08e76f45753abd5f399fcb
+    image: lscr.io/linuxserver/mastodon:latest@sha256:9cd791ad033e9a3c4bc8ab191b2b56d80c07b72fe632f8b2e215888eba22009e
     labels:
       swag: enable
       swag_proto: http
