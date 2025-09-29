@@ -1710,7 +1710,7 @@ services:
     #   - easyappointments:/var/www/html
   excalidraw:
     container_name: excalidraw
-    image: "excalidraw/excalidraw:latest@sha256:30e429c5784611b378bbaf72f20ca55c90707de40533939a3beb8098821121ee"
+    image: "excalidraw/excalidraw:latest@sha256:3a91fd1f0e1449af445eca337f5a4c10907da79c69d23a5e73a0be1c28012f06"
     labels:
       homepage.group: Personal Tools
       homepage.name: Excalidraw
