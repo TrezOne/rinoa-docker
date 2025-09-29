@@ -331,7 +331,7 @@ services:
       APPRISE_ATTACH_SIZE: 500
       APPRISE_CONFIG_DIR: /config
       APPRISE_STATEFUL_MODE: simple
-    image: lscr.io/linuxserver/apprise-api:latest@sha256:7d3b8154f396e687f3a44c6ccebb5150ad8e3a2e055ef2027965ec96116d64c5
+    image: lscr.io/linuxserver/apprise-api:latest@sha256:c3297670fdbdc694febfd0aec6b3cc8d5d7bf76c1b3e59816d0ac6607b0354c7
     labels:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: apprise.${MY_TLD}
