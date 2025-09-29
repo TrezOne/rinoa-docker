@@ -4640,7 +4640,7 @@ services:
     depends_on:
       - penpot-backend
       - penpot-exporter
-    image: penpotapp/frontend:latest@sha256:d4eff4cbb9eca82d9505bccd420635c74d02cc8a9a2287371204b441691edbbd
+    image: penpotapp/frontend:latest@sha256:91b80791f37b44c9aba3490720ae90fc01c691562c0862abeebcb8bc0a7198d2
     environment:
       <<: [*penpot-flags, *penpot-http-body-size]
     labels:
