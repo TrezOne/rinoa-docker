@@ -5,7 +5,7 @@ networks:
   nextcloud-aio:
     external: true
 x-jitsi-admin: &jitsi_admin_app
-  image: h2invent/jitsi-admin-main:latest@sha256:3d6d025178bc7a0c51da011052763d3ffddb97a1ab54f451c22e9aee14a0faad
+  image: h2invent/jitsi-admin-main:latest@sha256:dcebcc7eab4b95f97751a3ced9d11cd3b65b41297652bac40aea405e8efe4694
   #build: .
   environment:
     APACHE_DOCUMENT_ROOT: "public/"
