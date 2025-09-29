@@ -4693,7 +4693,7 @@ services:
       PENPOT_SMTP_PASSWORD: ${POSTAL_SMTP_AUTH_PASSWORD}
       PENPOT_SMTP_TLS: false
       PENPOT_SMTP_SSL: false
-    image: penpotapp/backend:latest@sha256:1bb38953e74386bf4786aa3aa2874b2ffe24af2df5dfb519a61fe8559d37942c
+    image: penpotapp/backend:latest@sha256:cfae17cff120a73c80e2237b7f664b44765b859a874896a377f09d8083463514
     profiles: ["rinoa-apps"]
     restart: always
     volumes:
