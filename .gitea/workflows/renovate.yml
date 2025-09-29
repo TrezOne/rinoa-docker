@@ -5,6 +5,9 @@ on:
     - cron: "0/30 * * * *"
   workflow_dispatch:
 
+env:
+  RENOVATE_VERSION: "41.97.7"
+
 jobs:
   renovate:
     runs-on: ubuntu-latest
@@ -27,4 +30,4 @@ jobs:
             -e RENOVATE_REPOSITORIES=trez/rinoa-docker \
             --volumes-from ${{ env.JOB_CONTAINER_NAME }} \
             -w ${GITHUB_WORKSPACE} \
-            renovate/renovate:41.97.7-full
+            renovate/renovate:${{ env.RENOVATE_VERSION }}-full
