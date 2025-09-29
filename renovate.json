@@ -19,51 +19,5 @@
       "matchPackageNames": ["postgres", "pgvector", "pgvecto-rs"],
       "pinDigests": true
     }
-  ],
-  "customManagers": [
-    {
-      "description": "Update flarectl version in workflows",
-      "fileMatch": [
-        ".github/workflows/.*\\.ya?ml$",
-        ".gitea/workflows/.*\\.ya?ml$"
-      ],
-      "matchStrings": ["FLARECTL_VERSION: \\\"(?<currentValue>.*?)\\\""],
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "cloudflare/cloudflare-go",
-      "versioningTemplate": "semver"
-    },
-    {
-      "description": "Update Vault version in workflows",
-      "fileMatch": [
-        ".github/workflows/.*\\.ya?ml$",
-        ".gitea/workflows/.*\\.ya?ml$"
-      ],
-      "matchStrings": ["HC_VAULT_VERSION: \\\"(?<currentValue>.*?)\\\""],
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "hashicorp/vault",
-      "versioningTemplate": "semver"
-    },
-    {
-      "description": "Update tea CLI version in workflows",
-      "fileMatch": [
-        ".github/workflows/.*\\.ya?ml$",
-        ".gitea/workflows/.*\\.ya?ml$"
-      ],
-      "matchStrings": ["TEA_VERSION: \\\"(?<currentValue>.*?)\\\""],
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "go-gitea/tea",
-      "versioningTemplate": "semver"
-    },
-    {
-      "description": "Update Renovate version in workflows",
-      "fileMatch": [
-        ".github/workflows/.*\\.ya?ml$",
-        ".gitea/workflows/.*\\.ya?ml$"
-      ],
-      "matchStrings": ["RENOVATE_VERSION: \\\"(?<currentValue>.*?)\\\""],
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "renovatebot/renovate",
-      "versioningTemplate": "semver"
-    }
   ]
 }
