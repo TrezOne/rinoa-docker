@@ -10,7 +10,7 @@ on:
       - "**/docker-compose.yml"
 
 env:
-  HC_VAULT_VERSION: "1.18.0"
+  HC_VAULT_VERSION: "1.20.4"
   VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
