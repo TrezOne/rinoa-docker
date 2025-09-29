@@ -1518,7 +1518,7 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
-    image: alplat/dockflare:stable@sha256:e1f6aa1179c1e0f5003b3986e6ae5c15ae5605cbb5c38819fa3520feada6d078 # Or :unstable for the latest features
+    image: alplat/dockflare:stable@sha256:5f990ba474c6f2657e022619417f269901cd826c4fb7cda62242bd15dc7efe4e # Or :unstable for the latest features
     labels:
       homepage.group: Privacy/Security
       homepage.name: DockFlare
