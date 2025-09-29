@@ -2180,7 +2180,7 @@ services:
   hugo:
     command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/ --configDir=/src/config/ -e production --logLevel debug
     container_name: hugo
-    image: hugomods/hugo:exts@sha256:13386acc7748fcaa3caab9fd93600adb8135323db8783d7f12483bccd57cee5f
+    image: hugomods/hugo:exts@sha256:bc2eb19ebd4cb623b2476386232425ce75ed8cd15bfbfcb648515b2bfa896346
     labels:
       swag: enable
       swag_proto: http
