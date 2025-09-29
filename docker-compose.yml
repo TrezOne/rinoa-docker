@@ -5971,7 +5971,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    image: signoz/signoz:v0.95.1@sha256:b650b0c52a9abc0a3458cb2d0cc64251e29f2ca3ba72b156a4c30c6be854d27e
+    image: signoz/signoz:v0.96.1@sha256:e2cded000c87adb0366c9ae4f292e034515458552d151879195071ba4f078b4e
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Signoz
