@@ -1135,7 +1135,7 @@ services:
     environment:
       MB_DB_FILE: /data/metabase.db
       MGID: ${GID-1000}
-    image: metabase/metabase@sha256:55cd5d71b4304b30e575862e25b82013ac81d48beaf6c371241e1c83894f3db2
+    image: metabase/metabase@sha256:f8a99822a7d3e2ee0874412b1835c99996addeb2101a183de7b6d55e5f6018cb
     labels:
       homepage.group: Privacy/Security
       homepage.name: CrowdSec Dashboard
