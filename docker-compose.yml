@@ -3803,7 +3803,7 @@ services:
     depends_on:
       - maxun-backend
     <<: *maxun-env
-    image: getmaxun/maxun-frontend:latest@sha256:cc9368aa44279f908ef42e7fe577fb6dc0f5f39491dd3265a037f3b2d993185a
+    image: getmaxun/maxun-frontend:latest@sha256:e5c889a2b8176646f0dc25662d6eb29e5b7b507b90c4250b0d18e3598b4636c5
     labels:
       swag: enable
       swag_proto: http
