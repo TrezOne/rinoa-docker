@@ -3787,7 +3787,7 @@ services:
     <<: *maxun-env
     expose:
       - 8080
-    image: getmaxun/maxun-backend:latest@sha256:fd95b998604648c1b2b781e29397ffa25e42cf6ea7a1954e373b2eebbbd0500f
+    image: getmaxun/maxun-backend:latest@sha256:a5a5df99e2f5aed1838336b0b4aa75c083b949da96c8e1b3a2820b8cf44b459c
     mem_limit: 2g # Set a 2GB memory limit
     ports:
       - 8369:8080
