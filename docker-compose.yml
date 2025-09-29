@@ -4750,7 +4750,7 @@ services:
       PBW_ENCRYPTION_KEY: ${PGBACKWEB_ENCRYPTION_KEY}
       PBW_POSTGRES_CONN_STRING: "postgresql://pgbackweb:${PGBACKWEB_PG_DB_PASSWD}@pgbackweb-db:5432/pgbackweb?sslmode=disable"
       TZ: ${TZ}
-    image: eduardolat/pgbackweb:latest@sha256:e568691203b92e37c5a0977c9979006960f3de5e66530743fdd1805e1cbcaa23
+    image: eduardolat/pgbackweb:latest@sha256:78112d94d212a8714cb97dc82ca86d14e2f3e763484e66a335f0fe60be084b05
     labels:
       homepage.group: System Administration
       homepage.name: PG Back Web
