@@ -4535,7 +4535,7 @@ services:
       WEBSOCKET_MANAGER: redis
       WEBSOCKET_REDIS_URL: redis://open-webui-valkey:6379/0
       REDIS_KEY_PREFIX: open-webui
-    image: ghcr.io/open-webui/open-webui:main@sha256:05aaa81eb4094038a16f0ae056342e3515d1912a30e41b828bfd3731fbe36a6c
+    image: ghcr.io/open-webui/open-webui:main@sha256:2b382ae46ba32ecb1a916541cdcb08fe1303f940a9e7323a60df28d868bd67f3
     labels:
       homepage.group: Personal Tools
       homepage.name: Open WebUI
