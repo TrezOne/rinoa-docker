@@ -3550,7 +3550,7 @@ services:
         bind:
           create_host_path: true
   loggifly:
-    image: ghcr.io/clemcer/loggifly:latest@sha256:6c36ab59b4679d4dbd10a606bd949b1c5128ef29735d2feb3d3f6bc5ce200148
+    image: ghcr.io/clemcer/loggifly:latest@sha256:cf1968ac30dc34dd85a8358a48d0f9bb959cbbfe6b3beef6e7732ab703518812
     container_name: loggifly
     profiles: ["rinoa-apps"]
     restart: unless-stopped
