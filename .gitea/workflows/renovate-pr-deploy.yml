@@ -48,42 +48,52 @@ jobs:
           echo "::warning::This PR does not involve patch/minor/major/digest update. Skipping deployment."
           exit 0
 
-      - name: Get changed services from docker-compose.yml
-        id: services
+      - name: Save both versions of docker-compose.yml
         run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git fetch origin main
 
-          echo "Getting image refs from head..."
+          if git ls-tree -r origin/main --name-only | grep -q '^docker-compose.yml$'; then
+            git show origin/main:docker-compose.yml > docker-compose-main.yml
+          else
+            echo "{}" > docker-compose-main.yml
+          fi
 
-          yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose.yml \
-            | sort > services_head.txt
+          cp docker-compose.yml docker-compose-head.yml
 
-          echo "Getting image refs from base..."
-          git show origin/${{ github.event.pull_request.base.ref }}:docker-compose.yml \
-            | yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' \
+      - name: Detect added, deleted, and modified services
+        id: detect_services
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Getting services from main and head"
+          yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose-main.yml \
             | sort > services_main.txt
 
-          echo "Comparing images between base and head..."
-          touch service_changes.txt
+          yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose-head.yml \
+            | sort > services_head.txt
 
-          while IFS== read -r svc img; do
-            base_img=$(grep "^$svc=" services_main.txt | cut -d= -f2- || true)
-            if [ "$img" != "$base_img" ]; then
-              echo "$svc" >> service_changes.txt
-            fi
-          done < services_head.txt
+          echo "Creating list of modified services..."
+          : > service_changes.txt
+
+          # Find modified services (image changes)
+          comm -12 <(cut -d= -f1 services_main.txt | sort) \
+                   <(cut -d= -f1 services_head.txt | sort) \
+            | while read service; do
+                main_image=$(grep "^$service=" services_main.txt | cut -d= -f2-)
+                head_image=$(grep "^$service=" services_head.txt | cut -d= -f2-)
+                if [ "$main_image" != "$head_image" ]; then
+                  echo "$service: modified" >> service_changes.txt
+                fi
+              done
 
           echo "Detected service changes:"
           cat service_changes.txt || true
 
-          mod_svcs=$(sort -u service_changes.txt)
-          if [ -z "$mod_svcs" ]; then
-            echo "::warning::No service image changes detected. Skipping selective deployment."
-          fi
+          # Flatten into single space-separated list for GHA output
+          mod_svcs=$(cut -d: -f1 service_changes.txt | sort -u | xargs echo -n)
 
-          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$mod_svcs" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
 
       - name: List of Services for (Re)Deployment
         run: |
