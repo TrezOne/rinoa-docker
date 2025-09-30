@@ -50,8 +50,8 @@ jobs:
 
           # Only check services that exist in both files
           comm -12 services_main.txt services_head.txt | while read service; do
-            img_main=$(yq -r ".services.\"$service\".image" docker-compose-main.yml)
-            img_head=$(yq -r ".services.\"$service\".image" docker-compose-head.yml)
+            img_main=$(yq -r ".services[\"$service\"].image" docker-compose-main.yml)
+            img_head=$(yq -r ".services[\"$service\"].image" docker-compose-head.yml)
 
             if [ "$img_main" != "$img_head" ]; then
               echo "$service: image_changed" >> service_changes.txt
