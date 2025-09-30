@@ -7039,7 +7039,7 @@ services:
       YDL_CONFIG_PATH: /youtube-dl/config.yml
       YDL_DEBUG: "false"
     hostname: Rinoa
-    image: nbr23/youtube-dl-server:latest@sha256:6072cdae4938b48e298ea84ff2092c8930597345cafa447cc33a8370aae6dbca
+    image: nbr23/youtube-dl-server:latest@sha256:af3dfd77a9aa03f3d8f9b18264780562c3bf9302a6bbf7f8e52f1b5c46a076b7
     labels:
       homepage.group: Downloaders
       homepage.name: YoutubeDL
