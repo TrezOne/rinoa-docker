@@ -54,7 +54,7 @@ jobs:
           git fetch origin ${{ github.event.pull_request.base.ref }}
 
           echo "Getting image refs from head..."
-          # Extract image refs (service -> image) from base and head
+
           yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose.yml \
             | sort > services_head.txt
 
