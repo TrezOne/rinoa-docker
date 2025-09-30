@@ -67,15 +67,15 @@ jobs:
           set -euo pipefail
 
           echo "Getting services from main and head"
-          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
-          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
+          yq eval '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
+          yq eval '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
 
           echo "Creating list of modified services..."
           : > service_changes.txt
 
           comm -12 services_main.txt services_head.txt | while read service; do
-            main_image=$(yq eval --yaml-merge ".services.\"$service\".image // \"\"" docker-compose-main.yml)
-            head_image=$(yq eval --yaml-merge ".services.\"$service\".image // \"\"" docker-compose-head.yml)
+            main_image=$(yq eval ".services.\"$service\".image // \"\"" docker-compose-main.yml)
+            head_image=$(yq eval ".services.\"$service\".image // \"\"" docker-compose-head.yml)
 
             if [ "$main_image" != "$head_image" ]; then
               echo "$service" >> service_changes.txt
