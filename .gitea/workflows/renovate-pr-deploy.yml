@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout full repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
         with:
           fetch-depth: 0 # Required for branch diffing
 
@@ -78,7 +78,7 @@ jobs:
           notification_message: "Starting Docker Compose run..."
 
       - name: Docker Compose Deployment
-        uses: hoverkraft-tech/compose-action@v2.3.0
+        uses: hoverkraft-tech/compose-action@40041ff1b97dbf152cd2361138c2b03fa29139df # v2.3.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
@@ -89,7 +89,7 @@ jobs:
 
       - name: Docker Compose Healthcheck
         id: health
-        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
+        uses: jaracogmbh/docker-compose-health-check-action@973fbdccf7c8e396b652d3501984c8e530a9fa80 # v1.0.0
         with:
           max-retries: 30
           retry-interval: 10
