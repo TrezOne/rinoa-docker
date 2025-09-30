@@ -4958,7 +4958,7 @@ services:
     expose:
       - 9000
       - 9443
-    image: portainer/portainer-ce:alpine@sha256:38f6d57dad1d47ad095f9d052f4dbae8551ece9358c6c0b9696770c42327d66d
+    image: portainer/portainer-ce:alpine@sha256:c6908c1a2d036668799d51fb4d5ba5a5b3905509c7ac1b832c0fc0ef4c152f0e
     labels:
       swag: enable
       swag_proto: http
