@@ -15,7 +15,6 @@ env:
 
 jobs:
   deploy:
-    name: Renovate PR Deployment
     if: |
       github.event.pull_request.merged == true &&
       github.event.pull_request.user.login == 'renovate-bot'
@@ -24,40 +23,56 @@ jobs:
       - name: Checkout full repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required for branch diffing
+          fetch-depth: 0 # required so we can access main^1
 
       - name: Install Vault
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
 
-      - name: Save both versions of docker-compose.yml
+      - name: Save docker-compose.yml before merge (old)
         run: |
-          git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
-          cp docker-compose.yml docker-compose-head.yml
+          git fetch origin main
+          if git ls-tree -r origin/main^1 --name-only | grep -q '^docker-compose.yml$'; then
+            git show origin/main^1:docker-compose.yml > docker-compose-old.yml
+          else
+            echo "services: {}" > docker-compose-old.yml
+          fi
 
-      - name: Detect services with changed image tags/digests
+      - name: Save docker-compose.yml after merge (new)
+        run: |
+          git show origin/main:docker-compose.yml > docker-compose-new.yml
+
+      - name: Detect services with image tag/digest changes
         id: detect_services
         run: |
+          set -euo pipefail
+
+          echo "Flattening docker-compose files..."
+          yq eval '... comments=""' docker-compose-old.yml > docker-compose-old-flat.yml
+          yq eval '... comments=""' docker-compose-new.yml > docker-compose-new-flat.yml
+
+          echo "Getting service names..."
+          yq eval '.services | keys | .[]' docker-compose-old-flat.yml | sort > services_old.txt
+          yq eval '.services | keys | .[]' docker-compose-new-flat.yml | sort > services_new.txt
+
           echo "Checking for image changes..."
-          touch service_changes.txt
+          : > service_changes.txt
 
-          yq '.services | keys | .[]' docker-compose-head.yml | sort | while read service; do
-            img_main=$(yq -r ".services[\"$service\"].image" docker-compose-main.yml)
-            img_head=$(yq -r ".services[\"$service\"].image" docker-compose-head.yml)
+          comm -12 services_old.txt services_new.txt | while read service; do
+            old_image=$(yq eval ".services[\"$service\"].image // \"\"" docker-compose-old-flat.yml)
+            new_image=$(yq eval ".services[\"$service\"].image // \"\"" docker-compose-new-flat.yml)
 
-            if [ "$img_main" != "$img_head" ]; then
-              echo "$service: image_changed" >> service_changes.txt
+            if [ "$old_image" != "$new_image" ]; then
+              echo "$service" >> service_changes.txt
             fi
           done
 
           echo "Detected services with changed images:"
-          cat service_changes.txt
+          cat service_changes.txt || true
 
-          mod_svcs=$(cut -d':' -f1 service_changes.txt | sort | uniq)
-          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$mod_svcs" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          mod_svcs=$(sort -u service_changes.txt | xargs echo -n)
+          echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
 
       - name: Stop if no image changes
         if: steps.detect_services.outputs.docker_svc_list == ''
@@ -67,7 +82,8 @@ jobs:
 
       - name: Generate .env file for Docker Compose
         run: |
-          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' \
+            | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
       - name: Gotify Notification (Start)
         uses: eikendev/gotify-action@master
