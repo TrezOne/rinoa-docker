@@ -53,16 +53,17 @@ jobs:
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
 
-          # Extract image refs (service -> image) from base and head
+          # Extract service=image pairs from HEAD (PR merge result)
           yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose.yml \
             | sort > services_head.txt
 
+          # Extract service=image pairs from BASE (main branch)
           git show origin/${{ github.event.pull_request.base.ref }}:docker-compose.yml \
             | yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' \
-            | sort > services_main.txt
+            | sort > services_main.txt || true
 
           echo "Comparing images between base and head..."
-          touch service_changes.txt
+          : > service_changes.txt
 
           while IFS== read -r svc img; do
             base_img=$(grep "^$svc=" services_main.txt | cut -d= -f2- || true)
@@ -74,14 +75,12 @@ jobs:
           echo "Detected service changes:"
           cat service_changes.txt || true
 
-          mod_svcs=$(sort -u service_changes.txt)
+          mod_svcs=$(sort -u service_changes.txt | xargs)
           if [ -z "$mod_svcs" ]; then
-            echo "::warning::No service image changes detected. Skipping selective deployment."
+            echo "docker_svc_list=" >> "$GITHUB_OUTPUT"
+          else
+            echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
           fi
-
-          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$mod_svcs" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: List of Services for (Re)Deployment
         run: |
