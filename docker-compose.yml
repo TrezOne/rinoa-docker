@@ -1322,7 +1322,7 @@ services:
       retries: 30
       start_period: 30s
       timeout: 10s
-    image: freikin/dawarich:latest@sha256:4cb9bd4e05dbea4cf5176c2d07c613c10bff231e487e2a95ab978fd7e3e7c174
+    image: freikin/dawarich:latest@sha256:ea1bcc61d7fd94e59ecee710f6850230d11593a54128cfd1309a14c61cb32fd6
     labels:
       homepage.group: Privacy/Security
       homepage.name: Dawarich
@@ -1414,7 +1414,7 @@ services:
       retries: 30
       start_period: 30s
       timeout: 10s
-    image: freikin/dawarich:latest@sha256:4cb9bd4e05dbea4cf5176c2d07c613c10bff231e487e2a95ab978fd7e3e7c174
+    image: freikin/dawarich:latest@sha256:ea1bcc61d7fd94e59ecee710f6850230d11593a54128cfd1309a14c61cb32fd6
     profiles: ["rinoa-apps"]
     restart: on-failure
     stdin_open: true
