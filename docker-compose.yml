@@ -4150,7 +4150,7 @@ services:
       NODE_ENV: production
       WEBHOOK_URL: https://n8n.${MY_TLD}/
       GENERIC_TIMEZONE: ${TZ}
-    image: docker.n8n.io/n8nio/n8n@sha256:746f90a251005a1bdbe2b7ebbce7d14eba6eb634739d157e4f9778d61f07dae3
+    image: docker.n8n.io/n8nio/n8n@sha256:57f95a26b1b28527053fba6316d9d046395d9b4da9d0da486e838384a38fcf37
     labels:
       swag: enable
       swag_proto: http
