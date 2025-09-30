@@ -2518,7 +2518,7 @@ services:
       TRUSTED_PROXIES: 172.18.0.0/16
     expose:
       - 9000
-    image: invoiceninja/invoiceninja-debian:5@sha256:581a94fab5a4f6f307e3954dd2f79508efd5a912acfab7a94663ad6df492981a
+    image: invoiceninja/invoiceninja-debian:5@sha256:5505dffeb378e4ea926c761177025881f251b049dc1dba15af3384e5ca5568b4
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
