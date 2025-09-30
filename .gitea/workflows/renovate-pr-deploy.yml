@@ -50,26 +50,21 @@ jobs:
 
       - name: Get changed services from docker-compose.yml
         id: services
-        shell: bash
         run: |
-          set -euo pipefail
-
           git fetch origin ${{ github.event.pull_request.base.ref }}
 
-          # Extract service=image pairs from HEAD (current merge commit)
+          echo "Getting image refs from head..."
+          # Extract image refs (service -> image) from base and head
           yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose.yml \
             | sort > services_head.txt
 
-          # Extract service=image pairs from BASE (main branch)
-          if git show origin/${{ github.event.pull_request.base.ref }}:docker-compose.yml > base.yml 2>/dev/null; then
-            yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' base.yml \
-              | sort > services_main.txt
-          else
-            touch services_main.txt
-          fi
+          echo "Getting image refs from base..."
+          git show origin/${{ github.event.pull_request.base.ref }}:docker-compose.yml \
+            | yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' \
+            | sort > services_main.txt
 
           echo "Comparing images between base and head..."
-          : > service_changes.txt
+          touch service_changes.txt
 
           while IFS== read -r svc img; do
             base_img=$(grep "^$svc=" services_main.txt | cut -d= -f2- || true)
@@ -81,11 +76,14 @@ jobs:
           echo "Detected service changes:"
           cat service_changes.txt || true
 
-          # Flatten into a single space-separated string
-          mod_svcs=$(sort -u service_changes.txt | xargs echo -n)
+          mod_svcs=$(sort -u service_changes.txt)
+          if [ -z "$mod_svcs" ]; then
+            echo "::warning::No service image changes detected. Skipping selective deployment."
+          fi
 
-          # Export for downstream steps (safe single-line)
-          echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
+          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$mod_svcs" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: List of Services for (Re)Deployment
         run: |
