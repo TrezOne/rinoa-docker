@@ -812,7 +812,7 @@ services:
       - 3000
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    image: ghcr.io/browserless/chromium:latest@sha256:fdd9b555a2d152a318f1b6f094f8390973a7773d237b4a4ad2901a176bae0e87
+    image: ghcr.io/browserless/chromium:latest@sha256:04d6b2df747bae31aa1d885ce4a70539e5f92e1f489235e4e184ed1be1199051
     labels:
       swag: enable
       swag_proto: http
