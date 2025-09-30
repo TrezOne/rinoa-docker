@@ -66,6 +66,9 @@ jobs:
         run: |
           set -euo pipefail
 
+          head docker-compose-main.yml
+          head docker-compose-head.yml
+
           echo "Getting services from main and head"
           yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose-main.yml \
             | sort > services_main.txt
