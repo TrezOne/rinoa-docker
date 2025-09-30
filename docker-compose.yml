@@ -580,7 +580,7 @@ services:
       POSTGRES_DB: authelia
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09
+    image: postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -3858,7 +3858,7 @@ services:
       MEILI_HOST: http://meilisearch:7700
       MEILI_NO_ANALYTICS: true
       MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
-    image: getmeili/meilisearch:v1.22@sha256:753430b82af098649d9e0fb571ae852063221c819948a69bc41f9f33c0f95a77
+    image: getmeili/meilisearch:v1.22@sha256:328dc1698cc6f54bb811b8030ff864c6345144cded5ac89b6ab23fe9f747d723
     ports:
       - 7700:7700
     profiles: ["rinoa-apps"]
@@ -4369,7 +4369,7 @@ services:
       retries: 10
       test: 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
       timeout: 2s
-    image: postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09
+    image: postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -4860,7 +4860,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09
+    image: postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -5442,7 +5442,7 @@ services:
       POSTGRES_PASSWORD: ${REACTIVE_RESUME_PGSQL_PASSWORD}
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09
+    image: postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -6575,7 +6575,7 @@ services:
       POSTGRES_USER: tandoor
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:1c6d2f6e4d30d49c529e09a627e8178db5011dde88d955eb08db2e135e64aa09
+    image: postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b
     networks:
       default: null
     profiles: ["rinoa-apps"]
