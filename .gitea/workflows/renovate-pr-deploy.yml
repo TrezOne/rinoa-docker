@@ -50,6 +50,7 @@ jobs:
 
       - name: Get changed services from docker-compose.yml
         id: services
+        shell: bash
         run: |
           set -euo pipefail
 
