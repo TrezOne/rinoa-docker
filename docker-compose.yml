@@ -2459,7 +2459,7 @@ services:
       test:
         - CMD-SHELL
         - pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
-    image: docker.io/library/postgres:14@sha256:f7b28597c837f7b83adf763cdb128a0e7f5ddcfe87ad154f69967b1f92781e04
+    image: docker.io/library/postgres:14@sha256:1c418702ab77adc7e84c7e726c2ab4f9cb63b8f997341ffcfab56629bab1429d
     networks:
       default: null
     profiles: ["rinoa-apps"]
