@@ -55,7 +55,7 @@ jobs:
           if git ls-tree -r origin/main --name-only | grep -q '^docker-compose.yml$'; then
             git show origin/main:docker-compose.yml > docker-compose-main.yml
           else
-            echo "{}" > docker-compose-main.yml
+            echo "services: {}" > docker-compose-main.yml
           fi
 
           cp docker-compose.yml docker-compose-head.yml
@@ -66,34 +66,36 @@ jobs:
         run: |
           set -euo pipefail
 
-          head docker-compose-main.yml
-          head docker-compose-head.yml
-
           echo "Getting services from main and head"
-          yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose-main.yml \
-            | sort > services_main.txt
-
-          yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose-head.yml \
-            | sort > services_head.txt
+          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
+          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
 
           echo "Creating list of modified services..."
           : > service_changes.txt
 
-          # Find modified services (image changes)
-          comm -12 <(cut -d= -f1 services_main.txt | sort) \
-                   <(cut -d= -f1 services_head.txt | sort) \
-            | while read service; do
-                main_image=$(grep "^$service=" services_main.txt | cut -d= -f2-)
-                head_image=$(grep "^$service=" services_head.txt | cut -d= -f2-)
-                if [ "$main_image" != "$head_image" ]; then
-                  echo "$service: modified" >> service_changes.txt
-                fi
-              done
+          # Added services
+          comm -13 services_main.txt services_head.txt | while read service; do
+            echo "$service: added" >> service_changes.txt
+          done
+
+          # Removed services
+          comm -23 services_main.txt services_head.txt | while read service; do
+            echo "$service: removed" >> service_changes.txt
+          done
+
+          # Modified services (image changes)
+          comm -12 services_main.txt services_head.txt | while read service; do
+            main_image=$(yq ".services.\"$service\".image // \"\"" docker-compose-main.yml)
+            head_image=$(yq ".services.\"$service\".image // \"\"" docker-compose-head.yml)
+            if [ "$main_image" != "$head_image" ]; then
+              echo "$service: modified" >> service_changes.txt
+            fi
+          done
 
           echo "Detected service changes:"
           cat service_changes.txt || true
 
-          # Flatten into single space-separated list for GHA output
+          # Flatten into single space-separated list
           mod_svcs=$(cut -d: -f1 service_changes.txt | sort -u | xargs echo -n)
 
           echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
