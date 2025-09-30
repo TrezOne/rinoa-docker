@@ -66,22 +66,14 @@ jobs:
         run: |
           set -euo pipefail
 
+          yq --version
+
           echo "Getting services from main and head"
           yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
           yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
 
           echo "Creating list of modified services..."
           : > service_changes.txt
-
-          # Added services
-          comm -13 services_main.txt services_head.txt | while read service; do
-            echo "$service: added" >> service_changes.txt
-          done
-
-          # Removed services
-          comm -23 services_main.txt services_head.txt | while read service; do
-            echo "$service: removed" >> service_changes.txt
-          done
 
           # Modified services (image changes)
           comm -12 services_main.txt services_head.txt | while read service; do
