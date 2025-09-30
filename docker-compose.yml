@@ -3858,7 +3858,7 @@ services:
       MEILI_HOST: http://meilisearch:7700
       MEILI_NO_ANALYTICS: true
       MEILI_MASTER_KEY: ${MEILISEARCH_MASTER_KEY}
-    image: getmeili/meilisearch:v1.22@sha256:753430b82af098649d9e0fb571ae852063221c819948a69bc41f9f33c0f95a77
+    image: getmeili/meilisearch:v1.22@sha256:328dc1698cc6f54bb811b8030ff864c6345144cded5ac89b6ab23fe9f747d723
     ports:
       - 7700:7700
     profiles: ["rinoa-apps"]
