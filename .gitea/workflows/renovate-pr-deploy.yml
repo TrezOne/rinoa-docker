@@ -10,7 +10,7 @@ on:
       - "**/docker-compose.yml"
 
 env:
-  HC_VAULT_VERSION: "1.20.4"
+  HC_VAULT_VERSION: "1.18.0"
   VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
   VAULT_TOKEN: ${{ secrets.VAULT_GITEA_TOKEN }}
 
@@ -52,32 +52,33 @@ jobs:
         id: services
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }}
-          git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
-          cp docker-compose.yml docker-compose-head.yml
 
-          echo "Getting services from main and ${{ github.ref_name }}"
-          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
-          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
+          # Extract image refs (service -> image) from base and head
+          yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' docker-compose.yml \
+            | sort > services_head.txt
 
-          echo "Creating list of modified services..."
+          git show origin/${{ github.event.pull_request.base.ref }}:docker-compose.yml \
+            | yq -r '.services | to_entries[] | "\(.key)=\(.value.image // "")"' \
+            | sort > services_main.txt
+
+          echo "Comparing images between base and head..."
           touch service_changes.txt
 
-          comm -13 services_main.txt services_head.txt | while read service; do
-            echo "$service: added" >> service_changes.txt
-          done
-
-          comm -12 services_main.txt services_head.txt | while read service; do
-            yq ".services[\"$service\"]" docker-compose-main.yml > tmp_main.yml
-            yq ".services[\"$service\"]" docker-compose-head.yml > tmp_head.yml
-            if ! diff -q tmp_main.yml tmp_head.yml > /dev/null; then
-              echo "$service: modified" >> service_changes.txt
+          while IFS== read -r svc img; do
+            base_img=$(grep "^$svc=" services_main.txt | cut -d= -f2- || true)
+            if [ "$img" != "$base_img" ]; then
+              echo "$svc" >> service_changes.txt
             fi
-          done
+          done < services_head.txt
 
           echo "Detected service changes:"
-          cat service_changes.txt
+          cat service_changes.txt || true
 
-          mod_svcs=$(cut -d':' -f1 service_changes.txt | sort | uniq)
+          mod_svcs=$(sort -u service_changes.txt)
+          if [ -z "$mod_svcs" ]; then
+            echo "::warning::No service image changes detected. Skipping selective deployment."
+          fi
+
           echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
           echo "$mod_svcs" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
