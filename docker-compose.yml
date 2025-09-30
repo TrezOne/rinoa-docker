@@ -4706,7 +4706,7 @@ services:
     environment:
       PENPOT_PUBLIC_URI: http://penpot-frontend:8080
       PENPOT_REDIS_URI: redis://penpot-redis/0
-    image: penpotapp/exporter:latest@sha256:885b9ad4383895e51d1b0384b95b7127de52a5fa046d9bea665f1236a32fb2c8
+    image: penpotapp/exporter:latest@sha256:79c4988d0ac1986e3e8a7a1e1041d54869bcf1b17779f0cc6553795666f685e4
     profiles: ["rinoa-apps"]
     restart: unless-stopped
   penpot-pg-db:
