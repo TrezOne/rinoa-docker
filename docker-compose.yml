@@ -1978,7 +1978,7 @@ services:
       interval: 10s
       start_period: 20s
       test: ["CMD-SHELL", "pg_isready -U gitea -d gitea"]
-    image: postgres:14@sha256:63b0c41b926b98e4a3944d74fb761943ca1cb5375c28f179edf35c77b8f63360
+    image: postgres:14@sha256:1c418702ab77adc7e84c7e726c2ab4f9cb63b8f997341ffcfab56629bab1429d
     networks:
       default: null
     profiles: ["rinoa-infra"]
@@ -2272,7 +2272,7 @@ services:
     container_name: immich-machine-learning
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:release@sha256:cc94659771d7e394d6406ebb0664069f2523062fda4f934def31648e903c4de2
+    image: ghcr.io/immich-app/immich-machine-learning:release@sha256:21b6a0bf02426336f456e8dca43c55b6a79b8e01ee2c25f91bc817fc3a745e52
     profiles: ["rinoa-apps"]
     restart: always
     volumes:
@@ -3241,7 +3241,7 @@ services:
       POSTGRES_DB: ${JOPLIN_POSTGRES_DATABASE}
     expose:
       - 5432
-    image: postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f
+    image: postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -3765,7 +3765,7 @@ services:
       timeout: 30s
       interval: 10s
       retries: 5
-    image: postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f
+    image: postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80
     profiles: ["rinoa-apps"]
     restart: always
     volumes:
@@ -3831,7 +3831,7 @@ services:
     restart: unless-stopped
   maxun-pg-db:
     container_name: maxun-pg-db
-    image: postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f
+    image: postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80
     environment:
       POSTGRES_USER: maxun
       POSTGRES_PASSWORD: ${MAXUN_DB_PASSWORD}
@@ -4785,7 +4785,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    image: postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f
+    image: postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80
     restart: unless-stopped
     volumes:
       - pgbackweb-data:/var/lib/postgresql/data
@@ -6170,7 +6170,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: postgres:17-alpine@sha256:d5f196a551b5cef1c70853c6dd588f456d16ca4ea733e3f31c75bc1ae2f65f3f
+    image: postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80
     profiles: ["rinoa-infra"]
     restart: unless-stopped
     volumes:
