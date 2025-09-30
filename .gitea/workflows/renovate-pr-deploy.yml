@@ -39,17 +39,10 @@ jobs:
       - name: Detect services with changed image tags/digests
         id: detect_services
         run: |
-          echo "Getting services from main and ${{ github.ref_name }}"
-
-          # Get service names from both files
-          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
-          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
-
           echo "Checking for image changes..."
           touch service_changes.txt
 
-          # Only check services that exist in both files
-          comm -12 services_main.txt services_head.txt | while read service; do
+          yq '.services | keys | .[]' docker-compose-head.yml | sort | while read service; do
             img_main=$(yq -r ".services[\"$service\"].image" docker-compose-main.yml)
             img_head=$(yq -r ".services[\"$service\"].image" docker-compose-head.yml)
 
