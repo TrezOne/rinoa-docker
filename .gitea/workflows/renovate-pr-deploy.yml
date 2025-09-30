@@ -1,7 +1,6 @@
-name: Renovate PR Deployment
+name: Renovate Image Tag Deployment
 
 on:
-  workflow_dispatch:
   pull_request:
     types: [closed]
     branches:
@@ -16,88 +15,68 @@ env:
 
 jobs:
   deploy:
+    name: Renovate PR Deployment
     if: |
       github.event.pull_request.merged == true &&
       github.event.pull_request.user.login == 'renovate-bot'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - name: Checkout full repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for branch diffing
 
       - name: Install Vault
         uses: cpanato/vault-installer@main
         with:
           version: ${{ env.HC_VAULT_VERSION }}
 
-      - name: Detect Renovate update type
-        id: detect-update
-        env:
-          PR_BODY: ${{ github.event.pull_request.body }}
-        run: |
-          echo "PR body: $PR_BODY"
-
-          if echo "$PR_BODY" | grep -qE 'Update Type: (patch|minor|major|digest)'; then
-            echo "update=true" >> $GITHUB_OUTPUT
-          else
-            echo "update=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Stop if update not patch/minor/major/digest
-        if: steps.detect-update.outputs.update != 'true'
-        run: |
-          echo "::warning::This PR does not involve patch/minor/major/digest update. Skipping deployment."
-          exit 0
-
       - name: Save both versions of docker-compose.yml
         run: |
-          git fetch origin main
-
-          if git ls-tree -r origin/main --name-only | grep -q '^docker-compose.yml$'; then
-            git show origin/main:docker-compose.yml > docker-compose-main.yml
-          else
-            echo "services: {}" > docker-compose-main.yml
-          fi
-
+          git show origin/main:docker-compose.yml > docker-compose-main.yml || touch docker-compose-main.yml
           cp docker-compose.yml docker-compose-head.yml
 
-      - name: Detect modified services
+      - name: Detect services with changed image tags/digests
         id: detect_services
-        shell: bash
         run: |
-          set -euo pipefail
+          echo "Getting services from main and ${{ github.ref_name }}"
 
-          echo "Getting services from main and head"
-          yq eval '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
-          yq eval '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
+          # Get service names from both files
+          yq '.services | keys | .[]' docker-compose-main.yml | sort > services_main.txt
+          yq '.services | keys | .[]' docker-compose-head.yml | sort > services_head.txt
 
-          echo "Creating list of modified services..."
-          : > service_changes.txt
+          echo "Checking for image changes..."
+          touch service_changes.txt
 
+          # Only check services that exist in both files
           comm -12 services_main.txt services_head.txt | while read service; do
-            main_image=$(yq eval ".services.\"$service\".image // \"\"" docker-compose-main.yml)
-            head_image=$(yq eval ".services.\"$service\".image // \"\"" docker-compose-head.yml)
+            img_main=$(yq -r ".services.\"$service\".image // empty" docker-compose-main.yml)
+            img_head=$(yq -r ".services.\"$service\".image // empty" docker-compose-head.yml)
 
-            if [ "$main_image" != "$head_image" ]; then
-              echo "$service" >> service_changes.txt
+            if [ "$img_main" != "$img_head" ]; then
+              echo "$service: image_changed" >> service_changes.txt
             fi
           done
 
-          echo "Detected modified services:"
-          cat service_changes.txt || true
+          echo "Detected services with changed images:"
+          cat service_changes.txt
 
-          mod_svcs=$(sort -u service_changes.txt | xargs echo -n)
+          mod_svcs=$(cut -d':' -f1 service_changes.txt | sort | uniq)
+          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$mod_svcs" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
-          echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
-
-      - name: List of Services for (Re)Deployment
+      - name: Stop if no image changes
+        if: steps.detect_services.outputs.docker_svc_list == ''
         run: |
-          echo -e "${{ steps.services.outputs.docker_svc_list }}"
+          echo "No image tag/digest changes detected. Exiting."
+          exit 0
 
       - name: Generate .env file for Docker Compose
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
 
-      - name: Gotify Notification
+      - name: Gotify Notification (Start)
         uses: eikendev/gotify-action@master
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
@@ -105,39 +84,19 @@ jobs:
           notification_title: "GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa"
           notification_message: "Starting Docker Compose run..."
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
-        with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
-        with:
-          registry: ghcr.io
-          username: ${{ secrets.GHCR_USER }}
-          password: ${{ secrets.GHCR_LOGIN_TOKEN }}
-
-      - name: Login to Private Gitea Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
-        with:
-          registry: git.trez.wtf
-          username: ${{ secrets.BOT_GITEA_USER }}
-          password: ${{ secrets.BOT_GITEA_PASSWORD }}
-
       - name: Docker Compose Deployment
-        uses: hoverkraft-tech/compose-action@40041ff1b97dbf152cd2361138c2b03fa29139df # v2.3.0
+        uses: hoverkraft-tech/compose-action@v2.3.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
           services: |
-            ${{ steps.services.outputs.docker_svc_list }}
+            ${{ steps.detect_services.outputs.docker_svc_list }}
           up-flags: -d --remove-orphans --pull always
           compose-flags: --profile rinoa-apps
 
       - name: Docker Compose Healthcheck
         id: health
-        uses: jaracogmbh/docker-compose-health-check-action@973fbdccf7c8e396b652d3501984c8e530a9fa80 # v1.0.0
+        uses: jaracogmbh/docker-compose-health-check-action@v1.0.0
         with:
           max-retries: 30
           retry-interval: 10
@@ -145,7 +104,7 @@ jobs:
           skip-exited: "true"
           skip-no-healthcheck: "true"
 
-      - name: Gotify Notification
+      - name: Gotify Notification (Finish)
         uses: eikendev/gotify-action@master
         with:
           gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
