@@ -3624,7 +3624,7 @@ services:
       REDIS_URL: redis://manyfold-valkey:6379/2
       SECRET_KEY_BASE: ${MANYFOLD_SECRET_KEY_BASE}
       MUTLIUSER: enabled
-    image: lscr.io/linuxserver/manyfold:latest@sha256:609ac6458c382c7fe35b145c056ea0661051f3b137b7aed9ed84fc50591bd320
+    image: lscr.io/linuxserver/manyfold:latest@sha256:b8f40d6f0b4bdd59d13d97c97c21d1e24b0276c8c4b8341855d2ca50bc9df25e
     labels:
       homepage.group: Lifestyle
       homepage.name: Manyfold
