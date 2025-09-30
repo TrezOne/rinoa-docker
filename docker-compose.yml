@@ -1430,7 +1430,7 @@ services:
       - dawarich-valkey-data:/data/valkey
   dead-man-hand:
     container_name: dead-man-hand
-    image: ghcr.io/bkupidura/dead-man-hand:latest@sha256:e5ef8e79f1263c2ba8ae196ebd03e7f240d8d6a44af39e0042981ce3f8a33a17
+    image: ghcr.io/bkupidura/dead-man-hand:latest@sha256:31905f19678f60d55ecdfa63dad009c07e2055cb5db0c608c8cab5de4467050e
     environment:
       DMH_CONFIG_FILE: /data/config.yaml
     labels:
