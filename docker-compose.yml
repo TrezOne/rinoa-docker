@@ -2232,7 +2232,7 @@ services:
       REDIS_DBINDEX: 0
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-server:release@sha256:a5935f03b93137952c38b14a47148525023f4c36a2db174d8266a9d3b37e7e3b
+    image: ghcr.io/immich-app/immich-server:release@sha256:f34203f6c2db130c26480ff21c412c6f0c37c24ee5261f6a6e4fe1eecaa921c0
     labels:
       swag: enable
       swag_proto: http
