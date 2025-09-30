@@ -4395,7 +4395,7 @@ services:
       PUID: ${PUID}
       TZ: America/New_York
     hostname: Rinoa
-    image: lscr.io/linuxserver/ombi:latest@sha256:58e53eadbec4a9bf370727be711d0d3ee238fb12db8a9cfe531ecf04eb21f6f7
+    image: lscr.io/linuxserver/ombi:latest@sha256:218d7f17ad284f35e2a7887c95f106da4d192df1d846ee22abcdbbdd30a7dfd9
     labels:
       homepage.group: Media Library
       homepage.name: Ombi
