@@ -89,7 +89,7 @@
 | karakeep | ghcr.io/karakeep-app/karakeep:release@sha256:abd7d6b11b1b8fa3593d1971f886a74850ba8d6a99291218b150207d5a60378e | Self-hosted bookmark-everything app with a touch of AI for data hoarders |
 | languagetool | elestio/languagetool:latest@sha256:85a32bdef9e7d87125977a201bfe7aa4310e67cab8abfa370157a9fc67cda4cd |  |
 | libretranslate | libretranslate/libretranslate@sha256:3727db3ce8224fb6afddd5227739ac6e58f060bcc59f12ae24a351dba47dd4f6 | Open-source machine translation API |
-| lidarr | lscr.io/linuxserver/lidarr:latest@sha256:f8d8ea187c97c893175cf74d6f22ce7d32820e94136b466a16dd06fedd765e30 | Music Automation |
+| lidarr | lscr.io/linuxserver/lidarr:latest@sha256:2452f5df3b6e3a267c419382a1e492c6831a5e46a01c3aec11c61a7810e15d6f | Music Automation |
 | lidify | thewicklowwolf/lidify:latest@sha256:958eaddeef8195470b974ee03512d9a5c31ad2af3167f7824448fb026fa9c94a | Music Discovery a la Last.fm, Spotify, Pandora, etc. |
 | linkstack | linkstackorg/linkstack:latest@sha256:abd691b4293b020a317de8794737671e0315159efcb868e8a4124d6f0611f7ae | Personal profile |
 | lldap | lldap/lldap:stable@sha256:9e605a66c02514bfcffd1b67cafb1e98d50992216bb2871d7ae44622047dd09d | LDAP made easy |
@@ -150,7 +150,7 @@
 | postal-web | ghcr.io/postalserver/postal:latest@sha256:86a5d7ce1f5293cfa612b58d43d4dda26ac8e12dc52b1f07b5fd7dedf699f7ba | OSS Mail delivery platform |
 | postal-worker | ghcr.io/postalserver/postal:latest@sha256:86a5d7ce1f5293cfa612b58d43d4dda26ac8e12dc52b1f07b5fd7dedf699f7ba |  |
 | protonmail-bridge | shenxn/protonmail-bridge@sha256:3717b4441130675dc9131196de9f9c5287d2ea21b138d83b0486429e1737638a |  |
-| prowlarr | lscr.io/linuxserver/prowlarr:latest@sha256:856c93bab72a6a41a23ff60bab48554135c044a456f40909307011dea8ddeafb | Index aggregator |
+| prowlarr | lscr.io/linuxserver/prowlarr:latest@sha256:fa81e471a7e46a24b121838563a10d468cf82eecd1587a464c6df4927ecc3248 | Index aggregator |
 | qbit-manage | ghcr.io/stuffanthings/qbit_manage:latest@sha256:64f749b97604d607747fc8b790821cf0317d8107385ea111afe1ed1c9d1d5b11 |  |
 | qbittorrentvpn | ghcr.io/binhex/arch-qbittorrentvpn:latest@sha256:e6556875ffa483ff603c0ed76c0c10122efad1edee2d9f5e4a94244accd5b3a3 | Fast and stable torrent client |
 | radarec | thewicklowwolf/radarec:latest@sha256:df726f35e3a1ef2f0cd482a6cf993bac8782804efd38ee8004c8694f7e8f526e | Movie discovery based on library/tastes |
