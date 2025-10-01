@@ -4090,7 +4090,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    image: docker.io/mongo:7
+    image: docker.io/mongo:7-jammy
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
