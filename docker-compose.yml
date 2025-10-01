@@ -4242,7 +4242,7 @@ services:
     environment:
       TZ: ${TZ}
       PORT: 20211
-    image: jokobsk/netalertx:latest@sha256:9a5f44f1fd65aa5962e7872d012cc332cabc24ce40768f18f4f76524e083b697
+    image: jokobsk/netalertx:latest@sha256:9304e29cd71bf9ddc9f33d6a7ddb3d71bab71815e077ab330f86bcc081598a79
     labels:
       cloudflare.tunnel.enable: true
       cloudflare.tunnel.hostname: net.${MY_TLD}
