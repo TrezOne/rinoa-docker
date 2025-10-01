@@ -15,7 +15,7 @@
 | audiobookshelf | ghcr.io/advplyr/audiobookshelf:latest@sha256:dd4a3079d26bfe9f0ea63de3e3eff483dfa25fef05ef850a5a9d121dca3794b2 | Podcasts, eBooks, & Audiobooks |
 | authelia | authelia/authelia:master | Authentication/authorization server with MFA & SSO |
 | authelia-pg | postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b |  |
-| authelia-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| authelia-valkey | docker.io/valkey/valkey:8-alpine |  |
 | bazarr | lscr.io/linuxserver/bazarr:latest@sha256:cf7a02a46d37899eeafd1d96b81984168f771f89c554a52a2fd35437fdc16cb6 | Subtitle automation for TV shows/movies |
 | beszel | henrygd/beszel:latest@sha256:cd539bbd1f8587b0302ef61bef0b8e9be3e637e8645b84688b64da5536045aad | Lightweight server monitoring hub |
 | beszel-agent | henrygd/beszel-agent:latest@sha256:0830d9eb7866d3dfe810d8a8ed4fc3dad2c51b3bc855e3558a9aa4e8886c99be |  |
@@ -24,7 +24,7 @@
 | browserless | ghcr.io/browserless/chromium:latest@sha256:04d6b2df747bae31aa1d885ce4a70539e5f92e1f489235e4e184ed1be1199051 |  |
 | bytestash | ghcr.io/jordan-dalby/bytestash:latest@sha256:f57d694a727bfbe1daf72acd3d98620b2ff9b1e4f4aafbacc5cda89c31da3512 | Code Gists/Snippets |
 | castopod | castopod/castopod:latest@sha256:e59262a89b035d1cb7decd7dcc387670c5ba81e31b67c7e0e89ef827d7f58ea9 | Podcast self-hosting |
-| castopod-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| castopod-valkey | docker.io/valkey/valkey:8-alpine |  |
 | changedetection | ghcr.io/dgtlmoon/changedetection.io@sha256:d8113bf66f47895d29c6935000bbac4c0f33d79588ae37d9ed6000ed328c5833 | Page change monitoring with alerts |
 | changedetection-chrome | dgtlmoon/sockpuppetbrowser:latest@sha256:9f2df6791a4cd9b2c3138cb62b5a8de7f27953cab84729fe09d28cbd341a8973 |  |
 | chrome | gcr.io/zenika-hub/alpine-chrome:123@sha256:e38563d4475a3d791e986500a2e4125c9afd13798067138881cf770b1f6f3980 |  |
@@ -39,7 +39,7 @@
 | dawarich-app | freikin/dawarich:latest@sha256:ea1bcc61d7fd94e59ecee710f6850230d11593a54128cfd1309a14c61cb32fd6 | Self-hosted alternative to Google Location History |
 | dawarich-pg-db | postgis/postgis:17-3.5-alpine@sha256:6ebb2b32a6d5315c8fc2b00427356eebd4778bfaf7211d4b28eac481f3d194ec |  |
 | dawarich-sidekiq | freikin/dawarich:latest@sha256:ea1bcc61d7fd94e59ecee710f6850230d11593a54128cfd1309a14c61cb32fd6 |  |
-| dawarich-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| dawarich-valkey | docker.io/valkey/valkey:8-alpine |  |
 | dead-man-hand | ghcr.io/bkupidura/dead-man-hand:latest@sha256:31905f19678f60d55ecdfa63dad009c07e2055cb5db0c608c8cab5de4467050e |  |
 | docker-socket-proxy | ghcr.io/tecnativa/docker-socket-proxy:latest@sha256:3400c429c5f9e1b21d62130fb93b16e2e772d4fb7695bd52fc2b743800b9fe9e |  |
 | dockflare | alplat/dockflare:stable@sha256:8c419e698cdf4160b7043197b1d674cdf82910fdc4e249ff52da3cf86f5b5383 | Cloudflare Tunnel controller |
@@ -68,7 +68,7 @@
 | immich-pg-db | tensorchord/pgvecto-rs:pg14-v0.2.1@sha256:9172feae86a211bc502db4ec2d3309a57329060b031d91796d39f45d1d698ef3 |  |
 | immich-public-proxy | alangrainger/immich-public-proxy:latest@sha256:bf9ae2b60f9cd69867789a2a492510443aa61cf01ab085475a08496ef35e67d0 | Immich Proxy for public sharing |
 | immich-power-tools | ghcr.io/varun-raj/immich-power-tools:latest@sha256:abfe87c08d6c08575649d7f4af04bd61ab2e5d3d54bdba693700595f70c92d0a |  |
-| immich-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| immich-valkey | docker.io/valkey/valkey:8-alpine |  |
 | influxdb2 | influxdb:2-alpine@sha256:fa166d3bdf6beeecf57791b70e558f6ef54e1e6cea95fb7728b45314bc48543b | Scalable datastore for metrics, events, and real-time analytics |
 | invidious | quay.io/invidious/invidious:latest@sha256:2836b5b8226a53a9cc2afdbd5f5fe6bccdd200f2e17cd92a828b4dc8d8b5cc06 | Alternative YouTube frontend (privacy-focused, ad-blocking) |
 | invidious-companion | quay.io/invidious/invidious-companion:latest |  |
@@ -96,15 +96,15 @@
 | loggifly | ghcr.io/clemcer/loggifly:latest@sha256:cf1968ac30dc34dd85a8358a48d0f9bb959cbbfe6b3beef6e7732ab703518812 |  |
 | maloja | krateng/maloja:latest@sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95 | Simple self-hosted music scrobble database to create personal listening statistics |
 | manyfold | lscr.io/linuxserver/manyfold:latest@sha256:b8f40d6f0b4bdd59d13d97c97c21d1e24b0276c8c4b8341855d2ca50bc9df25e | Self-hosted digital asset manager for 3D print files |
-| manyfold-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| manyfold-valkey | docker.io/valkey/valkey:8-alpine |  |
 | mariadb | linuxserver/mariadb@sha256:c7ca780abe5aba6d6a7643570ea30679aa0705da21c392355138660d8a5b6def |  |
 | mastodon | lscr.io/linuxserver/mastodon:latest@sha256:9cd791ad033e9a3c4bc8ab191b2b56d80c07b72fe632f8b2e215888eba22009e | Open-source social network |
 | mastodon-pg-db | postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80 |  |
-| mastodon-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| mastodon-valkey | docker.io/valkey/valkey:8-alpine |  |
 | maxun-backend | getmaxun/maxun-backend:latest@sha256:a5a5df99e2f5aed1838336b0b4aa75c083b949da96c8e1b3a2820b8cf44b459c |  |
 | maxun-frontend | getmaxun/maxun-frontend:latest@sha256:e5c889a2b8176646f0dc25662d6eb29e5b7b507b90c4250b0d18e3598b4636c5 | No-code web data extraction platform |
 | maxun-pg-db | postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80 |  |
-| maxun-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| maxun-valkey | docker.io/valkey/valkey:8-alpine |  |
 | meilisearch | getmeili/meilisearch:v1.22@sha256:328dc1698cc6f54bb811b8030ff864c6345144cded5ac89b6ab23fe9f747d723 |  |
 | meme-search-pro | ghcr.io/neonwatty/meme_search_pro:latest@sha256:bf3c20a6a0407ffa594d3e2fe8611073c0499659c90f44a28decd5e701e9e1f6 | Meme search engine built with Python and Ruby |
 | meme-search-pro-img2txt-gen | ghcr.io/neonwatty/image_to_text_generator:latest@sha256:e8445afab38e2eae1fcb95101dd26cf66708ef72127b291cab748050b4700cb8 |  |
@@ -112,9 +112,9 @@
 | mini-qr | ghcr.io/lyqht/mini-qr:latest@sha256:fb1dda0d80802c40b2d062fca192510498043c6436aef559c076931ff6b0887d | Scan and generate customized QR codes easily |
 | minio | minio/minio:RELEASE.2025-04-22T22-12-26Z@sha256:a1ea29fa28355559ef137d71fc570e508a214ec84ff8083e39bc5428980b015e | S3-compatible storage backend |
 | mixpost | inovector/mixpost:latest@sha256:088a0eed84289e9a408294acea969c1eebf80dff803d165629fe20c3442b0f8c | Multi-channel social media manager |
-| mixpost-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| mixpost-valkey | docker.io/valkey/valkey:8-alpine |  |
 | mgob | stefanprodan/mgob@sha256:d089c6d105d7d0f9db5222786cb93d85b1bf61e28b21ad717cea90f92570c8f3 | Headless Automated MongoDB Backups |
-| mongodb | bitnami/mongodb:7.0@sha256:16a57fa081f18e7acd1b4de1cd74f3e294cc6de861007e6fe3a418eb61db8a54 |  |
+| mongodb | library/mongo:7 |  |
 | multi-scrobbler | foxxmd/multi-scrobbler@sha256:e23ddda129ea2a8e9a009ef73d62af910ac25e6213c833680886b7002c5bb6fa | JS App for scrobbling/recording play history from/to multiple sources |
 | n8n | docker.n8n.io/n8nio/n8n@sha256:57f95a26b1b28527053fba6316d9d046395d9b4da9d0da486e838384a38fcf37 | Extendable workflow automation tool to easily automate tasks |
 | navidrome | deluan/navidrome:latest@sha256:2ae037d464de9f802d047165a13b1c9dc2bdbb14920a317ae4aef1233adc0a3c | Music Streaming |
@@ -122,15 +122,15 @@
 | nextcloud | nextcloud/all-in-one:latest@sha256:9be7362a88a21bb1c11d6d5085317685d57ea8b28b7375be39fd71e66340cbf3 | Private Cloud |
 | nocodb | nocodb/nocodb:latest@sha256:71d5b23640a9f5068bab26cf5b4c6a733709677a2c78664b132beaf24d766246 | Turn any SQL-based database into a smart spreadsheet |
 | nocodb-pg-db | postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b |  |
-| nocodb-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| nocodb-valkey | docker.io/valkey/valkey:8-alpine |  |
 | ollama | ollama/ollama:latest@sha256:c622a7adec67cf5bd7fe1802b7e26aa583a955a54e91d132889301f50c3e0bd0 |  |
 | ombi | lscr.io/linuxserver/ombi:latest@sha256:218d7f17ad284f35e2a7887c95f106da4d192df1d846ee22abcdbbdd30a7dfd9 | Media Requests |
 | omnitools | iib0011/omni-tools:latest@sha256:47747ad48020859ddff110b92b14799b034fc7a5f8f86160fbb8e4f1f5cf0f37 | Tools for common tasks |
 | omnipoly | kweg/omnipoly:latest@sha256:6739c1b665859493bbdc49269e39ff6c8e9a7de8e8a884e44e6579512adf5bcd | Open-source language translation with LanguageTool, LibreTranslate, & Ollama |
 | open-webui | ghcr.io/open-webui/open-webui:main@sha256:c77fa8da6d702ed064b36d414a9493e0bc5242d9a5a3ea0828c5013cbf35b1d5 | User-friendly and extensible AI interface |
-| open-webui-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| open-webui-valkey | docker.io/valkey/valkey:8-alpine |  |
 | paperless-ngx | ghcr.io/paperless-ngx/paperless-ngx:latest@sha256:3421ebe06ed27662d014046cf5089e612de853aae0c676a2bc72f73b38080e57 | Document indexer & archiver with OCR |
-| paperless-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| paperless-valkey | docker.io/valkey/valkey:8-alpine |  |
 | penpot-frontend | penpotapp/frontend:latest@sha256:91b80791f37b44c9aba3490720ae90fc01c691562c0862abeebcb8bc0a7198d2 | Open-source design and prototyping platform |
 | penpot-backend | penpotapp/backend:latest@sha256:cfae17cff120a73c80e2237b7f664b44765b859a874896a377f09d8083463514 |  |
 | penpot-exporter | penpotapp/exporter:latest@sha256:79c4988d0ac1986e3e8a7a1e1041d54869bcf1b17779f0cc6553795666f685e4 |  |
@@ -141,7 +141,7 @@
 | planka | ghcr.io/plankanban/planka:2.0.0-rc.3@sha256:5a2a69ec7159a2f9c6679c31698e4b5b17ccf254d5bfc6e9be43e411b6de0c3d | Kanban board |
 | planka-pg-db | postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b |  |
 | plant-it | msdeluise/plant-it-server:latest@sha256:23ddf8660087d6b9f5dbdca2ca09817b84db45cb2d9d6e2e0176e70f514629e7 | 🪴 Self-hosted, open source gardening companion app |
-| plant-it-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| plant-it-valkey | docker.io/valkey/valkey:8-alpine |  |
 | plantuml-server | plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426 |  |
 | portainer | portainer/portainer-ce:alpine@sha256:c6908c1a2d036668799d51fb4d5ba5a5b3905509c7ac1b832c0fc0ef4c152f0e | Service delivery platform for containerized applications |
 | portchecker-web | ghcr.io/dsgnr/portcheckerio-web:latest@sha256:8bea203e8785541c0acac7860de9f70849b05806e0c6db1d83dfc1b8407a6077 | Service delivery platform for containerized applications |
@@ -161,13 +161,13 @@
 | redlib | quay.io/redlib/redlib:latest@sha256:c1fcda90dca9447d4aa7e18fd3ef85cc2044c29263490159e1ae4b472d0f285c | Redlib is a private front-end like Invidious but for Reddit |
 | rocketchat | registry.rocket.chat/rocketchat/rocket.chat:latest | Fully customizable communications platform with high standards of data protection |
 | romm | rommapp/romm:latest@sha256:a492592dad85b7d9bae9fca9ac958eb04492e383002abbd3566a7efb3b251091 | Beautiful, powerful, self-hosted ROM manager |
-| romm-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| romm-valkey | docker.io/valkey/valkey:8-alpine |  |
 | sabnzbdvpn | ghcr.io/binhex/arch-sabnzbdvpn:latest@sha256:bbd64cb8343589f027a69e6174ab96f1bf31f4328fd75351b44330aa146cd7fd | NZB Downloader over VPN |
 | sablier | sablierapp/sablier:latest@sha256:4d4096b59a6e1496bd3106c1a90a7fdd161aafb73d58539b8c749c69380dedae |  |
 | scraparr | ghcr.io/thecfu/scraparr:2@sha256:4aa7e22f7a632082dbfe6e4be694068b08e5764b83c95339220ff2b33bf43be2 |  |
 | scrutiny | ghcr.io/analogj/scrutiny:master-omnibus@sha256:cc88f7babededd75ec01a631bf53671d8be0acbe0c8a80f7ba4d41454a5fc52b | WebUI for smartd S.M.A.R.T monitoring |
 | searxng | searxng/searxng:latest@sha256:a9f4ea46eabf1c7d8d1f9ded7c497862a7805d070c62025cab803c0c28a34662 | Anonymized Meta-Search Engine |
-| searxng-valkey | docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a |  |
+| searxng-valkey | docker.io/valkey/valkey:8-alpine |  |
 | semaphore-ui | semaphoreui/semaphore:v2.16.31@sha256:7c9617ecd6233a019c85f52b122108c1113458c3cf91554145f3c56d4dbc25b3 | Modern UI for Ansible, Terraform, OpenTofu, PowerShell and other DevOps tools |
 | signoz-app | signoz/signoz:v0.96.1@sha256:e2cded000c87adb0366c9ae4f292e034515458552d151879195071ba4f078b4e | Logs, metrics, and traces in a single pane |
 | signoz-clickhouse | clickhouse/clickhouse-server:25.5.6-alpine |  |
