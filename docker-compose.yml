@@ -1873,7 +1873,7 @@ services:
       mail__options__auth__pass: ${POSTAL_SMTP_AUTH_PASSWORD}
       mail__from: "'Ghost @ Rinoa' <noreply@${MY_TLD}>"
       url: https://blog.${MY_TLD}
-    image: ghost:latest@sha256:c44395f47a878b2bc3424062bf8d6b15ca38e8bf96468aa9c904797e0f3b9a10
+    image: ghost:latest@sha256:dd8091333f22465f6bb2a01636eb7fca155d1e954357f68726bfe3dd35c681e4
     labels:
       homepage.group: Lifestyle
       homepage.name: Ghost
