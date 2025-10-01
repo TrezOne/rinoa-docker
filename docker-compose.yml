@@ -580,7 +580,7 @@ services:
       POSTGRES_DB: authelia
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:7bc0121ccbb158ddfcf0a39225aaafbfadd2cd3c71fa823584091e533e1c9073
+    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -4374,7 +4374,7 @@ services:
       retries: 10
       test: 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
       timeout: 2s
-    image: postgres:16-alpine@sha256:7bc0121ccbb158ddfcf0a39225aaafbfadd2cd3c71fa823584091e533e1c9073
+    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -4865,7 +4865,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: postgres:16-alpine@sha256:7bc0121ccbb158ddfcf0a39225aaafbfadd2cd3c71fa823584091e533e1c9073
+    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -5449,7 +5449,7 @@ services:
       POSTGRES_PASSWORD: ${REACTIVE_RESUME_PGSQL_PASSWORD}
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:7bc0121ccbb158ddfcf0a39225aaafbfadd2cd3c71fa823584091e533e1c9073
+    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -6582,7 +6582,7 @@ services:
       POSTGRES_USER: tandoor
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:7bc0121ccbb158ddfcf0a39225aaafbfadd2cd3c71fa823584091e533e1c9073
+    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
     networks:
       default: null
     profiles: ["rinoa-apps"]
