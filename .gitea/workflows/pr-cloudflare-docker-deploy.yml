@@ -203,7 +203,7 @@ jobs:
           echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Dry Run
-        uses: hoverkraft-tech/compose-action@40041ff1b97dbf152cd2361138c2b03fa29139df # v2.3.0
+        uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43 # v2.4.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
@@ -452,7 +452,7 @@ jobs:
           echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Deployment
-        uses: hoverkraft-tech/compose-action@40041ff1b97dbf152cd2361138c2b03fa29139df # v2.3.0
+        uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43 # v2.4.0
         env:
           DOCKER_HOST: tcp://dockerproxy:2375
         with:
