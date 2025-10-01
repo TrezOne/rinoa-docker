@@ -5416,7 +5416,7 @@ services:
       STORAGE_URL: https://s3.${MY_TLD}/reactive-resume
       STORAGE_USE_SSL: false
       TZ: ${TZ}
-    image: amruthpillai/reactive-resume:latest@sha256:53ce201e15d79535494d278fd13658f57d0331f2b5eba12163bf38b879366c65
+    image: amruthpillai/reactive-resume:latest@sha256:46999abe24b0d41fb8b3c32e479f06035fa755db8c3243d03335e74fa6a2e74f
     labels:
       homepage.group: Professional Services
       homepage.name: Reactive Resume
