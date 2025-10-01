@@ -112,7 +112,7 @@ x-signoz-db-depend: &signoz-db-depend
 x-valkey-params: &valkey-params
   healthcheck:
     test: redis-cli ping || exit 1
-  image: docker.io/bitnami/valkey:latest@sha256:0384ca2eec63789450b2e07a00f377c2c9d0b548c2e346e1003bc0dd629fa71a
+  image: docker.io/valkey/valkey:8-alpine
   environment:
     ALLOW_EMPTY_PASSWORD: yes
     VALKEY_DATA_DIR: /data/valkey
@@ -4085,25 +4085,21 @@ services:
       - ${DOCKER_VOLUME_STORAGE}/backups/dbs/mongodb:/storage
       - ${DOCKER_VOLUME_CONFIG}/mgob/config:/config
   mongodb:
+    command: "--config /etc/mongodb/mongod.conf"
     container_name: mongodb
     environment:
-      MONGODB_ADVERTISED_HOSTNAME: mongodb
-      MONGODB_ENABLE_DIRECTORY_PER_DB: true
-      MONGODB_SYSTEM_LOG_VERBOSITY: 1
-      MONGODB_ROOT_USER: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGODB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ALLOW_EMPTY_PASSWORD: yes
-      MONGODB_REPLICA_SET_MODE: primary
-      MONGODB_REPLICA_SET_NAME: rinoa
-      MONGODB_REPLICA_SET_KEY: ${MONGODB_REPLICA_SET_KEY}
-    image: bitnami/mongodb:7.0@sha256:16a57fa081f18e7acd1b4de1cd74f3e294cc6de861007e6fe3a418eb61db8a54
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    image: mongodb:7.0
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
-      - mongodb_data:/data/db
-      - mongodb_config:/data/configdb
+      - ${DOCKER_VOLUME_CONFIG}/mongodb/config:/etc/mongodb
+      - ${DOCKER_VOLUME_CONFIG}/mongodb/db:/data/mongodb/dbs
+      - ${DOCKER_VOLUME_CONFIG}/mongodb/logs:/data/mongodb/logs
+      - ${DOCKER_VOLUME_CONFIG}/mongodb/tmp:/data/mongodb/tmp
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
