@@ -544,7 +544,7 @@ services:
       X_AUTHELIA_CONFIG_FILTERS: template
     expose:
       - 9091
-    image: authelia/authelia:master@sha256:2e9c40f59770814d99c08ac03c172216734377d8a554e17b7fe564cd2170ed97
+    image: authelia/authelia:master@sha256:d397592a4a24766c09f514617d5594f005439757213c52622c5a45f633df1e25
     labels:
       homepage.group: Privacy/Security
       homepage.name: Authelia
