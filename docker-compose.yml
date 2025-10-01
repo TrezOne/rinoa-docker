@@ -544,7 +544,7 @@ services:
       X_AUTHELIA_CONFIG_FILTERS: template
     expose:
       - 9091
-    image: authelia/authelia:master@sha256:91cfc866b0d875cc81bdf258552d25dd51c977a7c45cc670619b03ecf349a02c
+    image: authelia/authelia:master
     labels:
       homepage.group: Privacy/Security
       homepage.name: Authelia
@@ -2238,11 +2238,12 @@ services:
       swag_proto: http
       swag_port: 2283
       swag_url: pics.${MY_TLD}
-      swag_server_custom_directive: location /share {
-        proxy_pass http://immich-public-proxy:3000;
+      swag_server_custom_directive: |
+        location /share {
+          proxy_pass http://immich-public-proxy:3000;
         }
         location /tools {
-        proxy_pass http://immich-power-tools:3000;
+          proxy_pass http://immich-power-tools:3000;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -2413,6 +2414,10 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: invid.${MY_TLD}
+      swag_server_custom_directive: |
+        location /companion {
+          proxy_pass http://invidious-companion:8282
+        }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
       swag.uptime-kuma.name: Invidious
@@ -2433,22 +2438,26 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/invidious/config.yml:/config.yml
-  invidious-sig-helper:
+  invidious-companion:
     cap_drop:
       - ALL
-    command: ["--tcp", "0.0.0.0:12999"]
-    container_name: invidious-sig-helper
-    image: quay.io/invidious/inv-sig-helper:latest@sha256:39fee87693ef3d71c212d9511f2adb3230783753342321489deab17caa87c42f
-    init: true
+    container_name: invidious-companion
     environment:
-      RUST_LOG: info
-    expose:
-      - 12999
+      SERVER_SECRET_KEY: ${INVID_COMPANION_KEY}
+    image: quay.io/invidious/invidious-companion:latest
+    logging:
+      options:
+        max-size: "1G"
+        max-file: "4"
+    ports:
+      - 16290:8282
     profiles: ["rinoa-apps"]
-    restart: unless-stopped
     read_only: true
+    restart: unless-stopped
     security_opt:
       - no-new-privileges:true
+    volumes:
+      - invidious-companion-cache:/var/tmp/youtubei.js:rw
   invidious-db:
     container_name: invidious-db
     environment:
@@ -3809,9 +3818,9 @@ services:
       swag_proto: http
       swag_port: 5173
       swag_url: scrape.${MY_TLD}
-      swag_server_custom_directive:
+      swag_server_custom_directive: |
         location ~ ^/(auth|storage|record|workflow|robot|proxy|api-docs|api|webhook|socket.io)(/|$) {
-        proxy_pass http://maxun-backend:8080;
+          proxy_pass http://maxun-backend:8080;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -4912,8 +4921,9 @@ services:
       swag_proto: http
       swag_port: 3000
       swag_url: plants.${MY_TLD}
-      swag_server_custom_directive: location /api {
-        proxy_pass http://plant-it:8080;
+      swag_server_custom_directive: |
+        location /api {
+          proxy_pass http://plant-it:8080;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -5249,8 +5259,9 @@ services:
       homepage.widget.user: admin
       homepage.widget.password: "${DELUGEVPN_PASSWORD}"
       swag: enable
-      swag_server_custom_directive: location /mgmt {
-        proxy_pass http://qbit-manage:8080;
+      swag_server_custom_directive: |
+        location /mgmt {
+          proxy_pass http://qbit-manage:8080;
         }
       swag_port: 8080
       swag_proto: http
@@ -7224,6 +7235,8 @@ volumes:
     name: influxdb2-data
   influxdb2-config:
     name: influxdb2-config
+  invidious-companion-cache:
+    name: invidious-companion-cache
   invidious-postgres:
     name: invidious-postgres
   invoice-ninja_cache:
