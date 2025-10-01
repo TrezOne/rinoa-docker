@@ -4737,7 +4737,7 @@ services:
       - penpot-pg-data:/var/lib/postgresql/data
   penpot-redis:
     container_name: penpot-redis
-    image: redis:7.4@sha256:09153b57c664fdd8a0136cf0d3fa31c173e4502afa9f642a037790acb4c7cb2f
+    image: redis:7.4@sha256:4e71acdfc44ed0a9196af2f09589ee12a8f126eca2b3dc816fe3a949afcf985f
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       interval: 1s
