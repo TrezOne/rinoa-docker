@@ -4727,7 +4727,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 2s
-    image: postgres:15-alpine@sha256:5a10f9df4df8b16d59b20fbccba377d7e4ff6bc7e58f1cfb903eb84c6183bc28
+    image: postgres:15-alpine@sha256:52af010baaeb34a287e7b5ea9696720727bd5bace64f9c18068ee187a6d6a4b2
     profiles: ["rinoa-apps"]
     restart: always
     stop_signal: SIGINT
@@ -6656,7 +6656,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    image: postgres:15-alpine@sha256:5a10f9df4df8b16d59b20fbccba377d7e4ff6bc7e58f1cfb903eb84c6183bc28
+    image: postgres:15-alpine@sha256:52af010baaeb34a287e7b5ea9696720727bd5bace64f9c18068ee187a6d6a4b2
     volumes:
       - umami-db-data:/var/lib/postgresql/data
     profiles: ["rinoa-apps"]
