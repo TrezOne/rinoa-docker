@@ -1,48 +1,58 @@
-name: "Pre-pull/build Docker images in parallel with timing"
-description: "Prepares all services for docker compose dry-run by pulling or building them concurrently with logs"
+name: "Pre-pull/build Docker images in parallel"
+description: "Prepares services for docker compose dry-run by pulling or building them concurrently"
+author: "Your Name <you@example.com>"
+
 inputs:
   services:
     description: "Space-separated list of docker-compose services"
     required: true
+
 runs:
   using: "composite"
   steps:
-    - name: Install yq (if missing)
+    - name: Pre-pull/build services
       shell: bash
       run: |
-        if ! command -v yq >/dev/null 2>&1; then
-          echo "Installing yq..."
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
+        set -euo pipefail
+
+        SERVICES="${{ inputs.services }}"
+        if [ -z "$SERVICES" ]; then
+          echo "❌ No services provided. Exiting."
+          exit 1
         fi
 
-    - name: Pre-pull/build images in parallel
-      shell: bash
-      run: |
-        SERVICES="${{ inputs.services }}"
-        echo "Services to process: $SERVICES"
+        echo "Services to process:"
+        echo "$SERVICES"
+
         for svc in $SERVICES; do
-          (
-            echo "🔹 Starting prep for service: $svc"
-            start_time=$(date +%s)
+        (
+          echo "🔹 Starting prep for service: $svc"
+          start_time=$(date +%s)
 
-            image=$(docker compose config | yq -r ".services[\"$svc\"].image // empty")
-            build_dir=$(docker compose config | yq -r ".services[\"$svc\"].build.context // empty")
+          # Get image name; default to empty string if missing
+          image=$(docker compose config | yq -r ".services[\"$svc\"].image // \"\"")
+          # Get build context; default to empty string if missing
+          build_dir=$(docker compose config | yq -r ".services[\"$svc\"].build.context // \"\"")
 
-            if [ -n "$image" ]; then
-              echo "➡️ Pulling image: $image"
-              docker pull "$image"
-            elif [ -n "$build_dir" ]; then
-              echo "⚙️ Building service: $svc from context: $build_dir"
-              docker compose build "$svc"
-            else
-              echo "⚠️ No image or build context found for $svc — skipping"
+          if [ -n "$image" ]; then
+            echo "➡️ Pulling image for $svc: $image"
+            if ! docker pull "$image"; then
+              echo "⚠️ Failed to pull image $image for service $svc"
             fi
+          elif [ -n "$build_dir" ]; then
+            echo "⚙️ Building service: $svc from context: $build_dir"
+            if ! docker compose build "$svc"; then
+              echo "⚠️ Failed to build service $svc"
+            fi
+          else
+            echo "⚠️ No image or build context for $svc — skipping"
+          fi
 
-            end_time=$(date +%s)
-            duration=$((end_time - start_time))
-            echo "✅ Finished $svc in ${duration}s"
-          ) &
+          end_time=$(date +%s)
+          duration=$((end_time - start_time))
+          echo "✅ Finished $svc in ${duration}s"
+        ) &
         done
+
         wait
         echo "🎯 All services processed."
