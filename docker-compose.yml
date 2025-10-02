@@ -4090,7 +4090,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    image: library/mongo:7@sha256:4c65244b50910461b9641a76131f84a2dcfd4da487f928298cea626b3842842c
+    image: library/mongo:7@sha256:6a27f932a0784bd2b4a9d7ae6fa983a661f96abcc193331a98f5ce7134693135
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
