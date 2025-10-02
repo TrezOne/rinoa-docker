@@ -4954,7 +4954,7 @@ services:
       homepage.name: PlantUML
       homepage.href: https://plantuml.${MY_TLD}
       homepage.icon: plantuml.svg
-      homepage.description: Diagram creation tool
+      homepage.description: Textual diagram generator for UML and other visualizations.
       swag: enable
       swag_port: 8080
       swag_url: plantuml.${MY_TLD}
