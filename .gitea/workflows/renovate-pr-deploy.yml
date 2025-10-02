@@ -56,8 +56,8 @@ jobs:
           : > service_changes.txt
 
           comm -12 services_old.txt services_new.txt | while read service; do
-            old_image=$(yq eval ".services[\"$service\"].image // \"\"" docker-compose-old-flat.yml)
-            new_image=$(yq eval ".services[\"$service\"].image // \"\"" docker-compose-new-flat.yml)
+            old_image=$(yq eval-all --yaml-fix-merge-anchor-to-spec=true ".services[\"$service\"].image // \"\"" docker-compose-old-flat.yml)
+            new_image=$(yq eval-all --yaml-fix-merge-anchor-to-spec=true ".services[\"$service\"].image // \"\"" docker-compose-new-flat.yml)
 
             if [ "$old_image" != "$new_image" ]; then
               echo "$service" >> service_changes.txt
@@ -124,6 +124,7 @@ jobs:
           services: |
             ${{ steps.detect_services.outputs.docker_svc_list }}
           up-flags: -d --remove-orphans
+          down-flags: --dry-run
           services-log-level: debug
 
       - name: Docker Compose Healthcheck
