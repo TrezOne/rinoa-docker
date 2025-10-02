@@ -160,10 +160,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
-      # - name: Login to Gitea Container Registry
-      #   run: |
-      #     docker login -u gitea-sonarqube-bot -p ${RINOA_REGISTRY_PASSWORD} git.trez.wtf
-
       - name: Login to Docker Hub
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
@@ -184,10 +180,13 @@ jobs:
           username: ${{ secrets.BOT_GITEA_USER }}
           password: ${{ secrets.BOT_GITEA_PASSWORD }}
 
-      - name: Install Vault (only if not cached)
-        uses: cpanato/vault-installer@main
-        with:
-          version: ${{ env.HC_VAULT_VERSION }}
+      # - name: Generate .env file from Hashicorp Vault
+      #   uses: Simporter/get-env-file-from-vault@v1.0.3
+      #   with:
+      #     VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
+      #     VAULT_USERNAME: ${{ secrets.VAULT_GITEA_USER }}
+      #     VAULT_PASSWORD: "${{ secrets.VAULT_GITEA_PASSWORD }}"
+      #     VAULT_SECRETS_PATH: rinoa-docker/env
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -197,10 +196,22 @@ jobs:
           notification_title: "GITEA: Docker Compose Dry Run @ Rinoa"
           notification_message: "Starting Docker Compose dry run..."
 
+      - name: Install Vault (only if not cached)
+        uses: cpanato/vault-installer@main
+        with:
+          version: ${{ env.HC_VAULT_VERSION }}
+
       - name: Generate .env file for Docker Compose
         run: |
           vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
           echo ${DOCKER_SVC_LIST}
+
+      - name: Pre-pull/build service images in parallel
+        uses: ./.gitea/actions/docker-img-pre-pull
+        with:
+          services: ${{ env.DOCKER_SVC_LIST }}
+          compose_profile: "rinoa-apps"
+          env_file: ".env"
 
       - name: Docker Compose Dry Run
         uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43 # v2.4.0

@@ -142,7 +142,7 @@
 | planka-pg-db | postgres:16-alpine@sha256:66266770619a23ab310c7fa60043b6d1fa041038cb232ced59d2c509fecd297b |  |
 | plant-it | msdeluise/plant-it-server:latest@sha256:23ddf8660087d6b9f5dbdca2ca09817b84db45cb2d9d6e2e0176e70f514629e7 | 🪴 Self-hosted, open source gardening companion app |
 | plant-it-valkey | docker.io/valkey/valkey:8-alpine |  |
-| plantuml-server | plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426 |  |
+| plantuml-server | plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426 | Textual diagram generator for UML & other visualizations. |
 | portainer | portainer/portainer-ce:alpine@sha256:c6908c1a2d036668799d51fb4d5ba5a5b3905509c7ac1b832c0fc0ef4c152f0e | Service delivery platform for containerized applications |
 | portchecker-web | ghcr.io/dsgnr/portcheckerio-web:latest@sha256:8bea203e8785541c0acac7860de9f70849b05806e0c6db1d83dfc1b8407a6077 | Service delivery platform for containerized applications |
 | portchecker-api | ghcr.io/dsgnr/portcheckerio-api:latest@sha256:7783796d791c3e10aedba9d5f7fc2b934bb0e7afa75bc89054b70b886ed39e5c |  |

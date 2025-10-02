@@ -1,0 +1,76 @@
+name: "Pre-pull Docker Compose service images"
+description: "Prepares Docker Compose services by pulling images in parallel before dry-run"
+author: "Your Name <you@example.com>"
+
+inputs:
+  services:
+    description: "Space-separated list of Docker Compose services"
+    required: true
+  compose_profile:
+    description: "Docker Compose profile to use (optional)"
+    required: false
+    default: ""
+  env_file:
+    description: "Path to .env file (optional)"
+    required: false
+    default: ".env"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install yq
+      shell: bash
+      run: |
+        if ! command -v yq >/dev/null; then
+          echo "Installing yq..."
+          wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          chmod +x /usr/local/bin/yq
+        fi
+
+    - name: Pre-pull/build services
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        SERVICES="${{ inputs.services }}"
+        PROFILE="${{ inputs.compose_profile }}"
+        ENV_FILE="${{ inputs.env_file }}"
+
+        if [ -z "$SERVICES" ]; then
+          echo "❌ No services provided. Exiting."
+          exit 1
+        fi
+
+        echo "Services to process:"
+        echo "$SERVICES"
+
+        CONFIG_CMD="docker compose"
+        if [ -n "$PROFILE" ]; then
+          CONFIG_CMD="$CONFIG_CMD --profile $PROFILE"
+        fi
+        CONFIG_CMD="$CONFIG_CMD --env-file $ENV_FILE config"
+
+        for svc in $SERVICES; do
+        (
+          echo "🔹 Starting prep for service: $svc"
+          start_time=$(date +%s)
+
+          image=$(eval $CONFIG_CMD | yq -r ".services[\"$svc\"].image // \"\"")
+
+          if [ -n "$image" ] && [ "$image" != "null" ]; then
+            echo "➡️ Pulling image for $svc: $image"
+            if ! docker pull "$image"; then
+              echo "⚠️ Failed to pull image $image for service $svc"
+            fi
+          else
+            echo "⚠️ No image defined for $svc — skipping"
+          fi
+
+          end_time=$(date +%s)
+          duration=$((end_time - start_time))
+          echo "✅ Finished $svc in ${duration}s"
+        ) &
+        done
+
+        wait
+        echo "🎯 All services processed."

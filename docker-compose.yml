@@ -2416,7 +2416,7 @@ services:
       swag_url: invid.${MY_TLD}
       swag_server_custom_directive: |
         location /companion {
-          proxy_pass http://invidious-companion:8282
+          proxy_pass http://invidious-companion:8282;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -4097,9 +4097,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/mongodb/config:/etc/mongodb
-      - ${DOCKER_VOLUME_CONFIG}/mongodb/db:/data/mongodb/dbs
-      - ${DOCKER_VOLUME_CONFIG}/mongodb/logs:/data/mongodb/logs
-      - ${DOCKER_VOLUME_CONFIG}/mongodb/tmp:/data/mongodb/tmp
+      - ${DOCKER_VOLUME_CONFIG}/mongodb/db:/data/db
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
@@ -4950,9 +4948,24 @@ services:
       - plant-it-valkey-data:/data/valkey
   plantuml-server:
     container_name: plantuml-server
-    expose:
-      - 8080
-    image: "plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426"
+    image: plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426
+    labels:
+      homepage.group: Personal Tools
+      homepage.name: PlantUML
+      homepage.href: https://plantuml.${MY_TLD}
+      homepage.icon: plantuml.svg
+      homepage.description: Textual diagram generator for UML & other visualizations.
+      swag: enable
+      swag_port: 8080
+      swag_url: plantuml.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.parent: Rinoa
+      swag.uptime-kuma.monitor.url: https://plantuml.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+    ports:
+      - 42262:8080
     profiles: ["rinoa-apps"]
     restart: unless-stopped
   portainer:
