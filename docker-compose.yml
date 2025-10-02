@@ -4954,7 +4954,7 @@ services:
       homepage.name: PlantUML
       homepage.href: https://plantuml.${MY_TLD}
       homepage.icon: plantuml.svg
-      homepage.description: Kanban board
+      homepage.description: Diagram creation tool
       swag: enable
       swag_port: 8080
       swag_url: plantuml.${MY_TLD}

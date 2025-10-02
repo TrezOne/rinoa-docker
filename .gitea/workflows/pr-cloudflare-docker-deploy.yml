@@ -189,6 +189,19 @@ jobs:
         with:
           version: ${{ env.HC_VAULT_VERSION }}
 
+      - name: Gotify Notification
+        uses: eikendev/gotify-action@master
+        with:
+          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
+          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
+          notification_title: "GITEA: Docker Compose Dry Run @ Rinoa"
+          notification_message: "Starting Docker Compose dry run..."
+
+      - name: Generate .env file for Docker Compose
+        run: |
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          echo ${DOCKER_SVC_LIST}
+
       - name: Pre-pull service images
         run: |
           # Pull only the images needed for this dry run
@@ -202,19 +215,6 @@ jobs:
               echo "⚠️ No image defined for $svc (might be build-only)"
             fi
           done
-
-      - name: Gotify Notification
-        uses: eikendev/gotify-action@master
-        with:
-          gotify_api_base: "${{ secrets.RUNNER_GOTIFY_URL }}"
-          gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
-          notification_title: "GITEA: Docker Compose Dry Run @ Rinoa"
-          notification_message: "Starting Docker Compose dry run..."
-
-      - name: Generate .env file for Docker Compose
-        run: |
-          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-          echo ${DOCKER_SVC_LIST}
 
       - name: Docker Compose Dry Run
         uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43 # v2.4.0
