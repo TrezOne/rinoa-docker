@@ -104,6 +104,9 @@ jobs:
           notification_title: "GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa"
           notification_message: "Starting Docker Compose run..."
 
+      - run: |
+          echo ${{ steps.detect_services.outputs.docker_svc_list }}
+
       - name: Generate .env from Hashicorp Vault
         uses: https://git.trez.wtf/Trez/hc-vault-env@main
         with:
@@ -120,8 +123,7 @@ jobs:
         with:
           services: |
             ${{ steps.detect_services.outputs.docker_svc_list }}
-          up-flags: -d --remove-orphans --pull always
-          compose-flags: --profile rinoa-apps
+          up-flags: -d --remove-orphans
           services-log-level: debug
 
       - name: Docker Compose Healthcheck
