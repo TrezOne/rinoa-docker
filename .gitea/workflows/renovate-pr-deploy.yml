@@ -15,6 +15,7 @@ env:
 
 jobs:
   deploy:
+    name: Renovate PR Deployment
     if: |
       github.event.pull_request.merged == true &&
       github.event.pull_request.user.login == 'renovate-bot'
@@ -24,11 +25,6 @@ jobs:
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
           fetch-depth: 0 # required so we can access main^1
-
-      - name: Install Vault
-        uses: cpanato/vault-installer@main
-        with:
-          version: ${{ env.HC_VAULT_VERSION }}
 
       - name: Save docker-compose.yml before merge (old)
         run: |
@@ -80,11 +76,6 @@ jobs:
           echo "No image tag/digest changes detected. Exiting."
           exit 0
 
-      - name: Generate .env file for Docker Compose
-        run: |
-          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' \
-            | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-
       - name: Gotify Notification (Start)
         uses: eikendev/gotify-action@master
         with:
@@ -92,6 +83,15 @@ jobs:
           gotify_app_token: "${{ secrets.RUNNER_GOTIFY_TOKEN }}"
           notification_title: "GITEA: [RENOVATE] Docker Compose Deployment @ Rinoa"
           notification_message: "Starting Docker Compose run..."
+
+      - name: Generate .env from Hashicorp Vault
+        uses: https://git.trez.wtf/Trez/hc-vault-env@main
+        with:
+          HC_VAULT_VERSION: ${{ env.HC_VAULT_VERSION }}
+          HC_VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
+          HC_VAULT_USERNAME: ${{ secrets.VAULT_GITEA_USER }}
+          HC_VAULT_PASSWORD: ${{ secrets.VAULT_GITEA_PASSWORD }}
+          HC_VAULT_SECRETS_PATH: rinoa-docker/env
 
       - name: Docker Compose Deployment
         uses: hoverkraft-tech/compose-action@b716db5b717cb9b81e391fe638e5aceaa2299e43 # v2.4.0
