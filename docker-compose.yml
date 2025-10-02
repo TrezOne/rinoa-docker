@@ -112,7 +112,7 @@ x-signoz-db-depend: &signoz-db-depend
 x-valkey-params: &valkey-params
   healthcheck:
     test: redis-cli ping || exit 1
-  image: docker.io/valkey/valkey:8-alpine
+  image: docker.io/valkey/valkey:8-alpine@sha256:d827e7f7552cdee40cc7482dbae9da020f42bc47669af6f71182a4ef76a22773
   environment:
     ALLOW_EMPTY_PASSWORD: yes
     VALKEY_DATA_DIR: /data/valkey
@@ -544,7 +544,7 @@ services:
       X_AUTHELIA_CONFIG_FILTERS: template
     expose:
       - 9091
-    image: authelia/authelia:master
+    image: authelia/authelia:master@sha256:2e663a00fca9694fd0fcb686c3e9319a284263cfb8a0e6945c1518632268809e
     labels:
       homepage.group: Privacy/Security
       homepage.name: Authelia
@@ -2444,7 +2444,7 @@ services:
     container_name: invidious-companion
     environment:
       SERVER_SECRET_KEY: ${INVID_COMPANION_KEY}
-    image: quay.io/invidious/invidious-companion:latest
+    image: quay.io/invidious/invidious-companion:latest@sha256:6e50b4291b4bc4aa37a6425d2e059481216b7ab73ef2828b78ad82a9c3c70568
     logging:
       options:
         max-size: "1G"
@@ -4090,7 +4090,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    image: library/mongo:7
+    image: library/mongo:7@sha256:4c65244b50910461b9641a76131f84a2dcfd4da487f928298cea626b3842842c
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
