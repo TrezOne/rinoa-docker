@@ -3943,7 +3943,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/meme-search-db:/var/lib/postgresql/data
   mini-qr:
     container_name: mini-qr
-    image: ghcr.io/lyqht/mini-qr:latest@sha256:fb1dda0d80802c40b2d062fca192510498043c6436aef559c076931ff6b0887d
+    image: ghcr.io/lyqht/mini-qr:latest@sha256:af6b47968cb2c400d701eb3f6defe06c79a75a2af7a423bf272df3e3ccbbacd8
     labels:
       swag: enable
       swag_auth: authelia
