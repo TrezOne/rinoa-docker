@@ -74,7 +74,27 @@ jobs:
         if: steps.detect_services.outputs.docker_svc_list == ''
         run: |
           echo "No image tag/digest changes detected. Exiting."
-          exit 0
+          exit 1
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USER }}
+          password: ${{ secrets.GHCR_LOGIN_TOKEN }}
+
+      - name: Login to Private Gitea Registry
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        with:
+          registry: git.trez.wtf
+          username: ${{ secrets.BOT_GITEA_USER }}
+          password: ${{ secrets.BOT_GITEA_PASSWORD }}
 
       - name: Gotify Notification (Start)
         uses: eikendev/gotify-action@master
@@ -102,6 +122,7 @@ jobs:
             ${{ steps.detect_services.outputs.docker_svc_list }}
           up-flags: -d --remove-orphans --pull always
           compose-flags: --profile rinoa-apps
+          services-log-level: debug
 
       - name: Docker Compose Healthcheck
         id: health
