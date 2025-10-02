@@ -211,7 +211,6 @@ jobs:
           services: |
             ${{ needs.generate-service-list.outputs.svc_deploy_list }}
           up-flags: -d --remove-orphans --dry-run
-          down-flags: --dry-run
           compose-flags: --dry-run --profile rinoa-apps
           services-log-level: debug
 
