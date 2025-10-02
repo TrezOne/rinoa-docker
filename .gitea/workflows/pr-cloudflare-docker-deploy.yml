@@ -180,18 +180,13 @@ jobs:
           username: ${{ secrets.BOT_GITEA_USER }}
           password: ${{ secrets.BOT_GITEA_PASSWORD }}
 
-      # - name: Install Vault (only if not cached)
-      #   uses: cpanato/vault-installer@main
+      # - name: Generate .env file from Hashicorp Vault
+      #   uses: Simporter/get-env-file-from-vault@v1.0.3
       #   with:
-      #     version: ${{ env.HC_VAULT_VERSION }}
-
-      - name: Generate .env file from Hashicorp Vault
-        uses: Simporter/get-env-file-from-vault@v1.0.3
-        with:
-          VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
-          VAULT_USERNAME: ${{ secrets.VAULT_GITEA_USER }}
-          VAULT_PASSWORD: "${{ secrets.VAULT_GITEA_PASSWORD }}"
-          VAULT_SECRETS_PATH: rinoa-docker/env
+      #     VAULT_ADDR: ${{ secrets.TREZ_VAULT_ADDR }}
+      #     VAULT_USERNAME: ${{ secrets.VAULT_GITEA_USER }}
+      #     VAULT_PASSWORD: "${{ secrets.VAULT_GITEA_PASSWORD }}"
+      #     VAULT_SECRETS_PATH: rinoa-docker/env
 
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
@@ -201,10 +196,15 @@ jobs:
           notification_title: "GITEA: Docker Compose Dry Run @ Rinoa"
           notification_message: "Starting Docker Compose dry run..."
 
-      # - name: Generate .env file for Docker Compose
-      #   run: |
-      #     vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
-      #     echo ${DOCKER_SVC_LIST}
+      - name: Install Vault (only if not cached)
+        uses: cpanato/vault-installer@main
+        with:
+          version: ${{ env.HC_VAULT_VERSION }}
+
+      - name: Generate .env file for Docker Compose
+        run: |
+          vault kv get -format=json rinoa-docker/env | jq -r '.data.data' | jq -r 'keys[] as $k | "\($k)='\''\(.[$k])'\''"' > .env
+          echo ${DOCKER_SVC_LIST}
 
       - name: Pre-pull/build service images in parallel
         uses: ./.gitea/actions/docker-img-pre-pull
