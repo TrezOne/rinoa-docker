@@ -2416,7 +2416,7 @@ services:
       swag_url: invid.${MY_TLD}
       swag_server_custom_directive: |
         location /companion {
-          proxy_pass http://invidious-companion:8282
+          proxy_pass http://invidious-companion:8282;
         }
       swag.uptime-kuma.enabled: true
       swag.uptime-kuma.monitor.parent: Rinoa
@@ -4097,9 +4097,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/mongodb/config:/etc/mongodb
-      - ${DOCKER_VOLUME_CONFIG}/mongodb/db:/data/mongodb/dbs
-      - ${DOCKER_VOLUME_CONFIG}/mongodb/logs:/data/mongodb/logs
-      - ${DOCKER_VOLUME_CONFIG}/mongodb/tmp:/data/mongodb/tmp
+      - ${DOCKER_VOLUME_CONFIG}/mongodb/db:/data/db
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
