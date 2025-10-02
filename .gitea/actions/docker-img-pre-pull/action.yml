@@ -1,0 +1,37 @@
+name: "Pre-pull or Build Docker images"
+description: "Prepares all services for docker compose dry-run by pulling images or building them"
+inputs:
+  services:
+    description: "Space-separated list of docker-compose services"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install yq (if missing)
+      shell: bash
+      run: |
+        if ! command -v yq >/dev/null 2>&1; then
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+        fi
+
+    - name: Pre-pull/build images for services
+      shell: bash
+      run: |
+        echo "Services to resolve: ${{ inputs.services }}"
+        for svc in ${{ inputs.services }}; do
+          echo "Resolving image for service: $svc"
+          image=$(docker compose config | yq -r ".services[\"$svc\"].image // empty")
+          build_dir=$(docker compose config | yq -r ".services[\"$svc\"].build.context // empty")
+
+          if [ -n "$image" ]; then
+            echo "Pulling image: $image"
+            docker pull "$image"
+          elif [ -n "$build_dir" ]; then
+            echo "Building image for service: $svc from context: $build_dir"
+            docker compose build "$svc"
+          else
+            echo "⚠️ No image or build context for $svc — skipping"
+          fi
+        done
