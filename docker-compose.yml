@@ -4950,9 +4950,19 @@ services:
       - plant-it-valkey-data:/data/valkey
   plantuml-server:
     container_name: plantuml-server
-    expose:
-      - 8080
-    image: "plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426"
+    image: plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426
+    labels:
+      swag: enable
+      swag_port: 8080
+      swag_url: plantuml.${MY_TLD}
+      swag.uptime-kuma.enabled: true
+      swag.uptime-kuma.monitor.parent: Rinoa
+      swag.uptime-kuma.monitor.url: https://plantuml.${MY_TLD}
+      swag.uptime-kuma.monitor.interval: 300
+      swag.uptime-kuma.monitor.retryInterval: 60
+      swag.uptime-kuma.monitor.maxretries: 5
+    ports:
+      - 42262:8080
     profiles: ["rinoa-apps"]
     restart: unless-stopped
   portainer:
