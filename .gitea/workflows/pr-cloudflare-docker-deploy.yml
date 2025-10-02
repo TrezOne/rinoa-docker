@@ -189,6 +189,20 @@ jobs:
         with:
           version: ${{ env.HC_VAULT_VERSION }}
 
+      - name: Pre-pull service images
+        run: |
+          # Pull only the images needed for this dry run
+          for svc in ${DOCKER_SVC_LIST}; do
+            echo "Resolving image for service: $svc"
+            image=$(docker compose config | yq -r ".services[\"$svc\"].image")
+            if [ -n "$image" ] && [ "$image" != "null" ]; then
+              echo "Pulling $image"
+              docker pull "$image"
+            else
+              echo "⚠️ No image defined for $svc (might be build-only)"
+            fi
+          done
+
       - name: Gotify Notification
         uses: eikendev/gotify-action@master
         with:
