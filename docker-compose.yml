@@ -216,7 +216,7 @@ services:
       # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=20
       # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
       # !! If you are not using any of these options, remove the 'environment:' tag entirely.
-    image: docker.io/actualbudget/actual-server:latest@sha256:a96e38821a56843a5473204cbd3773ffee816c49c23e0a9187fb80498bd3e154
+    image: docker.io/actualbudget/actual-server:latest@sha256:32dceb536149fcfe6e5292a6a568403c363e9fd59a41596da002b994a0b2216e
     labels:
       swag: enable
       swag_port: 5006
