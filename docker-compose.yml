@@ -4950,6 +4950,11 @@ services:
     container_name: plantuml-server
     image: plantuml/plantuml-server:jetty@sha256:cd55fe13c6645253fbeb52665fc88a8d7e5c660e2bbff9b9ac045b0c136a1426
     labels:
+      homepage.group: Personal Tools
+      homepage.name: PlantUML
+      homepage.href: https://plantuml.${MY_TLD}
+      homepage.icon: plantuml.svg
+      homepage.description: Kanban board
       swag: enable
       swag_port: 8080
       swag_url: plantuml.${MY_TLD}
