@@ -207,7 +207,7 @@ jobs:
           echo ${DOCKER_SVC_LIST}
 
       - name: Pre-pull/build service images in parallel
-        uses: ./.github/actions/docker-img-pre-pull
+        uses: ./.gitea/actions/docker-img-pre-pull
         with:
           services: ${{ env.DOCKER_SVC_LIST }}
 
