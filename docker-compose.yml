@@ -216,7 +216,7 @@ services:
       # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=20
       # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
       # !! If you are not using any of these options, remove the 'environment:' tag entirely.
-    image: docker.io/actualbudget/actual-server:latest@sha256:a96e38821a56843a5473204cbd3773ffee816c49c23e0a9187fb80498bd3e154
+    image: docker.io/actualbudget/actual-server:latest@sha256:32dceb536149fcfe6e5292a6a568403c363e9fd59a41596da002b994a0b2216e
     labels:
       swag: enable
       swag_port: 5006
@@ -457,7 +457,7 @@ services:
       interval: 2s
       timeout: 5s
       retries: 10
-    image: postgres:14-alpine@sha256:34ac98969774c40be02a286e1794f0cbafbd0800e4fd595a17577f56ea7e3698
+    image: postgres:14-alpine@sha256:49f7dcce1efddd8d86ae3f37dcba206b5655d9fac3d3872d2823177fd6c1e7fa
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -544,7 +544,7 @@ services:
       X_AUTHELIA_CONFIG_FILTERS: template
     expose:
       - 9091
-    image: authelia/authelia:master@sha256:2e663a00fca9694fd0fcb686c3e9319a284263cfb8a0e6945c1518632268809e
+    image: authelia/authelia:master@sha256:4f8d4b779ec56d147b59913fbccf7e511d08b105b511e89a0a285583b63a09a1
     labels:
       homepage.group: Privacy/Security
       homepage.name: Authelia
@@ -580,7 +580,7 @@ services:
       POSTGRES_DB: authelia
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
+    image: postgres:16-alpine@sha256:84fb5d5bdd7d47f1889f325e534f3ce643f853f460832c8a61949f5391b8dc42
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -2180,7 +2180,7 @@ services:
   hugo:
     command: hugo server --baseURL "it-services.${MY_TLD}" --bind 0.0.0.0 --appendPort=false --source=/src/ --configDir=/src/config/ -e production --logLevel debug
     container_name: hugo
-    image: hugomods/hugo:exts@sha256:bc2eb19ebd4cb623b2476386232425ce75ed8cd15bfbfcb648515b2bfa896346
+    image: hugomods/hugo:exts@sha256:89c0472bdfc5f9ff051ae9f54942428c62edb1d2ec3527bf1a4e63e24aa48356
     labels:
       swag: enable
       swag_proto: http
@@ -3250,7 +3250,7 @@ services:
       POSTGRES_DB: ${JOPLIN_POSTGRES_DATABASE}
     expose:
       - 5432
-    image: postgres:17-alpine@sha256:d8bb4852e30c168a99654c9fa0673f51e4419cf96e931dbfe163fd8680bf1dba
+    image: postgres:17-alpine@sha256:5d14c08a257610d8e27c52ce0f10de5d9cce4c232e1277d44d7d6fb628b3d1a7
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -3774,7 +3774,7 @@ services:
       timeout: 30s
       interval: 10s
       retries: 5
-    image: postgres:17-alpine@sha256:d8bb4852e30c168a99654c9fa0673f51e4419cf96e931dbfe163fd8680bf1dba
+    image: postgres:17-alpine@sha256:5d14c08a257610d8e27c52ce0f10de5d9cce4c232e1277d44d7d6fb628b3d1a7
     profiles: ["rinoa-apps"]
     restart: always
     volumes:
@@ -3840,7 +3840,7 @@ services:
     restart: unless-stopped
   maxun-pg-db:
     container_name: maxun-pg-db
-    image: postgres:17-alpine@sha256:d8bb4852e30c168a99654c9fa0673f51e4419cf96e931dbfe163fd8680bf1dba
+    image: postgres:17-alpine@sha256:5d14c08a257610d8e27c52ce0f10de5d9cce4c232e1277d44d7d6fb628b3d1a7
     environment:
       POSTGRES_USER: maxun
       POSTGRES_PASSWORD: ${MAXUN_DB_PASSWORD}
@@ -3943,7 +3943,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/meme_search_pro/db-data/meme-search-db:/var/lib/postgresql/data
   mini-qr:
     container_name: mini-qr
-    image: ghcr.io/lyqht/mini-qr:latest@sha256:fb1dda0d80802c40b2d062fca192510498043c6436aef559c076931ff6b0887d
+    image: ghcr.io/lyqht/mini-qr:latest@sha256:af6b47968cb2c400d701eb3f6defe06c79a75a2af7a423bf272df3e3ccbbacd8
     labels:
       swag: enable
       swag_auth: authelia
@@ -4090,7 +4090,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    image: library/mongo:7@sha256:4c65244b50910461b9641a76131f84a2dcfd4da487f928298cea626b3842842c
+    image: library/mongo:7@sha256:6a27f932a0784bd2b4a9d7ae6fa983a661f96abcc193331a98f5ce7134693135
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
@@ -4372,7 +4372,7 @@ services:
       retries: 10
       test: 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
       timeout: 2s
-    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
+    image: postgres:16-alpine@sha256:84fb5d5bdd7d47f1889f325e534f3ce643f853f460832c8a61949f5391b8dc42
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -4727,7 +4727,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 2s
-    image: postgres:15-alpine@sha256:5a10f9df4df8b16d59b20fbccba377d7e4ff6bc7e58f1cfb903eb84c6183bc28
+    image: postgres:15-alpine@sha256:52af010baaeb34a287e7b5ea9696720727bd5bace64f9c18068ee187a6d6a4b2
     profiles: ["rinoa-apps"]
     restart: always
     stop_signal: SIGINT
@@ -4788,7 +4788,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    image: postgres:17-alpine@sha256:d8bb4852e30c168a99654c9fa0673f51e4419cf96e931dbfe163fd8680bf1dba
+    image: postgres:17-alpine@sha256:5d14c08a257610d8e27c52ce0f10de5d9cce4c232e1277d44d7d6fb628b3d1a7
     restart: unless-stopped
     volumes:
       - pgbackweb-data:/var/lib/postgresql/data
@@ -4863,7 +4863,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
+    image: postgres:16-alpine@sha256:84fb5d5bdd7d47f1889f325e534f3ce643f853f460832c8a61949f5391b8dc42
     profiles: ["rinoa-apps"]
     restart: unless-stopped
     volumes:
@@ -5071,7 +5071,7 @@ services:
       - NET_BIND_SERVICE
     command: postal smtp-server
     container_name: postal-smtp
-    image: ghcr.io/postalserver/postal:latest@sha256:8b41040faed70e68ce76ceaa2be6a8cab86892a7b99bf0f2c2b548db0267f7a9
+    image: ghcr.io/postalserver/postal:latest@sha256:52a91d30a121f0fca5f923cb87112d1902f473cf53507937aa2b64b3132847eb
     networks:
       default: null
     ports:
@@ -5084,7 +5084,7 @@ services:
   postal-web:
     command: postal web-server
     container_name: postal-web
-    image: ghcr.io/postalserver/postal:latest@sha256:8b41040faed70e68ce76ceaa2be6a8cab86892a7b99bf0f2c2b548db0267f7a9
+    image: ghcr.io/postalserver/postal:latest@sha256:52a91d30a121f0fca5f923cb87112d1902f473cf53507937aa2b64b3132847eb
     labels:
       swag: enable
       swag_proto: http
@@ -5120,7 +5120,7 @@ services:
     container_name: postal-worker
     environment:
       LOG_LEVEL: debug
-    image: ghcr.io/postalserver/postal:latest@sha256:8b41040faed70e68ce76ceaa2be6a8cab86892a7b99bf0f2c2b548db0267f7a9
+    image: ghcr.io/postalserver/postal:latest@sha256:52a91d30a121f0fca5f923cb87112d1902f473cf53507937aa2b64b3132847eb
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -5462,7 +5462,7 @@ services:
       POSTGRES_PASSWORD: ${REACTIVE_RESUME_PGSQL_PASSWORD}
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
+    image: postgres:16-alpine@sha256:84fb5d5bdd7d47f1889f325e534f3ce643f853f460832c8a61949f5391b8dc42
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -6190,7 +6190,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: postgres:17-alpine@sha256:d8bb4852e30c168a99654c9fa0673f51e4419cf96e931dbfe163fd8680bf1dba
+    image: postgres:17-alpine@sha256:5d14c08a257610d8e27c52ce0f10de5d9cce4c232e1277d44d7d6fb628b3d1a7
     profiles: ["rinoa-infra"]
     restart: unless-stopped
     volumes:
@@ -6322,7 +6322,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-    image: ghcr.io/mrusse/soularr:main@sha256:ff20e8b7537da7f06036b8c2aada56c00195405692a80e44ab11048fe519a1e0
+    image: ghcr.io/mrusse/soularr:main@sha256:61181c5809845d2c49c8c3c182c0280c5c91069cd2e5d7c341ddd8bfa2c01598
     labels:
       homepage.name: Soularr
       homepage.group: Downloaders
@@ -6595,7 +6595,7 @@ services:
       POSTGRES_USER: tandoor
     expose:
       - 5432
-    image: postgres:16-alpine@sha256:9694f53824bee37638eb5e5d9eddb927ecb55205a4e54eafec51bd0b0687a607
+    image: postgres:16-alpine@sha256:84fb5d5bdd7d47f1889f325e534f3ce643f853f460832c8a61949f5391b8dc42
     networks:
       default: null
     profiles: ["rinoa-apps"]
@@ -6656,7 +6656,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    image: postgres:15-alpine@sha256:5a10f9df4df8b16d59b20fbccba377d7e4ff6bc7e58f1cfb903eb84c6183bc28
+    image: postgres:15-alpine@sha256:52af010baaeb34a287e7b5ea9696720727bd5bace64f9c18068ee187a6d6a4b2
     volumes:
       - umami-db-data:/var/lib/postgresql/data
     profiles: ["rinoa-apps"]
@@ -7028,7 +7028,7 @@ services:
       PGID: ${PGID}
       DISABLE_BUILTIN_AUTH: true
       TZ: ${TZ}
-    image: ghcr.io/wizarrrr/wizarr@sha256:a2475c3404d5d16d2b9f05ff70ad17612cd2e1e1088debc1bd2d3571ed4fc1f5
+    image: ghcr.io/wizarrrr/wizarr@sha256:0f76eb2b6aaebcfb32f599e8021abc8435dad190fdf0a8792b4f477509ecf88f
     labels:
       homepage.group: Servarr Stack
       homepage.name: Wizarr
