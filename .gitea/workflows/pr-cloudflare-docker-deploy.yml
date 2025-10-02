@@ -198,7 +198,7 @@ jobs:
           HC_VAULT_SECRETS_PATH: rinoa-docker/env
 
       - name: Pre-pull/build service images in parallel
-        uses: ./.gitea/actions/docker-img-pre-pull
+        uses: https://git.trez.wtf/Trez/docker-select-image-pull@main
         with:
           services: ${{ env.DOCKER_SVC_LIST }}
           compose_profile: "rinoa-apps"
