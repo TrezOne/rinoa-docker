@@ -4442,7 +4442,7 @@ services:
         type: bind
   omnitools:
     container_name: omnitools
-    image: iib0011/omni-tools:latest@sha256:3f35a17d8d81caa33c7caec0198eb561dee212a5f48d8303d8f7b182c930fb71
+    image: iib0011/omni-tools:latest@sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69
     labels:
       homepage.group: Personal Tools
       homepage.name: OmniTools
