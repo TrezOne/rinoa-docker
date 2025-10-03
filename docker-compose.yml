@@ -651,7 +651,7 @@ services:
     container_name: beszel
     extra_hosts:
       - host.docker.internal:host-gateway
-    image: henrygd/beszel:latest@sha256:cd539bbd1f8587b0302ef61bef0b8e9be3e637e8645b84688b64da5536045aad
+    image: henrygd/beszel:latest@sha256:4a7aeba2e1ee2b4b9391c362cbbb6c2b3c5eb7de996d966d4e968f51dc080ef6
     labels:
       homepage.group: Infrastructure/App Performance Monitoring
       homepage.name: Beszel
