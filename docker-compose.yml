@@ -4090,7 +4090,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    image: library/mongo:7@sha256:6a27f932a0784bd2b4a9d7ae6fa983a661f96abcc193331a98f5ce7134693135
+    image: mongo:7@sha256:6a27f932a0784bd2b4a9d7ae6fa983a661f96abcc193331a98f5ce7134693135
     ports:
       - 27017:27017
     profiles: ["rinoa-apps"]
@@ -4098,6 +4098,7 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/mongodb/config:/etc/mongodb
       - ${DOCKER_VOLUME_CONFIG}/mongodb/db:/data/db
+      - ${DOCKER_VOLUME_CONFIG}/mongodb/logs/:/var/log/mongodb/
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
@@ -4507,7 +4508,7 @@ services:
         condition: service_started
         required: true
     environment:
-      OLLAMA_BASE_URLS: http://ollama:11434;http://192.168.1.252:11434
+      OLLAMA_BASE_URLS: http://ollama:11434;http://192.168.1.250:11434;http://192.168.1.252:11434
       WEBUI_AUTH: false
       ENABLE_IMAGE_GENERATION: "true"
       AUTOMATIC1111_BASE_URL: http://stable-diffusion-webui:7860
