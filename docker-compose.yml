@@ -5072,7 +5072,7 @@ services:
       - NET_BIND_SERVICE
     command: postal smtp-server
     container_name: postal-smtp
-    image: ghcr.io/postalserver/postal:latest@sha256:52a91d30a121f0fca5f923cb87112d1902f473cf53507937aa2b64b3132847eb
+    image: ghcr.io/postalserver/postal:latest@sha256:ff9a42deeda9b236ac36df012dab843b14726da8f3c2464c18c371f23107d986
     networks:
       default: null
     ports:
@@ -5085,7 +5085,7 @@ services:
   postal-web:
     command: postal web-server
     container_name: postal-web
-    image: ghcr.io/postalserver/postal:latest@sha256:52a91d30a121f0fca5f923cb87112d1902f473cf53507937aa2b64b3132847eb
+    image: ghcr.io/postalserver/postal:latest@sha256:ff9a42deeda9b236ac36df012dab843b14726da8f3c2464c18c371f23107d986
     labels:
       swag: enable
       swag_proto: http
@@ -5121,7 +5121,7 @@ services:
     container_name: postal-worker
     environment:
       LOG_LEVEL: debug
-    image: ghcr.io/postalserver/postal:latest@sha256:52a91d30a121f0fca5f923cb87112d1902f473cf53507937aa2b64b3132847eb
+    image: ghcr.io/postalserver/postal:latest@sha256:ff9a42deeda9b236ac36df012dab843b14726da8f3c2464c18c371f23107d986
     networks:
       default: null
     profiles: ["rinoa-apps"]
