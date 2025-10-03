@@ -6097,7 +6097,7 @@ services:
       - ${DOCKER_VOLUME_CONFIG}/swag/log/nginx/error.log:/swag/log/nginx/error.log:ro
   signoz-schema-migrator-async:
     <<: *signoz-db-depend
-    image: signoz/signoz-schema-migrator:v0.129.6@sha256:0ef03a850163df3488b22a0ec43d960a3ba10b69996918cb5638e565db43184f
+    image: signoz/signoz-schema-migrator:v0.129.7@sha256:721c55284b32da6af8932d1fe6939410b6f0d10da74fc666f9856fa1e1f5763b
     container_name: signoz-schema-migrator-async
     command:
       - async
@@ -6107,7 +6107,7 @@ services:
     restart: on-failure
   signoz-schema-migrator-sync:
     <<: *signoz-common
-    image: signoz/signoz-schema-migrator:v0.129.6@sha256:0ef03a850163df3488b22a0ec43d960a3ba10b69996918cb5638e565db43184f
+    image: signoz/signoz-schema-migrator:v0.129.7@sha256:721c55284b32da6af8932d1fe6939410b6f0d10da74fc666f9856fa1e1f5763b
     container_name: signoz-schema-migrator-sync
     command:
       - sync
