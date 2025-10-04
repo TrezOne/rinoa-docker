@@ -5607,7 +5607,7 @@ services:
         condition: service_healthy
         required: true
         restart: true
-    image: rommapp/romm:latest@sha256:a492592dad85b7d9bae9fca9ac958eb04492e383002abbd3566a7efb3b251091
+    image: rommapp/romm:latest@sha256:f9a66d759f255ddbc5cd635bf6b66efe17f75babda5863aad318ade1845d7d68
     environment:
       ROMM_DB_DRIVER: mariadb # mariadb | sqlite (default: sqlite)
       ROMM_HOST: https://localhost:3000 # [Optional] your host ip or domain name (including http(s)://, subdomain and port if needed). Being used only for webRcade feed for now.
@@ -6493,7 +6493,7 @@ services:
       UPTIME_KUMA_URL: http://uptimekuma:3001
       UPTIME_KUMA_USERNAME: ${UPTIME_KUMA_USERNAME}
     hostname: Rinoa
-    image: lscr.io/linuxserver/swag:latest@sha256:5f4f148eac1e5682db56186681dd296767013957f071d900d770040811738394
+    image: lscr.io/linuxserver/swag:latest@sha256:08af17ae67c12e9b42a17d33fe538f67853020294c1f89c8e9d5b213c89c47ae
     labels:
       swag: enable
       swag_proto: http
@@ -7028,7 +7028,7 @@ services:
       PGID: ${PGID}
       DISABLE_BUILTIN_AUTH: true
       TZ: ${TZ}
-    image: ghcr.io/wizarrrr/wizarr@sha256:a6a5b6d5e3e4a37b2bb60d9bee135717ab5c744fc55775fc1e608cff7e2f929a
+    image: ghcr.io/wizarrrr/wizarr@sha256:0681c279ebe80e73d0536a791d7ea2bcacaa4e6b865fbc026481d76315bf8e0a
     labels:
       homepage.group: Servarr Stack
       homepage.name: Wizarr
