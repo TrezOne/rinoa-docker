@@ -1610,7 +1610,7 @@ services:
       PUID: ${PUID}
       TZ: ${TZ}
     hostname: Rinoa
-    image: lscr.io/linuxserver/duplicati:latest@sha256:187467acf99e5de56f4ca1ad1e047a9a3ae4a9cc0e6deee31007242fb1749c00
+    image: lscr.io/linuxserver/duplicati:latest@sha256:6f9d58c8183dcfee25f0a36077b14ef278f06e51c47aa4d44c51f1d5360f44a9
     labels:
       swag: enable
       swag_port: 8200
