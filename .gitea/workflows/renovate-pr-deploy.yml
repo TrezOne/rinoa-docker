@@ -67,8 +67,10 @@ jobs:
           echo "Detected services with changed images:"
           cat service_changes.txt || true
 
-          mod_svcs=$(sort -u service_changes.txt | xargs echo -n)
-          echo "docker_svc_list=$mod_svcs" >> "$GITHUB_OUTPUT"
+          # Prepare multiline output for GitHub Actions
+          echo "docker_svc_list<<EOF" >> "$GITHUB_OUTPUT"
+          sort -u service_changes.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Stop if no image changes
         if: steps.detect_services.outputs.docker_svc_list == ''
