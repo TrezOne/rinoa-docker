@@ -1246,7 +1246,7 @@ services:
       DAGU_AUTH_TOKEN: ${DAGU_AUTH_TOKEN}
       PUID: ${PUID}
       PGID: ${PGID}
-    image: ghcr.io/dagu-org/dagu:alpine@sha256:96d5318adc43db5fa6a60d22a559af754a4090400cff06908e8b748049be9b1d
+    image: ghcr.io/dagu-org/dagu:alpine@sha256:89d0dbc4b2950939fcde3b517aaa2814a9b020488dbebefa6150482985fd2c95
     labels:
       homepage.group: Automation
       homepage.name: Dagu
