@@ -4098,7 +4098,6 @@ services:
     volumes:
       - ${DOCKER_VOLUME_CONFIG}/mongodb/config:/etc/mongodb
       - ${DOCKER_VOLUME_CONFIG}/mongodb/db:/data/db
-      - ${DOCKER_VOLUME_CONFIG}/mongodb/logs/:/var/log/mongodb/
   multi-scrobbler:
     container_name: multi-scrobbler
     environment:
