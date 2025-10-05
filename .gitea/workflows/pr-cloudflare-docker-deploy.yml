@@ -207,9 +207,8 @@ jobs:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CF_API_EMAIL: ${{ secrets.CF_API_EMAIL }}
         run: |
-          yq '.services[].labels.swag_url' docker-compose.yml | \
+          yq -r '.services[].labels.swag_url' docker-compose.yml | \
             egrep -v 'null' | \
-            sed -e 's|"||g' | \
             awk -F'.' '{print $1}' | \
             sort > compose_subdomains.txt
 
@@ -217,7 +216,7 @@ jobs:
             --zone "trez.wtf" \
             --type=CNAME \
             --content "trez.wtf" \
-            | jq '.[].Name' | sed -e 's|"||g' | awk -F"." '{print $1}' | \
+            | jq -r '.[].Name' | awk -F"." '{print $1}' | \
             sort > cloudflare_subdomains.txt
 
       - name: Gotify Notification
