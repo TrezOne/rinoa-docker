@@ -24,7 +24,7 @@ jobs:
             -e RENOVATE_PLATFORM=gitea \
             -e RENOVATE_ENDPOINT=https://git.trez.wtf/api/v1 \
             -e RENOVATE_TOKEN=${{ secrets.RENOVATE_BOT_TOKEN }} \
-            -e LOG_LEVEL=debug \
+            -e LOG_LEVEL=${{ vars.RENOVATE_LOG_LEVEL }} \
             -e RENOVATE_GITHUB_COM_TOKEN=${{ secrets.RENOVATE_GITHUB_TOKEN }} \
             -e RENOVATE_CONFIG_FILE=renovate.json \
             -e RENOVATE_REPOSITORIES=trez/rinoa-docker \
