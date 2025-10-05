@@ -26,6 +26,29 @@ jobs:
         with:
           fetch-depth: 0 # required so we can access main^1
 
+      - name: Generate service list for README
+        run: |
+          yq '.services | to_entries | map({"service": .key, "image": .value.image, "description": (.value.labels."homepage.description" // "")})' docker-compose.yml > services.yml
+
+      - name: Generate Markdown Table
+        uses: gazab/create-markdown-table@6686233d7008e8d8b9d4bbdbfd1fb1ae510019f0 # v1.0.7
+        id: service-table
+        with:
+          file: ./services.yml
+
+      - name: Regenerate README
+        run: |
+          echo "# List of Services" > README.md
+          echo -e "\n\n" >> README.md
+          echo "${{ steps.service-table.outputs.table }}" >> README.md
+
+      - name: Add/Commit README.md
+        id: commit-readme
+        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
+        with:
+          message: "chore: Update README"
+          add: "README.md"
+
       - name: Save docker-compose.yml before merge (old)
         run: |
           git fetch origin main
