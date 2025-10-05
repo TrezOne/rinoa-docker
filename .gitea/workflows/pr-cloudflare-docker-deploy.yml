@@ -36,7 +36,7 @@ jobs:
         with:
           url: ${{ secrets.TREZ_GITEA_URL }}
           token: ${{ secrets.BOT_GITEA_TOKEN }}
-          pr-label: rinoa-docker,manual
+          pr-label: docker-compose,manual
           assignee: ${{ github.actor }}
 
       - name: Gotify Notification
